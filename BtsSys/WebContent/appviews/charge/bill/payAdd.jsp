@@ -187,7 +187,7 @@ function uploadifyUpload() {
             </td>
             <td id="PayTypeLable" class="noneCss"><span style="color: red;">*</span>缴费方式：</td>
             <td id="payTypeTd" class="noneCss">
-                <select id="payType" class="input150">
+                <select id="payType" class="input150" name="chargeBill.payType">
                     <option value="">请选择</option>
                     <option value="1" selected>人工</option>
                     <option value="2">代扣</option>
