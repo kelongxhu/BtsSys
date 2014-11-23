@@ -184,13 +184,10 @@ public class WyBtsChargeListAction extends BaseAction {
      * @return
      */
     public String payDetail() {
-        List<WyBtsChargeList> chargeList = null;
         WyBtsCharge charge = null;
         try {
             charge = wyBtsChargeManager.selectByPrimaryKey(intId, costType, btsType);//
-            chargeList = wyBtsChargeListManager.selectByBtsId(intId, costType);
             this.getRequest().setAttribute("charge", charge);
-            this.getRequest().setAttribute("chargeList", chargeList);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
@@ -200,6 +197,7 @@ public class WyBtsChargeListAction extends BaseAction {
 
     /**
      * 通过基站intId,costType获取缴费清单
+     *
      * @return
      */
     public String payDetailList() {
@@ -465,8 +463,22 @@ public class WyBtsChargeListAction extends BaseAction {
         int total = 0;
         List<WyBtsChargeList> list = null;
         String path = FileRealPath.getPath();
-        String templatePath = path + "template" + "/roomPayDataTemplate.xls";
-        String fileName = "基站缴费清单数据.xls";
+        String templatePath = path + "template";
+        String fileName = "基站缴费清单数据";
+        switch (costType) {
+            case 1:
+                templatePath += "/roomPayDataTemplate.xls";
+                fileName += "_房租.xls";
+                break;
+            case 2:
+                templatePath += "/roomPayDataTemplate.xls";
+                fileName += "_物业.xls";
+                break;
+            case 3:
+                templatePath += "/powerPayDataTemplate.xls";
+                fileName += "_电费.xls";
+                break;
+        }
         try {
             Map<String, Object> map = buildParamMap();
             total = wyBtsChargeListManager.countByMap(map);

@@ -42,6 +42,10 @@ public class WyBtsCharge {
 
     private BigDecimal balance;
 
+    private Date inTime;//插入时间
+
+    private BigDecimal inUser;//插入用户
+
 
     //冗余基站字段
     private String cityName;
@@ -270,5 +274,21 @@ public class WyBtsCharge {
 
     public void setCostTypeStr(String costTypeStr) {
         this.costTypeStr = costTypeStr;
+    }
+
+    public Date getInTime() {
+        return inTime;
+    }
+
+    public void setInTime(Date inTime) {
+        this.inTime = inTime;
+    }
+
+    public BigDecimal getInUser() {
+        return inUser;
+    }
+
+    public void setInUser(BigDecimal inUser) {
+        this.inUser = inUser;
     }
 }

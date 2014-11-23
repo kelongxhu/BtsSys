@@ -114,7 +114,7 @@
 			</result>
 		</action>
 		<action name="login" class="com.scttsc.admin.web.LoginAction">
-		<!-- 
+		<!--
 			<interceptor-ref name="defaultStack"></interceptor-ref> -->
 			<result name="success" type="redirect">
 				/admin/index.action

@@ -92,7 +92,6 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
         return wyBtsCharge;
     }
     
-	@Override
 	public List<WyBtsCharge> selectWyBtsChargeSettingByMap(
 			final Map<String, Object> param, int btsType) throws Exception {
 		List<WyBtsCharge> wyBtsChargeList = null;
@@ -117,7 +116,6 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
 		return wyBtsChargeList;
 	}
 
-	@Override
 	public int selectWyBtsChargeSettingCountByMap(final Map<String, Object> param,
 			int btsType) throws Exception {
 		int count = 0;

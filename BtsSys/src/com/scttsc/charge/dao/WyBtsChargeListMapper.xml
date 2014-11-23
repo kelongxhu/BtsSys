@@ -17,7 +17,7 @@
     <result column="PAY_TIME" property="payTime" jdbcType="DATE" />
     <result column="PAY_USER" property="payUser" jdbcType="VARCHAR" />
     <result column="IS_TIMEOUT" property="isTimeout" jdbcType="DECIMAL" />
-    <result column="IN_TIME" property="inTime" jdbcType="DATE" />
+    <result column="IN_TIME" property="inTime" jdbcType="TIMESTAMP" />
     <result column="IN_USER" property="inUser" jdbcType="DECIMAL" />
     <result column="MONTH_DEGREE" property="monthDegree" jdbcType="DECIMAL" />
     <result column="BASE_DEGREE" property="baseDegree" jdbcType="DECIMAL" />
@@ -165,7 +165,7 @@
     values (WY_BTS_CHARGE_LIST_SEQ.NEXTVAL, #{intId,jdbcType=DECIMAL},#{btsName},#{cityId},#{countryId},#{bscName},#{btsId},
      #{btsType,jdbcType=DECIMAL}, #{costType,jdbcType=DECIMAL}, #{money,jdbcType=DECIMAL}, #{proofFile,jdbcType=VARCHAR},
       #{remark,jdbcType=VARCHAR}, #{payTime,jdbcType=DATE}, #{payUser,jdbcType=VARCHAR},
-      #{isTimeout,jdbcType=DECIMAL}, #{inTime,jdbcType=DATE},#{inUser,jdbcType=DECIMAL}, #{monthDegree,jdbcType=DECIMAL},
+      #{isTimeout,jdbcType=DECIMAL}, #{inTime,jdbcType=TIMESTAMP},#{inUser,jdbcType=DECIMAL}, #{monthDegree,jdbcType=DECIMAL},
       #{baseDegree,jdbcType=DECIMAL}, #{payType,jdbcType=DECIMAL})
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.charge.model.WyBtsChargeList" >
@@ -214,7 +214,7 @@
         IS_TIMEOUT = #{isTimeout,jdbcType=DECIMAL},
       </if>
       <if test="inTime != null" >
-        IN_TIME = #{inTime,jdbcType=DATE},
+        IN_TIME = #{inTime,jdbcType=TIMESTAMP},
       </if>
       <if test="inUser!=null">
         IN_USER=#{inUser,jdbcType=DECIMAL}
