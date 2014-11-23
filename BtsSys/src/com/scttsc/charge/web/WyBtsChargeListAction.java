@@ -161,6 +161,10 @@ public class WyBtsChargeListAction extends BaseAction {
                 } else {
                     chargeBill.setIsTimeout((short) 0);//不超时
                 }
+                //缴费方式，默认为人工
+                if(Common.isEmpty(chargeBill.getPayType())){
+                    chargeBill.setPayType((short)1);
+                }
                 chargeBill.setInTime(new Date());
                 chargeBill.setInUser(user.getIntId().intValue());
                 wyBtsChargeListManager.insert(chargeBill);

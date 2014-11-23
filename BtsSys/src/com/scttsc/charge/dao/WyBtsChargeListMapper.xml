@@ -149,7 +149,7 @@
   <select id="selectByBtsId" resultMap="BaseResultMap">
       select
       <include refid="Base_Column_List" />
-      from WY_BTS_CHARGE_LIST where INT_ID=#{intId} and COST_TYPE=#{costType}
+      from WY_BTS_CHARGE_LIST u where u.INT_ID=#{intId} and u.COST_TYPE=#{costType}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
