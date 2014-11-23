@@ -20,4 +20,9 @@ public interface WyBtsChargeManager {
     int selectWyBtsChargeCountByMap(Map<String,Object> param,int btsType)throws Exception;
 
     WyBtsCharge selectByPrimaryKey(BigDecimal intId,int costType,int btsType)throws Exception;
+    
+    List<WyBtsCharge> selectWyBtsChargeSettingByMap(final Map<String,Object> param, int btsType)throws Exception;
+    
+    int selectWyBtsChargeSettingCountByMap(final Map<String,Object> param, int btsType)throws Exception;
+    
 }
