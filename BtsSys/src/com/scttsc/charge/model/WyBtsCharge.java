@@ -46,6 +46,8 @@ public class WyBtsCharge {
 
     private BigDecimal inUser;//插入用户
 
+    private Date nextRemindTime;//计算下次提醒时间
+
 
     //冗余基站字段
     private String cityName;
@@ -55,8 +57,6 @@ public class WyBtsCharge {
     private Integer btsId;
 
     private String costTypeStr;
-
-
 
 
     public BigDecimal getIntId() {
@@ -253,18 +253,18 @@ public class WyBtsCharge {
 
 
     public String getCostTypeStr() {
-        if(costType==null){
+        if (costType == null) {
             return "";
         }
-        switch (costType){
+        switch (costType) {
             case 1:
-                costTypeStr="房租";
+                costTypeStr = "房租";
                 break;
             case 2:
-                costTypeStr="物业";
+                costTypeStr = "物业";
                 break;
             case 3:
-                costTypeStr="电费";
+                costTypeStr = "电费";
                 break;
             default:
                 break;
@@ -290,5 +290,13 @@ public class WyBtsCharge {
 
     public void setInUser(BigDecimal inUser) {
         this.inUser = inUser;
+    }
+
+    public Date getNextRemindTime() {
+        return nextRemindTime;
+    }
+
+    public void setNextRemindTime(Date nextRemindTime) {
+        this.nextRemindTime = nextRemindTime;
     }
 }

@@ -23,6 +23,8 @@
     <result column="BALANCE" property="balance" jdbcType="DECIMAL" />
     <result column="IN_TIME" property="inTime" jdbcType="TIMESTAMP" />
     <result column="IN_USER" property="inUser" jdbcType="DECIMAL" />
+    <result column="NEXT_REMIND_TIME" property="nextRemindTime" jdbcType="TIMESTAMP" />
+
     <!-->冗余字段<-->
     <result column="cityName" property="cityName" jdbcType="VARCHAR" />
     <result column="countryName" property="countryName" jdbcType="VARCHAR" />
@@ -33,7 +35,7 @@
   <sql id="Base_Column_List" >
     u.INT_ID, u.BTS_TYPE, u.COST_TYPE, u.CONTRACT_STARTTIME, u.CONTRACT_ENDTIME, u.PAY_CYCLE, u.PAY_DAY,
     u.AHEAD_DAY, u.REMIND_USER, u.REMIND_TEL, u.MONEY, u.CONTRACT_FILE, u.REMARK, u.EACH_TEL, u.EACH_ACCOUNTNAME,
-    u.EACH_BANKNUM, u.PAY_TYPE, u.BANK_ACCOUNT, u.BALANCE,u.IN_TIME,u.IN_USER
+    u.EACH_BANKNUM, u.PAY_TYPE, u.BANK_ACCOUNT, u.BALANCE,u.IN_TIME,u.IN_USER,u.NEXT_REMIND_TIME
   </sql>
 
   <!--室外覆盖站点的费用设置-->
@@ -286,14 +288,14 @@
       REMIND_TEL, MONEY, CONTRACT_FILE, 
       REMARK, EACH_TEL, EACH_ACCOUNTNAME, 
       EACH_BANKNUM, PAY_TYPE, BANK_ACCOUNT, 
-      BALANCE,IN_TIME,IN_USER)
+      BALANCE,IN_TIME,IN_USER,NEXT_REMIND_TIME)
     values (#{intId,jdbcType=DECIMAL}, #{btsType,jdbcType=DECIMAL}, #{costType,jdbcType=DECIMAL}, 
       #{contractStarttime,jdbcType=TIMESTAMP}, #{contractEndtime,jdbcType=TIMESTAMP}, #{payCycle,jdbcType=DECIMAL},
       #{payDay,jdbcType=DECIMAL}, #{aheadDay,jdbcType=DECIMAL}, #{remindUser,jdbcType=VARCHAR}, 
       #{remindTel,jdbcType=VARCHAR}, #{money,jdbcType=DECIMAL}, #{contractFile,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{eachTel,jdbcType=VARCHAR}, #{eachAccountname,jdbcType=VARCHAR}, 
       #{eachBanknum,jdbcType=VARCHAR}, #{payType,jdbcType=DECIMAL}, #{bankAccount,jdbcType=VARCHAR}, 
-      #{balance,jdbcType=DECIMAL},#{inTime,jdbcType=TIMESTAMP},#{inUser,jdbcType=DECIMAL})
+      #{balance,jdbcType=DECIMAL},#{inTime,jdbcType=TIMESTAMP},#{inUser,jdbcType=DECIMAL},#{nextRemindTime,TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.charge.model.WyBtsCharge" >
     update WY_BTS_CHARGE
@@ -357,6 +359,9 @@
         </if>
         <if test="inUser!=null">
             IN_USER=#{inUser,jdbcType=DECIMAL}
+        </if>
+        <if test="nextRemindTime!=null">
+            NEXT_REMIND_TIME=#{nextRemindTime,jdbcType=TIMESTAMP}
         </if>
     </set>
     where INT_ID = #{intId,jdbcType=DECIMAL}
