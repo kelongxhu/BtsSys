@@ -45,17 +45,18 @@ $(function() {
                     });
                 },
                errorPlacement : function(error, element) {
-                   var arr=["propVal","covertypeVal","shareflagVal","mchroomflagVal","builddate"];
-                   var id=element.attr("id");
-                   var index=arr.indexOf(id);
-                   if(index>-1){
-                       var parent = element.parent().parent().parent();
-                       var div = $("<div style='float: left;'></div>");
-                       div.append(error);
-                       div.insertAfter(parent);
-                   }else{
-                       error.appendTo(element.parent());
-                   }
+                   error.appendTo(element.parent());
+//                   var arr=["propVal","covertypeVal","shareflagVal","mchroomflagVal","builddate"];
+//                   var id=element.attr("id");
+//                   var index=arr.indexOf(id);
+//                   if(index>-1){
+//                       var parent = element.parent().parent().parent();
+//                       var div = $("<div style='float: left;'></div>");
+//                       div.append(error);
+//                       div.insertAfter(parent);
+//                   }else{
+//                       error.appendTo(element.parent());
+//                   }
                 }
                // success : function(lable) {
                  //   lable.ligerHideTip();
