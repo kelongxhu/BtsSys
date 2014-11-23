@@ -46,6 +46,11 @@
             </result>
         </action>
 
+        <action name="queryBtsData" class="com.scttsc.charge.web.WyBtsChargeAction" method="query">
+        	<result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
 
     </package>
 
@@ -76,6 +81,17 @@
             </result>
         </action>
 
+		<action name="chargeSetting" class="com.scttsc.charge.web.WyBtsChargeAction" method="chargeSetting">
+    		<result name="success" type="dispatcher">
+    			/appviews/charge/setting/chargeSetting.jsp
+    		</result>
+    	</action>
+    
+    	<action name="setting" class="com.scttsc.charge.web.WyBtsChargeAction" method="setting">
+    		<result name="success" type="dispatcher">
+    			/appviews/charge/setting/chargeInput.jsp
+    		</result>
+    	</action>
 
         <action name="exportTemplateExcel" class="com.scttsc.charge.web.WyBtsChargeListAction" method="exportTemplateExcel"/>
         <action name="payExport" class="com.scttsc.charge.web.WyBtsChargeListAction" method="payExport"/>
