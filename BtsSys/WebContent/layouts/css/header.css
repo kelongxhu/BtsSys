@@ -1,0 +1,26 @@
+@charset "utf-8";
+
+
+/*header*/
+#header{ height:69px; min-width:960px;overflow:hidden;background:url(../image/banner_tc.png) repeat-x}
+.header_top{ height:69px;background:url(../image/banner2.png) no-repeat top right}
+#logo{ height:69px; width:500px; float:left; padding:0px 0 0 0px;background:url(../image/banner_text.png) repeat-x;}
+/*#logo_right{ height:69px;min-width:775px;float:left; padding:0px 0 0 0px;background:url(../image/banner_right_2.gif) repeat-x;}*/
+#nav{ float:right;margin-top: 40px}
+.Shortcut{  height:22px; padding-top:0px; text-align:right;}
+.Shortcut li{ float:left; font-size:14px; color:#8accf0; margin-right:20px; }
+.Shortcut li a{  color:#8accf0;}
+.Shortcut li a:hover{ color: #006}
+
+.suv li{ background:url(../images/top_sub_bg.jpg) repeat-x; font-weight:bold; float:right; width:70px; text-align:center; }
+.suv li a{ color:#1585c0; text-decoration:none;  height:23px; display:block; padding-top:10px; background:url(../images/sub_right_line.jpg) right bottom no-repeat;}
+.suv li a:hover{ color:#006; }
+
+#sub_left{ background:url(../images/sub_left_pic.png) no-repeat; height:33px; width:37px; }
+.Shortcut td{ width:40px; height:22px; padding-right:10px; text-align:center;  color:#000;}
+.color_red{ background:url(../images/color_red.jpg) no-repeat; }
+.color_jh{ background:url(../images/color_jh.jpg) no-repeat; }
+.color_yellow{ background:url(../images/color_yellow.jpg) no-repeat; }
+.color_blue{ background:url(../images/color_blue.jpg) no-repeat; }
+.color_green{ background:url(../images/color_green.jpg) no-repeat; }
+

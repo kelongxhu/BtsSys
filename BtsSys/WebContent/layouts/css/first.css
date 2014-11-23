@@ -1,0 +1,61 @@
+@charset "utf-8";
+
+html, body {height:100%; }
+
+
+/*main*/
+#main_system{background-color:#fff; border-right:6px solid #198bc9; border-top:1px solid #198bc9;padding:5px 10px 0 0; height:100%}
+#main{ background-color:#fff;padding:10px 10px 0 10px; min-width:715px;}
+.main_title{ background:url(../images/main_title_mid.gif) repeat-x top; height:29px; margin:5px 0 0 10px;_margin:10px 0 0 20px; color:#075587; font-size:14px; }
+.main_title_p{ font-weight:bold; padding-top:6px; margin-left:20px; font-size:12px;}
+.content{  margin:0 0 12px 10px;_margin:0 0 10px 20px;}
+.content_title{ background:url(../images/main_inquires_tr_bg.jpg) repeat-x; height:22px; padding:8px 0 0 20px; font-weight:bold;color:#075587; border-left:1px solid #83bbd9;border-right:1px solid #83bbd9;}
+
+.tab_send{  }
+.tab_send tr th{ padding:5px 0 5px 10px; font-weight:normal;  text-align:right;  color:#075587; }
+.tab_send tr td{  padding:2px 5px 2px 5px;}
+
+.editbox{ color:#7d7d7d;}
+.edittextarea{ width:710px;_width:630px; }
+
+
+.btn_save{ border:0; background:url(../images/main_btn_save_norml.jpg) no-repeat; width:61px; height:25px;cursor:pointer; margin-right:10px; color:#000}
+.btn_del{ border:0; background:url(../images/main_btn_del_norml.jpg) no-repeat; width:61px; height:25px;cursor:pointer; margin-right:10px; color:#fff}
+input.tab_del{ border:0; background:url(../images/main_btn_del.jpg) no-repeat; width:81px; height:25px;cursor:pointer;color:#014265}
+
+.inquires_tr{ background:url(../images/main_inquires_tr_bg.jpg) repeat-x; height:33px; }
+#inquires_top{ background-color:#cee9ff; height:30px; text-align:left; padding:2px 0 2px 30px; border-bottom:none;}
+#inquires_btm{ background-color:#cee9ff; height:20px; text-align:right; padding:5px 30px 5px 0;}
+#inquires_btm img{ margin-top:3px;}
+.btn_input{ background:url(../images/btn_n.gif) no-repeat; width:77px; height:23px; border:none; color:#fff; font-size:12px; }
+.tr_inquires{  background:url(../images/main_inquires_tr_bg.jpg) repeat-x; height:33px; font-weight:bold;}
+.tr_inquires td{ border:1px solid #bfd8e0; border-bottom:none; border-top:none; padding:3px 0 0 20px;;}
+
+.table_touch_on{ background-color:#e4e4e4;}
+
+
+.show_control{}
+.show_control_title{ background:url(../images/main_title_mid.gif) repeat-x top; height:29px;  font-size:14px; width:150px; text-align:center; display:block;  cursor:pointer;}
+.show_control_title a{ color:#075587; cursor:pointer;}
+.show_control_title a:hover{ color:#09F; text-decoration:none;}
+.show_control_p{ font-weight:bold; padding-top:6px; margin-left:20px; font-size:12px;}
+.shown_control_content{ background-color:#cee9ff; border:1px solid #bfd8e0; padding:10px 0 10px 10px; color:#075587;}
+.shown_control_content input{ margin-left:10px;}
+.show_line{ border-top:2px dashed #CCC; padding:10px 0 0 0; margin-top:10px;}
+
+.show_left{ float:left; width:49%;}
+.show_right{ float:right; width:49%;}
+.show_block{ margin-bottom:10px;}
+.show_left_title{background:url(../images/main_title_mid.gif) repeat-x top; height:29px;  font-size:14px; text-align:center; display:block; font-weight:bold; font-size:12px; text-align:left; cursor:pointer;}
+.show_left_title a{ color:#075587; cursor:pointer;}
+.show_left_title a:hover{ color:#09F; text-decoration:none;}
+.show_left_content{ border:1px solid #bfd8e0; border-top:none; text-align:center; padding:10px;}
+.show_bt{ margin:10px 0 0 5%;}
+.show_bt li{ float:left; color:#333; margin-right:15px; padding-left:18px; line-height:20px;}
+.bt_green{ background:url(../images/icon_green.jpg) no-repeat left; }
+.bt_blue{ background:url(../images/icon_blue.jpg) no-repeat left; }
+.bt_red{ background:url(../images/icon_red.jpg) no-repeat left; }
+
+.tab_inquires{ width:100%; border:1px solid #bfd8e0;border-bottom:none; border-top:none; background:url(../images/main_inquires_tr_bg.jpg) repeat-x top; }
+.tab_inquires th{ font-weight:bold; color:#333; height:30px; background:url(../images/main_line_inquires.jpg) no-repeat right;}
+.tab_inquires td{ text-align:center; color:#666; height:25px; border-bottom:1px solid #bac4cc;}

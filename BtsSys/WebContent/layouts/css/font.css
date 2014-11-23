@@ -1,0 +1,10 @@
+@charset "utf-8";
+body,ul,li,dl,dt,dd,p,span,img,h1,h2,h3,h4,h5,h6{padding:0; margin:0px;}
+ul,li{ list-style:none;}
+body{ font-size:12px;  margin:0; padding:0; font:Arial, Helvetica, sans-serif; background:url(../images/body_bg.jpg);}
+img{ vertical-align: top;  border:0;}
+a:link img{ border:0px }
+a:hover{color:#215dd1; text-decoration: underline;}
+.clear{ clear:both;}
+
+/*FontStyle*/
