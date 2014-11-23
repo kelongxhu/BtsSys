@@ -77,18 +77,18 @@ function btsGrid(url) {
     gridObj = $("#maingrid").ligerGrid({
         columns: [
             {display:'室外覆盖站点名称',name:'btsName',width : 140,align:'center'},
-            {display:'本地网',name:'cityName',width : 80,align:'center'},
-            {display:'区县',name:'countryName',width : 80,align:'center'},
-            {display:'所属BSC',name:'bscName',width :120,align:'center'} ,
+            {display:'本地网',name:'cityName',width : 60,align:'center'},
+            {display:'区县',name:'countryName',width :60,align:'center'},
+            {display:'所属BSC',name:'bscName',width :100,align:'center'} ,
             {display:'BTSID',name:'btsId',width :60,align:'center',isSort:true} ,
             {display:'费用类型',name:'costTypeStr',width :60,align:'center'} ,
             {display:'金额',name:'money',width : 60,align:'center'},
             {display:'是否超时',name:'isTimeoutStr',width : 60,align:'center'},
             {display:'缴费时间',name:'payTimeStr',width : 80,align:'center'},
             {display:'缴费人员',name:'payUser',width : 80,align:'center'},
-            {display:'底度',name:'baseDegree',width : 80,align:'center',allowHideColumn:true},
-            {display:'当月度数',name:'monthDegree',width : 80,align:'center',allowHideColumn:true},
-            {display:'缴费类型',name:'payTypeStr',width : 80,align:'center'}
+            {display:'底度',name:'baseDegree',width : 60,align:'center',allowHideColumn:true},
+            {display:'当月度数',name:'monthDegree',width : 60,align:'center',allowHideColumn:true},
+            {display:'缴费类型',name:'payTypeStr',width : 60,align:'center'}
         ],
         toolbar: {
             items: [

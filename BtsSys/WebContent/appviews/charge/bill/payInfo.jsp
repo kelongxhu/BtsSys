@@ -15,17 +15,31 @@
                     {display:'缴费金额',name:'money',width : 140,align:'center'},
                     {display:'缴费人员',name:'payUser',width : 80,align:'center'},
                     {display:'缴费时间',name:'payTimeStr',width : 80,align:'center'},
-                    {display:'是否超时',name:'isTimeoutStr',width :120,align:'center'} ,
-                    {display:'缴费凭证',name:'proofFileName',width :140,align:'center'}
+                    {display:'是否超时',name:'isTimeoutStr',width :80,align:'center'},
+                    {display:'底度',name:'baseDegree',width :80,align:'center'},
+                    {display:'当月度数',name:'monthDegree',width :80,align:'center'} ,
+                    {display:'缴费方式',name:'payTypeStr',width :80,align:'center'} ,
+                    {display:'缴费凭证',name:'proofFileName',width :300,align:'center'}
                 ],
                 usePager:false,
                 rownumbers:true,
                 showTitle : false,
                 url:'${ctx}/chargejson/payDetailList.action?intId=${charge.intId}&costType=${charge.costType}',
                 checkbox : true,
-                width: '800',
-                height:'300'
+                width: '98%',
+                height:'250'
             });
+
+            var costType= "${charge.costType}";//费用类型
+            if(costType=='3'){
+                gridObj.toggleCol('baseDegree', true);
+                gridObj.toggleCol('monthDegree', true);
+                gridObj.toggleCol('payTypeStr', true);
+            }else{
+                gridObj.toggleCol('baseDegree', false);
+                gridObj.toggleCol('monthDegree', false);
+                gridObj.toggleCol('payTypeStr', false);
+            }
         })
         //返回
         function back() {
@@ -41,6 +55,7 @@
         <p class="main_title_p"><img src="${ctx}/layouts/image/ico_arrow.gif"></img>基站缴费信息</p>
     </div>
     <div class="content">
+        <div>
         <table cellpadding="0" cellspacing="0" class="tab_1">
             <tr>
                 <td colspan="4"><span class="label label-success">站点基本信息</span></td>
@@ -65,25 +80,8 @@
                 <td>${charge.costTypeStr}</td>
             </tr>
         </table>
+        </div>
         <div id="maingrid"></div>
-        <%--<table class="table table-condensed">--%>
-            <%--<tr>--%>
-                <%--<th width="20%">缴费金额:</th>--%>
-                <%--<th width="20%">缴费人员:</th>--%>
-                <%--<th width="20%">缴费时间:</th>--%>
-                <%--<th width="10%">是否超时:</th>--%>
-                <%--<th width="30%">缴费凭证:</th>--%>
-            <%--</tr>--%>
-            <%--<c:forEach items="${chargeList}" var="charge">--%>
-            <%--<tr>--%>
-                    <%--<td>${charge.money}</td>--%>
-                    <%--<td>${charge.payUser}</td>--%>
-                    <%--<td>${charge.payTimeStr}</td>--%>
-                    <%--<td>${charge.isTimeoutStr}</td>--%>
-                    <%--<td>${charge.proofFileName}</td>--%>
-            <%--</tr>--%>
-            <%--</c:forEach>--%>
-        <%--</table>--%>
         <div class="form-actions_2">
             <button class="btn" type="reset" onclick="back();">
                 <i class="icon-repeat"></i>

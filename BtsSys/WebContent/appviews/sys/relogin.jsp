@@ -24,7 +24,7 @@
 		  } 
 		  
 		  function reLogin() {
-			self.top.location  = "${ctx}" ;
+			self.top.location  = "${ctx}/" ;
 		  }
 		</script>
 	</head>

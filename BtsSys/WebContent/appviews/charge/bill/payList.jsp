@@ -85,15 +85,15 @@ function btsGrid(url) {
     gridObj = $("#maingrid").ligerGrid({
         columns: [
             {display:'室外覆盖站点名称',name:'btsName',width : 140,align:'center'},
-            {display:'本地网',name:'cityName',width : 80,align:'center'},
-            {display:'区县',name:'countryName',width : 80,align:'center'},
-            {display:'所属BSC',name:'bscName',width :120,align:'center'} ,
+            {display:'本地网',name:'cityName',width : 60,align:'center'},
+            {display:'区县',name:'countryName',width : 60,align:'center'},
+            {display:'所属BSC',name:'bscName',width :100,align:'center'} ,
             {display:'BTSID',name:'btsId',width :60,align:'center',isSort:true} ,
             {display:'费用类型',name:'costTypeStr',width :60,align:'center'} ,
             {display:'缴费周期',name:'payCycle',width : 60,align:'center'},
             {display:'缴费日期',name:'payDay',width : 60,align:'center'},
             {display:'提醒人员',name:'remindUser',width : 80,align:'center'},
-            {display:'提醒号码',name:'remindTel',width : 80,align:'center'}
+            {display:'提醒号码',name:'remindTel',width : 100,align:'center'}
         ],
         toolbar: {
             items: [
