@@ -162,8 +162,8 @@ public class WyBtsChargeListAction extends BaseAction {
                     chargeBill.setIsTimeout((short) 0);//不超时
                 }
                 //缴费方式，默认为人工
-                if(Common.isEmpty(chargeBill.getPayType())){
-                    chargeBill.setPayType((short)1);
+                if (Common.isEmpty(chargeBill.getPayType())) {
+                    chargeBill.setPayType((short) 1);
                 }
                 chargeBill.setInTime(new Date());
                 chargeBill.setInUser(user.getIntId().intValue());
@@ -194,6 +194,22 @@ public class WyBtsChargeListAction extends BaseAction {
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
+        return SUCCESS;
+    }
+
+
+    /**
+     * 通过基站intId,costType获取缴费清单
+     * @return
+     */
+    public String payDetailList() {
+        List<WyBtsChargeList> chargeList = null;
+        try {
+            chargeList = wyBtsChargeListManager.selectByBtsId(intId, costType);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
+        setJsonMapRows(chargeList);
         return SUCCESS;
     }
 
@@ -304,7 +320,7 @@ public class WyBtsChargeListAction extends BaseAction {
             for (int i = 1; i < rows; i++) // 从第二行开始取数
             {
                 row = sheet.getRow(i);
-                Map obj = parseRoomChargeObj(i - 1, row, errorList, btsType,costType);
+                Map obj = parseRoomChargeObj(i - 1, row, errorList, btsType, costType);
                 if (obj != null) {
                     data.add(obj);
                 }
@@ -330,20 +346,20 @@ public class WyBtsChargeListAction extends BaseAction {
      * @param btsType
      * @return
      */
-    public Map<String, Object> parseRoomChargeObj(int rowNum, HSSFRow row, List<String> errorList, int btsType,int costType) {
+    public Map<String, Object> parseRoomChargeObj(int rowNum, HSSFRow row, List<String> errorList, int btsType, int costType) {
         Map<String, Object> map = new HashMap<String, Object>();
-        Map<String, Validity> coulmnMap =null;
+        Map<String, Validity> coulmnMap = null;
         User user = (User) this.getSession().getAttribute("user");
         try {
             switch (costType) {
                 case 1:
-                    coulmnMap=ExcelHelper.getRoomChargeCoulmnMap();
+                    coulmnMap = ExcelHelper.getRoomChargeCoulmnMap();
                     break;
                 case 2:
-                    coulmnMap=ExcelHelper.getRoomChargeCoulmnMap();
+                    coulmnMap = ExcelHelper.getRoomChargeCoulmnMap();
                     break;
                 case 3:
-                    coulmnMap=ExcelHelper.getPowerChargeCoulmnMap();
+                    coulmnMap = ExcelHelper.getPowerChargeCoulmnMap();
                     break;
             }
             int j = 0;
@@ -367,25 +383,25 @@ public class WyBtsChargeListAction extends BaseAction {
                 }
                 //特殊字段校验处理
                 if ("btsName".equals(dataKey)) {
-                    Map<String,Object> param=new HashMap<String, Object>();
-                    param.put("btsName",cellValue);
-                    param.put("cellValue",btsType);
+                    Map<String, Object> param = new HashMap<String, Object>();
+                    param.put("btsName", cellValue);
+                    param.put("cellValue", btsType);
                     BtsDTO btsDTO = wyBtsChargeListManager.selectBtsByMap(param);
                     if (btsDTO != null) {
                         map.put("intId", btsDTO.getIntId());
                         map.put("btsType", btsDTO.getBtsType());
-                        map.put("btsName",btsDTO.getName());
-                        map.put("btsId",btsDTO.getBtsId());
-                        map.put("cityId",btsDTO.getCityId());
-                        map.put("countryId",btsDTO.getCountryId());
-                        map.put("costType",costType);
+                        map.put("btsName", btsDTO.getName());
+                        map.put("btsId", btsDTO.getBtsId());
+                        map.put("cityId", btsDTO.getCityId());
+                        map.put("countryId", btsDTO.getCountryId());
+                        map.put("costType", costType);
                     } else {
                         errorList.add("第" + rowNum + "行:" + validity.getName() + "在" + Constants.BTS_TYPE[btsType - 1] + "基站类型中未查询到该基站");
                         return null;
                     }
-                }else if("payType".equals(dataKey)){
+                } else if ("payType".equals(dataKey)) {
                     //付费方式
-                   map.put("payType",validity.getIndex()+1);
+                    map.put("payType", validity.getIndex() + 1);
                 } else {
                     //其它
                     map.put(dataKey, cellValue);
@@ -406,9 +422,10 @@ public class WyBtsChargeListAction extends BaseAction {
 
     /**
      * 缴费查询
+     *
      * @return
      */
-    public String payQuery(){
+    public String payQuery() {
         return SUCCESS;
     }
 
@@ -440,9 +457,10 @@ public class WyBtsChargeListAction extends BaseAction {
 
     /**
      * 缴费
+     *
      * @return
      */
-    public String payExport(){
+    public String payExport() {
         User user = (User) getSession().getAttribute("user");
         int total = 0;
         List<WyBtsChargeList> list = null;
@@ -450,7 +468,7 @@ public class WyBtsChargeListAction extends BaseAction {
         String templatePath = path + "template" + "/roomPayDataTemplate.xls";
         String fileName = "基站缴费清单数据.xls";
         try {
-            Map<String, Object> map =buildParamMap();
+            Map<String, Object> map = buildParamMap();
             total = wyBtsChargeListManager.countByMap(map);
             map.put("start", 0);
             map.put("pagesize", (total + 1));
@@ -469,9 +487,9 @@ public class WyBtsChargeListAction extends BaseAction {
                 cList.add(chargeList.getCityName());
                 cList.add(chargeList.getCountryName());
                 cList.add(chargeList.getBscName());
-                cList.add(chargeList.getBtsId()+"");
+                cList.add(chargeList.getBtsId() + "");
                 cList.add(chargeList.getCostTypeStr());
-                cList.add(chargeList.getMoney()+"");
+                cList.add(chargeList.getMoney() + "");
                 cList.add(chargeList.getPayTimeStr());
                 cList.add(chargeList.getPayUser());//缴费人员
                 cList.add(chargeList.getRemark());//备注
@@ -534,8 +552,8 @@ public class WyBtsChargeListAction extends BaseAction {
         if (!StringUtil.isEmpty(costType)) {
             param.put("costType", costType);//费用类型
         }
-        if(!StringUtil.isEmpty(btsType)){
-            param.put("btsType",btsType);
+        if (!StringUtil.isEmpty(btsType)) {
+            param.put("btsType", btsType);
         }
         return param;
     }
