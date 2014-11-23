@@ -353,4 +353,211 @@
     </set>
     where INT_ID = #{intId,jdbcType=DECIMAL}
   </update>
+  
+  	<!-- 费用设置 -->
+    <select id="selectWyBtsChargeSettingByMap" resultMap="BaseResultMap">
+  	  select * from (select m.*,ROWNUM RN from
+      (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,
+      		  b.int_id,b.name btsName,b.bsc_name bscName,b.bts_id btsId,
+      		  c.name cityName,d.name countryName,${btsType} btsType 
+      from wy_bts b 
+      left join (select u.* from WY_BTS_CHARGE u where u.BTS_TYPE = ${btsType} and u.cost_type = ${costType}) a on b.INT_ID = a.INT_ID
+      left join wy_city c on c.id = b.city_id
+      left join wy_city d on d.id = b.county_id
+      <where>
+          b.delete_flag=0
+          <if test="countryIds!=null">
+              and b.COUNTY_ID in(${countryIds})
+          </if>
+          <if test="btsName!=null">
+              and b.name like '%${btsName}%'
+          </if>
+          <if test="bscName!=null">
+              and b.bsc_name=#{bscName}
+          </if>
+          <if test="btsId!=null">
+              and b.bts_id=#{btsId}
+          </if>
+          <if test="isInDoor!=null">
+              and b.is_indoor = #{isInDoor}
+          </if>
+          <if test="intId!=null">
+              and b.int_id = #{intId}
+          </if>          
+      </where>
+      )m
+      <where>
+          <if test="start!=null">
+              and RowNum &lt; (#{start} + #{pagesize})
+          </if>
+      </where>
+      )
+      <where>
+          <if test="start!=null">
+              RN >= #{start}
+          </if>
+      </where>
+  </select>
+  
+  <select id="selectWyBtsChargeSettingCountByMap" resultType="int">
+      select count(1) from(
+      select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,
+      		 b.int_id,b.name btsName,b.bsc_name bscName,b.bts_id btsId,
+      		 c.name cityName,d.name countryName 
+      from wy_bts b 
+      left join (select u.* from WY_BTS_CHARGE u where u.BTS_TYPE = ${btsType} and u.cost_type = ${costType}) a on b.INT_ID = a.INT_ID
+      left join wy_city c on c.id = b.city_id
+      left join wy_city d on d.id = b.county_id
+      <where>
+          b.delete_flag=0
+          <if test="countryIds!=null">
+              and b.COUNTY_ID in(${countryIds})
+          </if>
+          <if test="btsName!=null">
+              and b.name like '%${btsName}%'
+          </if>
+          <if test="bscName!=null">
+              and b.bsc_name=#{bscName}
+          </if>
+          <if test="btsId!=null">
+              and b.bts_id=#{btsId}
+          </if>
+          <if test="isInDoor!=null">
+              and b.is_indoor = #{isInDoor}
+          </if>          
+      </where>
+      )
+  </select>
+  
+  <select id="selectWyBbuChargeSettingByMap" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,
+        		b.int_id,b.bts_id btsId,b.name btsName,b.bsc_name bscName,
+        		c.name cityName,d.name countryName,${btsType} btsType 
+        from wy_bbu b  
+        left join (select u.* from WY_BTS_CHARGE u where u.BTS_TYPE = ${btsType} and u.cost_type = ${costType}) a on b.INT_ID = a.INT_ID
+      	left join wy_city c on c.id = b.city_id
+      	left join wy_city d on d.id = b.county_id
+        <where>
+            b.delete_flag=0 and b.IS_SHARE=0 and b.BBU_TYPE in (1,2)
+            <if test="countryIds!=null">
+                and b.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="btsName!=null">
+                and b.name like '%${btsName}%'
+            </if>
+            <if test="bscName!=null">
+                and b.bsc_name=#{bscName}
+            </if>
+            <if test="btsId!=null">
+                and b.bts_id=#{btsId}
+            </if>
+			<if test="intId!=null">
+			    and b.int_id = #{intId}
+			</if>            
+        </where>
+        )m
+        <where>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+  
+    <select id="selectWyBbuChargeSettingCountByMap" resultType="int">
+        select count(1) from (
+        select a.*,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+        b.bts_id btsId from wy_bbu b  
+        left join (select u.* from WY_BTS_CHARGE u where u.BTS_TYPE = ${btsType} and u.cost_type = ${costType}) a on b.INT_ID = a.INT_ID
+      	left join wy_city c on c.id = b.city_id
+      	left join wy_city d on d.id = b.county_id
+        <where>
+            b.delete_flag=0 and b.IS_SHARE=0 and b.BBU_TYPE in (1,2)
+            <if test="countryIds!=null">
+                and b.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="btsName!=null">
+                and b.name like '%${btsName}%'
+            </if>
+            <if test="bscName!=null">
+                and b.bsc_name=#{bscName}
+            </if>
+            <if test="btsId!=null">
+                and b.bts_id=#{btsId}
+            </if>
+        </where>
+        )
+    </select>
+    
+    <select id="selectWyTunelChargeSettingByMap" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,
+        		b.int_id,b.name btsName,b.bsc_name bscName,b.bts_id btsId,
+        		c.name cityName,d.name countryName,${btsType} btsType 
+        from wy_tunel b
+		left join (select u.* from WY_BTS_CHARGE u where u.BTS_TYPE = ${btsType} and u.cost_type = ${costType}) a on b.INT_ID = a.INT_ID
+      	left join wy_city c on c.id = b.city_id
+      	left join wy_city d on d.id = b.county_id        
+        <where>
+            b.delete_flag=0
+            <if test="countryIds!=null">
+                and b.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="btsName!=null">
+                and b.name like '%${btsName}%'
+            </if>
+            <if test="bscName!=null">
+                and b.bsc_name=#{bscName}
+            </if>
+            <if test="btsId!=null">
+                and b.bts_id=#{btsId}
+            </if>
+			<if test="intId!=null">
+			    and b.int_id = #{intId}
+			</if>                 
+        </where>
+        )m
+        <where>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectWyTunelChargeSettingCountByMap" resultType="int">
+        select count(1) from (
+        select a.*,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+        b.bts_id btsId from wy_tunel b
+		left join (select u.* from WY_BTS_CHARGE u where u.BTS_TYPE = ${btsType} and u.cost_type = ${costType}) a on b.INT_ID = a.INT_ID
+      	left join wy_city c on c.id = b.city_id
+      	left join wy_city d on d.id = b.county_id        
+        <where>
+            b.delete_flag=0
+            <if test="countryIds!=null">
+                and b.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="btsName!=null">
+                and b.name like '%${btsName}%'
+            </if>
+            <if test="bscName!=null">
+                and b.bsc_name=#{bscName}
+            </if>
+            <if test="btsId!=null">
+                and b.bts_id=#{btsId}
+            </if>
+        </where>
+        )
+    </select>    
 </mapper>

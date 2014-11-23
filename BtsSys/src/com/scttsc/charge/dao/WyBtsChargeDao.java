@@ -62,4 +62,52 @@ public interface WyBtsChargeDao {
     List<WyBtsCharge> selectWyTunelChargeListByMap(Map<String,Object> param)throws Exception;
 
     int selectWyTunelChargeCountByMap(Map<String,Object> param)throws Exception;
+    
+    /**
+     * WyBts费用设置列表
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    List<WyBtsCharge> selectWyBtsChargeSettingByMap(Map<String,Object> param)throws Exception;
+
+    /**
+     * WyBts费用设置列表数量
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    int selectWyBtsChargeSettingCountByMap(Map<String,Object> param)throws Exception;
+    
+    /**
+     * WyBbu费用设置列表
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    List<WyBtsCharge> selectWyBbuChargeSettingByMap(Map<String,Object> param)throws Exception;
+    
+    /**
+     * WyBbu费用设置列表数量
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    int selectWyBbuChargeSettingCountByMap(Map<String,Object> param)throws Exception;
+    
+    /**
+     * WyTunel费用设置列表
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    List<WyBtsCharge> selectWyTunelChargeSettingByMap(Map<String,Object> param)throws Exception;
+    
+    /**
+     * WyTunel费用设置列表数量
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    int selectWyTunelChargeSettingCountByMap(Map<String,Object> param)throws Exception;
 }
