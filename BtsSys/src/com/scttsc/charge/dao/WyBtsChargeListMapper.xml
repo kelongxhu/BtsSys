@@ -94,6 +94,9 @@
            <if test="btsId!=null">
                and u.bts_id=#{btsId}
            </if>
+           <if test="btsType!=null">
+               and u.BTS_TYPE=#{btsType}
+           </if>
        </where>
        )m
        <where>
@@ -128,6 +131,9 @@
             </if>
             <if test="btsId!=null">
                 and u.bts_id=#{btsId}
+            </if>
+            <if test="btsType!=null">
+                and u.BTS_TYPE=#{btsType}
             </if>
         </where>
     </select>

@@ -12,7 +12,24 @@
 </style>
 
 <script type="text/javascript">
+
+    function init(){
+        var costType="${charge.costType}";
+        $("#costType option[value='" + costType + "']").attr("selected", true);
+        $("#costType").attr("disabled", "disabled");
+        if(costType==3){
+            $("#powerProperties").removeClass("noneCss").addClass("displayCss");
+            $("#payTypeTd").removeClass("noneCss").addClass("displayCss");
+            $("#PayTypeLable").removeClass("noneCss").addClass("displayCss");
+            $("#baseDegree").addClass("required").addClass("number");
+            $("#monthDegree").addClass("required").addClass("number");
+            $("#payTypeTd").addClass("required");
+        }
+    }
 $(function() {
+
+    init();
+
     var v = $("#form1").validate(
             {
                 ignore:"",
@@ -144,7 +161,14 @@ function uploadifyUpload() {
             <td>BTSID:</td>
             <td>${charge.btsId}</td>
             <td>费用类型:</td>
-            <td>${charge.costTypeStr}</td>
+            <td>
+                <select id="costType" class="input150">
+                    <option value="">请选择</option>
+                    <option value="1">房租</option>
+                    <option value="2">物业</option>
+                    <option value="3">电费</option>
+                </select>
+            </td>
         </tr>
         <tr>
             <td><span style="color: red;">*</span>金额:</td>
@@ -153,20 +177,28 @@ function uploadifyUpload() {
             </td>
             <td><span style="color: red;">*</span>缴费时间:</td>
             <td>
-                <input type="text" name="chargeBill.payTime" class="Wdate" onFocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})"/>
+                <input type="text" name="chargeBill.payTime" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})"/>
             </td>
         </tr>
         <tr>
             <td><span style="color: red;">*</span>缴费人员：</td>
             <td><input name="chargeBill.payUser" type="text" class="input150 required" value="${charge.remindUser}"/>
             </td>
+            <td id="PayTypeLable" class="noneCss"><span style="color: red;">*</span>缴费方式：</td>
+            <td id="payTypeTd" class="noneCss">
+                <select id="payType" class="input150">
+                    <option value="">请选择</option>
+                    <option value="1" selected>人工</option>
+                    <option value="2">代扣</option>
+                </select>
+            </td>
         </tr>
-        <tr>
+        <tr id="powerProperties" class="noneCss">
             <td><span style="color: red;">*</span>底度：</td>
-            <td><input name="chargeBill.baseDegree" type="text" class="input150 required number"/>
+            <td><input name="chargeBill.baseDegree" id="baseDegree" type="text" class="input150"/>
             </td>
             <td><span style="color: red;">*</span>当月度数:</td>
-            <td><input name="chargeBill.monthDegree" type="text" class="input150 required number"/>
+            <td><input name="chargeBill.monthDegree" id="monthDegree" type="text" class="input150"/>
         </tr>
         <td><label>缴费凭证上传:</label></td>
         <td>
@@ -181,10 +213,6 @@ function uploadifyUpload() {
             <button class="btn btn-success" onclick="$('#pz_uploadify').uploadify('upload', '*'); return false;" title="Upload File"><i class="icon-ok icon-white"></i>上传</button>
             <span id="msg" class="tipMsg"></span>
         </td>
-        <%--<td>--%>
-            <%--<div id="msg"></div>--%>
-        <%--</td>--%>
-
         </tr>
         <tr>
             <td>备注:</td>

@@ -530,6 +530,9 @@ public class WyBtsChargeListAction extends BaseAction {
         if (!StringUtil.isEmpty(costType)) {
             param.put("costType", costType);//费用类型
         }
+        if(!StringUtil.isEmpty(btsType)){
+            param.put("btsType",btsType);
+        }
         return param;
     }
 
