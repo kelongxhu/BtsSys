@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scttsc.baselibs.dao.AirLibDao">
+
+	<resultMap id="result" type="com.scttsc.baselibs.model.AirLib">
+		<result property="id" column="ID" jdbcType="DECIMAL" />
+		<result property="airModel" column="AIR_MODEL" jdbcType="VARCHAR" />
+		<result property="airFac" column="AIR_FAC" jdbcType="DECIMAL" />
+		<result property="prettifyFlag" column="PRETTIFY_FLAG" jdbcType="DECIMAL" />
+		<result property="ivaryFlag" column="IVARY_FLAG" jdbcType="DECIMAL" />
+		<result property="degree" column="DEGREE" jdbcType="DECIMAL" />
+		<result property="freq" column="FREQ" jdbcType="DECIMAL" />
+		<result property="trapWidth" column="TRAP_WIDTH" jdbcType="DECIMAL" />
+		<result property="airPlus" column="AIR_PLUS" jdbcType="DECIMAL" />
+		<result property="airType" column="AIR_TYPE" jdbcType="DECIMAL" />
+		<result property="jhType" column="JH_TYPE" jdbcType="DECIMAL" />
+		<result property="flatLobe" column="FLATLOBE" jdbcType="DECIMAL" />
+		<result property="uplobe" column="UPLOBE" jdbcType="DECIMAL" />
+		<result property="inputDrag" column="INPUTDRAG" jdbcType="DECIMAL" />
+		<result property="wireScale" column="WIRESCALE" jdbcType="DECIMAL" />
+		<result property="standingWave" column="STANDINGWAVE" jdbcType="DECIMAL" />
+		<result property="pitchUp" column="PITCHUP" jdbcType="DECIMAL" />
+		<result property="pitchDown" column="PITCHDOWN" jdbcType="DECIMAL" />
+		<result property="userId" column="USERID" jdbcType="DECIMAL" />
+		<result property="intime" column="INTIME" jdbcType="TIMESTAMP" />
+		<result property="updateTime" column="UPDATETIME" jdbcType="TIMESTAMP" />
+		<result property="remark" column="REMARK" jdbcType="VARCHAR" />
+        <result property="deleteFlag" column="DELETE_FLAG" jdbcType="DECIMAL" />
+
+
+		<result property="airFacName" column="airFacName" jdbcType="VARCHAR" />
+		<result property="airTypeName" column="airTypeName" jdbcType="VARCHAR" />
+		<result property="jhTypeName" column="jhTypeName" jdbcType="VARCHAR" />
+		
+		
+		
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		u.ID,u.AIR_MODEL,u.AIR_FAC,u.PRETTIFY_FLAG,u.IVARY_FLAG,u.DEGREE,u.FREQ,u.TRAP_WIDTH,u.AIR_PLUS,u.AIR_TYPE,u.JH_TYPE,u.FLATLOBE,
+		u.UPLOBE,u.INPUTDRAG,u.WIRESCALE,u.STANDINGWAVE,u.PITCHUP,u.PITCHDOWN,u.USERID,u.INTIME,u.UPDATETIME,u.REMARK,u.DELETE_FLAG
+	</sql>
+
+	<select id="getByConds" resultMap="result">
+		select* from (select m.*,ROWNUM RN from
+		(select
+		<include refid="Base_Column_List" />,a.name airFacName,b.name airTypeName,c.name jhTypeName
+		from WY_LIB_AIR u
+		LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='AIRFAC')a
+    	ON a.code=u.AIR_FAC
+    	LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='AIRTYPE')b
+    	ON b.code=u.AIR_TYPE
+    	LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='JHTYPE')c
+    	ON c.code=u.JH_TYPE
+		)m
+		<where>
+            and DELETE_FLAG=0
+			<if test="airFacs!=null">
+				and AIR_FAC in(${airFacs})
+			</if>
+			<if test="start!=null">
+				and RowNum &lt; (#{start} + #{pagesize})
+			</if>
+		</where>
+		)
+		<where>
+			<if test="start!=null">
+				RN >= #{start}
+			</if>
+		</where>
+	</select>
+
+	<select id="countByConds" resultType="int">
+		select count(1) from
+		(select
+		<include refid="Base_Column_List" />
+		from WY_LIB_AIR u)
+		<where>
+			1=1 and DELETE_FLAG=0
+			<if test="airFacs!=null">
+				and AIR_FAC in(${airFacs})
+			</if>
+			<!-- <include refid="other-condition" /> -->
+		</where>
+	</select>
+	
+	
+	<insert id="insert" parameterType="com.scttsc.baselibs.model.AirLib">
+	    INSERT INTO WY_LIB_AIR(ID,AIR_MODEL,AIR_FAC,PRETTIFY_FLAG,IVARY_FLAG,DEGREE,FREQ,TRAP_WIDTH,AIR_PLUS,
+	    AIR_TYPE,JH_TYPE,FLATLOBE,UPLOBE,INPUTDRAG,WIRESCALE,STANDINGWAVE,PITCHUP,PITCHDOWN,USERID,REMARK)
+	    VALUES(WY_LIB_AIR_SEQ.NEXTVAL,
+	    #{airModel,jdbcType=VARCHAR},
+	    #{airFac,jdbcType=DECIMAL},
+	    #{prettifyFlag,jdbcType=DECIMAL},
+	    #{ivaryFlag,jdbcType=DECIMAL},
+	    #{degree,jdbcType=DECIMAL},
+	    #{freq,jdbcType=DECIMAL},
+	    #{trapWidth,jdbcType=DECIMAL},
+	    #{airPlus,jdbcType=DECIMAL},
+	    #{airType,jdbcType=DECIMAL},
+	    #{jhType,jdbcType=DECIMAL},
+	    #{flatLobe,jdbcType=DECIMAL},
+	    #{uplobe,jdbcType=DECIMAL},
+	    #{inputDrag,jdbcType=DECIMAL},
+	    #{wireScale,jdbcType=DECIMAL},
+	    #{standingWave,jdbcType=DECIMAL},
+	    #{pitchUp,jdbcType=DECIMAL},
+	    #{pitchDown,jdbcType=DECIMAL},
+	    #{userId,jdbcType=DECIMAL},
+	    #{remark,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<select id="getById" resultMap="result">
+		select <include refid="Base_Column_List" /> from WY_LIB_AIR u
+		 where
+				u.ID=#{value}
+	</select>
+	
+	<update id="update" parameterType="com.scttsc.baselibs.model.AirLib">
+		UPDATE WY_LIB_AIR
+		SET AIR_MODEL= #{airModel,jdbcType=VARCHAR},
+		AIR_FAC= #{airFac,jdbcType=DECIMAL},
+		PRETTIFY_FLAG=#{prettifyFlag,jdbcType=DECIMAL},
+	    IVARY_FLAG=#{ivaryFlag,jdbcType=DECIMAL},
+	    DEGREE=#{degree,jdbcType=DECIMAL},
+	    FREQ=#{freq,jdbcType=DECIMAL},
+	    TRAP_WIDTH=#{trapWidth,jdbcType=DECIMAL},
+	    AIR_PLUS=#{airPlus,jdbcType=DECIMAL},
+	    AIR_TYPE=#{airType,jdbcType=DECIMAL},
+	    JH_TYPE=#{jhType,jdbcType=DECIMAL},
+	    FLATLOBE=#{flatLobe,jdbcType=DECIMAL},
+	    UPLOBE=#{uplobe,jdbcType=DECIMAL},
+	    INPUTDRAG=#{inputDrag,jdbcType=DECIMAL},
+	    WIRESCALE=#{wireScale,jdbcType=DECIMAL},
+	    STANDINGWAVE=#{standingWave,jdbcType=DECIMAL},
+	    PITCHUP=#{pitchUp,jdbcType=DECIMAL},
+	    PITCHDOWN=#{pitchDown,jdbcType=DECIMAL},
+	    REMARK=#{remark,jdbcType=VARCHAR} WHERE ID=#{id,jdbcType=DECIMAL}
+	</update>
+
+    <update id="deleteByDeleteFlag">
+        update WY_LIB_AIR set delete_flag=1,UPDATETIME=sysdate where id in(${ids})
+    </update>
+	
+	<delete id="delete">
+		delete WY_LIB_AIR where id in(${ids})
+	</delete>
+	
+	<select id="selectAll" resultMap="result">
+		select <include refid="Base_Column_List" /> from WY_LIB_AIR u where u.DELETE_FLAG=0
+	</select>
+	
+
+</mapper>
+

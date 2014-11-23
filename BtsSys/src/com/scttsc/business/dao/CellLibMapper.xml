@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.CellLibDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.business.model.CellLib">
+        <result column="CELL_INT_ID" property="cellIntId" jdbcType="DECIMAL"/>
+        <result column="LIB_ID" property="libId" jdbcType="DECIMAL"/>
+        <result column="LIB_TYPE" property="libType" jdbcType="DECIMAL"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+		CELL_INT_ID, LIB_ID, LIB_TYPE
+	</sql>
+
+    <insert id="insert" parameterType="com.scttsc.business.model.CellLib">
+		insert into WY_CELL_LIB (CELL_INT_ID, LIB_ID, LIB_TYPE
+		)
+		values (#{cellIntId,jdbcType=DECIMAL}, #{libId,jdbcType=DECIMAL},
+		#{libType,jdbcType=DECIMAL}
+		)
+	</insert>
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_CELL_LIB
+        <where>
+            1=1
+            <if test="cellId!=null">
+                and CELL_INT_ID=#{cellId,jdbcType=DECIMAL}
+            </if>
+            <if test="libType!=null">
+                and LIB_TYPE=#{libType,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByMap">
+        delete WY_CELL_LIB
+        <where>
+            1=1
+            <if test="cellId!=null">
+                and CELL_INT_ID=#{cellId,jdbcType=DECIMAL}
+            </if>
+            <if test="libType!=null">
+                and LIB_TYPE=#{libType,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </delete>
+
+
+      <sql id="SCHOOL_Column_List">
+		a.ADDRESS, a.SCHOOL_LEVEL, a.SCHOOL_TYPE,a.COVERAGE_TYPE,a.STRUCTURAL_TYPE,a.WIFI_TYPE,a.C_USERS,a.DO_USERS,
+		a.C_USERS_PLAN,a.DO_USERS_PLAN,a.MEAL_TYPE,a.BUSINESS_TYPE
+	  </sql>
+     <sql id="SCENERY_Column_List">
+		a.SCE_LEVEL, a.LONGITUDE,a.LATITUDE
+	  </sql>
+     <sql id="VITO_Column_List">
+		a.GPS_LONG, a.GPS_LAT,a.CMDA1X_COVGRATE,a.MOBGSM_COVGRATE,a.COVG_DIF_COVGRATE,a.UNICGSM_COVGRATE,a.EVDO_COVGRATE,a.CDMA1X_MOS,a.MOBGSM_MOS,a.UNICGSM_MOS
+	 </sql>
+    <sql id="ROAD_Column_List">
+		a.ROAD_PROP, a.SPEED,a.LINE_MILE,a.TUNNEL_MILE,a.PLAIN_MILE,a.MOUNTAIN_MILE,a.STATION_NUM,a.COVERTYPE,a.COVER_MILE_1X,a.COVER_RATE_1X,a.DROPCALL_MILE,
+		a.COVER_MILE_DO,a.COVER_RATE_DO,a.DOWN_TP_RATE,a.DOWN_TPGOOD_RATE,a.COVER_STATION_NUM,a.COVER_STATION_RATE
+	 </sql>
+    <sql id="TUNNEL_Column_List">
+		a.ROAD_ID, a.LENGTH,a.DIRECTION,a.LONGITUDE,a.LATITUDE,a.HEIGHT,a.COVGTYPE,a.INSTALLADRESS,a.RIGHTS,a.TOGBS,a.TOGNAME,
+		a.OPENTIME,a.ADDRESS
+	 </sql>
+
+
+    <select id="selectSchoolLibCells" resultType="hashmap">
+        select * from (select m.*,ROWNUM RN from
+        (SELECT a.id,a.name libname,a.city_id,c.name cityname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="SCHOOL_Column_List"/>
+        FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_school q WHERE w.lib_type=1 AND q.id=w.lib_id)a
+        LEFT JOIN wy_cell b
+        ON b.int_id=a.cell_int_id
+        LEFT JOIN wy_city c
+        ON c.id=a.city_id ORDER BY a.id)m
+        <where>
+            1=1
+            <if test="countryIds!=null">
+                and city_id in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and libname like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="countBySchoolLibCells" resultType="int">
+        select count(1) from (
+        SELECT a.id,a.name libname,a.city_id,c.name cityname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="SCHOOL_Column_List"/>
+        FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_school q WHERE w.lib_type=1 AND q.id=w.lib_id)a
+        LEFT JOIN wy_cell b
+        ON b.int_id=a.cell_int_id
+        LEFT JOIN wy_city c
+        ON c.id=a.city_id
+        )
+        <where>
+            1=1
+            <if test="countryIds!=null">
+                and city_id in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and libname like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+      <!--风景库覆盖-->
+      <select id="selectSecneryLibCells" resultType="hashmap">
+        select * from (select m.*,ROWNUM RN from
+        (SELECT a.id,a.sce_name libname,a.city_id,a.country_id,c.name cityname,d.name countryname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="SCENERY_Column_List"/>
+        FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_scenery q WHERE w.lib_type=5 and q.id=w.lib_id)a
+        LEFT JOIN wy_cell b
+        ON b.int_id=a.cell_int_id
+        LEFT JOIN wy_city c
+        ON c.id=a.city_id
+        LEFT JOIN wy_city d
+        ON d.id=a.country_id order by a.id
+          )m
+        <where>
+            1=1
+            <if test="countryIds!=null">
+                and country_id in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and libname like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="countBySecneryLibCells" resultType="int">
+        select count(1) from (
+        SELECT a.id,a.sce_name libname,a.city_id,a.country_id,c.name cityname,d.name countryname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="SCENERY_Column_List"/>
+        FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_scenery q WHERE w.lib_type=5 and q.id=w.lib_id)a
+        LEFT JOIN wy_cell b
+        ON b.int_id=a.cell_int_id
+        LEFT JOIN wy_city c
+        ON c.id=a.city_id
+        LEFT JOIN wy_city d
+        ON d.id=a.country_id
+        )
+        <where>
+            1=1
+            <if test="countryIds!=null">
+                and country_id in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and libname like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+
+
+     <!--农村库覆盖-->
+      <select id="selectVitoLibCells" resultType="hashmap">
+        select * from (select m.*,ROWNUM RN from
+        (SELECT a.id,a.name libname,a.city_id,a.country_id,c.name cityname,d.name countryname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="VITO_Column_List"/>
+        FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_vito q WHERE lib_type=2 and q.id=w.lib_id)a
+        LEFT JOIN wy_cell b
+        ON b.int_id=a.cell_int_id
+        LEFT JOIN wy_city c
+        ON c.id=a.city_id
+        LEFT JOIN wy_city d
+        ON d.id=a.country_id order by a.id
+          )m
+        <where>
+            1=1
+            <if test="countryIds!=null">
+                and country_id in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and libname like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="countByVitoLibCells" resultType="int">
+        select count(1) from (
+        SELECT a.name libname,a.city_id,a.country_id,c.name cityname,d.name countryname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="VITO_Column_List"/>
+        FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_vito q WHERE lib_type=2 and q.id=w.lib_id)a
+        LEFT JOIN wy_cell b
+        ON b.int_id=a.cell_int_id
+        LEFT JOIN wy_city c
+        ON c.id=a.city_id
+        LEFT JOIN wy_city d
+        ON d.id=a.country_id
+        )
+        <where>
+            1=1
+            <if test="countryIds!=null">
+                and country_id in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and libname like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+
+
+    <!--道路库覆盖-->
+         <select id="selectRoadLibCells" resultType="hashmap">
+           select * from (select m.*,ROWNUM RN from
+           (SELECT a.id,a.name libname,a.city_id,c.name cityname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="ROAD_Column_List"/>
+           FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_road q WHERE lib_type=3 and q.id=w.lib_id)a
+           LEFT JOIN wy_cell b
+           ON b.int_id=a.cell_int_id
+           LEFT JOIN wy_city c
+           ON c.id=a.city_id order by a.id
+          )m
+           <where>
+               1=1
+               <if test="countryIds!=null">
+                   and city_id in(${countryIds})
+               </if>
+               <if test="name!=null">
+                   and libname like #{name,jdbcType=VARCHAR}
+               </if>
+               <if test="bscName!=null">
+                   and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+               </if>
+               <if test="btsId!=null">
+                   and btsId = #{btsId,jdbcType=DECIMAL}
+               </if>
+               <if test="ci!=null">
+                   and CI = #{ci,jdbcType=DECIMAL}
+               </if>
+               <if test="pn!=null">
+                   and PN = #{pn,jdbcType=DECIMAL}
+               </if>
+               <if test="start!=null">
+                   and RowNum &lt; (#{start} + #{pagesize})
+               </if>
+           </where>
+           )
+           <where>
+               <if test="start!=null">
+                   RN >= #{start}
+               </if>
+           </where>
+       </select>
+
+
+       <select id="countByRoadLibCells" resultType="int">
+           select count(1) from (
+           SELECT a.id,a.name libname,a.city_id,c.name cityname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="ROAD_Column_List"/>
+           FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_road q WHERE lib_type=3 and q.id=w.lib_id)a
+           LEFT JOIN wy_cell b
+           ON b.int_id=a.cell_int_id
+           LEFT JOIN wy_city c
+           ON c.id=a.city_id
+           )
+           <where>
+               1=1
+               <if test="countryIds!=null">
+                   and city_id in(${countryIds})
+               </if>
+               <if test="name!=null">
+                   and libname like #{name,jdbcType=VARCHAR}
+               </if>
+               <if test="bscName!=null">
+                   and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+               </if>
+               <if test="btsId!=null">
+                   and btsId = #{btsId,jdbcType=DECIMAL}
+               </if>
+               <if test="ci!=null">
+                   and CI = #{ci,jdbcType=DECIMAL}
+               </if>
+               <if test="pn!=null">
+                   and PN = #{pn,jdbcType=DECIMAL}
+               </if>
+           </where>
+       </select>
+
+
+   <!--隧道库覆盖-->
+    <select id="selectTunnelLibCells" resultType="hashmap">
+             select * from (select m.*,ROWNUM RN from
+             (SELECT a.id,a.name libname,a.city_id,c.name cityname,a.country_id,d.name countryname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="TUNNEL_Column_List"/>
+             FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,WY_LIB_TUNNEL q WHERE lib_type=6 and q.id=w.lib_id)a
+             LEFT JOIN wy_cell b
+             ON b.int_id=a.cell_int_id
+             LEFT JOIN wy_city c
+             ON c.id=a.city_id
+             LEFT JOIN wy_city d
+             ON d.id=a.country_id order by a.id
+            )m
+             <where>
+                 1=1
+                 <if test="countryIds!=null">
+                     and country_id in(${countryIds})
+                 </if>
+                 <if test="name!=null">
+                     and libname like #{name,jdbcType=VARCHAR}
+                 </if>
+                 <if test="bscName!=null">
+                     and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+                 </if>
+                 <if test="btsId!=null">
+                     and btsId = #{btsId,jdbcType=DECIMAL}
+                 </if>
+                 <if test="ci!=null">
+                     and CI = #{ci,jdbcType=DECIMAL}
+                 </if>
+                 <if test="pn!=null">
+                     and PN = #{pn,jdbcType=DECIMAL}
+                 </if>
+                 <if test="start!=null">
+                     and RowNum &lt; (#{start} + #{pagesize})
+                 </if>
+             </where>
+             )
+             <where>
+                 <if test="start!=null">
+                     RN >= #{start}
+                 </if>
+             </where>
+         </select>
+
+
+         <select id="countByTunnelLibCells" resultType="int">
+             select count(1) from (
+             SELECT a.id,a.name libname,a.city_id,c.name cityname,a.country_id,d.name countryname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="TUNNEL_Column_List"/>
+             FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,WY_LIB_TUNNEL q WHERE lib_type=6 and q.id=w.lib_id)a
+             LEFT JOIN wy_cell b
+             ON b.int_id=a.cell_int_id
+             LEFT JOIN wy_city c
+             ON c.id=a.city_id
+             LEFT JOIN wy_city d
+             ON d.id=a.country_id order by a.id
+             )
+             <where>
+                 1=1
+                 <if test="countryIds!=null">
+                     and country_id in(${countryIds})
+                 </if>
+                 <if test="name!=null">
+                     and libname like #{name,jdbcType=VARCHAR}
+                 </if>
+                 <if test="bscName!=null">
+                     and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+                 </if>
+                 <if test="btsId!=null">
+                     and btsId = #{btsId,jdbcType=DECIMAL}
+                 </if>
+                 <if test="ci!=null">
+                     and CI = #{ci,jdbcType=DECIMAL}
+                 </if>
+                 <if test="pn!=null">
+                     and PN = #{pn,jdbcType=DECIMAL}
+                 </if>
+             </where>
+         </select>
+
+
+    <update id="updateByMap">
+        update WY_CELL_LIB set CELL_INT_ID=#{newCellIntId,jdbcType=DECIMAL}
+        where CELL_INT_ID = #{cellIntId,jdbcType=DECIMAL}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.healthy.dao.WyRulecfgDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.WyRulecfg">
+        <id column="ID" property="id" jdbcType="DECIMAL"/>
+        <result column="RULEDESC" property="ruledesc" jdbcType="VARCHAR"/>
+        <result column="GRADE" property="grade" jdbcType="DECIMAL"/>
+        <result column="GRADETYPE" property="gradetype" jdbcType="DECIMAL"/>
+        <result column="A_WEIGHT" property="aweight" jdbcType="DECIMAL"/>
+        <result column="B_WEIGHT" property="bweight" jdbcType="DECIMAL"/>
+        <result column="C_WEIGHT" property="cweight" jdbcType="DECIMAL"/>
+        <result column="D_WEIGHT" property="dweight" jdbcType="DECIMAL"/>
+        <result column="GRADEFLAG" property="gradeflag" jdbcType="DECIMAL"/>
+        <result column="SUGGEST" property="suggest" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="DECIMAL"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP"/>
+        <result column="USER_ID" property="userId" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.scttsc.healthy.model.WyRulecfg">
+        <id column="RL_ID" property="id" jdbcType="DECIMAL"/>
+        <result column="RL_RULEDESC" property="ruledesc" jdbcType="VARCHAR"/>
+        <result column="RL_GRADE" property="grade" jdbcType="DECIMAL"/>
+        <result column="RL_GRADETYPE" property="gradetype" jdbcType="DECIMAL"/>
+        <result column="RL_A_WEIGHT" property="aweight" jdbcType="DECIMAL"/>
+        <result column="RL_B_WEIGHT" property="bweight" jdbcType="DECIMAL"/>
+        <result column="RL_C_WEIGHT" property="cweight" jdbcType="DECIMAL"/>
+        <result column="RL_D_WEIGHT" property="dweight" jdbcType="DECIMAL"/>
+        <result column="RL_GRADEFLAG" property="gradeflag" jdbcType="DECIMAL"/>
+        <result column="RL_SUGGEST" property="suggest" jdbcType="VARCHAR"/>
+        <result column="RL_STATUS" property="status" jdbcType="DECIMAL"/>
+        <result column="RL_UPDATETIME" property="updatetime" jdbcType="TIMESTAMP"/>
+        <result column="RL_USER_ID" property="userId" jdbcType="DECIMAL"/>
+        <collection property="wyRuletermList" javaType="ArrayList"
+                    resultMap="com.scttsc.healthy.dao.WyRuletermDao.BaseResultMap2"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    ID, RULEDESC, GRADE, GRADETYPE, A_WEIGHT, B_WEIGHT, C_WEIGHT, D_WEIGHT, GRADEFLAG, 
+    SUGGEST, STATUS, UPDATETIME, USER_ID
+    </sql>
+
+    <sql id="Base_Column_List2">
+        rl.ID RL_ID, rl.RULEDESC RL_RULEDESC, rl.GRADE RL_GRADE, rl.GRADETYPE RL_GRADETYPE, rl.A_WEIGHT RL_A_WEIGHT, rl.B_WEIGHT RL_B_WEIGHT, rl.C_WEIGHT RL_C_WEIGHT, rl.D_WEIGHT RL_D_WEIGHT, rl.GRADEFLAG RL_GRADEFLAG,
+        rl.SUGGEST RL_SUGGEST, rl.STATUS RL_STATUS, rl.UPDATETIME RL_UPDATETIME, rl.USER_ID RL_USER_ID
+     </sql>
+
+
+    <select id="selectRuleCfgList" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List"/>
+        from wy_rulecfg
+        )m
+        <where>
+            1=1
+            <if test="gradetype!=null">
+                and GRADETYPE=#{gradetype,jdbcType=DECIMAL}
+            </if>
+            <if test="status!=null">
+                and status in(${status})
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectRuleCfgCount" resultType="int">
+        select count(1) from wy_rulecfg
+        <where>
+            1=1
+            <if test="gradetype!=null">
+                and GRADETYPE=#{gradetype,jdbcType=DECIMAL}
+            </if>
+            <if test="status!=null">
+                and status in(${status})
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap2" parameterType="Long">
+        select
+        <include refid="Base_Column_List2"/>,
+        <include refid="com.scttsc.healthy.dao.WyRuletermDao.Base_Column_List2"/>,
+        <include refid="com.scttsc.healthy.dao.WySubcfgDao.Base_Column_List2"/>
+        from WY_RULECFG rl
+        left join wy_ruleterm r on r.rulecfgid=rl.id
+        left join WY_SUBCFG s on s.id=r.SUBCFGID
+        where rl.ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="Long">
+    delete from WY_RULECFG
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="com.scttsc.healthy.model.WyRulecfg">
+        <selectKey resultType="Long" keyProperty="id" order="BEFORE">
+            select wy_rulecfg_SEQ.nextval from dual
+        </selectKey>
+        insert into WY_RULECFG (ID, RULEDESC, GRADE,
+        GRADETYPE, A_WEIGHT, B_WEIGHT,
+        C_WEIGHT, D_WEIGHT, GRADEFLAG,
+        SUGGEST, STATUS, UPDATETIME,
+        USER_ID)
+        values (#{id,jdbcType=DECIMAL}, #{ruledesc,jdbcType=VARCHAR}, #{grade,jdbcType=DECIMAL},
+        #{gradetype,jdbcType=DECIMAL}, #{aweight,jdbcType=DECIMAL}, #{bweight,jdbcType=DECIMAL},
+        #{cweight,jdbcType=DECIMAL}, #{dweight,jdbcType=DECIMAL}, #{gradeflag,jdbcType=DECIMAL},
+        #{suggest,jdbcType=VARCHAR}, #{status,jdbcType=DECIMAL}, #{updatetime,jdbcType=DATE},
+        #{userId,jdbcType=DECIMAL})
+    </insert>
+    <insert id="insertSelective" parameterType="com.scttsc.healthy.model.WyRulecfg">
+        <selectKey resultType="Long" keyProperty="id" order="BEFORE">
+            select wy_rulecfg_SEQ.nextval from dual
+        </selectKey>
+        insert into WY_RULECFG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            ID,
+            <if test="ruledesc != null">
+                RULEDESC,
+            </if>
+            <if test="grade != null">
+                GRADE,
+            </if>
+            <if test="gradetype != null">
+                GRADETYPE,
+            </if>
+            <if test="aweight != null">
+                A_WEIGHT,
+            </if>
+            <if test="bweight != null">
+                B_WEIGHT,
+            </if>
+            <if test="cweight != null">
+                C_WEIGHT,
+            </if>
+            <if test="dweight != null">
+                D_WEIGHT,
+            </if>
+            <if test="gradeflag != null">
+                GRADEFLAG,
+            </if>
+            <if test="suggest != null">
+                SUGGEST,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=DECIMAL},
+            <if test="ruledesc != null">
+                #{ruledesc,jdbcType=VARCHAR},
+            </if>
+            <if test="grade != null">
+                #{grade,jdbcType=DECIMAL},
+            </if>
+            <if test="gradetype != null">
+                #{gradetype,jdbcType=DECIMAL},
+            </if>
+            <if test="aweight != null">
+                #{aweight,jdbcType=DECIMAL},
+            </if>
+            <if test="bweight != null">
+                #{bweight,jdbcType=DECIMAL},
+            </if>
+            <if test="cweight != null">
+                #{cweight,jdbcType=DECIMAL},
+            </if>
+            <if test="dweight != null">
+                #{dweight,jdbcType=DECIMAL},
+            </if>
+            <if test="gradeflag != null">
+                #{gradeflag,jdbcType=DECIMAL},
+            </if>
+            <if test="suggest != null">
+                #{suggest,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=DECIMAL},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.healthy.model.WyRulecfg">
+        update WY_RULECFG
+        <set>
+            <if test="ruledesc != null">
+                RULEDESC = #{ruledesc,jdbcType=VARCHAR},
+            </if>
+            <if test="grade != null">
+                GRADE = #{grade,jdbcType=DECIMAL},
+            </if>
+            <if test="gradetype != null">
+                GRADETYPE = #{gradetype,jdbcType=DECIMAL},
+            </if>
+            <if test="aweight != null">
+                A_WEIGHT = #{aweight,jdbcType=DECIMAL},
+            </if>
+            <if test="bweight != null">
+                B_WEIGHT = #{bweight,jdbcType=DECIMAL},
+            </if>
+            <if test="cweight != null">
+                C_WEIGHT = #{cweight,jdbcType=DECIMAL},
+            </if>
+            <if test="dweight != null">
+                D_WEIGHT = #{dweight,jdbcType=DECIMAL},
+            </if>
+            <if test="gradeflag != null">
+                GRADEFLAG = #{gradeflag,jdbcType=DECIMAL},
+            </if>
+            <if test="suggest != null">
+                SUGGEST = #{suggest,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=DECIMAL},
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.scttsc.healthy.model.WyRulecfg">
+    update WY_RULECFG
+    set RULEDESC = #{ruledesc,jdbcType=VARCHAR},
+      GRADE = #{grade,jdbcType=DECIMAL},
+      GRADETYPE = #{gradetype,jdbcType=DECIMAL},
+      A_WEIGHT = #{aweight,jdbcType=DECIMAL},
+      B_WEIGHT = #{bweight,jdbcType=DECIMAL},
+      C_WEIGHT = #{cweight,jdbcType=DECIMAL},
+      D_WEIGHT = #{dweight,jdbcType=DECIMAL},
+      GRADEFLAG = #{gradeflag,jdbcType=DECIMAL},
+      SUGGEST = #{suggest,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=DECIMAL},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      USER_ID = #{userId,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+
+    <select id="selectRuleCfgByMap" resultMap="BaseResultMap2" parameterType="Long">
+           select
+           <include refid="Base_Column_List2"/>,
+           <include refid="com.scttsc.healthy.dao.WyRuletermDao.Base_Column_List2"/>,
+           <include refid="com.scttsc.healthy.dao.WySubcfgDao.Base_Column_List2"/>
+           from WY_RULECFG rl
+           left join wy_ruleterm r on r.rulecfgid=rl.id
+           left join WY_SUBCFG s on s.id=r.SUBCFGID
+           <where>
+               1=1
+               <if test="gradetype!=null">
+                   and GRADETYPE=#{gradetype,jdbcType=DECIMAL}
+               </if>
+               <if test="status!=null">
+                   and status in(${status})
+               </if>
+           </where>
+       </select>
+
+    <select id="selectSumGradeByType" resultType="double">
+         select SUM(grade) from WY_RULECFG t WHERE status in(1,3) and GRADETYPE=#{gradeType}
+    </select>
+</mapper>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.charge.dao.WyBtsChargeListDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.charge.model.WyBtsChargeList" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="NAME" property="btsName" jdbcType="VARCHAR" />
+    <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
+    <result column="COUNTRY_ID" property="countryId" jdbcType="DECIMAL" />
+    <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR" />
+    <result column="BTS_ID" property="btsId" jdbcType="DECIMAL" />
+    <result column="BTS_TYPE" property="btsType" jdbcType="DECIMAL" />
+    <result column="COST_TYPE" property="costType" jdbcType="DECIMAL" />
+    <result column="MONEY" property="money" jdbcType="DECIMAL" />
+    <result column="PROOF_FILE" property="proofFile" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="PAY_TIME" property="payTime" jdbcType="DATE" />
+    <result column="PAY_USER" property="payUser" jdbcType="VARCHAR" />
+    <result column="IS_TIMEOUT" property="isTimeout" jdbcType="DECIMAL" />
+    <result column="IN_TIME" property="inTime" jdbcType="DATE" />
+    <result column="IN_USER" property="inUser" jdbcType="DECIMAL" />
+    <result column="MONTH_DEGREE" property="monthDegree" jdbcType="DECIMAL" />
+    <result column="BASE_DEGREE" property="baseDegree" jdbcType="DECIMAL" />
+    <result column="PAY_TYPE" property="payType" jdbcType="DECIMAL" />
+
+      <!-->冗余字段<-->
+    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
+    <result column="countryName" property="countryName" jdbcType="VARCHAR" />
+
+  </resultMap>
+
+
+
+  <sql id="Base_Column_List" >
+    u.ID, u.INT_ID,u.NAME,u.CITY_ID,u.COUNTRY_ID,u.BSC_NAME,u.BTS_ID,u.BTS_TYPE, u.COST_TYPE, u.MONEY, u.PROOF_FILE, u.REMARK, u.PAY_TIME, u.PAY_USER, u.IS_TIMEOUT,
+    u.IN_TIME,u.IN_USER, u.MONTH_DEGREE, u.BASE_DEGREE, u.PAY_TYPE
+  </sql>
+
+    <resultMap id="BTS_ResultMap" type="com.scttsc.charge.dto.BtsDTO">
+        <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
+        <result column="COUNTY_ID" property="countryId" jdbcType="DECIMAL" />
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR" />
+        <result column="BTS_ID" property="btsId" jdbcType="DECIMAL" />
+        <result column="BTS_TYPE" property="btsType" jdbcType="DECIMAL" />
+    </resultMap>
+
+
+    <select id="selectBtsByMap" resultMap="BTS_ResultMap">
+        select u.* from(select INT_ID,NAME, city_id, county_id,BSC_NAME,BTS_ID,(case is_indoor when '否' then 1 when '是'
+        then 3 END) BTS_TYPE from wy_bts where delete_flag=0
+        UNION
+        select INT_ID,NAME, city_id, county_id,BSC_NAME,BTS_ID,2 BTS_TYPE from wy_bbu where is_share=0 and bbu_no in(1,2)
+        and delete_flag=0
+        UNION
+        select INT_ID,NAME, city_id, county_id,BSC_NAME,BTS_ID,6 BTS_TYPE from wy_tunel where delete_flag=0)u
+        <where>
+            1=1
+            <if test="name!=null">
+                and u.name=#{name}
+            </if>
+            <if test="btsType!=null">
+                and u.BTS_TYPE=#{btsType}
+            </if>
+            <if test="intId!=null">
+                and u.INT_ID=#{intId}
+            </if>
+        </where>
+    </select>
+
+
+
+
+   <select id="selectByMap" resultMap="BaseResultMap">
+       select * from (select m.*,ROWNUM RN from
+       (
+       select <include refid="Base_Column_List"/>,c.name cityName,d.name countryName from wy_bts_charge_list u
+       left join wy_city c on c.id=u.city_id
+       left join wy_city d on d.id=u.COUNTRY_ID
+       <where>
+           <if test="countryIds!=null">
+               and u.COUNTRY_ID in(${countryIds})
+           </if>
+           <if test="costType!=null">
+               and u.COST_TYPE=#{costType}
+           </if>
+           <if test="btsName!=null">
+               and u.name like '%${btsName}%'
+           </if>
+           <if test="bscName!=null">
+               and u.bsc_name=#{bscName}
+           </if>
+           <if test="btsId!=null">
+               and u.bts_id=#{btsId}
+           </if>
+       </where>
+       )m
+       <where>
+           <if test="start!=null">
+               and RowNum &lt; (#{start} + #{pagesize})
+           </if>
+       </where>
+       )
+       <where>
+           <if test="start!=null">
+               RN >= #{start}
+           </if>
+       </where>
+   </select>
+
+
+    <select id="countByMap" resultType="int">
+        select count(1) from
+        wy_bts_charge_list u
+        <where>
+            <if test="countryIds!=null">
+                and u.COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="costType!=null">
+                and u.COST_TYPE=#{costType}
+            </if>
+            <if test="btsName!=null">
+                and u.name like '%${btsName}%'
+            </if>
+            <if test="bscName!=null">
+                and u.bsc_name=#{bscName}
+            </if>
+            <if test="btsId!=null">
+                and u.bts_id=#{btsId}
+            </if>
+        </where>
+    </select>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from WY_BTS_CHARGE_LIST
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByBtsId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from WY_BTS_CHARGE_LIST where INT_ID=#{intId} and COST_TYPE=#{costType}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from WY_BTS_CHARGE_LIST
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.charge.model.WyBtsChargeList" >
+    insert into WY_BTS_CHARGE_LIST (ID, INT_ID,NAME,CITY_ID,COUNTRY_ID,BSC_NAME,BTS_ID, BTS_TYPE,
+      COST_TYPE, MONEY, PROOF_FILE, 
+      REMARK, PAY_TIME, PAY_USER, 
+      IS_TIMEOUT, IN_TIME,IN_USER, MONTH_DEGREE,
+      BASE_DEGREE, PAY_TYPE)
+    values (WY_BTS_CHARGE_LIST_SEQ.NEXTVAL, #{intId,jdbcType=DECIMAL},#{btsName},#{cityId},#{countryId},#{bscName},#{btsId},
+     #{btsType,jdbcType=DECIMAL}, #{costType,jdbcType=DECIMAL}, #{money,jdbcType=DECIMAL}, #{proofFile,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR}, #{payTime,jdbcType=DATE}, #{payUser,jdbcType=VARCHAR},
+      #{isTimeout,jdbcType=DECIMAL}, #{inTime,jdbcType=DATE},#{inUser,jdbcType=DECIMAL}, #{monthDegree,jdbcType=DECIMAL},
+      #{baseDegree,jdbcType=DECIMAL}, #{payType,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.charge.model.WyBtsChargeList" >
+    update WY_BTS_CHARGE_LIST
+    <set >
+      <if test="intId != null" >
+         INT_ID = #{intId,jdbcType=DECIMAL},
+      </if>
+      <if test="btsName!=null">
+         NAME=#{btsName},
+      </if>
+      <if test="bscName!=null">
+          BSC_NAME=#{bscName},
+      </if>
+      <if test="btsId!=null">
+          BTS_ID=#{btsId},
+      </if>
+      <if test="cityId!=null">
+          CITY_ID=#{cityId},
+      </if>
+      <if test="countryId!=null">
+          COUNTRY_ID=#{countryId}
+      </if>
+      <if test="btsType != null" >
+        BTS_TYPE = #{btsType,jdbcType=DECIMAL},
+      </if>
+      <if test="costType != null" >
+        COST_TYPE = #{costType,jdbcType=DECIMAL},
+      </if>
+      <if test="money != null" >
+        MONEY = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="proofFile != null" >
+        PROOF_FILE = #{proofFile,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null" >
+        PAY_TIME = #{payTime,jdbcType=DATE},
+      </if>
+      <if test="payUser != null" >
+        PAY_USER = #{payUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isTimeout != null" >
+        IS_TIMEOUT = #{isTimeout,jdbcType=DECIMAL},
+      </if>
+      <if test="inTime != null" >
+        IN_TIME = #{inTime,jdbcType=DATE},
+      </if>
+      <if test="inUser!=null">
+        IN_USER=#{inUser,jdbcType=DECIMAL}
+      </if>
+      <if test="monthDegree != null" >
+        MONTH_DEGREE = #{monthDegree,jdbcType=DECIMAL},
+      </if>
+      <if test="baseDegree != null" >
+        BASE_DEGREE = #{baseDegree,jdbcType=DECIMAL},
+      </if>
+      <if test="payType != null" >
+        PAY_TYPE = #{payType,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

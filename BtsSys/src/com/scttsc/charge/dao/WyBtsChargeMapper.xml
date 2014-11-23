@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.charge.dao.WyBtsChargeDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.charge.model.WyBtsCharge" >
+    <id column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="BTS_TYPE" property="btsType" jdbcType="DECIMAL" />
+    <result column="COST_TYPE" property="costType" jdbcType="DECIMAL" />
+    <result column="CONTRACT_STARTTIME" property="contractStarttime" jdbcType="DATE" />
+    <result column="CONTRACT_ENDTIME" property="contractEndtime" jdbcType="DATE" />
+    <result column="PAY_CYCLE" property="payCycle" jdbcType="DECIMAL" />
+    <result column="PAY_DAY" property="payDay" jdbcType="DECIMAL" />
+    <result column="AHEAD_DAY" property="aheadDay" jdbcType="DECIMAL" />
+    <result column="REMIND_USER" property="remindUser" jdbcType="VARCHAR" />
+    <result column="REMIND_TEL" property="remindTel" jdbcType="VARCHAR" />
+    <result column="MONEY" property="money" jdbcType="DECIMAL" />
+    <result column="CONTRACT_FILE" property="contractFile" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="EACH_TEL" property="eachTel" jdbcType="VARCHAR" />
+    <result column="EACH_ACCOUNTNAME" property="eachAccountname" jdbcType="VARCHAR" />
+    <result column="EACH_BANKNUM" property="eachBanknum" jdbcType="VARCHAR" />
+    <result column="PAY_TYPE" property="payType" jdbcType="DECIMAL" />
+    <result column="BANK_ACCOUNT" property="bankAccount" jdbcType="VARCHAR" />
+    <result column="BALANCE" property="balance" jdbcType="DECIMAL" />
+    <!-->冗余字段<-->
+    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
+    <result column="countryName" property="countryName" jdbcType="VARCHAR" />
+    <result column="btsName" property="btsName" jdbcType="VARCHAR" />
+    <result column="bscName" property="bscName" jdbcType="VARCHAR" />
+    <result column="btsId" property="btsId" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    u.INT_ID, u.BTS_TYPE, u.COST_TYPE, u.CONTRACT_STARTTIME, u.CONTRACT_ENDTIME, u.PAY_CYCLE, u.PAY_DAY,
+    u.AHEAD_DAY, u.REMIND_USER, u.REMIND_TEL, u.MONEY, u.CONTRACT_FILE, u.REMARK, u.EACH_TEL, u.EACH_ACCOUNTNAME,
+    u.EACH_BANKNUM, u.PAY_TYPE, u.BANK_ACCOUNT, u.BALANCE
+  </sql>
+
+  <!--室外覆盖站点的费用设置-->
+
+  <select id="selectWyBtsChargeListByMap" resultMap="BaseResultMap">
+      select * from (select m.*,ROWNUM RN from
+      (select a.*,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+      b.bts_id btsId from (select <include refid="Base_Column_List"/> from WY_BTS_CHARGE u where u.BTS_TYPE=#{btsType})a
+      left join wy_bts b on b.INT_ID=a.INT_ID
+      left join wy_city c on c.id=b.city_id
+      left join wy_city d on d.id=b.county_id
+      <where>
+          b.delete_flag=0
+          <if test="countryIds!=null">
+              and b.COUNTY_ID in(${countryIds})
+          </if>
+          <if test="costType!=null">
+              and a.COST_TYPE=#{costType}
+          </if>
+          <if test="btsName!=null">
+              and b.name like '%${btsName}%'
+          </if>
+          <if test="bscName!=null">
+              and b.bsc_name=#{bscName}
+          </if>
+          <if test="btsId!=null">
+              and b.bts_id=#{btsId}
+          </if>
+      </where>
+      )m
+      <where>
+          <if test="start!=null">
+              and RowNum &lt; (#{start} + #{pagesize})
+          </if>
+      </where>
+      )
+      <where>
+          <if test="start!=null">
+              RN >= #{start}
+          </if>
+      </where>
+  </select>
+
+  <select id="selectWyBtsChargeCountByMap" resultType="int">
+      select count(1) from(
+      select a.*,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+      b.bts_id btsId from (select <include refid="Base_Column_List"/> from WY_BTS_CHARGE u where u.BTS_TYPE=#{btsType})a
+      left join wy_bts b on b.INT_ID=a.INT_ID
+      left join wy_city c on c.id=b.city_id
+      left join wy_city d on d.id=b.county_id
+      <where>
+          b.delete_flag=0
+          <if test="countryIds!=null">
+              and b.COUNTY_ID in(${countryIds})
+          </if>
+          <if test="costType!=null">
+              and a.COST_TYPE=#{costType}
+          </if>
+          <if test="btsName!=null">
+              and b.name like '%${btsName}%'
+          </if>
+          <if test="bscName!=null">
+              and b.bsc_name=#{bscName}
+          </if>
+          <if test="btsId!=null">
+              and b.bts_id=#{btsId}
+          </if>
+      </where>
+      )
+  </select>
+
+  <!--纯BBU费用设置-->
+    <select id="selectWyBbuChargeListByMap" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select a.*,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+        b.bts_id btsId from (select <include refid="Base_Column_List"/> from WY_BTS_CHARGE u where u.BTS_TYPE=2)a
+        left join wy_bbu b on b.INT_ID=a.INT_ID
+        left join wy_city c on c.id=b.city_id
+        left join wy_city d on d.id=b.county_id
+        <where>
+            b.delete_flag=0 and b.IS_SHARE=0 and b.BBU_TYPE in (1,2)
+            <if test="countryIds!=null">
+                and b.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="costType!=null">
+                and a.COST_TYPE=#{costType}
+            </if>
+            <if test="btsName!=null">
+                and b.name like '%${btsName}%'
+            </if>
+            <if test="bscName!=null">
+                and b.bsc_name=#{bscName}
+            </if>
+            <if test="btsId!=null">
+                and b.bts_id=#{btsId}
+            </if>
+        </where>
+        )m
+        <where>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectWyBbuChargeCountByMap" resultType="int">
+        select count(1) from(
+        select a.*,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+        b.bts_id btsId from (select <include refid="Base_Column_List"/> from WY_BTS_CHARGE u where u.BTS_TYPE=2)a
+        left join wy_bbu b on b.INT_ID=a.INT_ID
+        left join wy_city c on c.id=b.city_id
+        left join wy_city d on d.id=b.county_id
+        <where>
+            b.delete_flag=0 and b.IS_SHARE=0 and b.BBU_TYPE in (1,2)
+            <if test="countryIds!=null">
+                and b.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="costType!=null">
+                and a.COST_TYPE=#{costType}
+            </if>
+            <if test="btsName!=null">
+                and b.name like '%${btsName}%'
+            </if>
+            <if test="bscName!=null">
+                and b.bsc_name=#{bscName}
+            </if>
+            <if test="btsId!=null">
+                and b.bts_id=#{btsId}
+            </if>
+        </where>
+        )
+    </select>
+
+    <!--隧道覆盖站点-->
+    <select id="selectWyTunelChargeListByMap" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select a.*,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+        b.bts_id btsId from (select <include refid="Base_Column_List"/> from WY_BTS_CHARGE u where u.BTS_TYPE=6)a
+        left join wy_tunel b on b.INT_ID=a.INT_ID
+        left join wy_city c on c.id=b.city_id
+        left join wy_city d on d.id=b.county_id
+        <where>
+            b.delete_flag=0
+            <if test="countryIds!=null">
+                and b.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="costType!=null">
+                and a.COST_TYPE=#{costType}
+            </if>
+            <if test="btsName!=null">
+                and b.name like '%${btsName}%'
+            </if>
+            <if test="bscName!=null">
+                and b.bsc_name=#{bscName}
+            </if>
+            <if test="btsId!=null">
+                and b.bts_id=#{btsId}
+            </if>
+        </where>
+        )m
+        <where>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectWyTunelChargeCountByMap" resultType="int">
+        select count(1) from(
+        select a.*,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+        b.bts_id btsId from (select <include refid="Base_Column_List"/> from WY_BTS_CHARGE u where u.BTS_TYPE=6)a
+        left join wy_tunel b on b.INT_ID=a.INT_ID
+        left join wy_city c on c.id=b.city_id
+        left join wy_city d on d.id=b.county_id
+        <where>
+            b.delete_flag=0
+            <if test="countryIds!=null">
+                and b.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="costType!=null">
+                and a.COST_TYPE=#{costType}
+            </if>
+            <if test="btsName!=null">
+                and b.name like '%${btsName}%'
+            </if>
+            <if test="bscName!=null">
+                and b.bsc_name=#{bscName}
+            </if>
+            <if test="btsId!=null">
+                and b.bts_id=#{btsId}
+            </if>
+        </where>
+        )
+    </select>
+
+    <!--室外覆盖站点费用设置详情-->
+    <select id="selectChargeWithBtsByAis" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+        b.bts_id btsId from WY_BTS_CHARGE u
+        left join wy_bts b on u.INT_ID=b.INT_ID
+        left join wy_city c on c.id=b.city_id
+        left join wy_city d on d.id=b.county_id
+        where u.INT_ID = #{intId,jdbcType=DECIMAL} and u.COST_TYPE=#{costType}
+    </select>
+    <!--纯BBU站点费用设置详情-->
+    <select id="selectChargeWithBbuByAis" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+        b.bts_id btsId from WY_BTS_CHARGE u
+        left join wy_bbu b on u.INT_ID=b.INT_ID
+        left join wy_city c on c.id=b.city_id
+        left join wy_city d on d.id=b.county_id
+        where u.INT_ID = #{intId,jdbcType=DECIMAL} and u.COST_TYPE=#{costType}
+    </select>
+
+    <!--隧道覆盖站点费用设置详情-->
+    <select id="selectChargeWithTunelByAis" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,c.name cityName,d.name countryName,b.name btsName,b.bsc_name bscName,
+        b.bts_id btsId from WY_BTS_CHARGE u
+        left join wy_tunel b on u.INT_ID=b.INT_ID
+        left join wy_city c on c.id=b.city_id
+        left join wy_city d on d.id=b.county_id
+        where u.INT_ID = #{intId,jdbcType=DECIMAL} and u.COST_TYPE=#{costType}
+    </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from WY_BTS_CHARGE
+    where INT_ID = #{intId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.charge.model.WyBtsCharge" >
+    insert into WY_BTS_CHARGE (INT_ID, BTS_TYPE, COST_TYPE, 
+      CONTRACT_STARTTIME, CONTRACT_ENDTIME, PAY_CYCLE, 
+      PAY_DAY, AHEAD_DAY, REMIND_USER, 
+      REMIND_TEL, MONEY, CONTRACT_FILE, 
+      REMARK, EACH_TEL, EACH_ACCOUNTNAME, 
+      EACH_BANKNUM, PAY_TYPE, BANK_ACCOUNT, 
+      BALANCE)
+    values (#{intId,jdbcType=DECIMAL}, #{btsType,jdbcType=DECIMAL}, #{costType,jdbcType=DECIMAL}, 
+      #{contractStarttime,jdbcType=DATE}, #{contractEndtime,jdbcType=DATE}, #{payCycle,jdbcType=DECIMAL}, 
+      #{payDay,jdbcType=DECIMAL}, #{aheadDay,jdbcType=DECIMAL}, #{remindUser,jdbcType=VARCHAR}, 
+      #{remindTel,jdbcType=VARCHAR}, #{money,jdbcType=DECIMAL}, #{contractFile,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{eachTel,jdbcType=VARCHAR}, #{eachAccountname,jdbcType=VARCHAR}, 
+      #{eachBanknum,jdbcType=VARCHAR}, #{payType,jdbcType=DECIMAL}, #{bankAccount,jdbcType=VARCHAR}, 
+      #{balance,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.charge.model.WyBtsCharge" >
+    update WY_BTS_CHARGE
+    <set >
+      <if test="btsType != null" >
+        BTS_TYPE = #{btsType,jdbcType=DECIMAL},
+      </if>
+      <if test="costType != null" >
+        COST_TYPE = #{costType,jdbcType=DECIMAL},
+      </if>
+      <if test="contractStarttime != null" >
+        CONTRACT_STARTTIME = #{contractStarttime,jdbcType=DATE},
+      </if>
+      <if test="contractEndtime != null" >
+        CONTRACT_ENDTIME = #{contractEndtime,jdbcType=DATE},
+      </if>
+      <if test="payCycle != null" >
+        PAY_CYCLE = #{payCycle,jdbcType=DECIMAL},
+      </if>
+      <if test="payDay != null" >
+        PAY_DAY = #{payDay,jdbcType=DECIMAL},
+      </if>
+      <if test="aheadDay != null" >
+        AHEAD_DAY = #{aheadDay,jdbcType=DECIMAL},
+      </if>
+      <if test="remindUser != null" >
+        REMIND_USER = #{remindUser,jdbcType=VARCHAR},
+      </if>
+      <if test="remindTel != null" >
+        REMIND_TEL = #{remindTel,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        MONEY = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="contractFile != null" >
+        CONTRACT_FILE = #{contractFile,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="eachTel != null" >
+        EACH_TEL = #{eachTel,jdbcType=VARCHAR},
+      </if>
+      <if test="eachAccountname != null" >
+        EACH_ACCOUNTNAME = #{eachAccountname,jdbcType=VARCHAR},
+      </if>
+      <if test="eachBanknum != null" >
+        EACH_BANKNUM = #{eachBanknum,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        PAY_TYPE = #{payType,jdbcType=DECIMAL},
+      </if>
+      <if test="bankAccount != null" >
+        BANK_ACCOUNT = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null" >
+        BALANCE = #{balance,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where INT_ID = #{intId,jdbcType=DECIMAL}
+  </update>
+</mapper>

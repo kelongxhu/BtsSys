@@ -1,0 +1,927 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.BtsManualDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.business.model.BtsManual" >
+    <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR" />
+    <result column="BTS_ID" property="btsId" jdbcType="DECIMAL" />
+    <result column="INSTALL_POS_CODE" property="installPos" jdbcType="DECIMAL" />
+    <result column="SHAR_FLAG" property="sharFlag" jdbcType="VARCHAR" />
+    <result column="SHAR_NAME" property="sharName" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="OPEN_TIME" property="openTime" jdbcType="VARCHAR" />
+    <result column="CONF_1X" property="conf1x" jdbcType="VARCHAR" />
+    <result column="CONF_DO" property="confDo" jdbcType="VARCHAR" />
+    <result column="TRAN_MODEL" property="tranModel" jdbcType="VARCHAR" />
+    <result column="TRAN_FAC" property="tranFac" jdbcType="VARCHAR" />
+    <result column="TRAN_UPSITENAME" property="tranUpsitename" jdbcType="VARCHAR" />
+    <result column="TRAN_DOWNSITENAME" property="tranDownsitename" jdbcType="VARCHAR" />
+    <result column="TRAN_NETPROTECT" property="tranNetprotect" jdbcType="VARCHAR" />
+    <result column="tran_ISNODE" property="tranIsnode" jdbcType="VARCHAR" />
+    <result column="tran_SITENUM" property="tranSitenum" jdbcType="DECIMAL" />
+    
+    
+    <result column="SOUR_MODEL" property="sourModel" jdbcType="VARCHAR" />
+    <result column="SOUR_FAC" property="sourFac" jdbcType="VARCHAR" />
+    <result column="SOUR_MODULE_MODEL" property="sourModuleModel" jdbcType="VARCHAR" />
+    <result column="SOUR_MODULE_NUM" property="sourModuleNum" jdbcType="DECIMAL" />
+    <result column="SOUR_CAPA" property="sourCapa" jdbcType="DECIMAL" />
+    <result column="BOX_MODEL" property="boxModel" jdbcType="VARCHAR" />
+    <result column="BOX_FAC" property="boxFac" jdbcType="VARCHAR" />
+    <result column="CELL_MODEL" property="cellModel" jdbcType="VARCHAR" />
+    <result column="CELL_FAC" property="cellFac" jdbcType="VARCHAR" />
+    <result column="CELL_CAPA" property="cellCapa" jdbcType="DECIMAL" />
+    <result column="CELL_NUM" property="cellNum" jdbcType="DECIMAL" />
+    <result column="CELL_POWER" property="cellPower" jdbcType="DECIMAL" />
+    <result column="CELL_DUAR" property="cellDuar" jdbcType="DECIMAL" />
+    <result column="CELL_USTIME" property="cellUstime" jdbcType="VARCHAR" />
+    <result column="TOWER_TYPE" property="towerType" jdbcType="DECIMAL" />
+    <result column="TOWER_HIGH" property="towerHigh" jdbcType="DECIMAL" />
+    <result column="TOWER_PIC" property="towerPic" jdbcType="VARCHAR" />
+    <result column="AC_MODEL" property="acModel" jdbcType="VARCHAR" />
+    <result column="AC_FAC" property="acFac" jdbcType="VARCHAR" />
+    <result column="AC_NUM" property="acNum" jdbcType="DECIMAL" />
+    <result column="DH_MODEL" property="dhModel" jdbcType="VARCHAR" />
+    <result column="DH_FAC" property="dhFac" jdbcType="VARCHAR" />
+    <result column="XF_MODEL" property="xfModel" jdbcType="VARCHAR" />
+    <result column="XF_FAC" property="xfFac" jdbcType="VARCHAR" />
+    <result column="MR_STRUT" property="mrStrut" jdbcType="DECIMAL" />
+    <result column="MR_LENGTH" property="mrLength" jdbcType="DECIMAL" />
+    <result column="MR_WIDTH" property="mrWidth" jdbcType="DECIMAL" />
+    <result column="MR_HIGH" property="mrHigh" jdbcType="DECIMAL" />
+    <result column="MR_OWNER" property="mrOwner" jdbcType="VARCHAR" />
+    <result column="MR_PIC" property="mrPic" jdbcType="VARCHAR" />
+    <result column="WD_TYPE" property="wdType" jdbcType="VARCHAR" />
+    <result column="WD_MODEL" property="wdModel" jdbcType="VARCHAR" />
+    <result column="WD_FAC" property="wdFac" jdbcType="VARCHAR" />
+    <result column="WD_GDS" property="wdGds" jdbcType="VARCHAR" />
+    <result column="OE_TYPE" property="oeType" jdbcType="VARCHAR" />
+    <result column="OE_MODEL" property="oeModel" jdbcType="VARCHAR" />
+    <result column="OE_POWER" property="oePower" jdbcType="VARCHAR" />
+    <result column="OE_FAC" property="oeFac" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="DATE" />
+    <result column="UPDATEUSER" property="updateuser" jdbcType="DECIMAL" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    INT_ID, NAME, BSC_NAME, BTS_ID, INSTALL_POS_CODE, SHAR_FLAG, SHAR_NAME, ADDRESS, OPEN_TIME, 
+    CONF_1X, CONF_DO, TRAN_MODEL, TRAN_FAC, TRAN_UPSITENAME, TRAN_DOWNSITENAME, TRAN_NETPROTECT,tran_ISNODE,tran_SITENUM, 
+    SOUR_MODEL, SOUR_FAC, SOUR_MODULE_MODEL, SOUR_MODULE_NUM, SOUR_CAPA, BOX_MODEL, BOX_FAC, 
+    CELL_MODEL, CELL_FAC, CELL_CAPA, CELL_NUM, CELL_POWER, CELL_DUAR, CELL_USTIME, TOWER_TYPE, 
+    TOWER_HIGH, TOWER_PIC, AC_MODEL, AC_FAC, AC_NUM, DH_MODEL, DH_FAC, XF_MODEL, XF_FAC, 
+    MR_STRUT, MR_LENGTH, MR_WIDTH, MR_HIGH, MR_OWNER, MR_PIC, WD_TYPE, WD_MODEL, WD_FAC, 
+    WD_GDS, OE_TYPE, OE_MODEL, OE_POWER, OE_FAC, REMARK, UPDATETIME, UPDATEUSER
+  </sql>
+  
+  <select id="getById" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from WY_BTS_MANUAL where INT_ID=#{intId,jdbcType=DECIMAL}
+  </select>
+  
+  <insert id="insert" parameterType="com.scttsc.business.model.BtsManual" >
+    insert into WY_BTS_MANUAL (INT_ID, NAME, BSC_NAME, 
+      BTS_ID, INSTALL_POS_CODE, SHAR_FLAG, 
+      SHAR_NAME, ADDRESS, OPEN_TIME, 
+      CONF_1X, CONF_DO, TRAN_MODEL, 
+      TRAN_FAC, TRAN_UPSITENAME, TRAN_DOWNSITENAME, 
+      TRAN_NETPROTECT,tran_ISNODE,tran_SITENUM, SOUR_MODEL, SOUR_FAC, 
+      SOUR_MODULE_MODEL, SOUR_MODULE_NUM, SOUR_CAPA, 
+      BOX_MODEL, BOX_FAC, CELL_MODEL, 
+      CELL_FAC, CELL_CAPA, CELL_NUM, 
+      CELL_POWER, CELL_DUAR, CELL_USTIME, 
+      TOWER_TYPE, TOWER_HIGH, TOWER_PIC, 
+      AC_MODEL, AC_FAC, AC_NUM, 
+      DH_MODEL, DH_FAC, XF_MODEL, 
+      XF_FAC, MR_STRUT, MR_LENGTH, 
+      MR_WIDTH, MR_HIGH, MR_OWNER, 
+      MR_PIC, WD_TYPE, WD_MODEL, 
+      WD_FAC, WD_GDS, OE_TYPE, 
+      OE_MODEL, OE_POWER, OE_FAC, 
+      REMARK, UPDATETIME, UPDATEUSER
+      )
+    values (#{intId,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{bscName,jdbcType=VARCHAR}, 
+      #{btsId,jdbcType=DECIMAL}, #{installPos,jdbcType=VARCHAR}, #{sharFlag,jdbcType=VARCHAR}, 
+      #{sharName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{openTime,jdbcType=VARCHAR}, 
+      #{conf1x,jdbcType=VARCHAR}, #{confDo,jdbcType=VARCHAR}, #{tranModel,jdbcType=VARCHAR}, 
+      #{tranFac,jdbcType=VARCHAR}, #{tranUpsitename,jdbcType=VARCHAR}, #{tranDownsitename,jdbcType=VARCHAR}, 
+      #{tranNetprotect,jdbcType=VARCHAR},#{tranIsnode,jdbcType=VARCHAR},#{tranSitenum,jdbcType=DECIMAL},
+      #{sourModel,jdbcType=VARCHAR}, #{sourFac,jdbcType=VARCHAR}, 
+      #{sourModuleModel,jdbcType=VARCHAR}, #{sourModuleNum,jdbcType=DECIMAL}, #{sourCapa,jdbcType=DECIMAL}, 
+      #{boxModel,jdbcType=VARCHAR}, #{boxFac,jdbcType=VARCHAR}, #{cellModel,jdbcType=VARCHAR}, 
+      #{cellFac,jdbcType=VARCHAR}, #{cellCapa,jdbcType=DECIMAL}, #{cellNum,jdbcType=DECIMAL}, 
+      #{cellPower,jdbcType=DECIMAL}, #{cellDuar,jdbcType=DECIMAL}, #{cellUstime,jdbcType=VARCHAR}, 
+      #{towerType,jdbcType=DECIMAL}, #{towerHigh,jdbcType=DECIMAL}, #{towerPic,jdbcType=VARCHAR}, 
+      #{acModel,jdbcType=VARCHAR}, #{acFac,jdbcType=VARCHAR}, #{acNum,jdbcType=DECIMAL}, 
+      #{dhModel,jdbcType=VARCHAR}, #{dhFac,jdbcType=VARCHAR}, #{xfModel,jdbcType=VARCHAR}, 
+      #{xfFac,jdbcType=VARCHAR}, #{mrStrut,jdbcType=VARCHAR}, #{mrLength,jdbcType=DECIMAL}, 
+      #{mrWidth,jdbcType=DECIMAL}, #{mrHigh,jdbcType=DECIMAL}, #{mrOwner,jdbcType=VARCHAR}, 
+      #{mrPic,jdbcType=VARCHAR}, #{wdType,jdbcType=VARCHAR}, #{wdModel,jdbcType=VARCHAR}, 
+      #{wdFac,jdbcType=VARCHAR}, #{wdGds,jdbcType=VARCHAR}, #{oeType,jdbcType=VARCHAR}, 
+      #{oeModel,jdbcType=VARCHAR}, #{oePower,jdbcType=VARCHAR}, #{oeFac,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{updatetime,jdbcType=DATE}, #{updateuser,jdbcType=DECIMAL}
+      )
+  </insert>
+  
+   <insert id="insertSelective">
+    insert into WY_BTS_MANUAL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="intId != null" >
+        INT_ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="bscName != null" >
+        BSC_NAME,
+      </if>
+      <if test="btsId != null" >
+        BTS_ID,
+      </if>
+      <if test="installPosCode != null" >
+        INSTALL_POS_CODE,
+      </if>
+      <if test="sharFlag != null" >
+        SHAR_FLAG,
+      </if>
+      <if test="sharName != null" >
+        SHAR_NAME,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="openTime != null" >
+        OPEN_TIME,
+      </if>
+      <if test="conf1x != null" >
+        CONF_1X,
+      </if>
+      <if test="confDo != null" >
+        CONF_DO,
+      </if>
+      <if test="tranModel != null" >
+        TRAN_MODEL,
+      </if>
+      <if test="tranFac != null" >
+        TRAN_FAC,
+      </if>
+      <if test="tranUpsitename != null" >
+        TRAN_UPSITENAME,
+      </if>
+      <if test="tranDownsitename != null" >
+        TRAN_DOWNSITENAME,
+      </if>
+      <if test="tranNetprotect != null" >
+        TRAN_NETPROTECT,
+      </if>
+      <if test="tranIsnode != null" >
+        TRAN_ISNODE,
+      </if>
+      <if test="tranSitenum != null" >
+        TRAN_SITENUM,
+      </if>
+      <if test="sourModel != null" >
+        SOUR_MODEL,
+      </if>
+      <if test="sourFac != null" >
+        SOUR_FAC,
+      </if>
+      <if test="sourModuleModel != null" >
+        SOUR_MODULE_MODEL,
+      </if>
+      <if test="sourModuleNum != null" >
+        SOUR_MODULE_NUM,
+      </if>
+      <if test="sourCapa != null" >
+        SOUR_CAPA,
+      </if>
+      <if test="boxModel != null" >
+        BOX_MODEL,
+      </if>
+      <if test="boxFac != null" >
+        BOX_FAC,
+      </if>
+      <if test="cellModel != null" >
+        CELL_MODEL,
+      </if>
+      <if test="cellFac != null" >
+        CELL_FAC,
+      </if>
+      <if test="cellCapa != null" >
+        CELL_CAPA,
+      </if>
+      <if test="cellNum != null" >
+        CELL_NUM,
+      </if>
+      <if test="cellPower != null" >
+        CELL_POWER,
+      </if>
+      <if test="cellDuar != null" >
+        CELL_DUAR,
+      </if>
+      <if test="cellUstime != null" >
+        CELL_USTIME,
+      </if>
+      <if test="towerType != null" >
+        TOWER_TYPE,
+      </if>
+      <if test="towerHigh != null" >
+        TOWER_HIGH,
+      </if>
+      <if test="towerPic != null" >
+        TOWER_PIC,
+      </if>
+      <if test="acModel != null" >
+        AC_MODEL,
+      </if>
+      <if test="acFac != null" >
+        AC_FAC,
+      </if>
+      <if test="acNum != null" >
+        AC_NUM,
+      </if>
+      <if test="dhModel != null" >
+        DH_MODEL,
+      </if>
+      <if test="dhFac != null" >
+        DH_FAC,
+      </if>
+      <if test="xfModel != null" >
+        XF_MODEL,
+      </if>
+      <if test="xfFac != null" >
+        XF_FAC,
+      </if>
+      <if test="mrStrut != null" >
+        MR_STRUT,
+      </if>
+      <if test="mrLength != null" >
+        MR_LENGTH,
+      </if>
+      <if test="mrWidth != null" >
+        MR_WIDTH,
+      </if>
+      <if test="mrHigh != null" >
+        MR_HIGH,
+      </if>
+      <if test="mrOwner != null" >
+        MR_OWNER,
+      </if>
+      <if test="mrPic != null" >
+        MR_PIC,
+      </if>
+      <if test="wdType != null" >
+        WD_TYPE,
+      </if>
+      <if test="wdModel != null" >
+        WD_MODEL,
+      </if>
+      <if test="wdFac != null" >
+        WD_FAC,
+      </if>
+      <if test="wdGds != null" >
+        WD_GDS,
+      </if>
+      <if test="oeType != null" >
+        OE_TYPE,
+      </if>
+      <if test="oeModel != null" >
+        OE_MODEL,
+      </if>
+      <if test="oePower != null" >
+        OE_POWER,
+      </if>
+      <if test="oeFac != null" >
+        OE_FAC,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+      <if test="updateuser != null" >
+        UPDATEUSER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="intId != null" >
+        #{intId,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="bscName != null" >
+        #{bscName,jdbcType=VARCHAR},
+      </if>
+      <if test="btsId != null" >
+        #{btsId,jdbcType=DECIMAL},
+      </if>
+      <if test="installPosCode != null" >
+        #{installPosCode,jdbcType=DECIMAL},
+      </if>
+      <if test="sharFlag != null" >
+        #{sharFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="sharName != null" >
+        #{sharName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="openTime != null" >
+        #{openTime,jdbcType=VARCHAR},
+      </if>
+      <if test="conf1x != null" >
+        #{conf1x,jdbcType=VARCHAR},
+      </if>
+      <if test="confDo != null" >
+        #{confDo,jdbcType=VARCHAR},
+      </if>
+      <if test="tranModel != null" >
+        #{tranModel,jdbcType=VARCHAR},
+      </if>
+      <if test="tranFac != null" >
+        #{tranFac,jdbcType=VARCHAR},
+      </if>
+      <if test="tranUpsitename != null" >
+        #{tranUpsitename,jdbcType=VARCHAR},
+      </if>
+      <if test="tranDownsitename != null" >
+        #{tranDownsitename,jdbcType=VARCHAR},
+      </if>
+      <if test="tranNetprotect != null" >
+        #{tranNetprotect,jdbcType=VARCHAR},
+      </if>
+      <if test="tranIsnode != null" >
+        #{tranIsnode,jdbcType=VARCHAR},
+      </if>
+      <if test="tranSitenum != null" >
+        #{tranSitenum,jdbcType=DECIMAL},
+      </if>
+      <if test="sourModel != null" >
+        #{sourModel,jdbcType=VARCHAR},
+      </if>
+      <if test="sourFac != null" >
+        #{sourFac,jdbcType=VARCHAR},
+      </if>
+      <if test="sourModuleModel != null" >
+        #{sourModuleModel,jdbcType=VARCHAR},
+      </if>
+      <if test="sourModuleNum != null" >
+        #{sourModuleNum,jdbcType=DECIMAL},
+      </if>
+      <if test="sourCapa != null" >
+        #{sourCapa,jdbcType=DECIMAL},
+      </if>
+      <if test="boxModel != null" >
+        #{boxModel,jdbcType=VARCHAR},
+      </if>
+      <if test="boxFac != null" >
+        #{boxFac,jdbcType=VARCHAR},
+      </if>
+      <if test="cellModel != null" >
+        #{cellModel,jdbcType=VARCHAR},
+      </if>
+      <if test="cellFac != null" >
+        #{cellFac,jdbcType=VARCHAR},
+      </if>
+      <if test="cellCapa != null" >
+        #{cellCapa,jdbcType=DECIMAL},
+      </if>
+      <if test="cellNum != null" >
+        #{cellNum,jdbcType=DECIMAL},
+      </if>
+      <if test="cellPower != null" >
+        #{cellPower,jdbcType=DECIMAL},
+      </if>
+      <if test="cellDuar != null" >
+        #{cellDuar,jdbcType=DECIMAL},
+      </if>
+      <if test="cellUstime != null" >
+        #{cellUstime,jdbcType=VARCHAR},
+      </if>
+      <if test="towerType != null" >
+        #{towerType,jdbcType=DECIMAL},
+      </if>
+      <if test="towerHigh != null" >
+        #{towerHigh,jdbcType=DECIMAL},
+      </if>
+      <if test="towerPic != null" >
+        #{towerPic,jdbcType=VARCHAR},
+      </if>
+      <if test="acModel != null" >
+        #{acModel,jdbcType=VARCHAR},
+      </if>
+      <if test="acFac != null" >
+        #{acFac,jdbcType=VARCHAR},
+      </if>
+      <if test="acNum != null" >
+        #{acNum,jdbcType=DECIMAL},
+      </if>
+      <if test="dhModel != null" >
+        #{dhModel,jdbcType=VARCHAR},
+      </if>
+      <if test="dhFac != null" >
+        #{dhFac,jdbcType=VARCHAR},
+      </if>
+      <if test="xfModel != null" >
+        #{xfModel,jdbcType=VARCHAR},
+      </if>
+      <if test="xfFac != null" >
+        #{xfFac,jdbcType=VARCHAR},
+      </if>
+      <if test="mrStrut != null" >
+        #{mrStrut,jdbcType=VARCHAR},
+      </if>
+      <if test="mrLength != null" >
+        #{mrLength,jdbcType=DECIMAL},
+      </if>
+      <if test="mrWidth != null" >
+        #{mrWidth,jdbcType=DECIMAL},
+      </if>
+      <if test="mrHigh != null" >
+        #{mrHigh,jdbcType=DECIMAL},
+      </if>
+      <if test="mrOwner != null" >
+        #{mrOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="mrPic != null" >
+        #{mrPic,jdbcType=VARCHAR},
+      </if>
+      <if test="wdType != null" >
+        #{wdType,jdbcType=VARCHAR},
+      </if>
+      <if test="wdModel != null" >
+        #{wdModel,jdbcType=VARCHAR},
+      </if>
+      <if test="wdFac != null" >
+        #{wdFac,jdbcType=VARCHAR},
+      </if>
+      <if test="wdGds != null" >
+        #{wdGds,jdbcType=VARCHAR},
+      </if>
+      <if test="oeType != null" >
+        #{oeType,jdbcType=VARCHAR},
+      </if>
+      <if test="oeModel != null" >
+        #{oeModel,jdbcType=VARCHAR},
+      </if>
+      <if test="oePower != null" >
+        #{oePower,jdbcType=VARCHAR},
+      </if>
+      <if test="oeFac != null" >
+        #{oeFac,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=DATE},
+      </if>
+      <if test="updateuser != null" >
+        #{updateuser,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="update" parameterType="com.scttsc.business.model.BtsManual" >
+    update WY_BTS_MANUAL
+    set 
+      NAME = #{name,jdbcType=VARCHAR},
+      BSC_NAME = #{bscName,jdbcType=VARCHAR},
+      BTS_ID = #{btsId,jdbcType=DECIMAL},
+      INSTALL_POS_CODE = #{installPos,jdbcType=VARCHAR},
+      SHAR_FLAG = #{sharFlag,jdbcType=VARCHAR},
+      SHAR_NAME = #{sharName,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      OPEN_TIME = #{openTime,jdbcType=VARCHAR},
+      CONF_1X = #{conf1x,jdbcType=VARCHAR},
+      CONF_DO = #{confDo,jdbcType=VARCHAR},
+      TRAN_MODEL = #{tranModel,jdbcType=VARCHAR},
+      TRAN_FAC = #{tranFac,jdbcType=VARCHAR},
+      TRAN_UPSITENAME = #{tranUpsitename,jdbcType=VARCHAR},
+      TRAN_DOWNSITENAME = #{tranDownsitename,jdbcType=VARCHAR},
+      TRAN_NETPROTECT = #{tranNetprotect,jdbcType=VARCHAR},
+      tran_ISNODE=#{tranIsnode,jdbcType=VARCHAR},
+      tran_SITENUM=#{tranSitenum,jdbcType=VARCHAR},
+      SOUR_MODEL = #{sourModel,jdbcType=VARCHAR},
+      SOUR_FAC = #{sourFac,jdbcType=VARCHAR},
+      SOUR_MODULE_MODEL = #{sourModuleModel,jdbcType=VARCHAR},
+      SOUR_MODULE_NUM = #{sourModuleNum,jdbcType=DECIMAL},
+      SOUR_CAPA = #{sourCapa,jdbcType=DECIMAL},
+      BOX_MODEL = #{boxModel,jdbcType=VARCHAR},
+      BOX_FAC = #{boxFac,jdbcType=VARCHAR},
+      CELL_MODEL = #{cellModel,jdbcType=VARCHAR},
+      CELL_FAC = #{cellFac,jdbcType=VARCHAR},
+      CELL_CAPA = #{cellCapa,jdbcType=DECIMAL},
+      CELL_NUM = #{cellNum,jdbcType=DECIMAL},
+      CELL_POWER = #{cellPower,jdbcType=DECIMAL},
+      CELL_DUAR = #{cellDuar,jdbcType=DECIMAL},
+      CELL_USTIME = #{cellUstime,jdbcType=VARCHAR},
+      TOWER_TYPE = #{towerType,jdbcType=DECIMAL},
+      TOWER_HIGH = #{towerHigh,jdbcType=DECIMAL},
+      TOWER_PIC = #{towerPic,jdbcType=VARCHAR},
+      AC_MODEL = #{acModel,jdbcType=VARCHAR},
+      AC_FAC = #{acFac,jdbcType=VARCHAR},
+      AC_NUM = #{acNum,jdbcType=DECIMAL},
+      DH_MODEL = #{dhModel,jdbcType=VARCHAR},
+      DH_FAC = #{dhFac,jdbcType=VARCHAR},
+      XF_MODEL = #{xfModel,jdbcType=VARCHAR},
+      XF_FAC = #{xfFac,jdbcType=VARCHAR},
+      MR_STRUT = #{mrStrut,jdbcType=VARCHAR},
+      MR_LENGTH = #{mrLength,jdbcType=DECIMAL},
+      MR_WIDTH = #{mrWidth,jdbcType=DECIMAL},
+      MR_HIGH = #{mrHigh,jdbcType=DECIMAL},
+      MR_OWNER = #{mrOwner,jdbcType=VARCHAR},
+      MR_PIC = #{mrPic,jdbcType=VARCHAR},
+      WD_TYPE = #{wdType,jdbcType=VARCHAR},
+      WD_MODEL = #{wdModel,jdbcType=VARCHAR},
+      WD_FAC = #{wdFac,jdbcType=VARCHAR},
+      WD_GDS = #{wdGds,jdbcType=VARCHAR},
+      OE_TYPE = #{oeType,jdbcType=VARCHAR},
+      OE_MODEL = #{oeModel,jdbcType=VARCHAR},
+      OE_POWER = #{oePower,jdbcType=VARCHAR},
+      OE_FAC = #{oeFac,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      UPDATETIME = #{updatetime,jdbcType=DATE},
+      UPDATEUSER = #{updateuser,jdbcType=DECIMAL}
+     where INT_ID = #{intId,jdbcType=DECIMAL}
+  </update>
+  
+    <update id="updateByMap" parameterType="com.scttsc.business.model.BtsManual" >
+    update WY_BTS_MANUAL
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="bscName != null" >
+        BSC_NAME = #{bscName,jdbcType=VARCHAR},
+      </if>
+      <if test="btsId != null" >
+        BTS_ID = #{btsId,jdbcType=DECIMAL},
+      </if>
+      <if test="installPos != null" >
+        INSTALL_POS_CODE = #{installPos ,jdbcType=DECIMAL},
+      </if>
+      <if test="sharFlag != null" >
+        SHAR_FLAG = #{sharFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="sharName != null" >
+        SHAR_NAME = #{sharName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="openTime != null" >
+        OPEN_TIME = #{openTime,jdbcType=VARCHAR},
+      </if>
+      <if test="conf1x != null" >
+        CONF_1X = #{conf1x,jdbcType=VARCHAR},
+      </if>
+      <if test="confDo != null" >
+        CONF_DO = #{confDo,jdbcType=VARCHAR},
+      </if>
+      <if test="tranModel != null" >
+        TRAN_MODEL = #{tranModel,jdbcType=VARCHAR},
+      </if>
+      <if test="tranFac != null" >
+        TRAN_FAC = #{tranFac,jdbcType=VARCHAR},
+      </if>
+      <if test="tranUpsitename != null" >
+        TRAN_UPSITENAME = #{tranUpsitename,jdbcType=VARCHAR},
+      </if>
+      <if test="tranDownsitename != null" >
+        TRAN_DOWNSITENAME = #{tranDownsitename,jdbcType=VARCHAR},
+      </if>
+      <if test="tranNetprotect != null" >
+        TRAN_NETPROTECT = #{tranNetprotect,jdbcType=VARCHAR},
+      </if>
+      <if test="tranIsnode != null" >
+        TRAN_ISNODE = #{tranIsnode,jdbcType=VARCHAR},
+      </if>
+      <if test="tranSitenum != null" >
+        TRAN_SITENUM = #{tranSitenum,jdbcType=DECIMAL},
+      </if>
+      <if test="sourModel != null" >
+        SOUR_MODEL = #{sourModel,jdbcType=VARCHAR},
+      </if>
+      <if test="sourFac != null" >
+        SOUR_FAC = #{sourFac,jdbcType=VARCHAR},
+      </if>
+      <if test="sourModuleModel != null" >
+        SOUR_MODULE_MODEL = #{sourModuleModel,jdbcType=VARCHAR},
+      </if>
+      <if test="sourModuleNum != null" >
+        SOUR_MODULE_NUM = #{sourModuleNum,jdbcType=DECIMAL},
+      </if>
+      <if test="sourCapa != null" >
+        SOUR_CAPA = #{sourCapa,jdbcType=DECIMAL},
+      </if>
+      <if test="boxModel != null" >
+        BOX_MODEL = #{boxModel,jdbcType=VARCHAR},
+      </if>
+      <if test="boxFac != null" >
+        BOX_FAC = #{boxFac,jdbcType=VARCHAR},
+      </if>
+      <if test="cellModel != null" >
+        CELL_MODEL = #{cellModel,jdbcType=VARCHAR},
+      </if>
+      <if test="cellFac != null" >
+        CELL_FAC = #{cellFac,jdbcType=VARCHAR},
+      </if>
+      <if test="cellCapa != null" >
+        CELL_CAPA = #{cellCapa,jdbcType=DECIMAL},
+      </if>
+      <if test="cellNum != null" >
+        CELL_NUM = #{cellNum,jdbcType=DECIMAL},
+      </if>
+      <if test="cellPower != null" >
+        CELL_POWER = #{cellPower,jdbcType=DECIMAL},
+      </if>
+      <if test="cellDuar != null" >
+        CELL_DUAR = #{cellDuar,jdbcType=DECIMAL},
+      </if>
+      <if test="cellUstime != null" >
+        CELL_USTIME = #{cellUstime,jdbcType=VARCHAR},
+      </if>
+      <if test="towerType != null" >
+        TOWER_TYPE = #{towerType,jdbcType=DECIMAL},
+      </if>
+      <if test="towerHigh != null" >
+        TOWER_HIGH = #{towerHigh,jdbcType=DECIMAL},
+      </if>
+      <if test="towerPic != null" >
+        TOWER_PIC = #{towerPic,jdbcType=VARCHAR},
+      </if>
+      <if test="acModel != null" >
+        AC_MODEL = #{acModel,jdbcType=VARCHAR},
+      </if>
+      <if test="acFac != null" >
+        AC_FAC = #{acFac,jdbcType=VARCHAR},
+      </if>
+      <if test="acNum != null" >
+        AC_NUM = #{acNum,jdbcType=DECIMAL},
+      </if>
+      <if test="dhModel != null" >
+        DH_MODEL = #{dhModel,jdbcType=VARCHAR},
+      </if>
+      <if test="dhFac != null" >
+        DH_FAC = #{dhFac,jdbcType=VARCHAR},
+      </if>
+      <if test="xfModel != null" >
+        XF_MODEL = #{xfModel,jdbcType=VARCHAR},
+      </if>
+      <if test="xfFac != null" >
+        XF_FAC = #{xfFac,jdbcType=VARCHAR},
+      </if>
+      <if test="mrStrut != null" >
+        MR_STRUT = #{mrStrut,jdbcType=VARCHAR},
+      </if>
+      <if test="mrLength != null" >
+        MR_LENGTH = #{mrLength,jdbcType=DECIMAL},
+      </if>
+      <if test="mrWidth != null" >
+        MR_WIDTH = #{mrWidth,jdbcType=DECIMAL},
+      </if>
+      <if test="mrHigh != null" >
+        MR_HIGH = #{mrHigh,jdbcType=DECIMAL},
+      </if>
+      <if test="mrOwner != null" >
+        MR_OWNER = #{mrOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="mrPic != null" >
+        MR_PIC = #{mrPic,jdbcType=VARCHAR},
+      </if>
+      <if test="wdType != null" >
+        WD_TYPE = #{wdType,jdbcType=VARCHAR},
+      </if>
+      <if test="wdModel != null" >
+        WD_MODEL = #{wdModel,jdbcType=VARCHAR},
+      </if>
+      <if test="wdFac != null" >
+        WD_FAC = #{wdFac,jdbcType=VARCHAR},
+      </if>
+      <if test="wdGds != null" >
+        WD_GDS = #{wdGds,jdbcType=VARCHAR},
+      </if>
+      <if test="oeType != null" >
+        OE_TYPE = #{oeType,jdbcType=VARCHAR},
+      </if>
+      <if test="oeModel != null" >
+        OE_MODEL = #{oeModel,jdbcType=VARCHAR},
+      </if>
+      <if test="oePower != null" >
+        OE_POWER = #{oePower,jdbcType=VARCHAR},
+      </if>
+      <if test="oeFac != null" >
+        OE_FAC = #{oeFac,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=DATE},
+      </if>
+      <if test="updateuser != null" >
+        UPDATEUSER = #{updateuser,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <where>
+    	INT_ID = #{intId,jdbcType=DECIMAL}
+    </where>
+  </update>
+
+
+    <update id="updateByIntID">
+        update WY_BTS_MANUAL set INT_ID = #{newIntId,jdbcType=DECIMAL}
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+    </update>
+
+
+
+    <!--手机接口更改基站手工信息-->
+
+
+    <update id="updateByInterface">
+    update WY_BTS_MANUAL
+    <set >
+      <if test="NAME != null" >
+        NAME = #{NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="BSC_NAME != null" >
+        BSC_NAME = #{BSC_NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="BTS_ID != null" >
+        BTS_ID = #{BTS_ID,jdbcType=DECIMAL},
+      </if>
+      <if test="INSTALL_POS_CODE != null" >
+        INSTALL_POS_CODE = #{INSTALL_POS_CODE ,jdbcType=DECIMAL},
+      </if>
+      <if test="SHAR_FLAG != null" >
+        SHAR_FLAG = #{SHAR_FLAG,jdbcType=VARCHAR},
+      </if>
+      <if test="SHAR_NAME != null" >
+        SHAR_NAME = #{SHAR_NAME,jdbcType=VARCHAR},
+      </if>
+      <if test="ADDRESS != null" >
+        ADDRESS = #{ADDRESS,jdbcType=VARCHAR},
+      </if>
+      <if test="OPEN_TIME != null" >
+        OPEN_TIME = #{OPEN_TIME,jdbcType=VARCHAR},
+      </if>
+      <if test="CONF_1X != null" >
+        CONF_1X = #{CONF_1X,jdbcType=VARCHAR},
+      </if>
+      <if test="CONF_DO != null" >
+        CONF_DO = #{CONF_DO,jdbcType=VARCHAR},
+      </if>
+      <if test="TRAN_MODEL != null" >
+        TRAN_MODEL = #{TRAN_MODEL,jdbcType=VARCHAR},
+      </if>
+      <if test="TRAN_FAC != null" >
+        TRAN_FAC = #{TRAN_FAC,jdbcType=VARCHAR},
+      </if>
+      <if test="TRAN_UPSITENAME != null" >
+        TRAN_UPSITENAME = #{TRAN_UPSITENAME,jdbcType=VARCHAR},
+      </if>
+      <if test="TRAN_DOWNSITENAME != null" >
+        TRAN_DOWNSITENAME = #{TRAN_DOWNSITENAME,jdbcType=VARCHAR},
+      </if>
+      <if test="TRAN_NETPROTECT != null" >
+        TRAN_NETPROTECT = #{TRAN_NETPROTECT,jdbcType=VARCHAR},
+      </if>
+      <if test="TRAN_ISNODE != null" >
+        TRAN_ISNODE = #{TRAN_ISNODE,jdbcType=VARCHAR},
+      </if>
+      <if test="TRAN_SITENUM != null" >
+        TRAN_SITENUM = #{TRAN_SITENUM,jdbcType=DECIMAL},
+      </if>
+      <if test="SOUR_MODEL != null" >
+        SOUR_MODEL = #{SOUR_MODEL,jdbcType=VARCHAR},
+      </if>
+      <if test="SOUR_FAC != null" >
+        SOUR_FAC = #{SOUR_FAC,jdbcType=VARCHAR},
+      </if>
+      <if test="SOUR_MODULE_MODEL != null" >
+        SOUR_MODULE_MODEL = #{SOUR_MODULE_MODEL,jdbcType=VARCHAR},
+      </if>
+      <if test="SOUR_MODULE_NUM != null" >
+        SOUR_MODULE_NUM = #{SOUR_MODULE_NUM,jdbcType=DECIMAL},
+      </if>
+      <if test="SOUR_CAPA != null" >
+        SOUR_CAPA = #{SOUR_CAPA,jdbcType=DECIMAL},
+      </if>
+      <if test="BOX_MODEL != null" >
+        BOX_MODEL = #{BOX_MODEL,jdbcType=VARCHAR},
+      </if>
+      <if test="BOX_FAC != null" >
+        BOX_FAC = #{BOX_FAC,jdbcType=VARCHAR},
+      </if>
+      <if test="CELL_MODEL != null" >
+        CELL_MODEL = #{CELL_MODEL,jdbcType=VARCHAR},
+      </if>
+      <if test="CELL_FAC != null" >
+        CELL_FAC = #{CELL_FAC,jdbcType=VARCHAR},
+      </if>
+      <if test="CELL_CAPA != null" >
+        CELL_CAPA = #{CELL_CAPA,jdbcType=DECIMAL},
+      </if>
+      <if test="CELL_NUM != null" >
+        CELL_NUM = #{CELL_NUM,jdbcType=DECIMAL},
+      </if>
+      <if test="CELL_POWER != null" >
+        CELL_POWER = #{CELL_POWER,jdbcType=DECIMAL},
+      </if>
+      <if test="CELL_DUAR != null" >
+        CELL_DUAR = #{CELL_DUAR,jdbcType=DECIMAL},
+      </if>
+      <if test="CELL_USTIME != null" >
+        CELL_USTIME = #{CELL_USTIME,jdbcType=VARCHAR},
+      </if>
+        <if test="TOWER_TYPE!= null">
+            TOWER_TYPE = #{TOWER_TYPE,jdbcType=VARCHAR},
+        </if>
+        <if test="TOWER_HIGH  != null">
+            TOWER_HIGH = #{TOWER_HIGH,jdbcType=VARCHAR},
+        </if>
+      <if test="AC_MODEL != null" >
+        AC_MODEL = #{AC_MODEL,jdbcType=VARCHAR},
+      </if>
+      <if test="AC_FAC != null" >
+        AC_FAC = #{AC_FAC,jdbcType=VARCHAR},
+      </if>
+      <if test="AC_NUM != null" >
+        AC_NUM = #{AC_NUM,jdbcType=DECIMAL},
+      </if>
+      <if test="DH_MODEL != null" >
+        DH_MODEL = #{DH_MODEL,jdbcType=VARCHAR},
+      </if>
+      <if test="DH_FAC != null" >
+        DH_FAC = #{DH_FAC,jdbcType=VARCHAR},
+      </if>
+      <if test="XF_MODEL != null" >
+        XF_MODEL = #{XF_MODEL,jdbcType=VARCHAR},
+      </if>
+      <if test="XF_FAC != null" >
+        XF_FAC = #{XF_FAC,jdbcType=VARCHAR},
+      </if>
+      <if test="MR_STRUT != null" >
+        MR_STRUT = #{MR_STRUT,jdbcType=VARCHAR},
+      </if>
+      <if test="MR_LENGTH != null" >
+        MR_LENGTH = #{MR_LENGTH,jdbcType=DECIMAL},
+      </if>
+      <if test="MR_WIDTH != null" >
+        MR_WIDTH = #{MR_WIDTH,jdbcType=DECIMAL},
+      </if>
+      <if test="MR_HIGH != null" >
+        MR_HIGH = #{MR_HIGH,jdbcType=DECIMAL},
+      </if>
+      <if test="MR_OWNER != null" >
+        MR_OWNER = #{MR_OWNER,jdbcType=VARCHAR},
+      </if>
+      <if test="MR_PIC != null" >
+        MR_PIC = #{MR_PIC,jdbcType=VARCHAR},
+      </if>
+      <if test="WD_TYPE != null" >
+        WD_TYPE = #{WD_TYPE,jdbcType=VARCHAR},
+      </if>
+      <if test="WD_MODEL != null" >
+        WD_MODEL = #{WD_MODEL,jdbcType=VARCHAR},
+      </if>
+      <if test="WD_FAC != null" >
+        WD_FAC = #{WD_FAC,jdbcType=VARCHAR},
+      </if>
+      <if test="WD_GDS != null" >
+        WD_GDS = #{WD_GDS,jdbcType=VARCHAR},
+      </if>
+      <if test="OE_TYPE != null" >
+        OE_TYPE = #{OE_TYPE,jdbcType=VARCHAR},
+      </if>
+      <if test="OE_MODEL != null" >
+        OE_MODEL = #{OE_MODEL,jdbcType=VARCHAR},
+      </if>
+      <if test="OE_POWER != null" >
+        OE_POWER = #{OE_POWER,jdbcType=VARCHAR},
+      </if>
+      <if test="OE_FAC != null" >
+        OE_FAC = #{OE_FAC,jdbcType=VARCHAR},
+      </if>
+      <if test="REMARK != null" >
+        REMARK = #{REMARK,jdbcType=VARCHAR},
+      </if>
+      <if test="UPDATETIME != null" >
+        UPDATETIME = #{UPDATETIME,jdbcType=DATE},
+      </if>
+      <if test="UPDATEUSER != null" >
+        UPDATEUSER = #{UPDATEUSER,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <where>
+    	INT_ID = #{INT_ID,jdbcType=DECIMAL}
+    </where>
+  </update>
+  
+  
+</mapper>

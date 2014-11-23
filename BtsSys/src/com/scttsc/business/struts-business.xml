@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="businessjson" namespace="/businessjson" extends="json-default">
+
+        <!-- 非室分站点 -->
+        <action name="btsData" class="com.scttsc.business.web.BtsAction"
+                method="btsData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="abandonBtsData" class="com.scttsc.business.web.AbandonAction"
+                method="data">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="delete" class="com.scttsc.business.web.AbandonAction"
+                method="delete">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <!--直放gird-->
+        <action name="ereData" class="com.scttsc.business.web.ErectstationAction"
+                method="erectStationData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="ereAdd" class="com.scttsc.business.web.ErectstationAction"
+                method="ereAddDate">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <!--干放gird-->
+        <action name="dryData" class="com.scttsc.business.web.DrystationAction"
+                method="dryStationData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="dryAdd" class="com.scttsc.business.web.DrystationAction"
+                method="dryAddDate">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="delete" class="com.scttsc.business.web.ErectstationAction"
+                method="delete">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="deleteDry" class="com.scttsc.business.web.DrystationAction"
+                method="delete">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="addBtsManual" class="com.scttsc.business.web.BtsAction"
+                method="addBtsManual">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="editAbandoned" class="com.scttsc.business.web.AbandonAction"
+                method="editAbandoned">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="edit" class="com.scttsc.business.web.AbandonAction"
+                method="edit">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="importInputData" class="com.scttsc.business.web.BtsAction" method="importInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="importIndoorInputData" class="com.scttsc.business.web.IndoorAction" method="importIndoorInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="importErctsInputData" class="com.scttsc.business.web.ErectstationAction" method="importErctsInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="importDryInputData" class="com.scttsc.business.web.DrystationAction" method="importDryInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="importFile" class="com.scttsc.business.web.BtsAction" method="importFile">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+
+        <action name="addIndoorManual" class="com.scttsc.business.web.IndoorAction" method="indoorManualDate">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="exportIndoorInputData" class="com.scttsc.business.web.IndoorAction" method="exportIndoorInputData"></action>
+
+
+        <!-- 室分站点 -->
+
+        <action name="indoorData" class="com.scttsc.business.web.IndoorAction"
+                method="indoorData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="indoorQueryData" class="com.scttsc.business.web.DataQueryAction"
+                method="indoorQueryData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <!-- BBU站点 -->
+
+        <action name="bbuData" class="com.scttsc.business.web.BbuAction"
+                method="bbuData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="addBbuManual" class="com.scttsc.business.web.BbuAction"
+                method="addBbuManual">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="importBbuInputData" class="com.scttsc.business.web.BbuAction"
+                method="importBbuInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+
+        <!-- 小区 -->
+
+        <action name="cellData" class="com.scttsc.business.web.CellAction"
+                method="cellData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="addCellManual" class="com.scttsc.business.web.CellAction"
+                method="addCellManual">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="importCellInputData" class="com.scttsc.business.web.CellAction"
+                method="importCellInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <!--数据查询-->
+
+        <action name="buildDataTree" class="com.scttsc.business.web.QueryAction" method="buildDataTree">
+            <result type="json" name="success"/>
+        </action>
+
+        <action name="columnsList" class="com.scttsc.business.web.TemplateAction"
+                method="columnsList">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="templateList" class="com.scttsc.business.web.TemplateAction"
+                method="templateList">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="templateData" class="com.scttsc.business.web.TemplateAction"
+                method="templateData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="addTemplate" class="com.scttsc.business.web.TemplateAction"
+                method="addTemplate">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="columnsByTemplate" class="com.scttsc.business.web.TemplateAction"
+                method="columnsByTemplate">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="schoolQuery" class="com.scttsc.business.web.DataQueryAction"
+                method="schoolQuery">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="secneryQuery" class="com.scttsc.business.web.DataQueryAction"
+                method="secneryQuery">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="vitoQuery" class="com.scttsc.business.web.DataQueryAction"
+                method="vitoQuery">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="roadQuery" class="com.scttsc.business.web.DataQueryAction"
+                method="roadQuery">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="tunnelQuery" class="com.scttsc.business.web.DataQueryAction"
+                method="tunnelQuery">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <!--错误命名查询-->
+        <action name="wrongNameData" class="com.scttsc.business.web.WrongNameAction"
+                method="wrongNameData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+
+        <!--统计action-->
+
+        <action name="countResult" class="com.scttsc.business.web.DataCountAction"
+                        method="countResult">
+                    <result name="success" type="json">
+                        <param name="root">jsonMap</param>
+                    </result>
+       </action>
+
+        <!-- 传输节点查询 -->
+        <action name="queryTransferList" class="com.scttsc.business.web.TransferNodeAction"
+                        method="queryTransferList">
+                    <result name="success" type="json">
+                        <param name="root">jsonMap</param>
+                    </result>
+        </action>
+
+        <action name="transferAddEdit" class="com.scttsc.business.web.TransferNodeAction"
+                        method="transferAddEdit">
+                    <result name="success" type="json">
+                        <param name="root">jsonMap</param>
+                    </result>
+        </action>
+
+        <action name="transferDelete" class="com.scttsc.business.web.TransferNodeAction"
+                        method="transferDelete">
+                    <result name="success" type="json">
+                        <param name="root">jsonMap</param>
+                    </result>
+        </action>
+
+        <!--修改接口列表-->
+        <action name="columneditInterfaceList" class="com.scttsc.business.web.ColumneditInterfaceAction"
+                               method="columneditInterfaceList">
+                           <result name="success" type="json">
+                               <param name="root">jsonMap</param>
+                           </result>
+        </action>
+
+        <action name="editApply" class="com.scttsc.business.web.ColumneditInterfaceAction"
+                method="editApply">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+
+        <!--隧道錄入-->
+        <action name="tunelData" class="com.scttsc.business.web.TunelAction"
+                method="tunelData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="addTunelManual" class="com.scttsc.business.web.TunelAction"
+                method="addTunelManual">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="importTunelInputData" class="com.scttsc.business.web.TunelAction"
+                method="importTunelInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+
+        <!--刪除的物理站點-->
+
+
+    <action name="btsDataDel" class="com.scttsc.business.web.FindBackAction"
+                      method="btsDataDel">
+        <result name="success" type="json">
+            <param name="root">jsonMap</param>
+        </result>
+    </action>
+
+        <action name="bbuDataDel" class="com.scttsc.business.web.FindBackAction"
+                method="bbuDataDel">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="indoorDataDel" class="com.scttsc.business.web.FindBackAction"
+                method="indoorDataDel">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+
+     <action name="cellDataDel" class="com.scttsc.business.web.FindBackAction"
+               method="cellDataDel">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+     </action>
+
+   <action name="tunelDataDel" class="com.scttsc.business.web.FindBackAction"
+                           method="tunelDataDel">
+        <result name="success" type="json">
+            <param name="root">jsonMap</param>
+        </result>
+    </action>
+
+    <action name="mateData" class="com.scttsc.business.web.FindBackAction"
+                method="mateData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+    </action>
+
+    <action name="backMateData" class="com.scttsc.business.web.FindBackAction"
+                method="backMateData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+    </action>
+
+
+
+
+    </package>
+
+    <package name="business" namespace="/business" extends="default">
+
+        <!--<action name="addIndoorManual" class="com.scttsc.business.web.IndoorAction" method="indoorManualDate">-->
+        <!--<result name="success" type="redirect">-->
+        <!--/business/business/indoor.action-->
+        <!--</result>-->
+        <!--</action>-->
+
+        <!--非室分站点  -->
+        <action name="bts" class="com.scttsc.business.web.BtsAction"
+                method="bts">
+            <result name="success" type="dispatcher">
+                /appviews/business/bts/btsList.jsp
+            </result>
+        </action>
+
+        <action name="importbts" class="com.scttsc.business.web.BtsAction"
+                     method="importbts">
+                 <result name="success" type="dispatcher">
+                     /appviews/business/bts/btsImport.jsp
+                 </result>
+             </action>
+
+        <action name="editPage" class="com.scttsc.business.web.AbandonAction"
+                method="editPage">
+            <result name="success" type="dispatcher">
+                /appviews/business/bts/editPage.jsp
+            </result>
+        </action>
+
+        <action name="indoorDetail" class="com.scttsc.business.web.IndoorAction"
+                method="indoorDetail">
+            <result name="success" type="dispatcher">
+                /appviews/business/indoorbts/indoorDetail.jsp
+            </result>
+        </action>
+
+        <action name="abandonBts" class="com.scttsc.business.web.AbandonAction"
+                method="bts">
+            <result name="success" type="dispatcher">
+                /appviews/business/bts/abandonList2.jsp
+            </result>
+        </action>
+
+        <action name="btsInput" class="com.scttsc.business.web.BtsAction"
+                method="btsInput">
+            <result name="success" type="dispatcher">
+                /appviews/business/bts/btsInput.jsp
+            </result>
+        </action>
+
+        <action name="btsInfo" class="com.scttsc.business.web.BtsAction"
+                method="btsInfo">
+            <result name="success" type="dispatcher">
+                /appviews/business/bts/btsInfo.jsp
+            </result>
+        </action>
+
+        <action name="exportInputData" class="com.scttsc.business.web.BtsAction" method="exportInputData"></action>
+        <action name="exportIndoorInputData" class="com.scttsc.business.web.IndoorAction" method="exportIndoorInputData"></action>
+        <action name="exportErectTemplate" class="com.scttsc.business.web.IndoorAction" method="exportErectTemplate"></action>
+        <action name="exportDryTemplate" class="com.scttsc.business.web.IndoorAction" method="exportDryTemplate"></action>
+        <action name="exportErect" class="com.scttsc.business.web.ErectstationAction" method="exportErect"></action>
+        <action name="exportDry" class="com.scttsc.business.web.DrystationAction" method="exportDry"></action>
+        <action name="exportTunelInputData" class="com.scttsc.business.web.TunelAction" method="exportTunelInputData"></action>
+        <action name="tunelExport" class="com.scttsc.business.web.TunelAction" method="tunelExport"></action>
+
+
+
+
+
+
+        <!-- 室分站点 -->
+
+        <action name="indoor" class="com.scttsc.business.web.IndoorAction"
+                method="indoor">
+            <result name="success" type="dispatcher">
+                /appviews/business/indoorbts/indoorList.jsp
+            </result>
+        </action>
+
+        <!-- BBU站点 -->
+
+        <action name="bbu" class="com.scttsc.business.web.BbuAction"
+                method="bbu">
+            <result name="success" type="dispatcher">
+                /appviews/business/bbu/bbuList.jsp
+            </result>
+        </action>
+
+        <action name="bbuInput" class="com.scttsc.business.web.BbuAction"
+                method="bbuInput">
+            <result name="success" type="dispatcher">
+                /appviews/business/bbu/bbuInput.jsp
+            </result>
+        </action>
+
+        <action name="bbuInfo" class="com.scttsc.business.web.BbuAction"
+                method="bbuInfo">
+            <result name="success" type="dispatcher">
+                /appviews/business/bbu/bbuInfo.jsp
+            </result>
+        </action>
+
+        <action name="exportBbuInputData" class="com.scttsc.business.web.BbuAction"
+                method="exportBbuInputData"></action>
+
+        <!-- 室分站点 -->
+
+        <action name="indoorInput" class="com.scttsc.business.web.IndoorAction"
+                method="indoorInput">
+            <result name="success" type="dispatcher">
+                /appviews/business/indoorbts/indoorInput.jsp
+            </result>
+        </action>
+
+         <action name="impIndoor" class="com.scttsc.business.web.IndoorAction"
+                method="indoorImp">
+            <result name="success" type="dispatcher">
+                /appviews/business/indoorbts/indoorImport.jsp
+            </result>
+        </action>
+
+        <!-- 小区 -->
+        <action name="cell" class="com.scttsc.business.web.CellAction"
+                method="cell">
+            <result name="success" type="dispatcher">
+                /appviews/business/cell/cellList.jsp
+            </result>
+        </action>
+
+        <action name="cellInput" class="com.scttsc.business.web.CellAction"
+                method="cellInput">
+            <result name="success" type="dispatcher">
+                /appviews/business/cell/cellInput.jsp
+            </result>
+        </action>
+
+        <action name="cellInfo" class="com.scttsc.business.web.CellAction"
+                method="cellInfo">
+            <result name="success" type="dispatcher">
+                /appviews/business/cell/cellInfo.jsp
+            </result>
+        </action>
+
+        <!-- 传输节点 -->
+        <action name="showTransferList" class="com.scttsc.business.web.TransferNodeAction"
+                method="showTransferList">
+            <result name="success" type="dispatcher">
+                /appviews/business/transfer/transferList.jsp
+            </result>
+        </action>
+
+        <action name="showTransferDetail" class="com.scttsc.business.web.TransferNodeAction"
+                method="showTransferDetail">
+            <result name="success" type="dispatcher">
+                /appviews/business/transfer/transferDetail.jsp
+            </result>
+        </action>
+
+        <action name="showTransferAddEdit" class="com.scttsc.business.web.TransferNodeAction"
+                method="showTransferAddEdit">
+            <result name="success" type="dispatcher">
+                /appviews/business/transfer/transferAddEdit.jsp
+            </result>
+        </action>
+
+        <action name="transferExport" class="com.scttsc.business.web.TransferNodeAction" method="transferExport">
+		    <result name="success" type="stream">
+                <param name="contentType">${attachmentContentType}</param>
+                <param name="inputName">inputStream</param>
+                <param name="contentDisposition">attachment;filename="${attachmentFileName}"</param>
+                <param name="bufferSize">4096</param>
+            </result>
+            <result name="error" type="dispatcher">
+				/pages/common/json.jsp
+			</result>
+        </action>
+
+
+        <action name="exportCellInputData" class="com.scttsc.business.web.CellAction"
+                method="exportCellInputData"></action>
+
+        <!--数据树展示-->
+        <action name="query" class="com.scttsc.business.web.QueryAction"
+                method="query">
+            <result name="success" type="dispatcher">
+                /appviews/business/dataquery/dataTreeMain.jsp
+            </result>
+        </action>
+        <!--数据查询-->
+        <action name="dataQuery" class="com.scttsc.business.web.DataQueryAction"
+                method="dataQuery">
+            <result name="success" type="dispatcher">
+                /appviews/business/dataquery/dataQuery.jsp
+            </result>
+        </action>
+
+        <!--模板列表-->
+        <action name="template" class="com.scttsc.business.web.TemplateAction"
+                method="template">
+            <result name="success" type="dispatcher">
+                /appviews/business/template/templateList.jsp
+            </result>
+        </action>
+
+
+        <!--模板定制-->
+        <action name="columnConfig" class="com.scttsc.business.web.TemplateAction"
+                method="columnConfig">
+            <result name="success" type="dispatcher">
+                /appviews/business/template/columnsConfig.jsp
+            </result>
+        </action>
+        <action name="templateDefine" class="com.scttsc.business.web.TemplateAction"
+                method="templateDefine">
+            <result name="success" type="dispatcher">
+                /appviews/business/template/templateDefine.jsp
+            </result>
+        </action>
+
+        <action name="columns" class="com.scttsc.business.web.TemplateAction"
+                       method="columns">
+                   <result name="success" type="dispatcher">
+                       /appviews/business/template/cloumns.jsp
+                   </result>
+        </action>
+
+
+
+        <!--自定义字段导出-->
+        <action name="defineCoulmnsExport" class="com.scttsc.business.web.TemplateAction"
+                method="defineCoulmnsExport"></action>
+
+        <!--按模板导出-->
+        <action name="templateExport" class="com.scttsc.business.web.TemplateAction"
+                method="templateExport"></action>
+        <!--小区信息库查询-->
+        <action name="libQuery" class="com.scttsc.business.web.DataQueryAction"
+                method="libQuery">
+            <result name="success" type="dispatcher">
+                /appviews/business/dataquery/libQuery.jsp
+            </result>
+        </action>
+
+          <action name="wrongName" class="com.scttsc.business.web.WrongNameAction"
+                method="wrongName">
+            <result name="success" type="dispatcher">
+                /appviews/business/wrongname/wrongNameList.jsp
+            </result>
+        </action>
+         <!--校园覆盖导出-->
+         <action name="libExport" class="com.scttsc.business.web.DataQueryAction"
+                method="libExport"></action>
+         <action name="wrongNameExport" class="com.scttsc.business.web.WrongNameAction"
+                method="wrongNameExport"></action>
+         <action name="exportDeleteData" class="com.scttsc.business.web.AbandonAction"
+                method="exportDeleteData"></action>
+
+
+         <!--数据统计页面-->
+          <action name="count" class="com.scttsc.business.web.DataCountAction"
+                method="count">
+            <result name="success" type="dispatcher">
+                /appviews/business/count/dataCount.jsp
+            </result>
+          </action>
+
+
+        <action name="exportCountResult" class="com.scttsc.business.web.DataCountAction"
+                      method="exportCountResult"></action>
+
+        <action name="selectColumns" class="com.scttsc.business.web.DataCountAction"
+                       method="selectColumns">
+                   <result name="success" type="dispatcher">
+                       /appviews/business/count/dataColumns.jsp
+                   </result>
+        </action>
+
+        <!--修改接口页面-->
+        <action name="columneditInterface" class="com.scttsc.business.web.ColumneditInterfaceAction"
+                               method="columneditInterface">
+                           <result name="success" type="dispatcher">
+                               /appviews/business/editinterface/list.jsp
+                           </result>
+        </action>
+
+
+        <!--隧道錄入-->
+        <action name="tunel" class="com.scttsc.business.web.TunelAction"
+                method="tunel">
+            <result name="success" type="dispatcher">
+                /appviews/business/tunel/tunelList.jsp
+            </result>
+        </action>
+
+        <action name="tunelInput" class="com.scttsc.business.web.TunelAction"
+                method="tunelInput">
+            <result name="success" type="dispatcher">
+                /appviews/business/tunel/tunelInput.jsp
+            </result>
+        </action>
+        <action name="importTunel" class="com.scttsc.business.web.TunelAction"
+                method="importTunel">
+            <result name="success" type="dispatcher">
+                /appviews/business/tunel/tunelImport.jsp
+            </result>
+        </action>
+
+        <action name="tunelInfo" class="com.scttsc.business.web.TunelAction"
+                method="tunelInfo">
+            <result name="success" type="dispatcher">
+                /appviews/business/tunel/tunelInfo.jsp
+            </result>
+        </action>
+
+       <!--割接数据找回-->
+
+        <action name="findback" class="com.scttsc.business.web.FindBackAction"
+                method="findback">
+            <result name="success" type="dispatcher">
+                /appviews/business/findback/findback.jsp
+            </result>
+        </action>
+
+        <action name="getMate" class="com.scttsc.business.web.FindBackAction"
+                method="getMate">
+            <result name="success" type="dispatcher">
+                /appviews/business/findback/mateData.jsp
+            </result>
+        </action>
+
+        <action name="getCellMate" class="com.scttsc.business.web.FindBackAction"
+                method="getCellMate">
+            <result name="success" type="dispatcher">
+                /appviews/business/findback/mateCellData.jsp
+            </result>
+        </action>
+
+
+
+    </package>
+
+
+</struts>

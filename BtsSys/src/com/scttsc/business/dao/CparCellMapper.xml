@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.CparCellDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.business.model.CparCell" >
+    <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="OBJECT_RDN" property="objectRdn" jdbcType="VARCHAR" />
+    <result column="OMC_ID" property="omcId" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="RELATED_BSC" property="relatedBsc" jdbcType="DECIMAL" />
+    <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR" />
+    <result column="TIME_STAMP" property="timeStamp" jdbcType="DATE" />
+    <result column="CONFIRMED" property="confirmed" jdbcType="DECIMAL" />
+    <result column="SYSTEM" property="system" jdbcType="DECIMAL" />
+    <result column="CELLID" property="cellid" jdbcType="DECIMAL" />
+    <result column="SID" property="sid" jdbcType="DECIMAL" />
+    <result column="NID" property="nid" jdbcType="DECIMAL" />
+    <result column="REG_ZONE" property="regZone" jdbcType="DECIMAL" />
+    <result column="TOTAL_ZONES" property="totalZones" jdbcType="DECIMAL" />
+    <result column="ZONE_TIMER" property="zoneTimer" jdbcType="DECIMAL" />
+    <result column="PACKET_ZONE_ID" property="packetZoneId" jdbcType="DECIMAL" />
+    <result column="P_REV" property="pRev" jdbcType="DECIMAL" />
+    <result column="ENCRYPT_MODE_A" property="encryptModeA" jdbcType="DECIMAL" />
+    <result column="ENC_SUPPORTED_A" property="encSupportedA" jdbcType="DECIMAL" />
+    <result column="SIG_ENCRYPT_SUP_A" property="sigEncryptSupA" jdbcType="DECIMAL" />
+    <result column="AUTH_A" property="authA" jdbcType="DECIMAL" />
+    <result column="MAX_NUM_ALT_SO_A" property="maxNumAltSoA" jdbcType="DECIMAL" />
+    <result column="USE_SYNC_ID_A" property="useSyncIdA" jdbcType="DECIMAL" />
+    <result column="MS_IPL_SUP_IND_A" property="msIplSupIndA" jdbcType="DECIMAL" />
+    <result column="MOB_QOS_A" property="mobQosA" jdbcType="DECIMAL" />
+    <result column="HOME_REG" property="homeReg" jdbcType="DECIMAL" />
+    <result column="FOR_SID_REG" property="forSidReg" jdbcType="DECIMAL" />
+    <result column="FOR_NID_REG" property="forNidReg" jdbcType="DECIMAL" />
+    <result column="POWER_UP_REG" property="powerUpReg" jdbcType="DECIMAL" />
+    <result column="POWER_DOWN_REG" property="powerDownReg" jdbcType="DECIMAL" />
+    <result column="PARAMETER_REG" property="parameterReg" jdbcType="DECIMAL" />
+    <result column="REG_PRD" property="regPrd" jdbcType="DECIMAL" />
+    <result column="REG_DIST" property="regDist" jdbcType="DECIMAL" />
+    <result column="PREF_MSID_TYPE" property="prefMsidType" jdbcType="DECIMAL" />
+    <result column="MCC" property="mcc" jdbcType="DECIMAL" />
+    <result column="IMSI_11_12" property="imsi1112" jdbcType="DECIMAL" />
+    <result column="IMSI_T_SUPPORTED" property="imsiTSupported" jdbcType="DECIMAL" />
+    <result column="PILOT_REPORT_A" property="pilotReportA" jdbcType="DECIMAL" />
+    <result column="SDB_SUPPORTED" property="sdbSupported" jdbcType="DECIMAL" />
+    <result column="PILOTPN" property="pilotpn" jdbcType="DECIMAL" />
+    <result column="SECTORID" property="sectorid" jdbcType="VARCHAR" />
+    <result column="SUBNETMASK" property="subnetmask" jdbcType="DECIMAL" />
+    <result column="COLORCODE" property="colorcode" jdbcType="DECIMAL" />
+    <result column="ACCESSRESTRICTEN" property="accessrestricten" jdbcType="DECIMAL" />
+    <result column="ACCESSDISTANCE" property="accessdistance" jdbcType="DECIMAL" />
+    <result column="ACCESSSIGNATURE" property="accesssignature" jdbcType="DECIMAL" />
+    <result column="LATITUDE" property="latitude" jdbcType="DECIMAL" />
+    <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL" />
+    <result column="ROUTEUPDATERADIUS" property="routeupdateradius" jdbcType="DECIMAL" />
+    <result column="MAXIMUMREVISION" property="maximumrevision" jdbcType="DECIMAL" />
+    <result column="MINIMUMREVISION" property="minimumrevision" jdbcType="DECIMAL" />
+    <result column="LEAPSECONDS" property="leapseconds" jdbcType="DECIMAL" />
+    <result column="LOCALTIMEOFFSET" property="localtimeoffset" jdbcType="DECIMAL" />
+    <result column="CRKEEPTHRESHOLD" property="crkeepthreshold" jdbcType="DECIMAL" />
+    <result column="LOADBALANCETHRESH" property="loadbalancethresh" jdbcType="DECIMAL" />
+    <result column="STATUS" property="status" jdbcType="DECIMAL" />
+    <result column="SECTORSIGNATURE" property="sectorsignature" jdbcType="DECIMAL" />
+    <result column="LONGLATLOCK_B" property="longlatlockB" jdbcType="DECIMAL" />
+    <result column="ANID" property="anid" jdbcType="DECIMAL" />
+    <result column="CI" property="ci" jdbcType="DECIMAL" />
+    <result column="SUBNETADDRESS_B" property="subnetaddressB" jdbcType="VARCHAR" />
+    <result column="BANDCLASS" property="bandclass" jdbcType="DECIMAL" />
+    <result column="ALIAS_B" property="aliasB" jdbcType="VARCHAR" />
+    <result column="SWITCH1" property="switch1" jdbcType="DECIMAL" />
+    <result column="SWITCH2" property="switch2" jdbcType="DECIMAL" />
+    <result column="SWITCH3" property="switch3" jdbcType="DECIMAL" />
+    <result column="SWITCH4" property="switch4" jdbcType="DECIMAL" />
+    <result column="SWITCH5" property="switch5" jdbcType="DECIMAL" />
+    <result column="SWITCH6" property="switch6" jdbcType="DECIMAL" />
+    <result column="SWITCH7" property="switch7" jdbcType="DECIMAL" />
+    <result column="SWITCH8" property="switch8" jdbcType="DECIMAL" />
+    <result column="SWITCH9" property="switch9" jdbcType="DECIMAL" />
+    <result column="SWITCH10" property="switch10" jdbcType="DECIMAL" />
+    <result column="SUBNETINDEXID" property="subnetindexid" jdbcType="DECIMAL" />
+    <result column="PHYCELLID" property="phycellid" jdbcType="DECIMAL" />
+    <result column="SCENETYPE" property="scenetype" jdbcType="DECIMAL" />
+    <result column="ISSAMEPNSECTOR" property="issamepnsector" jdbcType="DECIMAL" />
+    <result column="REFCELLID" property="refcellid" jdbcType="DECIMAL" />
+    <result column="SAMEPNCELLMAXNUM" property="samepncellmaxnum" jdbcType="DECIMAL" />
+    <result column="SOFTERHOGROUPID" property="softerhogroupid" jdbcType="DECIMAL" />
+    <result column="BTS_ALIAS" property="btsAlias" jdbcType="VARCHAR" />
+    <result column="ISSECTORMCCAPABLE" property="issectormccapable" jdbcType="DECIMAL" />
+    <result column="LATITUDE_B" property="latitudeB" jdbcType="FLOAT" />
+    <result column="LONGTITUDE_B" property="longtitudeB" jdbcType="FLOAT" />
+    <result column="SECCOLORCODE1" property="seccolorcode1" jdbcType="DECIMAL" />
+    <result column="SECCOLORCODE2" property="seccolorcode2" jdbcType="DECIMAL" />
+    <result column="SECCOLORCODE3" property="seccolorcode3" jdbcType="DECIMAL" />
+    <result column="SECCOLORCODE4" property="seccolorcode4" jdbcType="DECIMAL" />
+    <result column="SECCOLORCODE5" property="seccolorcode5" jdbcType="DECIMAL" />
+    <result column="SECCOLORCODE6" property="seccolorcode6" jdbcType="DECIMAL" />
+    <result column="SECCOLORCODE7" property="seccolorcode7" jdbcType="DECIMAL" />
+    <result column="MAINCONNQOSENABLED" property="mainconnqosenabled" jdbcType="DECIMAL" />
+    <result column="FPC_MODE" property="fpcMode" jdbcType="DECIMAL" />
+    <result column="FPC_PTTSCH_FER" property="fpcPttschFer" jdbcType="DECIMAL" />
+    <result column="FPC_PTTSCH_INI_SPT" property="fpcPttschIniSpt" jdbcType="DECIMAL" />
+    <result column="AN_ID" property="anId" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    INT_ID, OBJECT_RDN, OMC_ID, NAME, RELATED_BSC, BSC_NAME, TIME_STAMP, CONFIRMED, SYSTEM, 
+    CELLID, SID, NID, REG_ZONE, TOTAL_ZONES, ZONE_TIMER, PACKET_ZONE_ID, P_REV, ENCRYPT_MODE_A, 
+    ENC_SUPPORTED_A, SIG_ENCRYPT_SUP_A, AUTH_A, MAX_NUM_ALT_SO_A, USE_SYNC_ID_A, MS_IPL_SUP_IND_A, 
+    MOB_QOS_A, HOME_REG, FOR_SID_REG, FOR_NID_REG, POWER_UP_REG, POWER_DOWN_REG, PARAMETER_REG, 
+    REG_PRD, REG_DIST, PREF_MSID_TYPE, MCC, IMSI_11_12, IMSI_T_SUPPORTED, PILOT_REPORT_A, 
+    SDB_SUPPORTED, PILOTPN, SECTORID, SUBNETMASK, COLORCODE, ACCESSRESTRICTEN, ACCESSDISTANCE, 
+    ACCESSSIGNATURE, LATITUDE, LONGITUDE, ROUTEUPDATERADIUS, MAXIMUMREVISION, MINIMUMREVISION, 
+    LEAPSECONDS, LOCALTIMEOFFSET, CRKEEPTHRESHOLD, LOADBALANCETHRESH, STATUS, SECTORSIGNATURE, 
+    LONGLATLOCK_B, ANID, CI, SUBNETADDRESS_B, BANDCLASS, ALIAS_B, SWITCH1, SWITCH2, SWITCH3, 
+    SWITCH4, SWITCH5, SWITCH6, SWITCH7, SWITCH8, SWITCH9, SWITCH10, SUBNETINDEXID, PHYCELLID, 
+    SCENETYPE, ISSAMEPNSECTOR, REFCELLID, SAMEPNCELLMAXNUM, SOFTERHOGROUPID, BTS_ALIAS, 
+    ISSECTORMCCAPABLE, LATITUDE_B, LONGTITUDE_B, SECCOLORCODE1, SECCOLORCODE2, SECCOLORCODE3, 
+    SECCOLORCODE4, SECCOLORCODE5, SECCOLORCODE6, SECCOLORCODE7, MAINCONNQOSENABLED, FPC_MODE, 
+    FPC_PTTSCH_FER, FPC_PTTSCH_INI_SPT, AN_ID
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select
+    <include refid="Base_Column_List" />
+    from C_TZX_PAR_CELL_DO where INT_ID=#{intId,jdbcType=DECIMAL}
+  </select>
+ 
+</mapper>

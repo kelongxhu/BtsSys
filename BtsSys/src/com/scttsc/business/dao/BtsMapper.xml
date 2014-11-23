@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.BtsDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.business.model.Bts">
+        <result column="INT_ID" property="intId" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL"/>
+        <result column="LATITUDE" property="latitude" jdbcType="DECIMAL"/>
+        <result column="IS_INDOOR" property="isIndoor" jdbcType="VARCHAR"/>
+        <result column="IS_RRU" property="isRru" jdbcType="VARCHAR"/>
+        <result column="BTS_NAME" property="btsName" jdbcType="VARCHAR"/>
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR"/>
+        <result column="BTS_ID" property="btsId" jdbcType="DECIMAL"/>
+        <result column="CIRCUITROOM_OWNERSHIP" property="circuitroomOwnership" jdbcType="VARCHAR"/>
+        <result column="TRANS_OWNERSHIP" property="transOwnership" jdbcType="VARCHAR"/>
+        <result column="VENDOR_BTSTYPE" property="vendorBtstype" jdbcType="VARCHAR"/>
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
+        <result column="COUNTY_ID" property="countyId" jdbcType="DECIMAL"/>
+        <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL"/>
+        <result column="MANUAL_FLAG" property="manualFlag" jdbcType="DECIMAL"/>
+        <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL"/>
+        <result column="DELETETIME" property="deletetime" jdbcType="DATE"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
+        <result column="SERVICE_LEVEL" property="serviceLevel" jdbcType="VARCHAR"/>
+
+        <result column="c_name" property="cons.name" jdbcType="VARCHAR"/>
+
+
+        <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL"/>
+        <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR"/>
+
+
+        <result column="cityname" property="cityName" jdbcType="VARCHAR"/>
+        <result column="countryname" property="country.cityName" jdbcType="VARCHAR"/>
+        <result column="b_id" property="country.id" jdbcType="DECIMAL"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    u.INT_ID, u.NAME, u.LONGITUDE, u.LATITUDE, u.IS_INDOOR, u.IS_RRU, u.BTS_NAME, u.BSC_NAME, u.BTS_ID, 
+    u.CIRCUITROOM_OWNERSHIP, u.TRANS_OWNERSHIP, u.VENDOR_BTSTYPE, u.CITY_ID, u.COUNTY_ID, u.RELATED_BTS, 
+    u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME, u.SERVICE_LEVEL,u.DELETE_RESONCODE,u.DELETE_TEXT
+   </sql>
+
+
+    <sql id="orderby-condition">
+        <trim prefix="ORDER BY" suffixOverrides=",">
+            <if test="sortname=='name'">NAME</if>
+            <if test="sortname=='cityName'">CITY_ID</if>
+            <if test="sortname=='country.cityName'">COUNTY_ID</if>
+            <if test="sortname=='bscName'">BSC_NAME</if>
+            <if test="sortname=='btsId'">BTS_ID</if>
+            <if test="sortname=='serviceLevel'">SERVICE_LEVEL</if>
+            <if test="sortname=='circuitroomOwnership'">CIRCUITROOM_OWNERSHIP</if>
+            <if test="sortname=='transOwnership'">TRANS_OWNERSHIP</if>
+            <if test="sortname=='isRru'">IS_RRU</if>
+            <if test="sortname=='btsName'">BTS_NAME</if>
+            <if test="sortname=='vendorBtstype'">VENDOR_BTSTYPE</if>
+            <if test="sortname=='manualFlag'">MANUAL_FLAG</if>
+            <if test="sortorder != null">${sortorder}</if>
+        </trim>
+    </sql>
+
+
+    <!--统计查询按点击某个字段排序-->
+    <sql id="orderby-count">
+        <trim prefix="ORDER BY" suffixOverrides=",">
+            <if test="sortname=='NAME'">NAME</if>
+            <if test="sortname=='CITYNAME'">CITYNAME</if>
+            <if test="sortname=='COUNTRYNAME'">COUNTRYNAME</if>
+            <if test="sortname=='MSC_NAME'">MSC_NAME</if>
+            <if test="sortname=='BSC_NAME'">BSC_NAME</if>
+            <if test="sortname=='BTS_ID'">BTS_ID</if>
+            <if test="sortname=='USESTATUS'">USESTATUS</if>
+            <if test="sortname=='LONGITUDE'">LONGITUDE</if>
+            <if test="sortname=='LATITUDE'">LATITUDE</if>
+            <if test="sortname=='DO_BTS'">DO_BTS</if>
+            <if test="sortname=='IS_RRU'">IS_RRU</if>
+            <if test="sortname=='BTS_NAME'">BTS_NAME</if>
+            <if test="sortname=='SERVICE_LEVEL'">SERVICE_LEVEL</if>
+            <if test="sortname=='CIRCUITROOM_OWNERSHIP'">CIRCUITROOM_OWNERSHIP</if>
+            <if test="sortname=='TRANS_OWNERSHIP'">TRANS_OWNERSHIP</if>
+            <if test="sortname=='INSTALL_POS_CODE_NAME'">INSTALL_POS_CODE_NAME</if>
+            <if test="sortname=='SHAR_FLAG'">SHAR_FLAG</if>
+            <if test="sortname=='SHAR_NAME'">SHAR_NAME</if>
+            <if test="sortname=='ADDRESS'">ADDRESS</if>
+            <if test="sortname=='OPEN_TIME'">OPEN_TIME</if>
+            <if test="sortname=='CONF_1X'">CONF_1X</if>
+            <if test="sortname=='CONF_DO'">CONF_DO</if>
+            <if test="sortname=='TOWER_TYPE_NAME'">TOWER_TYPE_NAME</if>
+            <if test="sortname=='TOWER_HIGH'">TOWER_HIGH</if>
+            <if test="sortname=='MR_STRUT_NAME'">MR_STRUT_NAME</if>
+            <if test="sortname=='MR_LENGTH'">MR_LENGTH</if>
+            <if test="sortname=='MR_WIDTH'">MR_WIDTH</if>
+            <if test="sortname=='MR_HIGH'">MR_HIGH</if>
+            <if test="sortname=='MR_OWNER'">MR_OWNER</if>
+            <if test="sortname=='WD_TYPE'">WD_TYPE</if>
+            <if test="sortorder != null">${sortorder}</if>
+        </trim>
+    </sql>
+
+    <select id="getByConds" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List"/>,a.name cityname,b.name countryname,c.name c_name,b.id b_id
+        from WY_BTS u
+        left join wy_city a on a.id=u.CITY_ID
+        left join wy_city b on b.id=u.COUNTY_ID
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='ABANDONEDTYPE')c
+        ON c.code=u.DELETE_RESONCODE
+        )m
+        <where>
+            1=1
+            <if test="ids!=null">
+                and INT_ID in(${ids})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="isIndoor!=null">
+                and IS_INDOOR=#{isIndoor,jdbcType=VARCHAR}
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="ntxFlag!=null">
+                and DELETE_RESONCODE=0
+            </if>
+            <if test="ytxFlag!=null">
+                and DELETE_RESONCODE!=0
+            </if>
+            <if test="startTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd')>=#{startTime}
+            </if>
+            <if test="endTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd') &lt; #{endTime}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        <include refid="orderby-condition"/>)
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="countByConds" resultType="int">
+        select count(1) from
+        (select
+        <include refid="Base_Column_List"/>
+        from WY_BTS u)
+        <where>
+            1=1
+            <if test="ids!=null">
+                and INT_ID in(${ids})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="isIndoor!=null">
+                and IS_INDOOR=#{isIndoor,jdbcType=VARCHAR}
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsName!=null">
+                and BTS_NAME like #{btsName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID =  #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="startTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd')>=#{startTime}
+            </if>
+            <if test="endTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd') &lt; #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_BTS u
+        <where>
+            1=1
+            <if test="countryIds!=null">
+                and u.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and u.int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="isIndoor!=null">
+                and u.IS_INDOOR=#{isIndoor,jdbcType=VARCHAR}
+            </if>
+            <if test="name!=null">
+                and u.name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and u.BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and u.BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and u.delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and u.MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="wybtsName!=null">
+                and u.NAME=#{wybtsName,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_BTS u
+        where
+        u.INT_ID=#{id,jdbcType=DECIMAL}
+    </select>
+
+
+    <insert id="insert" parameterType="com.scttsc.business.model.Bts">
+    insert into WY_BTS (INT_ID, NAME, LONGITUDE, 
+      LATITUDE, IS_INDOOR, IS_RRU, 
+      BTS_NAME, BSC_NAME, BTS_ID, 
+      CIRCUITROOM_OWNERSHIP, TRANS_OWNERSHIP, VENDOR_BTSTYPE, 
+      CITY_ID, COUNTY_ID, RELATED_BTS, 
+      MANUAL_FLAG, DELETE_FLAG, DELETETIME,
+      UPDATETIME, SERVICE_LEVEL)
+    values (#{intId,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{longitude,jdbcType=DECIMAL}, 
+      #{latitude,jdbcType=DECIMAL}, #{isIndoor,jdbcType=VARCHAR}, #{isRru,jdbcType=VARCHAR}, 
+      #{btsName,jdbcType=VARCHAR}, #{bscName,jdbcType=VARCHAR}, #{btsId,jdbcType=DECIMAL}, 
+      #{circuitroomOwnership,jdbcType=VARCHAR}, #{transOwnership,jdbcType=VARCHAR}, #{vendorBtstype,jdbcType=VARCHAR}, 
+      #{cityId,jdbcType=DECIMAL}, #{countyId,jdbcType=DECIMAL}, #{relatedBts,jdbcType=DECIMAL}, 
+      #{manualFlag,jdbcType=DECIMAL}, #{deleteFlag,jdbcType=DECIMAL}, #{deletetime,jdbcType=DATE},
+      #{updatetime,jdbcType=DATE}, #{serviceLevel,jdbcType=VARCHAR})
+  </insert>
+
+    <update id="update" parameterType="com.scttsc.business.model.Bts">
+    update WY_BTS
+    set NAME = #{record.name,jdbcType=VARCHAR},
+      LONGITUDE = #{record.longitude,jdbcType=DECIMAL},
+      LATITUDE = #{record.latitude,jdbcType=DECIMAL},
+      IS_INDOOR = #{record.isIndoor,jdbcType=VARCHAR},
+      IS_RRU = #{record.isRru,jdbcType=VARCHAR},
+      BTS_NAME = #{record.btsName,jdbcType=VARCHAR},
+      BSC_NAME = #{record.bscName,jdbcType=VARCHAR},
+      BTS_ID = #{record.btsId,jdbcType=DECIMAL},
+      CIRCUITROOM_OWNERSHIP = #{record.circuitroomOwnership,jdbcType=VARCHAR},
+      TRANS_OWNERSHIP = #{record.transOwnership,jdbcType=VARCHAR},
+      VENDOR_BTSTYPE = #{record.vendorBtstype,jdbcType=VARCHAR},
+      CITY_ID = #{record.cityId,jdbcType=DECIMAL},
+      COUNTY_ID = #{record.countyId,jdbcType=DECIMAL},
+      RELATED_BTS = #{record.relatedBts,jdbcType=DECIMAL},
+      MANUAL_FLAG = #{record.manualFlag,jdbcType=DECIMAL},
+      DELETE_FLAG = #{record.deleteFlag,jdbcType=DECIMAL},
+      DELETETIME = #{record.deletetime,jdbcType=DATE},
+      UPDATETIME = #{record.updatetime,jdbcType=DATE},
+      SERVICE_LEVEL = #{record.serviceLevel,jdbcType=VARCHAR}
+     	where
+				u.INT_ID=#{value}
+  </update>
+
+    <update id="updateByMap">
+        update WY_BTS
+        <set>
+            <if test="manualFlag != null">
+                MANUAL_FLAG = #{manualFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteResoncode != null">
+                DELETE_RESONCODE = #{deleteResoncode,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteText != null">
+                DELETE_TEXT = #{deleteText,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <where>
+            1=1
+            <if test="intId!=null">
+                and INT_ID=#{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag=#{deleteFlag,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </update>
+
+    <!--导出所有字段查询-->
+    <select id="selectExportDataByMap" resultType="hashmap">
+        SELECT a.int_id,a.name,e.name cityname,f.name countryname,b.msc_name,a.bsc_name,a.bts_id,
+        (case(b.usestatus) when 0 then '正式商用' when 1 then '开通未商用' when 2 then '未开通' END) usestatus,
+        a.longitude,a.latitude,
+        (case(b.do_bts) when 0 then '1X基站' when 1 then 'DO基站' end)
+        do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,
+        c.install_pos_code,o.name
+        install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
+        c.tower_type,p.name tower_type_name,c.tower_high,c.mr_strut,q.name
+        mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
+        c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
+        C.Tran_Isnode,c.tran_sitenum,c.sour_model,c.sour_fac,c.sour_module_model,c.sour_module_num,c.sour_capa,
+        c.box_model,c.box_fac,c.cell_model,c.cell_fac,c.cell_capa,c.cell_num,c.cell_power,c.cell_duar,c.cell_ustime,
+        c.ac_model,c.ac_fac,c.ac_num,c.dh_model,c.dh_fac,c.xf_model,c.xf_fac FROM wy_bts a
+        LEFT JOIN c_bts b
+        ON b.int_id=a.related_bts
+        LEFT JOIN wy_bts_manual c
+        ON c.int_id=a.int_id
+        LEFT JOIN wy_city e ON
+        a.city_id=e.id
+        LEFT JOIN wy_city f ON
+        a.county_id=f.id
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='BTSINSTALL')o
+        ON o.code=c.install_pos_code
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TOWERTYPE')p
+        ON p.code=c.tower_type
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='MRSTRUT')q
+        ON q.code=c.mr_strut
+        <where>
+            1=1 and a.delete_flag=0 AND a.is_indoor='否'
+            <if test="countryIds!=null">
+                and a.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and a.name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and a.BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and a.BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="intId!=null">
+                and a.int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+        </where>
+        ORDER BY a.city_id,a.county_id ASC
+    </select>
+
+
+    <!--自定义字段统计功能SqL-->
+
+
+    <select id="selectBtsGroupByColumns" resultType="hashmap" parameterType="map">
+        select * from (select m.*,ROWNUM RN from
+        (
+        SELECT
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>,count(1) num
+        FROM
+        (SELECT a.int_id,a.city_id,a.name,e.name cityname,f.name countryname,b.msc_name,a.bsc_name,a.bts_id,
+        (case(b.usestatus) when 0 then '正式商用' when 1 then '开通未商用' when 2 then '未开通' END) usestatus,
+        a.longitude,a.latitude,
+        (case(b.do_bts) when 0 then '1X基站' when 1 then 'DO基站' end)
+        do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,
+        c.install_pos_code,o.name
+        install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
+        c.tower_type,p.name tower_type_name,c.tower_high,c.mr_strut,q.name
+        mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
+        c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
+        C.Tran_Isnode,c.tran_sitenum,c.sour_model,c.sour_fac,c.sour_module_model,c.sour_module_num,c.sour_capa,
+        c.box_model,c.box_fac,c.cell_model,c.cell_fac,c.cell_capa,c.cell_num,c.cell_power,c.cell_duar,c.cell_ustime,
+        c.ac_model,c.ac_fac,c.ac_num,c.dh_model,c.dh_fac,c.xf_model,c.xf_fac FROM wy_bts a
+        LEFT JOIN c_bts b
+        ON b.int_id=a.related_bts
+        LEFT JOIN wy_bts_manual c
+        ON c.int_id=a.int_id
+        LEFT JOIN wy_city e ON
+        a.city_id=e.id
+        LEFT JOIN wy_city f ON
+        a.county_id=f.id
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='BTSINSTALL')o
+        ON o.code=c.install_pos_code
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TOWERTYPE')p
+        ON p.code=c.tower_type
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='MRSTRUT')q
+        ON q.code=c.mr_strut
+        WHERE a.delete_flag=0 AND a.is_indoor='否'
+        )
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and city_id in(${cityIds})
+            </if>
+        </where>
+
+        GROUP BY
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>
+        <choose>
+            <when test="orderCondition != null">
+                order by ${orderCondition}
+            </when>
+            <otherwise>
+                order by NUM DESC
+            </otherwise>
+        </choose>
+        )m
+        <where>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="countBtsGroupByColumns" resultType="int">
+        select count(1) from(
+        SELECT
+          <if test="sqlsb!=null">
+              ${sqlsb}
+          </if>,count(1) num
+          FROM
+          (SELECT a.int_id,a.city_id,a.name,e.name cityname,f.name countryname,b.msc_name,a.bsc_name,a.bts_id,
+          (case(b.usestatus) when 0 then '正式商用' when 1 then '开通未商用' when 2 then '未开通' END) usestatus,
+          a.longitude,a.latitude,
+          (case(b.do_bts) when 0 then '1X基站' when 1 then 'DO基站' end)
+          do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,
+          c.install_pos_code,o.name
+          install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
+          c.tower_type,p.name tower_type_name,c.tower_high,c.mr_strut,q.name
+          mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
+          c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
+          C.Tran_Isnode,c.tran_sitenum,c.sour_model,c.sour_fac,c.sour_module_model,c.sour_module_num,c.sour_capa,
+          c.box_model,c.box_fac,c.cell_model,c.cell_fac,c.cell_capa,c.cell_num,c.cell_power,c.cell_duar,c.cell_ustime,
+          c.ac_model,c.ac_fac,c.ac_num,c.dh_model,c.dh_fac,c.xf_model,c.xf_fac FROM wy_bts a
+          LEFT JOIN c_bts b
+          ON b.int_id=a.related_bts
+          LEFT JOIN wy_bts_manual c
+          ON c.int_id=a.int_id
+          LEFT JOIN wy_city e ON
+          a.city_id=e.id
+          LEFT JOIN wy_city f ON
+          a.county_id=f.id
+          LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='BTSINSTALL')o
+          ON o.code=c.install_pos_code
+          LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TOWERTYPE')p
+          ON p.code=c.tower_type
+          LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='MRSTRUT')q
+          ON q.code=c.mr_strut
+          WHERE a.delete_flag=0 AND a.is_indoor='否'
+          )
+          <where>
+              1=1
+              <if test="cityIds!=null">
+                  and city_id in(${cityIds})
+              </if>
+          </where>
+
+          GROUP BY
+          <if test="sqlsb!=null">
+              ${sqlsb}
+          </if>
+        )
+    </select>
+
+    <select id="selectWyBtsByMap" resultType="hashmap">
+        select int_id from wy_bts
+        <where>
+            1=1 and delete_flag=0
+            <if test="bscName!=null">
+                and bsc_name=#{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and bts_id=#{btsId,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

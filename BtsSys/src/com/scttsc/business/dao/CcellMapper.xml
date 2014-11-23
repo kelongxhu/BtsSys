@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.CcellDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.business.model.Ccell" >
+    <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="OBJECT_RDN" property="objectRdn" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="BSSID" property="bssid" jdbcType="DECIMAL" />
+    <result column="BTSID" property="btsid" jdbcType="DECIMAL" />
+    <result column="CELLID" property="cellid" jdbcType="DECIMAL" />
+    <result column="ADJ_NUM" property="adjNum" jdbcType="DECIMAL" />
+    <result column="UNIQUE_RDN" property="uniqueRdn" jdbcType="VARCHAR" />
+    <result column="ZH_NAME" property="zhName" jdbcType="VARCHAR" />
+    <result column="VENDOR_ID" property="vendorId" jdbcType="DECIMAL" />
+    <result column="OMC_ID" property="omcId" jdbcType="DECIMAL" />
+    <result column="RELATED_OMC" property="relatedOmc" jdbcType="DECIMAL" />
+    <result column="RELATED_MSC" property="relatedMsc" jdbcType="DECIMAL" />
+    <result column="RELATED_BSC" property="relatedBsc" jdbcType="DECIMAL" />
+    <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL" />
+    <result column="MSC_NAME" property="mscName" jdbcType="VARCHAR" />
+    <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR" />
+    <result column="BTS_NAME" property="btsName" jdbcType="VARCHAR" />
+    <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
+    <result column="TIME_STAMP" property="timeStamp" jdbcType="DATE" />
+    <result column="CONFIRMED" property="confirmed" jdbcType="DECIMAL" />
+    <result column="CI" property="ci" jdbcType="DECIMAL" />
+    <result column="SECTORLOC" property="sectorloc" jdbcType="DECIMAL" />
+    <result column="NUMFA" property="numfa" jdbcType="DECIMAL" />
+    <result column="CAPACITY" property="capacity" jdbcType="FLOAT" />
+    <result column="MICROCELL" property="microcell" jdbcType="DECIMAL" />
+    <result column="PN" property="pn" jdbcType="DECIMAL" />
+    <result column="PN_INC" property="pnInc" jdbcType="DECIMAL" />
+    <result column="LAC" property="lac" jdbcType="DECIMAL" />
+    <result column="STATUS" property="status" jdbcType="DECIMAL" />
+    <result column="DO_CELL" property="doCell" jdbcType="DECIMAL" />
+    <result column="RELATED_RNC" property="relatedRnc" jdbcType="DECIMAL" />
+    <result column="RNC_NAME" property="rncName" jdbcType="VARCHAR" />
+    <result column="SID" property="sid" jdbcType="DECIMAL" />
+    <result column="NID" property="nid" jdbcType="DECIMAL" />
+    <result column="NUMFA_DO" property="numfaDo" jdbcType="DECIMAL" />
+    <result column="RRU_CELL" property="rruCell" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    INT_ID, OBJECT_RDN, NAME, BSSID, BTSID, CELLID, ADJ_NUM, UNIQUE_RDN, ZH_NAME, VENDOR_ID, 
+    OMC_ID, RELATED_OMC, RELATED_MSC, RELATED_BSC, RELATED_BTS, MSC_NAME, BSC_NAME, BTS_NAME, 
+    CITY_ID, TIME_STAMP, CONFIRMED, CI, SECTORLOC, NUMFA, CAPACITY, MICROCELL, PN, PN_INC, 
+    LAC, STATUS, DO_CELL, RELATED_RNC, RNC_NAME, SID, NID, NUMFA_DO, RRU_CELL
+  </sql>
+    <sql id="Base_Column_List1" >
+    a.INT_ID, a.OBJECT_RDN, a.NAME, a.BSSID, a.BTSID, a.CELLID, a.ADJ_NUM, a.UNIQUE_RDN, a.ZH_NAME, a.VENDOR_ID,
+    a.OMC_ID, a.RELATED_OMC, a.RELATED_MSC, a.RELATED_BSC, a.RELATED_BTS, a.MSC_NAME, a.BSC_NAME, a.BTS_NAME,
+    a.CITY_ID, a.TIME_STAMP, a.CONFIRMED, a.CI, a.SECTORLOC, a.NUMFA, a.CAPACITY, a.MICROCELL, a.PN, a.PN_INC,
+    a.LAC, a.STATUS, a.DO_CELL, a.RELATED_RNC, a.RNC_NAME, a.SID, a.NID, a.NUMFA_DO, a.RRU_CELL
+  </sql>
+ 
+   <select id="selectById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+   		select <include refid="Base_Column_List"/> from c_cell where INT_ID=#{intId,jdbcType=DECIMAL}
+   </select>
+
+    <select id="selectByRelateBts" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+   		select <include refid="Base_Column_List"/> from c_cell where RELATED_BTS=#{btsId,jdbcType=DECIMAL}
+   </select>
+
+    <select id="selectByBtsId" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select <include refid="Base_Column_List1"/> from c_cell a left join wy_cell b on a.int_id = b.int_id where b.wy_bts_int_id = #{btsId,jdbcType=DECIMAL}
+   </select>
+
+
+
+</mapper>

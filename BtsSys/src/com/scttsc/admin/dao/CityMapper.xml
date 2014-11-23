@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scttsc.admin.dao.CityDao">
+
+	<resultMap id="result" type="com.scttsc.admin.model.City">
+		<result property="id" column="ID" jdbcType="DECIMAL" />
+		<result property="parentId" column="parentid" jdbcType="DECIMAL" />
+		<result property="cityId" column="city_id" jdbcType="DECIMAL" />
+		<result property="cityName" column="city_name" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getCitys" resultMap="result">
+		SELECT a.id,a.parentid,a.name city_name,a.city_id FROM wy_city a WHERE a.parentid IN(-1,10001)
+	</select>
+	
+	<select id="getCountry" resultMap="result">
+		SELECT a.id,a.parentid,a.name city_name,a.city_id FROM wy_city a 
+	</select>
+	
+	<select id="getById" resultMap="result">
+		select a.id,a.parentid,a.name city_name,a.city_id FROM WY_CITY a where a.id=#{value}
+	</select>
+
+    <select id="getByMap" resultMap="result">
+		select a.id,a.parentid,a.name city_name,a.city_id FROM WY_CITY a
+		<where>
+            1=1
+            <if test="pid!=null">
+                  and a.parentid=#{pid,jdbcType=DECIMAL}
+            </if>
+            <if test="name!=null">
+                and a.name=#{name,jdbcType=DECIMAL}
+            </if>
+		</where>
+	</select>
+
+
+</mapper>
+

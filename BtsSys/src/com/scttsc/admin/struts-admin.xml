@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="adminjson" namespace="/adminjson" extends="json-default">
+		<action name="subMenu" class="com.scttsc.admin.web.HxMenuAction"
+			method="subMenu">
+			<result name="success" type="json" />
+		</action>
+		<action name="dmList" class="com.scttsc.admin.web.DepartMentAction"
+			method="dmList">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		<action name="dmTree" class="com.scttsc.admin.web.DepartMentAction"
+			method="dmTree">
+			<result name="success" type="json"/>
+		</action>
+		<!--角色列表-->
+		<action name="roleData" class="com.scttsc.admin.web.RoleAction"
+			method="roleData">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>
+			</result>
+		</action>
+        <action name="menuApply" class="com.scttsc.admin.web.RoleAction"
+			method="menuApply">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>
+			</result>
+		</action>
+        <!--权限树-->
+        <action name="menuTreeData" class="com.scttsc.admin.web.RoleAction"
+			method="menuTreeData">
+			<result name="success" type="json"/>
+		</action>
+
+        <!--修改-->
+        <action name="roleMenuTreeData" class="com.scttsc.admin.web.RoleAction"
+      			method="roleMenuTreeData">
+            <result name="success" type="json"/>
+        </action>
+
+	</package>
+
+	<package name="admin" namespace="/admin" extends="default">
+		<action name="menu" class="com.scttsc.admin.web.HxMenuAction"
+			method="menu">
+			<result name="success" type="dispatcher">
+				/layouts/menu.jsp
+			</result>
+		</action>
+		
+		<action name="index2" class="com.scttsc.admin.web.UserAction"
+			method="index2">
+			<result name="success" type="dispatcher">
+				/layouts/index.jsp
+			</result>
+		</action>
+         <!--角色列表-->
+         <action name="role" class="com.scttsc.admin.web.RoleAction"
+			method="role">
+			<result name="success" type="dispatcher">
+				/appviews/admin/roleList.jsp
+			</result>
+		</action>
+
+         <action name="roleMenu" class="com.scttsc.admin.web.RoleAction"
+			method="roleMenu">
+			<result name="success" type="dispatcher">
+				/appviews/admin/roleMenuApply.jsp
+			</result>
+		</action>
+
+        <action name="roleMenu2" class="com.scttsc.admin.web.RoleAction"
+       			method="roleMenu2">
+       			<result name="success" type="dispatcher">
+       				/appviews/admin/roleMenuApply.jsp
+       			</result>
+        </action>
+
+
+
+
+         <action name="index" class="com.scttsc.admin.web.HxMenuAction"
+			method="index">
+			<result name="success" type="dispatcher">
+				/layouts/index2.jsp
+			</result>
+		</action>
+
+
+
+	</package>
+	
+	
+	
+	<package name="login"   extends="struts-default">
+		<interceptors>
+			<interceptor-stack name="defaultItcpt">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="exception">
+					<param name="logEnabled">true</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="defaultItcpt"></default-interceptor-ref>
+		<!-- 用户登录动作 -->
+		<action name="checkPassword" class="com.scttsc.admin.web.LoginAction" method="checkPassword">
+			<result name="success" type="dispatcher" >
+				/appviews/common/json.jsp
+			</result>
+		</action>
+		<action name="login" class="com.scttsc.admin.web.LoginAction">
+		<!-- 
+			<interceptor-ref name="defaultStack"></interceptor-ref> -->
+			<result name="success" type="redirect">
+				/admin/index.action
+			</result>
+            <result name="error" type="dispatcher">
+				/appviews/sys/login2.jsp
+			</result>
+		</action>
+
+
+        <action name="login2" class="com.scttsc.admin.web.LoginAction" method="login2">
+            <!--
+                <interceptor-ref name="defaultStack"></interceptor-ref> -->
+            <result name="success" type="redirect">
+                /admin/index.action
+            </result>
+            <result name="error" type="dispatcher">
+                /appviews/sys/login2.jsp
+            </result>
+        </action>
+		
+		
+		<action name="loginOut" class="com.scttsc.admin.web.LoginAction" method="loginOut">
+			<result name="success" type="dispatcher" >
+				/appviews/sys/login2.jsp
+			</result>
+		</action>
+		
+		<!-- Random验证码 -->
+		<action name="validateCode" class="com.scttsc.admin.web.ValidateCodeAction">   
+		  <interceptor-ref name="defaultStack"></interceptor-ref>
+	      <result type="stream">   
+	           <param name="contentType">image/jpg</param>   
+	           <param name="inputName">inputStream</param>   
+	      </result>
+	 	</action>
+		
+</package> 
+		
+
+
+</struts>

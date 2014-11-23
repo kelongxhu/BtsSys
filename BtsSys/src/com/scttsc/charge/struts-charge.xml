@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="chargejson" namespace="/chargejson" extends="json-default">
+
+        <action name="wyBtsChargeList" class="com.scttsc.charge.web.WyBtsChargeListAction"
+                method="wyBtsChargeList">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="uploadFile" class="com.scttsc.charge.web.WyBtsChargeListAction"
+                method="uploadFile">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="payAdd" class="com.scttsc.charge.web.WyBtsChargeListAction"
+                method="payAdd">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="importPayInputData" class="com.scttsc.charge.web.WyBtsChargeListAction"
+                method="importPayInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="chargeBillList" class="com.scttsc.charge.web.WyBtsChargeListAction"
+                method="chargeBillList">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+
+    </package>
+
+    <package name="charge" namespace="/charge" extends="default">
+        <action name="pay" class="com.scttsc.charge.web.WyBtsChargeListAction" method="pay">
+            <result name="success" type="dispatcher">
+                /appviews/charge/bill/payList.jsp
+            </result>
+        </action>
+        <action name="payAddPage" class="com.scttsc.charge.web.WyBtsChargeListAction" method="payAddPage">
+            <result name="success" type="dispatcher">
+                /appviews/charge/bill/payAdd.jsp
+            </result>
+        </action>
+        <action name="payDetail" class="com.scttsc.charge.web.WyBtsChargeListAction" method="payDetail">
+            <result name="success" type="dispatcher">
+                /appviews/charge/bill/payInfo.jsp
+            </result>
+        </action>
+        <action name="importPage" class="com.scttsc.charge.web.WyBtsChargeListAction" method="importPage">
+            <result name="success" type="dispatcher">
+                /appviews/charge/bill/payImport.jsp
+            </result>
+        </action>
+        <action name="payQuery" class="com.scttsc.charge.web.WyBtsChargeListAction" method="payQuery">
+            <result name="success" type="dispatcher">
+                /appviews/charge/bill/payQuery.jsp
+            </result>
+        </action>
+
+
+        <action name="exportTemplateExcel" class="com.scttsc.charge.web.WyBtsChargeListAction" method="exportTemplateExcel"/>
+        <action name="payExport" class="com.scttsc.charge.web.WyBtsChargeListAction" method="payExport"/>
+    </package>
+</struts>

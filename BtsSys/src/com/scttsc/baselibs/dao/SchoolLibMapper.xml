@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scttsc.baselibs.dao.SchoolLibDao">
+
+	<resultMap id="result" type="com.scttsc.baselibs.model.SchoolLib">
+		<result property="id" column="ID" jdbcType="DECIMAL" />
+		<result property="cityId" column="CITY_ID" jdbcType="DECIMAL" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
+		<result property="schoolLevel" column="SCHOOL_LEVEL" jdbcType="DECIMAL" />
+		<result property="schoolType" column="SCHOOL_TYPE" jdbcType="DECIMAL" />
+		<result property="coverageType" column="COVERAGE_TYPE" jdbcType="VARCHAR" />
+		<result property="structuralType" column="STRUCTURAL_TYPE" jdbcType="DECIMAL" />
+		<result property="wifiType" column="WIFI_TYPE" jdbcType="DECIMAL" />
+		<result property="cusers" column="C_USERS" jdbcType="DECIMAL" />
+		<result property="doUsers" column="DO_USERS" jdbcType="DECIMAL" />
+		<result property="cusersPlan" column="C_USERS_PLAN" jdbcType="DECIMAL" />
+		<result property="doUsersPlan" column="DO_USERS_PLAN" jdbcType="DECIMAL" />
+		<result property="mealType" column="MEAL_TYPE" jdbcType="DECIMAL" />
+		<result property="businessType" column="BUSINESS_TYPE" jdbcType="VARCHAR" />
+		<result property="schoolImage" column="SCHOOL_IMAGE" jdbcType="VARCHAR" />
+		<result property="userId" column="USER_ID" jdbcType="DECIMAL" />
+		<result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP" />
+		<result property="remark" column="REMARK" jdbcType="VARCHAR" />
+        <result property="deleteFlag" column="DELETE_FLAG" jdbcType="DECIMAL" />
+		
+		<result property="provinceName" column="provincename" jdbcType="VARCHAR" />
+		<result property="cityName" column="cityname" jdbcType="VARCHAR" />
+		<result property="schoolLevelName" column="schoollevelname" jdbcType="VARCHAR" />
+		<result property="schoolTypeName" column="schooltypename" jdbcType="VARCHAR" />
+		<result property="structuralTypeName" column="structuraltypename" jdbcType="VARCHAR" />
+		<result property="wifiTypeName" column="wifitypename" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		u.ID,u.CITY_ID,u.NAME,u.ADDRESS,u.SCHOOL_LEVEL,u.SCHOOL_TYPE,u.COVERAGE_TYPE,u.STRUCTURAL_TYPE,u.WIFI_TYPE,u.C_USERS,u.DO_USERS,
+		u.C_USERS_PLAN,u.DO_USERS_PLAN,u.MEAL_TYPE,u.BUSINESS_TYPE,u.SCHOOL_IMAGE,u.USER_ID,u.UPDATE_TIME,u.REMARK,u.DELETE_FLAG
+	</sql>
+	
+	<select id="loadAll" resultMap="result">
+		select <include refid="Base_Column_List"/> from WY_LIB_SCHOOL u where u.DELETE_FLAG=0
+	</select>
+
+	<select id="getByConds" resultMap="result">
+		select* from (select m.*,ROWNUM RN from
+		(select
+		<include refid="Base_Column_List" />,b.name cityname,c.name schoollevelname,d.name schooltypename,
+		e.name structuraltypename,f.name wifitypename
+		from WY_LIB_SCHOOL u
+		LEFT JOIN wy_city b
+		ON b.id=u.CITY_ID
+		LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='SCHOOL_LEVEL')c
+    	ON c.code=u.school_level
+    	LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='SCHOOL_TYPE')d
+    	ON d.code=u.school_type
+    	LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='STRUCTURAL_TYPE')e
+    	ON e.code=u.STRUCTURAL_TYPE
+    	LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='WIFI_TYPE')f
+    	ON f.code=u.WIFI_TYPE
+		)m
+		<where>
+			<!-- <include refid = "other-condition"/> -->
+            and DELETE_FLAG=0
+			<if test="cityIds!=null">
+				and CITY_ID in(${cityIds})
+			</if>
+			<if test="start!=null">
+				and RowNum &lt; (#{start} + #{pagesize})
+			</if>
+		</where>
+		)
+		<where>
+			<if test="start!=null">
+				RN >= #{start}
+			</if>
+		</where>
+	</select>
+
+	<select id="countByConds" resultType="int">
+		select count(1) from
+		(select
+		<include refid="Base_Column_List" />
+		from WY_LIB_SCHOOL u)
+		<where>
+			1=1 and DELETE_FLAG=0
+			<if test="cityIds!=null">
+				and CITY_ID in(${cityIds})
+			</if>
+			<!-- <include refid="other-condition" /> -->
+		</where>
+	</select>
+	
+	
+	<insert id="insert" parameterType="com.scttsc.baselibs.model.SchoolLib">
+		INSERT INTO WY_LIB_SCHOOL(ID,CITY_ID,NAME,ADDRESS,SCHOOL_LEVEL,SCHOOL_TYPE,COVERAGE_TYPE,
+		STRUCTURAL_TYPE,WIFI_TYPE,C_USERS,DO_USERS,C_USERS_PLAN,DO_USERS_PLAN,MEAL_TYPE,BUSINESS_TYPE,SCHOOL_IMAGE,
+		USER_ID,UPDATE_TIME,REMARK)VALUES(WY_LIB_SCHOOL_SEQ.NEXTVAL,#{cityId,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{schoolLevel,jdbcType=INTEGER},#{schoolType,jdbcType=INTEGER},
+		#{coverageType,jdbcType=VARCHAR},#{structuralType,jdbcType=INTEGER},#{wifiType,jdbcType=INTEGER},#{cusers,jdbcType=INTEGER},
+		#{doUsers,jdbcType=INTEGER},#{cusersPlan,jdbcType=INTEGER},#{doUsersPlan,jdbcType=INTEGER},#{mealType,jdbcType=VARCHAR},
+		#{businessType,jdbcType=VARCHAR},#{schoolImage,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER},sysdate,#{remark,jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="getById" resultMap="result">
+		select <include refid="Base_Column_List" /> from WY_LIB_SCHOOL u
+		 where
+				u.ID=#{value} and u.DELETE_FLAG=0
+	</select>
+	
+	<update id="update" parameterType="com.scttsc.baselibs.model.SchoolLib">
+		update WY_LIB_SCHOOL set
+		CITY_ID=#{cityId,jdbcType=INTEGER},
+		NAME=#{name,jdbcType=VARCHAR},
+		ADDRESS=#{address,jdbcType=VARCHAR},
+		SCHOOL_LEVEL=#{schoolLevel,jdbcType=INTEGER},
+		SCHOOL_TYPE=#{schoolType,jdbcType=INTEGER},
+		COVERAGE_TYPE=#{coverageType,jdbcType=VARCHAR},
+		STRUCTURAL_TYPE=#{structuralType,jdbcType=INTEGER},
+		WIFI_TYPE=#{wifiType,jdbcType=INTEGER},
+		C_USERS=#{cusers,jdbcType=INTEGER},
+		DO_USERS=#{doUsers,jdbcType=INTEGER},
+		C_USERS_PLAN=#{cusersPlan,jdbcType=INTEGER},
+		DO_USERS_PLAN=#{doUsersPlan,jdbcType=INTEGER},
+		MEAL_TYPE=#{mealType,jdbcType=VARCHAR},
+		BUSINESS_TYPE=#{businessType,jdbcType=VARCHAR},
+		SCHOOL_IMAGE=#{schoolImage,jdbcType=VARCHAR},
+		UPDATE_TIME=sysdate,
+		REMARK=#{remark,jdbcType=VARCHAR}
+		where ID=#{id,jdbcType=INTEGER}
+	</update>
+
+    <update id="deleteByDeleteFlag">
+           update WY_LIB_SCHOOL set delete_flag=1,UPDATE_TIME=sysdate where id in(${ids})
+    </update>
+	
+	<delete id="delete">
+		delete WY_LIB_SCHOOL where id in(${ids})
+	</delete>
+
+</mapper>
+

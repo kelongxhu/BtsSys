@@ -1,0 +1,1848 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.IndoorManualDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.business.model.IndoorManual">
+        <id column="INT_ID" property="intId" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
+        <result column="COUNTRY_ID" property="countryId" jdbcType="DECIMAL"/>
+        <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL"/>
+        <result column="LATITUDE" property="latitude" jdbcType="DECIMAL"/>
+        <result column="VENDOR_BTSTYPE" property="vendorBtstype" jdbcType="VARCHAR"/>
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR"/>
+        <result column="BTS_NAME" property="btsName" jdbcType="VARCHAR"/>
+        <result column="CELL_SEQ" property="cellSeq" jdbcType="DECIMAL"/>
+        <result column="PN" property="pn" jdbcType="DECIMAL"/>
+        <result column="CI" property="ci" jdbcType="DECIMAL"/>
+        <result column="PROP1" property="prop1" jdbcType="VARCHAR"/>
+        <result column="PROP2" property="prop2" jdbcType="VARCHAR"/>
+        <result column="GRADE" property="grade" jdbcType="VARCHAR"/>
+        <result column="COVERAGE" property="coverage" jdbcType="VARCHAR"/>
+        <result column="BUILDINGNUM" property="buildingnum" jdbcType="DECIMAL"/>
+        <result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+        <result column="DEVICENUM" property="devicenum" jdbcType="DECIMAL"/>
+        <result column="MONITORFLAG" property="monitorflag" jdbcType="VARCHAR"/>
+        <result column="MONITORNUMBER" property="monitornumber" jdbcType="VARCHAR"/>
+        <result column="DEVICEADDRESS" property="deviceaddress" jdbcType="VARCHAR"/>
+        <result column="REPEATERNUM" property="repeaternum" jdbcType="DECIMAL"/>
+        <result column="DRYNUM" property="drynum" jdbcType="DECIMAL"/>
+        <result column="DISTRIBUTEDESC" property="distributedesc" jdbcType="VARCHAR"/>
+        <result column="DISTRIBUTEFAC" property="distributefac" jdbcType="VARCHAR"/>
+        <result column="MOTORFLAG" property="motorflag" jdbcType="VARCHAR"/>
+        <result column="MOTORAREA" property="motorarea" jdbcType="VARCHAR"/>
+        <result column="MOTORRIGHT" property="motorright" jdbcType="VARCHAR"/>
+        <result column="METERADDRESS" property="meteraddress" jdbcType="VARCHAR"/>
+        <result column="CONSTRUCTIONDATE" property="constructiondate" jdbcType="VARCHAR"/>
+        <result column="WLANFLAG" property="wlanflag" jdbcType="VARCHAR"/>
+        <result column="WLANSHARE" property="wlanshare" jdbcType="VARCHAR"/>
+        <result column="WLANCOVERAGE" property="wlancoverage" jdbcType="VARCHAR"/>
+        <result column="OWNERNAME" property="ownername" jdbcType="VARCHAR"/>
+        <result column="OWNERPHONE" property="ownerphone" jdbcType="VARCHAR"/>
+        <result column="MONITORDEVICENUM" property="monitordevicenum" jdbcType="DECIMAL"/>
+        <result column="MONITORDEVICEIDS" property="monitordeviceids" jdbcType="VARCHAR"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
+        <result column="UPDATEUSER" property="updateuser" jdbcType="DECIMAL"/>
+
+        <result column="manual_flag" property="manualFlag" jdbcType="DECIMAL"/>
+        <result column="ADD_FLAG" property="addFlag" jdbcType="DECIMAL"/>
+
+
+        <result column="cityname" property="city.cityName" jdbcType="VARCHAR"/>
+        <result column="countryname" property="country.cityName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    INT_ID, NAME, CITY_ID, COUNTRY_ID, LONGITUDE, LATITUDE, VENDOR_BTSTYPE, BSC_NAME, 
+    BTS_NAME, CELL_SEQ, PN, CI, PROP1, PROP2, GRADE, COVERAGE, BUILDINGNUM, ADDRESS, 
+    DEVICENUM, MONITORFLAG, MONITORNUMBER, DEVICEADDRESS, REPEATERNUM, DRYNUM, DISTRIBUTEDESC, 
+    DISTRIBUTEFAC, MOTORFLAG, MOTORAREA, MOTORRIGHT, METERADDRESS, CONSTRUCTIONDATE, 
+    WLANFLAG, WLANSHARE, WLANCOVERAGE, OWNERNAME, OWNERPHONE, MONITORDEVICENUM, MONITORDEVICEIDS, 
+    REMARK, UPDATETIME, UPDATEUSER,ADD_FLAG
+    </sql>
+
+    <sql id="orderby-condition">
+           <trim prefix="ORDER BY" suffixOverrides=",">
+               <if test="sortname=='name'">NAME</if>
+               <if test="sortname=='city.cityName'">CITY_ID</if>
+               <if test="sortname=='country.cityName'">COUNTY_ID</if>
+               <if test="sortname=='vendorBtstype'">VENDOR_BTSTYPE</if>
+               <if test="sortname=='bscName'">BSC_NAME</if>
+               <if test="sortname=='btsName'">BTS_NAME</if>
+               <if test="sortname=='cellSeq'">CELL_SEQ</if>
+               <if test="sortname=='pn'">PN</if>
+               <if test="sortname=='prop1'">PROP1</if>
+               <if test="sortname=='prop2'">PROP2</if>
+               <if test="sortname=='grade'">GRADE</if>
+               <if test="sortname=='repeaternum'">REPEATERNUM</if>
+               <if test="sortname=='drynum'">DRYNUM</if>
+               <if test="sortname=='manualFlag'">MANUAL_FLAG</if>
+               <if test="sortorder != null">${sortorder}</if>
+           </trim>
+       </sql>
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (
+        SELECT u.*,c.name cityname,d.name countryname FROM (
+        SELECT e.int_id,e.city_id,e.country_id,e.name,e.vendor_btstype,e.bsc_name,e.bts_name,e.LONGITUDE,e.LATITUDE,
+        f.cellid cell_seq,f.pn,f.ci,B.PROP1,B.PROP2,B.GRADE,b.repeaternum,b.drynum,e.manual_flag
+        FROM(SELECT a.int_id,a.city_id,a.county_id country_id,a.NAME,a.vendor_btstype,a.bsc_name,a.bts_name,
+        a.LONGITUDE,a.LATITUDE,a.manual_flag,
+        (SELECT int_id FROM wy_cell WHERE wy_bts_int_id=a.int_id AND ROWNUM=1)AS cell_int_id
+        FROM wy_bts a WHERE a.is_indoor='是' and a.delete_flag=0)e
+        LEFT JOIN WY_INDOOR_MANUAL b ON e.int_id=b.int_id
+        LEFT join wy_cell f on f.int_id = cell_int_id
+        UNION
+        SELECT
+        int_id,city_id,country_id,NAME,vendor_btstype,bsc_name,bts_name,LONGITUDE,LATITUDE,
+        cell_seq,pn,ci,PROP1,PROP2,GRADE,repeaternum,drynum,2 AS manual_flag
+        FROM WY_INDOOR_MANUAL WHERE add_flag=1)u
+        LEFT JOIN wy_city c
+        ON c.id=u.city_id
+        LEFT JOIN wy_city d
+        ON d.id=u.country_id
+        )m
+        <where>
+            1=1
+            <if test="ids!=null">
+                and int_id in(${ids})
+            </if>
+            <if test="manualFlag!=null">
+                and manual_flag=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="cityId!=null">
+                and CITY_ID in(${cityId})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and NAME like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        <include refid="orderby-condition"/>)
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="countByMap" resultType="int">
+        select count(1) from
+        (
+        SELECT u.*,c.name cityname,d.name countryname FROM (
+        SELECT a.int_id,a.city_id,a.county_id
+        country_id,a.NAME,a.vendor_btstype,a.bsc_name,a.bts_name,b.cell_seq,b.pn,b.ci,b.prop1,b.prop2,b.grade,
+        b.repeaterNum,b.DRYNUM FROM wy_bts a
+        LEFT JOIN WY_INDOOR_MANUAL b ON a.int_id=b.int_id WHERE a.is_indoor='是' and a.delete_flag=0
+        UNION
+        SELECT
+        int_id,city_id,country_id,NAME,vendor_btstype,bsc_name,bts_name,cell_seq,pn,ci,prop1,prop2,grade,repeaternum,drynum
+        FROM WY_INDOOR_MANUAL WHERE add_flag=1)u
+        LEFT JOIN wy_city c
+        ON c.id=u.city_id
+        LEFT JOIN wy_city d
+        ON d.id=u.country_id
+        )
+        <where>
+            1=1
+            <if test="ids!=null">
+                and int_id in(${ids})
+            </if>
+            <if test="cityId!=null">
+                and CITY_ID in(${cityId})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and NAME like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+    <!--按照查询导出自定义字段-->
+
+    <select id="selectExportIndoorDataByMap" resultType="hashmap">
+        SELECT u.*,e.name cityname,f.name countryname FROM(SELECT a.int_id,a.city_id,a.county_id
+        country_id,a.NAME,a.longitude,a.latitude,a.vendor_btstype,a.bsc_name,a.bts_name,b.cell_seq,b.pn,b.ci,b.prop1,b.prop2,b.grade,
+        b.repeaterNum,b.DRYNUM,b.COVERAGE,b.BUILDINGNUM,b.ADDRESS,b.DEVICENUM,b.MONITORFLAG,b.MONITORNUMBER,b.DEVICEADDRESS,b.DISTRIBUTEDESC,
+        b.DISTRIBUTEFAC,b.MOTORFLAG,b.MOTORAREA,b.MOTORRIGHT,b.METERADDRESS,b.CONSTRUCTIONDATE,b.WLANFLAG,b.WLANSHARE,b.WLANCOVERAGE,b.OWNERNAME,
+        b.OWNERPHONE,b.MONITORDEVICENUM,b.MONITORDEVICEIDS FROM wy_bts a
+        LEFT JOIN WY_INDOOR_MANUAL b ON a.int_id=b.int_id WHERE a.is_indoor='是' AND a.delete_flag=0
+        UNION
+        SELECT
+        int_id,city_id,country_id,NAME,latitude,latitude,vendor_btstype,bsc_name,bts_name,cell_seq,pn,ci,prop1,prop2,grade,
+        repeaternum,drynum,COVERAGE,BUILDINGNUM,ADDRESS,DEVICENUM,MONITORFLAG,MONITORNUMBER,DEVICEADDRESS,DISTRIBUTEDESC,
+        DISTRIBUTEFAC,MOTORFLAG,MOTORAREA,MOTORRIGHT,METERADDRESS,CONSTRUCTIONDATE,WLANFLAG,WLANSHARE,WLANCOVERAGE,OWNERNAME,
+        OWNERPHONE,MONITORDEVICENUM,MONITORDEVICEIDS
+        FROM WY_INDOOR_MANUAL WHERE add_flag=1)u
+        LEFT JOIN wy_city e
+        ON e.id=u.city_id
+        LEFT JOIN wy_city f
+        ON f.id=u.country_id
+        <where>
+              1=1
+            <if test="countryIds!=null">
+                and u.COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and u.NAME like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and u.BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and u.btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and u.CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and u.PN = #{pn,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+
+
+
+
+    <!--动态统计自定义字段-->
+
+
+    <select id="selectIndoorDataGroupByCoulmns" resultType="hashmap">
+        select * from (select m.*,ROWNUM RN from
+               (
+               SELECT
+               <if test="sqlsb!=null">
+                   ${sqlsb}
+               </if>,count(1) num
+               FROM
+        ( SELECT u.*,e.name cityname,f.name countryname FROM(SELECT a.int_id,a.city_id,a.county_id
+        country_id,a.NAME,a.longitude,a.latitude,a.vendor_btstype,a.bsc_name,a.bts_name,b.cell_seq,b.pn,b.ci,b.prop1,b.prop2,b.grade,
+        b.repeaterNum,b.DRYNUM,b.COVERAGE,b.BUILDINGNUM,b.ADDRESS,b.DEVICENUM,b.MONITORFLAG,b.MONITORNUMBER,b.DEVICEADDRESS,b.DISTRIBUTEDESC,
+        b.DISTRIBUTEFAC,b.MOTORFLAG,b.MOTORAREA,b.MOTORRIGHT,b.METERADDRESS,b.CONSTRUCTIONDATE,b.WLANFLAG,b.WLANSHARE,b.WLANCOVERAGE,b.OWNERNAME,
+        b.OWNERPHONE,b.MONITORDEVICENUM,b.MONITORDEVICEIDS FROM wy_bts a
+        LEFT JOIN WY_INDOOR_MANUAL b ON a.int_id=b.int_id WHERE a.is_indoor='是' AND a.delete_flag=0
+        UNION
+        SELECT
+        int_id,city_id,country_id,NAME,latitude,latitude,vendor_btstype,bsc_name,bts_name,cell_seq,pn,ci,prop1,prop2,grade,
+        repeaternum,drynum,COVERAGE,BUILDINGNUM,ADDRESS,DEVICENUM,MONITORFLAG,MONITORNUMBER,DEVICEADDRESS,DISTRIBUTEDESC,
+        DISTRIBUTEFAC,MOTORFLAG,MOTORAREA,MOTORRIGHT,METERADDRESS,CONSTRUCTIONDATE,WLANFLAG,WLANSHARE,WLANCOVERAGE,OWNERNAME,
+        OWNERPHONE,MONITORDEVICENUM,MONITORDEVICEIDS
+        FROM WY_INDOOR_MANUAL WHERE add_flag=1)u
+        LEFT JOIN wy_city e
+        ON e.id=u.city_id
+        LEFT JOIN wy_city f
+        ON f.id=u.country_id
+        )
+               <where>
+                   1=1
+                   <if test="cityIds!=null">
+                       and city_id in(${cityIds})
+                   </if>
+               </where>
+
+               GROUP BY
+               <if test="sqlsb!=null">
+                   ${sqlsb}
+               </if>
+        <choose>
+            <when test="orderCondition != null">
+                order by ${orderCondition}
+            </when>
+            <otherwise>
+                order by NUM DESC
+            </otherwise>
+        </choose>
+               )m
+               <where>
+                   <if test="start!=null">
+                       and RowNum &lt; (#{start} + #{pagesize})
+                   </if>
+               </where>
+               )
+               <where>
+                   <if test="start!=null">
+                       RN >= #{start}
+                   </if>
+               </where>
+    </select>
+
+    <select id="countIndoorDataGroupByColumns" resultType="int">
+        select count(1) from(
+        SELECT
+                      <if test="sqlsb!=null">
+                          ${sqlsb}
+                      </if>,count(1) num
+                      FROM
+               ( SELECT u.*,e.name cityname,f.name countryname FROM(SELECT a.int_id,a.city_id,a.county_id
+               country_id,a.NAME,a.longitude,a.latitude,a.vendor_btstype,a.bsc_name,a.bts_name,b.cell_seq,b.pn,b.ci,b.prop1,b.prop2,b.grade,
+               b.repeaterNum,b.DRYNUM,b.COVERAGE,b.BUILDINGNUM,b.ADDRESS,b.DEVICENUM,b.MONITORFLAG,b.MONITORNUMBER,b.DEVICEADDRESS,b.DISTRIBUTEDESC,
+               b.DISTRIBUTEFAC,b.MOTORFLAG,b.MOTORAREA,b.MOTORRIGHT,b.METERADDRESS,b.CONSTRUCTIONDATE,b.WLANFLAG,b.WLANSHARE,b.WLANCOVERAGE,b.OWNERNAME,
+               b.OWNERPHONE,b.MONITORDEVICENUM,b.MONITORDEVICEIDS FROM wy_bts a
+               LEFT JOIN WY_INDOOR_MANUAL b ON a.int_id=b.int_id WHERE a.is_indoor='是' AND a.delete_flag=0
+               UNION
+               SELECT
+               int_id,city_id,country_id,NAME,latitude,latitude,vendor_btstype,bsc_name,bts_name,cell_seq,pn,ci,prop1,prop2,grade,
+               repeaternum,drynum,COVERAGE,BUILDINGNUM,ADDRESS,DEVICENUM,MONITORFLAG,MONITORNUMBER,DEVICEADDRESS,DISTRIBUTEDESC,
+               DISTRIBUTEFAC,MOTORFLAG,MOTORAREA,MOTORRIGHT,METERADDRESS,CONSTRUCTIONDATE,WLANFLAG,WLANSHARE,WLANCOVERAGE,OWNERNAME,
+               OWNERPHONE,MONITORDEVICENUM,MONITORDEVICEIDS
+               FROM WY_INDOOR_MANUAL WHERE add_flag=1)u
+               LEFT JOIN wy_city e
+               ON e.id=u.city_id
+               LEFT JOIN wy_city f
+               ON f.id=u.country_id
+               )
+                      <where>
+                          1=1
+                          <if test="cityIds!=null">
+                              and city_id in(${cityIds})
+                          </if>
+                      </where>
+
+                      GROUP BY
+                      <if test="sqlsb!=null">
+                          ${sqlsb}
+                      </if>
+        )
+    </select>
+
+
+
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.scttsc.business.model.IndoorManual">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_INDOOR_MANUAL
+        <where>
+            1=1
+            <if test="intId != null">
+                and INT_ID = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="name != null">
+                and NAME = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="cityId != null">
+                and CITY_ID = #{cityId,jdbcType=DECIMAL}
+            </if>
+            <if test="countryId != null">
+                and COUNTRY_ID = #{countryId,jdbcType=DECIMAL}
+            </if>
+            <if test="longitude != null">
+                and LONGITUDE = #{longitude,jdbcType=DECIMAL}
+            </if>
+            <if test="latitude != null">
+                and LATITUDE = #{latitude,jdbcType=DECIMAL}
+            </if>
+            <if test="vendorBtstype != null and vendorBtstype !='' ">
+                and VENDOR_BTSTYPE = #{vendorBtstype,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName != null and bscName !='' ">
+                and BSC_NAME = #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsName != null and btsName !='' ">
+                and BTS_NAME = #{btsName,jdbcType=VARCHAR}
+            </if>
+            <if test="cellSeq != null">
+                and CELL_SEQ = #{cellSeq,jdbcType=DECIMAL}
+            </if>
+            <if test="pn != null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+            <if test="ci != null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="prop1 != null">
+                and PROP1 = #{prop1,jdbcType=VARCHAR}
+            </if>
+            <if test="prop2 != null">
+                and PROP2 = #{prop2,jdbcType=VARCHAR}
+            </if>
+            <if test="grade != null">
+                and GRADE = #{grade,jdbcType=VARCHAR}
+            </if>
+            <if test="coverage != null">
+                and COVERAGE = #{coverage,jdbcType=VARCHAR}
+            </if>
+            <if test="buildingnum != null">
+                and BUILDINGNUM = #{buildingnum,jdbcType=DECIMAL}
+            </if>
+            <if test="address != null">
+                and ADDRESS = #{address,jdbcType=VARCHAR}
+            </if>
+            <if test="devicenum != null">
+                and DEVICENUM = #{devicenum,jdbcType=DECIMAL}
+            </if>
+            <if test="monitorflag != null">
+                and MONITORFLAG = #{monitorflag,jdbcType=VARCHAR}
+            </if>
+            <if test="monitornumber != null">
+                and MONITORNUMBER = #{monitornumber,jdbcType=VARCHAR}
+            </if>
+            <if test="deviceaddress != null">
+                and DEVICEADDRESS = #{deviceaddress,jdbcType=VARCHAR}
+            </if>
+            <if test="repeaternum != null">
+                and REPEATERNUM = #{repeaternum,jdbcType=DECIMAL}
+            </if>
+            <if test="drynum != null">
+                and DRYNUM = #{drynum,jdbcType=DECIMAL}
+            </if>
+            <if test="distributedesc != null">
+                and DISTRIBUTEDESC = #{distributedesc,jdbcType=VARCHAR}
+            </if>
+            <if test="distributefac != null">
+                and DISTRIBUTEFAC = #{distributefac,jdbcType=VARCHAR}
+            </if>
+            <if test="motorflag != null">
+                and MOTORFLAG = #{motorflag,jdbcType=VARCHAR}
+            </if>
+            <if test="motorarea != null">
+                and MOTORAREA = #{motorarea,jdbcType=VARCHAR}
+            </if>
+            <if test="motorright != null">
+                and MOTORRIGHT = #{motorright,jdbcType=VARCHAR}
+            </if>
+            <if test="meteraddress != null">
+                and METERADDRESS = #{meteraddress,jdbcType=VARCHAR}
+            </if>
+            <if test="constructiondate != null">
+                and CONSTRUCTIONDATE = #{constructiondate,jdbcType=VARCHAR}
+            </if>
+            <if test="wlanflag != null">
+                and WLANFLAG = #{wlanflag,jdbcType=VARCHAR}
+            </if>
+            <if test="wlanshare != null">
+                and WLANSHARE = #{wlanshare,jdbcType=VARCHAR}
+            </if>
+            <if test="wlancoverage != null">
+                and WLANCOVERAGE = #{wlancoverage,jdbcType=VARCHAR}
+            </if>
+            <if test="ownername != null">
+                and OWNERNAME = #{ownername,jdbcType=VARCHAR}
+            </if>
+            <if test="ownerphone != null">
+                and OWNERPHONE = #{ownerphone,jdbcType=VARCHAR}
+            </if>
+            <if test="monitordevicenum != null">
+                and MONITORDEVICENUM = #{monitordevicenum,jdbcType=DECIMAL}
+            </if>
+            <if test="monitordeviceids != null">
+                and MONITORDEVICEIDS = #{monitordeviceids,jdbcType=VARCHAR}
+            </if>
+            <if test="remark != null">
+                and REMARK = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="updatetime != null">
+                and UPDATETIME = #{updatetime,jdbcType=DATE}
+            </if>
+            <if test="updateuser != null">
+                and UPDATEUSER = #{updateuser,jdbcType=DECIMAL}
+            </if>
+        </where>
+
+
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_INDOOR_MANUAL
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from WY_INDOOR_MANUAL
+    where INT_ID = #{intId,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="com.scttsc.business.model.IndoorManual">
+    insert into WY_INDOOR_MANUAL (INT_ID, NAME, CITY_ID, 
+      COUNTRY_ID, LONGITUDE, LATITUDE, 
+      VENDOR_BTSTYPE, BSC_NAME, BTS_NAME, 
+      CELL_SEQ, PN, CI, PROP1, 
+      PROP2, GRADE, COVERAGE, 
+      BUILDINGNUM, ADDRESS, DEVICENUM, 
+      MONITORFLAG, MONITORNUMBER, DEVICEADDRESS, 
+      REPEATERNUM, DRYNUM, DISTRIBUTEDESC, 
+      DISTRIBUTEFAC, MOTORFLAG, MOTORAREA, 
+      MOTORRIGHT, METERADDRESS, CONSTRUCTIONDATE, 
+      WLANFLAG, WLANSHARE, WLANCOVERAGE, 
+      OWNERNAME, OWNERPHONE, MONITORDEVICENUM, 
+      MONITORDEVICEIDS, REMARK, UPDATETIME, 
+      UPDATEUSER)
+    values (#{intId,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{cityId,jdbcType=DECIMAL}, 
+      #{countryId,jdbcType=DECIMAL}, #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, 
+      #{vendorBtstype,jdbcType=VARCHAR}, #{bscName,jdbcType=VARCHAR}, #{btsName,jdbcType=VARCHAR}, 
+      #{cellSeq,jdbcType=DECIMAL}, #{pn,jdbcType=DECIMAL}, #{ci,jdbcType=DECIMAL}, #{prop1,jdbcType=VARCHAR}, 
+      #{prop2,jdbcType=VARCHAR}, #{grade,jdbcType=VARCHAR}, #{coverage,jdbcType=VARCHAR}, 
+      #{buildingnum,jdbcType=DECIMAL}, #{address,jdbcType=VARCHAR}, #{devicenum,jdbcType=DECIMAL}, 
+      #{monitorflag,jdbcType=VARCHAR}, #{monitornumber,jdbcType=VARCHAR}, #{deviceaddress,jdbcType=VARCHAR}, 
+      #{repeaternum,jdbcType=DECIMAL}, #{drynum,jdbcType=DECIMAL}, #{distributedesc,jdbcType=VARCHAR}, 
+      #{distributefac,jdbcType=VARCHAR}, #{motorflag,jdbcType=VARCHAR}, #{motorarea,jdbcType=VARCHAR}, 
+      #{motorright,jdbcType=VARCHAR}, #{meteraddress,jdbcType=VARCHAR}, #{constructiondate,jdbcType=VARCHAR}, 
+      #{wlanflag,jdbcType=VARCHAR}, #{wlanshare,jdbcType=VARCHAR}, #{wlancoverage,jdbcType=VARCHAR}, 
+      #{ownername,jdbcType=VARCHAR}, #{ownerphone,jdbcType=VARCHAR}, #{monitordevicenum,jdbcType=DECIMAL}, 
+      #{monitordeviceids,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{updatetime,jdbcType=DATE}, 
+      #{updateuser,jdbcType=DECIMAL})
+  </insert>
+    <insert id="insertSelective" parameterType="com.scttsc.business.model.IndoorManual">
+        insert into WY_INDOOR_MANUAL
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="intId != null">
+                INT_ID,
+            </if>
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="cityId != null">
+                CITY_ID,
+            </if>
+            <if test="countryId != null">
+                COUNTRY_ID,
+            </if>
+            <if test="longitude != null">
+                LONGITUDE,
+            </if>
+            <if test="latitude != null">
+                LATITUDE,
+            </if>
+            <if test="vendorBtstype != null">
+                VENDOR_BTSTYPE,
+            </if>
+            <if test="bscName != null">
+                BSC_NAME,
+            </if>
+            <if test="btsName != null">
+                BTS_NAME,
+            </if>
+            <if test="cellSeq != null">
+                CELL_SEQ,
+            </if>
+            <if test="pn != null">
+                PN,
+            </if>
+            <if test="ci != null">
+                CI,
+            </if>
+            <if test="prop1 != null">
+                PROP1,
+            </if>
+            <if test="prop2 != null">
+                PROP2,
+            </if>
+            <if test="grade != null">
+                GRADE,
+            </if>
+            <if test="coverage != null">
+                COVERAGE,
+            </if>
+            <if test="buildingnum != null">
+                BUILDINGNUM,
+            </if>
+            <if test="address != null">
+                ADDRESS,
+            </if>
+            <if test="devicenum != null">
+                DEVICENUM,
+            </if>
+            <if test="monitorflag != null">
+                MONITORFLAG,
+            </if>
+            <if test="monitornumber != null">
+                MONITORNUMBER,
+            </if>
+            <if test="deviceaddress != null">
+                DEVICEADDRESS,
+            </if>
+            <if test="repeaternum != null">
+                REPEATERNUM,
+            </if>
+            <if test="drynum != null">
+                DRYNUM,
+            </if>
+            <if test="distributedesc != null">
+                DISTRIBUTEDESC,
+            </if>
+            <if test="distributefac != null">
+                DISTRIBUTEFAC,
+            </if>
+            <if test="motorflag != null">
+                MOTORFLAG,
+            </if>
+            <if test="motorarea != null">
+                MOTORAREA,
+            </if>
+            <if test="motorright != null">
+                MOTORRIGHT,
+            </if>
+            <if test="meteraddress != null">
+                METERADDRESS,
+            </if>
+            <if test="constructiondate != null">
+                CONSTRUCTIONDATE,
+            </if>
+            <if test="wlanflag != null">
+                WLANFLAG,
+            </if>
+            <if test="wlanshare != null">
+                WLANSHARE,
+            </if>
+            <if test="wlancoverage != null">
+                WLANCOVERAGE,
+            </if>
+            <if test="ownername != null">
+                OWNERNAME,
+            </if>
+            <if test="ownerphone != null">
+                OWNERPHONE,
+            </if>
+            <if test="monitordevicenum != null">
+                MONITORDEVICENUM,
+            </if>
+            <if test="monitordeviceids != null">
+                MONITORDEVICEIDS,
+            </if>
+            <if test="remark != null">
+                REMARK,
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME,
+            </if>
+            <if test="updateuser != null">
+                UPDATEUSER,
+            </if>
+            <if test="addFlag != null">
+                ADD_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="intId != null">
+                #{intId,jdbcType=DECIMAL},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=DECIMAL},
+            </if>
+            <if test="countryId != null">
+                #{countryId,jdbcType=DECIMAL},
+            </if>
+            <if test="longitude != null">
+                #{longitude,jdbcType=DECIMAL},
+            </if>
+            <if test="latitude != null">
+                #{latitude,jdbcType=DECIMAL},
+            </if>
+            <if test="vendorBtstype != null">
+                #{vendorBtstype,jdbcType=VARCHAR},
+            </if>
+            <if test="bscName != null">
+                #{bscName,jdbcType=VARCHAR},
+            </if>
+            <if test="btsName != null">
+                #{btsName,jdbcType=VARCHAR},
+            </if>
+            <if test="cellSeq != null">
+                #{cellSeq,jdbcType=DECIMAL},
+            </if>
+            <if test="pn != null">
+                #{pn,jdbcType=DECIMAL},
+            </if>
+            <if test="ci != null">
+                #{ci,jdbcType=DECIMAL},
+            </if>
+            <if test="prop1 != null">
+                #{prop1,jdbcType=VARCHAR},
+            </if>
+            <if test="prop2 != null">
+                #{prop2,jdbcType=VARCHAR},
+            </if>
+            <if test="grade != null">
+                #{grade,jdbcType=VARCHAR},
+            </if>
+            <if test="coverage != null">
+                #{coverage,jdbcType=VARCHAR},
+            </if>
+            <if test="buildingnum != null">
+                #{buildingnum,jdbcType=DECIMAL},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="devicenum != null">
+                #{devicenum,jdbcType=DECIMAL},
+            </if>
+            <if test="monitorflag != null">
+                #{monitorflag,jdbcType=VARCHAR},
+            </if>
+            <if test="monitornumber != null">
+                #{monitornumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceaddress != null">
+                #{deviceaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="repeaternum != null">
+                #{repeaternum,jdbcType=DECIMAL},
+            </if>
+            <if test="drynum != null">
+                #{drynum,jdbcType=DECIMAL},
+            </if>
+            <if test="distributedesc != null">
+                #{distributedesc,jdbcType=VARCHAR},
+            </if>
+            <if test="distributefac != null">
+                #{distributefac,jdbcType=VARCHAR},
+            </if>
+            <if test="motorflag != null">
+                #{motorflag,jdbcType=VARCHAR},
+            </if>
+            <if test="motorarea != null">
+                #{motorarea,jdbcType=VARCHAR},
+            </if>
+            <if test="motorright != null">
+                #{motorright,jdbcType=VARCHAR},
+            </if>
+            <if test="meteraddress != null">
+                #{meteraddress,jdbcType=VARCHAR},
+            </if>
+            <if test="constructiondate != null">
+                #{constructiondate,jdbcType=VARCHAR},
+            </if>
+            <if test="wlanflag != null">
+                #{wlanflag,jdbcType=VARCHAR},
+            </if>
+            <if test="wlanshare != null">
+                #{wlanshare,jdbcType=VARCHAR},
+            </if>
+            <if test="wlancoverage != null">
+                #{wlancoverage,jdbcType=VARCHAR},
+            </if>
+            <if test="ownername != null">
+                #{ownername,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerphone != null">
+                #{ownerphone,jdbcType=VARCHAR},
+            </if>
+            <if test="monitordevicenum != null">
+                #{monitordevicenum,jdbcType=DECIMAL},
+            </if>
+            <if test="monitordeviceids != null">
+                #{monitordeviceids,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=DATE},
+            </if>
+            <if test="updateuser != null">
+                #{updateuser,jdbcType=DECIMAL},
+            </if>
+              <if test="addFlag != null">
+                #{addFlag,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertSelectiveMap" parameterType="java.util.Map">
+        insert into WY_INDOOR_MANUAL
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="intId != null">
+                INT_ID,
+            </if>
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="cityId != null">
+                CITY_ID,
+            </if>
+            <if test="countryId != null">
+                COUNTRY_ID,
+            </if>
+            <if test="longitude != null">
+                LONGITUDE,
+            </if>
+            <if test="latitude != null">
+                LATITUDE,
+            </if>
+            <if test="vendorBtstype != null">
+                VENDOR_BTSTYPE,
+            </if>
+            <if test="bscName != null">
+                BSC_NAME,
+            </if>
+            <if test="btsName != null">
+                BTS_NAME,
+            </if>
+            <if test="cellSeq != null">
+                CELL_SEQ,
+            </if>
+            <if test="pn != null">
+                PN,
+            </if>
+            <if test="ci != null">
+                CI,
+            </if>
+            <if test="prop1 != null">
+                PROP1,
+            </if>
+            <if test="prop2 != null">
+                PROP2,
+            </if>
+            <if test="grade != null">
+                GRADE,
+            </if>
+            <if test="coverage != null">
+                COVERAGE,
+            </if>
+            <if test="buildingnum != null">
+                BUILDINGNUM,
+            </if>
+            <if test="address != null">
+                ADDRESS,
+            </if>
+            <if test="devicenum != null">
+                DEVICENUM,
+            </if>
+            <if test="monitorflag != null">
+                MONITORFLAG,
+            </if>
+            <if test="monitornumber != null">
+                MONITORNUMBER,
+            </if>
+            <if test="deviceaddress != null">
+                DEVICEADDRESS,
+            </if>
+            <if test="repeaternum != null">
+                REPEATERNUM,
+            </if>
+            <if test="drynum != null">
+                DRYNUM,
+            </if>
+            <if test="distributedesc != null">
+                DISTRIBUTEDESC,
+            </if>
+            <if test="distributefac != null">
+                DISTRIBUTEFAC,
+            </if>
+            <if test="motorflag != null">
+                MOTORFLAG,
+            </if>
+            <if test="motorarea != null">
+                MOTORAREA,
+            </if>
+            <if test="motorright != null">
+                MOTORRIGHT,
+            </if>
+            <if test="meteraddress != null">
+                METERADDRESS,
+            </if>
+            <if test="constructiondate != null">
+                CONSTRUCTIONDATE,
+            </if>
+            <if test="wlanflag != null">
+                WLANFLAG,
+            </if>
+            <if test="wlanshare != null">
+                WLANSHARE,
+            </if>
+            <if test="wlancoverage != null">
+                WLANCOVERAGE,
+            </if>
+            <if test="ownername != null">
+                OWNERNAME,
+            </if>
+            <if test="ownerphone != null">
+                OWNERPHONE,
+            </if>
+            <if test="monitordevicenum != null">
+                MONITORDEVICENUM,
+            </if>
+            <if test="monitordeviceids != null">
+                MONITORDEVICEIDS,
+            </if>
+            <if test="remark != null">
+                REMARK,
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME,
+            </if>
+            <if test="updateuser != null">
+                UPDATEUSER,
+            </if>
+            <if test="addFlag != null">
+                ADD_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="intId != null">
+                #{intId,jdbcType=DECIMAL},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=DECIMAL},
+            </if>
+            <if test="countryId != null">
+                #{countryId,jdbcType=DECIMAL},
+            </if>
+            <if test="longitude != null">
+                #{longitude,jdbcType=DECIMAL},
+            </if>
+            <if test="latitude != null">
+                #{latitude,jdbcType=DECIMAL},
+            </if>
+            <if test="vendorBtstype != null">
+                #{vendorBtstype,jdbcType=VARCHAR},
+            </if>
+            <if test="bscName != null">
+                #{bscName,jdbcType=VARCHAR},
+            </if>
+            <if test="btsName != null">
+                #{btsName,jdbcType=VARCHAR},
+            </if>
+            <if test="cellSeq != null">
+                #{cellSeq,jdbcType=DECIMAL},
+            </if>
+            <if test="pn != null">
+                #{pn,jdbcType=DECIMAL},
+            </if>
+            <if test="ci != null">
+                #{ci,jdbcType=DECIMAL},
+            </if>
+            <if test="prop1 != null">
+                #{prop1,jdbcType=VARCHAR},
+            </if>
+            <if test="prop2 != null">
+                #{prop2,jdbcType=VARCHAR},
+            </if>
+            <if test="grade != null">
+                #{grade,jdbcType=VARCHAR},
+            </if>
+            <if test="coverage != null">
+                #{coverage,jdbcType=VARCHAR},
+            </if>
+            <if test="buildingnum != null">
+                #{buildingnum,jdbcType=DECIMAL},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="devicenum != null">
+                #{devicenum,jdbcType=DECIMAL},
+            </if>
+            <if test="monitorflag != null">
+                #{monitorflag,jdbcType=VARCHAR},
+            </if>
+            <if test="monitornumber != null">
+                #{monitornumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceaddress != null">
+                #{deviceaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="repeaternum != null">
+                #{repeaternum,jdbcType=DECIMAL},
+            </if>
+            <if test="drynum != null">
+                #{drynum,jdbcType=DECIMAL},
+            </if>
+            <if test="distributedesc != null">
+                #{distributedesc,jdbcType=VARCHAR},
+            </if>
+            <if test="distributefac != null">
+                #{distributefac,jdbcType=VARCHAR},
+            </if>
+            <if test="motorflag != null">
+                #{motorflag,jdbcType=VARCHAR},
+            </if>
+            <if test="motorarea != null">
+                #{motorarea,jdbcType=VARCHAR},
+            </if>
+            <if test="motorright != null">
+                #{motorright,jdbcType=VARCHAR},
+            </if>
+            <if test="meteraddress != null">
+                #{meteraddress,jdbcType=VARCHAR},
+            </if>
+            <if test="constructiondate != null">
+                #{constructiondate,jdbcType=VARCHAR},
+            </if>
+            <if test="wlanflag != null">
+                #{wlanflag,jdbcType=VARCHAR},
+            </if>
+            <if test="wlanshare != null">
+                #{wlanshare,jdbcType=VARCHAR},
+            </if>
+            <if test="wlancoverage != null">
+                #{wlancoverage,jdbcType=VARCHAR},
+            </if>
+            <if test="ownername != null">
+                #{ownername,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerphone != null">
+                #{ownerphone,jdbcType=VARCHAR},
+            </if>
+            <if test="monitordevicenum != null">
+                #{monitordevicenum,jdbcType=DECIMAL},
+            </if>
+            <if test="monitordeviceids != null">
+                #{monitordeviceids,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=DATE},
+            </if>
+            <if test="updateuser != null">
+                #{updateuser,jdbcType=DECIMAL},
+            </if>
+            <if test="addFlag != null">
+                #{addFlag,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.scttsc.business.model.IndoorManual" resultType="java.lang.Integer">
+        select count(*) from WY_INDOOR_MANUAL
+        <where>
+            1=1
+            <if test="intId != null">
+                and INT_ID = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="name != null">
+                and NAME = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="cityId != null">
+                and CITY_ID = #{cityId,jdbcType=DECIMAL}
+            </if>
+            <if test="countryId != null">
+                and COUNTRY_ID = #{countryId,jdbcType=DECIMAL}
+            </if>
+            <if test="countryIds!=null">
+                and COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="longitude != null">
+                and LONGITUDE = #{longitude,jdbcType=DECIMAL}
+            </if>
+            <if test="latitude != null">
+                and LATITUDE = #{latitude,jdbcType=DECIMAL}
+            </if>
+            <if test="vendorBtstype != null and vendorBtstype !='' ">
+                and VENDOR_BTSTYPE = #{vendorBtstype,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName != null and bscName !='' ">
+                and BSC_NAME = #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsName != null and btsName !='' ">
+                and BTS_NAME = #{btsName,jdbcType=VARCHAR}
+            </if>
+            <if test="cellSeq != null">
+                and CELL_SEQ = #{cellSeq,jdbcType=DECIMAL}
+            </if>
+            <if test="pn != null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+            <if test="ci != null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="prop1 != null">
+                and PROP1 = #{prop1,jdbcType=VARCHAR}
+            </if>
+            <if test="prop2 != null">
+                and PROP2 = #{prop2,jdbcType=VARCHAR}
+            </if>
+            <if test="grade != null">
+                and GRADE = #{grade,jdbcType=VARCHAR}
+            </if>
+            <if test="coverage != null">
+                and COVERAGE = #{coverage,jdbcType=VARCHAR}
+            </if>
+            <if test="buildingnum != null">
+                and BUILDINGNUM = #{buildingnum,jdbcType=DECIMAL}
+            </if>
+            <if test="address != null">
+                and ADDRESS = #{address,jdbcType=VARCHAR}
+            </if>
+            <if test="devicenum != null">
+                and DEVICENUM = #{devicenum,jdbcType=DECIMAL}
+            </if>
+            <if test="monitorflag != null">
+                and MONITORFLAG = #{monitorflag,jdbcType=VARCHAR}
+            </if>
+            <if test="monitornumber != null">
+                and MONITORNUMBER = #{monitornumber,jdbcType=VARCHAR}
+            </if>
+            <if test="deviceaddress != null">
+                and DEVICEADDRESS = #{deviceaddress,jdbcType=VARCHAR}
+            </if>
+            <if test="repeaternum != null">
+                and REPEATERNUM = #{repeaternum,jdbcType=DECIMAL}
+            </if>
+            <if test="drynum != null">
+                and DRYNUM = #{drynum,jdbcType=DECIMAL}
+            </if>
+            <if test="distributedesc != null">
+                and DISTRIBUTEDESC = #{distributedesc,jdbcType=VARCHAR}
+            </if>
+            <if test="distributefac != null">
+                and DISTRIBUTEFAC = #{distributefac,jdbcType=VARCHAR}
+            </if>
+            <if test="motorflag != null">
+                and MOTORFLAG = #{motorflag,jdbcType=VARCHAR}
+            </if>
+            <if test="motorarea != null">
+                and MOTORAREA = #{motorarea,jdbcType=VARCHAR}
+            </if>
+            <if test="motorright != null">
+                and MOTORRIGHT = #{motorright,jdbcType=VARCHAR}
+            </if>
+            <if test="meteraddress != null">
+                and METERADDRESS = #{meteraddress,jdbcType=VARCHAR}
+            </if>
+            <if test="constructiondate != null">
+                and CONSTRUCTIONDATE = #{constructiondate,jdbcType=VARCHAR}
+            </if>
+            <if test="wlanflag != null">
+                and WLANFLAG = #{wlanflag,jdbcType=VARCHAR}
+            </if>
+            <if test="wlanshare != null">
+                and WLANSHARE = #{wlanshare,jdbcType=VARCHAR}
+            </if>
+            <if test="wlancoverage != null">
+                and WLANCOVERAGE = #{wlancoverage,jdbcType=VARCHAR}
+            </if>
+            <if test="ownername != null">
+                and OWNERNAME = #{ownername,jdbcType=VARCHAR}
+            </if>
+            <if test="ownerphone != null">
+                and OWNERPHONE = #{ownerphone,jdbcType=VARCHAR}
+            </if>
+            <if test="monitordevicenum != null">
+                and MONITORDEVICENUM = #{monitordevicenum,jdbcType=DECIMAL}
+            </if>
+            <if test="monitordeviceids != null">
+                and MONITORDEVICEIDS = #{monitordeviceids,jdbcType=VARCHAR}
+            </if>
+            <if test="remark != null">
+                and REMARK = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="updatetime != null">
+                and UPDATETIME = #{updatetime,jdbcType=DATE}
+            </if>
+            <if test="updateuser != null">
+                and UPDATEUSER = #{updateuser,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update WY_INDOOR_MANUAL
+        <set>
+            <if test="intId != null">
+                INT_ID = #{intId,jdbcType=DECIMAL},
+            </if>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                CITY_ID = #{cityId,jdbcType=DECIMAL},
+            </if>
+            <if test="countryId != null">
+                COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+            </if>
+            <if test="longitude != null">
+                LONGITUDE = #{longitude,jdbcType=DECIMAL},
+            </if>
+            <if test="latitude != null">
+                LATITUDE = #{latitude,jdbcType=DECIMAL},
+            </if>
+            <if test="vendorBtstype != null">
+                VENDOR_BTSTYPE = #{vendorBtstype,jdbcType=VARCHAR},
+            </if>
+            <if test="bscName != null">
+                BSC_NAME = #{bscName,jdbcType=VARCHAR},
+            </if>
+            <if test="btsName != null">
+                BTS_NAME = #{btsName,jdbcType=VARCHAR},
+            </if>
+            <if test="cellSeq != null">
+                CELL_SEQ = #{cellSeq,jdbcType=DECIMAL},
+            </if>
+            <if test="pn != null">
+                PN = #{pn,jdbcType=DECIMAL},
+            </if>
+            <if test="ci != null">
+                CI = #{ci,jdbcType=DECIMAL},
+            </if>
+            <if test="prop1 != null">
+                PROP1 = #{prop1,jdbcType=VARCHAR},
+            </if>
+            <if test="prop2 != null">
+                PROP2 = #{prop2,jdbcType=VARCHAR},
+            </if>
+            <if test="grade != null">
+                GRADE = #{grade,jdbcType=VARCHAR},
+            </if>
+            <if test="coverage != null">
+                COVERAGE = #{coverage,jdbcType=VARCHAR},
+            </if>
+            <if test="buildingnum != null">
+                BUILDINGNUM = #{buildingnum,jdbcType=DECIMAL},
+            </if>
+            <if test="address != null">
+                ADDRESS = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="devicenum != null">
+                DEVICENUM = #{devicenum,jdbcType=DECIMAL},
+            </if>
+            <if test="monitorflag != null">
+                MONITORFLAG = #{monitorflag,jdbcType=VARCHAR},
+            </if>
+            <if test="monitornumber != null">
+                MONITORNUMBER = #{monitornumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceaddress != null">
+                DEVICEADDRESS = #{deviceaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="repeaternum != null">
+                REPEATERNUM = #{repeaternum,jdbcType=DECIMAL},
+            </if>
+            <if test="drynum != null">
+                DRYNUM = #{drynum,jdbcType=DECIMAL},
+            </if>
+            <if test="distributedesc != null">
+                DISTRIBUTEDESC = #{distributedesc,jdbcType=VARCHAR},
+            </if>
+            <if test="distributefac != null">
+                DISTRIBUTEFAC = #{distributefac,jdbcType=VARCHAR},
+            </if>
+            <if test="motorflag != null">
+                MOTORFLAG = #{motorflag,jdbcType=VARCHAR},
+            </if>
+            <if test="motorarea != null">
+                MOTORAREA = #{motorarea,jdbcType=VARCHAR},
+            </if>
+            <if test="motorright != null">
+                MOTORRIGHT = #{motorright,jdbcType=VARCHAR},
+            </if>
+            <if test="meteraddress != null">
+                METERADDRESS = #{meteraddress,jdbcType=VARCHAR},
+            </if>
+            <if test="constructiondate != null">
+                CONSTRUCTIONDATE = #{constructiondate,jdbcType=VARCHAR},
+            </if>
+            <if test="wlanflag != null">
+                WLANFLAG = #{wlanflag,jdbcType=VARCHAR},
+            </if>
+            <if test="wlanshare != null">
+                WLANSHARE = #{wlanshare,jdbcType=VARCHAR},
+            </if>
+            <if test="wlancoverage != null">
+                WLANCOVERAGE = #{wlancoverage,jdbcType=VARCHAR},
+            </if>
+            <if test="ownername != null">
+                OWNERNAME = #{ownername,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerphone != null">
+                OWNERPHONE = #{ownerphone,jdbcType=VARCHAR},
+            </if>
+            <if test="monitordevicenum != null">
+                MONITORDEVICENUM = #{monitordevicenum,jdbcType=DECIMAL},
+            </if>
+            <if test="monitordeviceids != null">
+                MONITORDEVICEIDS = #{monitordeviceids,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME = #{updatetime,jdbcType=DATE},
+            </if>
+            <if test="updateuser != null">
+                UPDATEUSER = #{updateuser,jdbcType=DECIMAL},
+            </if>
+        </set>
+        <if test="int_id != null">
+            int_id = #{int_id,jdbcType=DECIMAL},
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update WY_INDOOR_MANUAL
+        set INT_ID = #{intId,jdbcType=DECIMAL},
+        NAME = #{name,jdbcType=VARCHAR},
+        CITY_ID = #{cityId,jdbcType=DECIMAL},
+        COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+        LONGITUDE = #{longitude,jdbcType=DECIMAL},
+        LATITUDE = #{latitude,jdbcType=DECIMAL},
+        VENDOR_BTSTYPE = #{vendorBtstype,jdbcType=VARCHAR},
+        BSC_NAME = #{bscName,jdbcType=VARCHAR},
+        BTS_NAME = #{btsName,jdbcType=VARCHAR},
+        CELL_SEQ = #{cellSeq,jdbcType=DECIMAL},
+        PN = #{pn,jdbcType=DECIMAL},
+        CI = #{ci,jdbcType=DECIMAL},
+        PROP1 = #{prop1,jdbcType=VARCHAR},
+        PROP2 = #{prop2,jdbcType=VARCHAR},
+        GRADE = #{grade,jdbcType=VARCHAR},
+        COVERAGE = #{coverage,jdbcType=VARCHAR},
+        BUILDINGNUM = #{buildingnum,jdbcType=DECIMAL},
+        ADDRESS = #{address,jdbcType=VARCHAR},
+        DEVICENUM = #{devicenum,jdbcType=DECIMAL},
+        MONITORFLAG = #{monitorflag,jdbcType=VARCHAR},
+        MONITORNUMBER = #{monitornumber,jdbcType=VARCHAR},
+        DEVICEADDRESS = #{deviceaddress,jdbcType=VARCHAR},
+        REPEATERNUM = #{repeaternum,jdbcType=DECIMAL},
+        DRYNUM = #{drynum,jdbcType=DECIMAL},
+        DISTRIBUTEDESC = #{distributedesc,jdbcType=VARCHAR},
+        DISTRIBUTEFAC = #{distributefac,jdbcType=VARCHAR},
+        MOTORFLAG = #{motorflag,jdbcType=VARCHAR},
+        MOTORAREA = #{motorarea,jdbcType=VARCHAR},
+        MOTORRIGHT = #{motorright,jdbcType=VARCHAR},
+        METERADDRESS = #{meteraddress,jdbcType=VARCHAR},
+        CONSTRUCTIONDATE = #{constructiondate,jdbcType=VARCHAR},
+        WLANFLAG = #{wlanflag,jdbcType=VARCHAR},
+        WLANSHARE = #{wlanshare,jdbcType=VARCHAR},
+        WLANCOVERAGE = #{wlancoverage,jdbcType=VARCHAR},
+        OWNERNAME = #{ownername,jdbcType=VARCHAR},
+        OWNERPHONE = #{ownerphone,jdbcType=VARCHAR},
+        MONITORDEVICENUM = #{monitordevicenum,jdbcType=DECIMAL},
+        MONITORDEVICEIDS = #{monitordeviceids,jdbcType=VARCHAR},
+        REMARK = #{remark,jdbcType=VARCHAR},
+        UPDATETIME = #{updatetime,jdbcType=DATE},
+        UPDATEUSER = #{updateuser,jdbcType=DECIMAL}
+        <if test="int_id != null">
+            int_id = #{int_id,jdbcType=DECIMAL},
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.business.model.IndoorManual">
+        update WY_INDOOR_MANUAL
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                CITY_ID = #{cityId,jdbcType=DECIMAL},
+            </if>
+            <if test="countryId != null">
+                COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+            </if>
+            <if test="longitude != null">
+                LONGITUDE = #{longitude,jdbcType=DECIMAL},
+            </if>
+            <if test="latitude != null">
+                LATITUDE = #{latitude,jdbcType=DECIMAL},
+            </if>
+            <if test="vendorBtstype != null">
+                VENDOR_BTSTYPE = #{vendorBtstype,jdbcType=VARCHAR},
+            </if>
+            <if test="bscName != null">
+                BSC_NAME = #{bscName,jdbcType=VARCHAR},
+            </if>
+            <if test="btsName != null">
+                BTS_NAME = #{btsName,jdbcType=VARCHAR},
+            </if>
+            <if test="cellSeq != null">
+                CELL_SEQ = #{cellSeq,jdbcType=DECIMAL},
+            </if>
+            <if test="pn != null">
+                PN = #{pn,jdbcType=DECIMAL},
+            </if>
+            <if test="ci != null">
+                CI = #{ci,jdbcType=DECIMAL},
+            </if>
+            <if test="prop1 != null">
+                PROP1 = #{prop1,jdbcType=VARCHAR},
+            </if>
+            <if test="prop2 != null">
+                PROP2 = #{prop2,jdbcType=VARCHAR},
+            </if>
+            <if test="grade != null">
+                GRADE = #{grade,jdbcType=VARCHAR},
+            </if>
+            <if test="coverage != null">
+                COVERAGE = #{coverage,jdbcType=VARCHAR},
+            </if>
+            <if test="buildingnum != null">
+                BUILDINGNUM = #{buildingnum,jdbcType=DECIMAL},
+            </if>
+            <if test="address != null">
+                ADDRESS = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="devicenum != null">
+                DEVICENUM = #{devicenum,jdbcType=DECIMAL},
+            </if>
+            <if test="monitorflag != null">
+                MONITORFLAG = #{monitorflag,jdbcType=VARCHAR},
+            </if>
+            <if test="monitornumber != null">
+                MONITORNUMBER = #{monitornumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceaddress != null">
+                DEVICEADDRESS = #{deviceaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="repeaternum != null">
+                REPEATERNUM = #{repeaternum,jdbcType=DECIMAL},
+            </if>
+            <if test="drynum != null">
+                DRYNUM = #{drynum,jdbcType=DECIMAL},
+            </if>
+            <if test="distributedesc != null">
+                DISTRIBUTEDESC = #{distributedesc,jdbcType=VARCHAR},
+            </if>
+            <if test="distributefac != null">
+                DISTRIBUTEFAC = #{distributefac,jdbcType=VARCHAR},
+            </if>
+            <if test="motorflag != null">
+                MOTORFLAG = #{motorflag,jdbcType=VARCHAR},
+            </if>
+            <if test="motorarea != null">
+                MOTORAREA = #{motorarea,jdbcType=VARCHAR},
+            </if>
+            <if test="motorright != null">
+                MOTORRIGHT = #{motorright,jdbcType=VARCHAR},
+            </if>
+            <if test="meteraddress != null">
+                METERADDRESS = #{meteraddress,jdbcType=VARCHAR},
+            </if>
+            <if test="constructiondate != null">
+                CONSTRUCTIONDATE = #{constructiondate,jdbcType=VARCHAR},
+            </if>
+            <if test="wlanflag != null">
+                WLANFLAG = #{wlanflag,jdbcType=VARCHAR},
+            </if>
+            <if test="wlanshare != null">
+                WLANSHARE = #{wlanshare,jdbcType=VARCHAR},
+            </if>
+            <if test="wlancoverage != null">
+                WLANCOVERAGE = #{wlancoverage,jdbcType=VARCHAR},
+            </if>
+            <if test="ownername != null">
+                OWNERNAME = #{ownername,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerphone != null">
+                OWNERPHONE = #{ownerphone,jdbcType=VARCHAR},
+            </if>
+            <if test="monitordevicenum != null">
+                MONITORDEVICENUM = #{monitordevicenum,jdbcType=DECIMAL},
+            </if>
+            <if test="monitordeviceids != null">
+                MONITORDEVICEIDS = #{monitordeviceids,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME = #{updatetime,jdbcType=DATE},
+            </if>
+            <if test="updateuser != null">
+                UPDATEUSER = #{updateuser,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+    </update>
+
+    <update id="updateByPrimaryKeySelectiveMap" parameterType="java.util.Map">
+        update WY_INDOOR_MANUAL
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                CITY_ID = #{cityId,jdbcType=DECIMAL},
+            </if>
+            <if test="countryId != null">
+                COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+            </if>
+            <if test="longitude != null">
+                LONGITUDE = #{longitude,jdbcType=DECIMAL},
+            </if>
+            <if test="latitude != null">
+                LATITUDE = #{latitude,jdbcType=DECIMAL},
+            </if>
+            <if test="vendorBtstype != null">
+                VENDOR_BTSTYPE = #{vendorBtstype,jdbcType=VARCHAR},
+            </if>
+            <if test="bscName != null">
+                BSC_NAME = #{bscName,jdbcType=VARCHAR},
+            </if>
+            <if test="btsName != null">
+                BTS_NAME = #{btsName,jdbcType=VARCHAR},
+            </if>
+            <if test="cellSeq != null">
+                CELL_SEQ = #{cellSeq,jdbcType=DECIMAL},
+            </if>
+            <if test="pn != null">
+                PN = #{pn,jdbcType=DECIMAL},
+            </if>
+            <if test="ci != null">
+                CI = #{ci,jdbcType=DECIMAL},
+            </if>
+            <if test="prop1 != null">
+                PROP1 = #{prop1,jdbcType=VARCHAR},
+            </if>
+            <if test="prop2 != null">
+                PROP2 = #{prop2,jdbcType=VARCHAR},
+            </if>
+            <if test="grade != null">
+                GRADE = #{grade,jdbcType=VARCHAR},
+            </if>
+            <if test="coverage != null">
+                COVERAGE = #{coverage,jdbcType=VARCHAR},
+            </if>
+            <if test="buildingnum != null">
+                BUILDINGNUM = #{buildingnum,jdbcType=DECIMAL},
+            </if>
+            <if test="address != null">
+                ADDRESS = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="devicenum != null">
+                DEVICENUM = #{devicenum,jdbcType=DECIMAL},
+            </if>
+            <if test="monitorflag != null">
+                MONITORFLAG = #{monitorflag,jdbcType=VARCHAR},
+            </if>
+            <if test="monitornumber != null">
+                MONITORNUMBER = #{monitornumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceaddress != null">
+                DEVICEADDRESS = #{deviceaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="repeaternum != null">
+                REPEATERNUM = #{repeaternum,jdbcType=DECIMAL},
+            </if>
+            <if test="drynum != null">
+                DRYNUM = #{drynum,jdbcType=DECIMAL},
+            </if>
+            <if test="distributedesc != null">
+                DISTRIBUTEDESC = #{distributedesc,jdbcType=VARCHAR},
+            </if>
+            <if test="distributefac != null">
+                DISTRIBUTEFAC = #{distributefac,jdbcType=VARCHAR},
+            </if>
+            <if test="motorflag != null">
+                MOTORFLAG = #{motorflag,jdbcType=VARCHAR},
+            </if>
+            <if test="motorarea != null">
+                MOTORAREA = #{motorarea,jdbcType=VARCHAR},
+            </if>
+            <if test="motorright != null">
+                MOTORRIGHT = #{motorright,jdbcType=VARCHAR},
+            </if>
+            <if test="meteraddress != null">
+                METERADDRESS = #{meteraddress,jdbcType=VARCHAR},
+            </if>
+            <if test="constructiondate != null">
+                CONSTRUCTIONDATE = #{constructiondate,jdbcType=VARCHAR},
+            </if>
+            <if test="wlanflag != null">
+                WLANFLAG = #{wlanflag,jdbcType=VARCHAR},
+            </if>
+            <if test="wlanshare != null">
+                WLANSHARE = #{wlanshare,jdbcType=VARCHAR},
+            </if>
+            <if test="wlancoverage != null">
+                WLANCOVERAGE = #{wlancoverage,jdbcType=VARCHAR},
+            </if>
+            <if test="ownername != null">
+                OWNERNAME = #{ownername,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerphone != null">
+                OWNERPHONE = #{ownerphone,jdbcType=VARCHAR},
+            </if>
+            <if test="monitordevicenum != null">
+                MONITORDEVICENUM = #{monitordevicenum,jdbcType=DECIMAL},
+            </if>
+            <if test="monitordeviceids != null">
+                MONITORDEVICEIDS = #{monitordeviceids,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME = #{updatetime,jdbcType=DATE},
+            </if>
+            <if test="updateuser != null">
+                UPDATEUSER = #{updateuser,jdbcType=DECIMAL},
+            </if>
+            <if test="addFlag != null">
+                ADD_FLAG = #{addFlag,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.scttsc.business.model.IndoorManual">
+    update WY_INDOOR_MANUAL
+    set NAME = #{name,jdbcType=VARCHAR},
+      CITY_ID = #{cityId,jdbcType=DECIMAL},
+      COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+      LONGITUDE = #{longitude,jdbcType=DECIMAL},
+      LATITUDE = #{latitude,jdbcType=DECIMAL},
+      VENDOR_BTSTYPE = #{vendorBtstype,jdbcType=VARCHAR},
+      BSC_NAME = #{bscName,jdbcType=VARCHAR},
+      BTS_NAME = #{btsName,jdbcType=VARCHAR},
+      CELL_SEQ = #{cellSeq,jdbcType=DECIMAL},
+      PN = #{pn,jdbcType=DECIMAL},
+      CI = #{ci,jdbcType=DECIMAL},
+      PROP1 = #{prop1,jdbcType=VARCHAR},
+      PROP2 = #{prop2,jdbcType=VARCHAR},
+      GRADE = #{grade,jdbcType=VARCHAR},
+      COVERAGE = #{coverage,jdbcType=VARCHAR},
+      BUILDINGNUM = #{buildingnum,jdbcType=DECIMAL},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      DEVICENUM = #{devicenum,jdbcType=DECIMAL},
+      MONITORFLAG = #{monitorflag,jdbcType=VARCHAR},
+      MONITORNUMBER = #{monitornumber,jdbcType=VARCHAR},
+      DEVICEADDRESS = #{deviceaddress,jdbcType=VARCHAR},
+      REPEATERNUM = #{repeaternum,jdbcType=DECIMAL},
+      DRYNUM = #{drynum,jdbcType=DECIMAL},
+      DISTRIBUTEDESC = #{distributedesc,jdbcType=VARCHAR},
+      DISTRIBUTEFAC = #{distributefac,jdbcType=VARCHAR},
+      MOTORFLAG = #{motorflag,jdbcType=VARCHAR},
+      MOTORAREA = #{motorarea,jdbcType=VARCHAR},
+      MOTORRIGHT = #{motorright,jdbcType=VARCHAR},
+      METERADDRESS = #{meteraddress,jdbcType=VARCHAR},
+      CONSTRUCTIONDATE = #{constructiondate,jdbcType=VARCHAR},
+      WLANFLAG = #{wlanflag,jdbcType=VARCHAR},
+      WLANSHARE = #{wlanshare,jdbcType=VARCHAR},
+      WLANCOVERAGE = #{wlancoverage,jdbcType=VARCHAR},
+      OWNERNAME = #{ownername,jdbcType=VARCHAR},
+      OWNERPHONE = #{ownerphone,jdbcType=VARCHAR},
+      MONITORDEVICENUM = #{monitordevicenum,jdbcType=DECIMAL},
+      MONITORDEVICEIDS = #{monitordeviceids,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      UPDATETIME = #{updatetime,jdbcType=DATE},
+      UPDATEUSER = #{updateuser,jdbcType=DECIMAL}
+    where INT_ID = #{intId,jdbcType=DECIMAL}
+  </update>
+
+
+
+  <select id="selectByCons" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List"/>
+        from WY_INDOOR_MANUAL
+        <where>
+            1=1
+            <if test="name != null">
+                and NAME=#{name,jdbcType=VARCHAR}
+            </if>
+      </where>
+ </select>
+
+    <!--查询未录入直放站的室分手工数据-->
+    <select id="selectByNoInputErect" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_INDOOR_MANUAL a
+        WHERE NOT EXISTS (SELECT 1 FROM WY_ERECTSTATION b WHERE a.int_id=b.wybtsintid)
+        <if test="ids!=null">
+            and a.int_id in(${ids})
+        </if>
+        <if test="cityId!=null">
+            and a.CITY_ID in(${cityId})
+        </if>
+        <if test="countryIds!=null">
+            and a.COUNTRY_ID in(${countryIds})
+        </if>
+        <if test="name!=null">
+            and a.NAME like #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="bscName!=null">
+            and a.BSC_NAME like #{bscName,jdbcType=VARCHAR}
+        </if>
+        ORDER BY a.int_id
+    </select>
+
+
+    <!--查询未录入干放站的室分手工数据-->
+       <select id="selectByNoInputDry" resultMap="BaseResultMap">
+           select
+           <include refid="Base_Column_List"/>
+           from WY_INDOOR_MANUAL a
+           WHERE NOT EXISTS (SELECT 1 FROM WY_DRYSTATION b WHERE a.int_id=b.wybtsintid)
+           <if test="ids!=null">
+               and a.int_id in(${ids})
+           </if>
+           <if test="cityId!=null">
+               and a.CITY_ID in(${cityId})
+           </if>
+           <if test="countryIds!=null">
+               and a.COUNTRY_ID in(${countryIds})
+           </if>
+           <if test="name!=null">
+               and a.NAME like #{name,jdbcType=VARCHAR}
+           </if>
+           <if test="bscName!=null">
+               and a.BSC_NAME like #{bscName,jdbcType=VARCHAR}
+           </if>
+           ORDER BY a.int_id
+       </select>
+
+
+    <update id="updateByInterface" parameterType="java.util.Map">
+           update WY_INDOOR_MANUAL
+           <set>
+               <if test="NAME != null">
+                   NAME = #{NAME,jdbcType=VARCHAR},
+               </if>
+               <if test="CITY_ID != null">
+                   CITY_ID = #{CITY_ID,jdbcType=DECIMAL},
+               </if>
+               <if test="COUNTRY_ID != null">
+                   COUNTRY_ID = #{COUNTRY_ID,jdbcType=DECIMAL},
+               </if>
+               <if test="LONGITUDE != null">
+                   LONGITUDE = #{LONGITUDE,jdbcType=DECIMAL},
+               </if>
+               <if test="LATITUDE != null">
+                   LATITUDE = #{LATITUDE,jdbcType=DECIMAL},
+               </if>
+               <if test="VENDOR_BTSTYPE != null">
+                   VENDOR_BTSTYPE = #{VENDOR_BTSTYPE,jdbcType=VARCHAR},
+               </if>
+               <if test="BSC_NAME != null">
+                   BSC_NAME = #{BSC_NAME,jdbcType=VARCHAR},
+               </if>
+               <if test="BTS_NAME != null">
+                   BTS_NAME = #{BTS_NAME,jdbcType=VARCHAR},
+               </if>
+               <if test="CELL_SEQ != null">
+                   CELL_SEQ = #{CELL_SEQ,jdbcType=DECIMAL},
+               </if>
+               <if test="PN != null">
+                   PN = #{PN,jdbcType=DECIMAL},
+               </if>
+               <if test="CI != null">
+                   CI = #{CI,jdbcType=DECIMAL},
+               </if>
+               <if test="PROP1 != null">
+                   PROP1 = #{PROP1,jdbcType=VARCHAR},
+               </if>
+               <if test="PROP2 != null">
+                   PROP2 = #{PROP2,jdbcType=VARCHAR},
+               </if>
+               <if test="GRADE != null">
+                   GRADE = #{GRADE,jdbcType=VARCHAR},
+               </if>
+               <if test="COVERAGE != null">
+                   COVERAGE = #{COVERAGE,jdbcType=VARCHAR},
+               </if>
+               <if test="BUILDINGNUM != null">
+                   BUILDINGNUM = #{BUILDINGNUM,jdbcType=DECIMAL},
+               </if>
+               <if test="ADDRESS != null">
+                   ADDRESS = #{ADDRESS,jdbcType=VARCHAR},
+               </if>
+               <if test="DEVICENUM != null">
+                   DEVICENUM = #{DEVICENUM,jdbcType=DECIMAL},
+               </if>
+               <if test="MONITORFLAG != null">
+                   MONITORFLAG = #{MONITORFLAG,jdbcType=VARCHAR},
+               </if>
+               <if test="MONITORNUMBER != null">
+                   MONITORNUMBER = #{MONITORNUMBER,jdbcType=VARCHAR},
+               </if>
+               <if test="DEVICEADDRESS != null">
+                   DEVICEADDRESS = #{DEVICEADDRESS,jdbcType=VARCHAR},
+               </if>
+               <if test="REPEATERNUM != null">
+                   REPEATERNUM = #{REPEATERNUM,jdbcType=DECIMAL},
+               </if>
+               <if test="DRYNUM != null">
+                   DRYNUM = #{DRYNUM,jdbcType=DECIMAL},
+               </if>
+               <if test="DISTRIBUTEDESC != null">
+                   DISTRIBUTEDESC = #{DISTRIBUTEDESC,jdbcType=VARCHAR},
+               </if>
+               <if test="DISTRIBUTEFAC != null">
+                   DISTRIBUTEFAC = #{DISTRIBUTEFAC,jdbcType=VARCHAR},
+               </if>
+               <if test="MOTORFLAG != null">
+                   MOTORFLAG = #{MOTORFLAG,jdbcType=VARCHAR},
+               </if>
+               <if test="MOTORAREA != null">
+                   MOTORAREA = #{MOTORAREA,jdbcType=VARCHAR},
+               </if>
+               <if test="MOTORRIGHT != null">
+                   MOTORRIGHT = #{MOTORRIGHT,jdbcType=VARCHAR},
+               </if>
+               <if test="METERADDRESS != null">
+                   METERADDRESS = #{METERADDRESS,jdbcType=VARCHAR},
+               </if>
+               <if test="CONSTRUCTIONDATE != null">
+                   CONSTRUCTIONDATE = #{CONSTRUCTIONDATE,jdbcType=VARCHAR},
+               </if>
+               <if test="WLANFLAG != null">
+                   WLANFLAG = #{WLANFLAG,jdbcType=VARCHAR},
+               </if>
+               <if test="WLANSHARE != null">
+                   WLANSHARE = #{WLANSHARE,jdbcType=VARCHAR},
+               </if>
+               <if test="WLANCOVERAGE != null">
+                   WLANCOVERAGE = #{WLANCOVERAGE,jdbcType=VARCHAR},
+               </if>
+               <if test="OWNERNAME != null">
+                   OWNERNAME = #{OWNERNAME,jdbcType=VARCHAR},
+               </if>
+               <if test="OWNERPHONE != null">
+                   OWNERPHONE = #{OWNERPHONE,jdbcType=VARCHAR},
+               </if>
+               <if test="MONITORDEVICENUM != null">
+                   MONITORDEVICENUM = #{MONITORDEVICENUM,jdbcType=DECIMAL},
+               </if>
+               <if test="MONITORDEVICEIDS != null">
+                   MONITORDEVICEIDS = #{MONITORDEVICEIDS,jdbcType=VARCHAR},
+               </if>
+               <if test="REMARK != null">
+                   REMARK = #{REMARK,jdbcType=VARCHAR},
+               </if>
+               <if test="UPDATETIME != null">
+                   UPDATETIME = #{UPDATETIME,jdbcType=DATE},
+               </if>
+               <if test="UPDATEUSER != null">
+                   UPDATEUSER = #{UPDATEUSER,jdbcType=DECIMAL},
+               </if>
+               <if test="ADD_FLAG != null">
+                   ADD_FLAG = #{ADD_FLAG,jdbcType=DECIMAL},
+               </if>
+           </set>
+           where INT_ID = #{INT_ID,jdbcType=DECIMAL}
+       </update>
+
+
+    <update id="updateByIntID">
+        update WY_INDOOR_MANUAL set INT_ID = #{newIntId,jdbcType=DECIMAL}
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+    </update>
+
+
+</mapper>

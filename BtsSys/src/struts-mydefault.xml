@@ -1,0 +1,31 @@
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<include file="struts-plugin.xml" />
+		<package name="default" extends="struts-default">
+		<!-- 自定义拦截器，实现用户校验 -->
+
+		<interceptors>
+			<interceptor name="authInterceptor" class="com.scttsc.admin.web.AuthInterceptor"></interceptor>
+			<interceptor-stack name="mydefaultStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="authInterceptor"></interceptor-ref>
+				<interceptor-ref name="exception">
+					<param name="logEnabled">true</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+	   <default-interceptor-ref name="mydefaultStack"/>
+		<!-- 全局逻辑视图 -->
+		<global-results>
+			<result name="relogin">/appviews/sys/relogin.jsp</result>
+			<result name="sysException">/appviews/common/exception.jsp</result>
+			<result name="exception">/appviews/common/error.jsp</result>
+		</global-results>
+		  
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception" result="exception"></exception-mapping>
+		</global-exception-mappings>
+	</package>
+</struts>

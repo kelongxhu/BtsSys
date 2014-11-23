@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scttsc.admin.dao.HxMenuDao">
+
+    <resultMap id="result" type="com.scttsc.admin.model.HxMenu">
+        <result property="id" column="ID" jdbcType="INTEGER"/>
+        <result property="pid" column="PID" jdbcType="INTEGER"/>
+        <result property="name" column="NAME" jdbcType="VARCHAR"/>
+        <result property="url" column="URL" jdbcType="VARCHAR"/>
+        <result property="icon" column="ICON" jdbcType="VARCHAR"/>
+        <result property="orderby" column="ORDERBY" jdbcType="INTEGER"/>
+        <result property="note" column="NOTE" jdbcType="VARCHAR"/>
+        <result property="intime" column="INTIME" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="REMARK" jdbcType="VARCHAR"/>
+        <result property="flag" column="FLAG" jdbcType="DECIMAL"/>
+        <!--
+        <collection property="children" column="ID" ofType="com.scttsc.admin.model.HxMenu"
+                    select="com.scttsc.admin.dao.HxMenuDao.getByPid"/>
+                    -->
+    </resultMap>
+
+     <sql id="Base_Column_List" >
+       ID,PID,NAME,URL,ICON,ORDERBY,INTIME,REMARK,FLAG
+    </sql>
+
+    <select id="getByPid" resultMap="result">
+		SELECT <include refid="Base_Column_List"/> FROM
+		WY_MENU WHERE PID=#{pid,jdbcType=INTEGER} order by ORDERBY
+	</select>
+
+    <select id="getByUserId" resultMap="result">
+            SELECT <include refid="Base_Column_List"/> FROM wy_menu WHERE ID IN(
+            select DISTINCT a.pid from WY_ROLE_MENU t
+            LEFT JOIN wy_menu a ON a.id=t.menu_id
+            WHERE t.role_id IN(SELECT role_id FROM framework_security_user_role WHERE user_id=#{userId,jdbcType=DECIMAL}))
+            ORDER BY orderby
+    </select>
+
+    <select id="getChildByUserId" resultMap="result">
+        SELECT DISTINCT a.id,a.pid,a.name,a.url,a.flag,a.orderby from WY_ROLE_MENU t
+        LEFT JOIN wy_menu a ON a.id=t.menu_id
+        WHERE t.role_id IN(SELECT role_id FROM framework_security_user_role WHERE user_id=#{userId,jdbcType=DECIMAL})
+        AND pid=#{pid,jdbcType=DECIMAL} ORDER BY orderby
+    </select>
+
+
+    <select id="loadAll" resultMap="result">
+        SELECT <include refid="Base_Column_List"/> FROM
+		WY_MENU order by orderby
+    </select>
+
+    <select id="selectById" resultMap="result">
+		SELECT <include refid="Base_Column_List"/> FROM
+		WY_MENU WHERE ID=#{id,jdbcType=INTEGER}
+	</select>
+
+
+</mapper>
+

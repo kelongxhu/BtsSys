@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.charge.dao.WySmsLogDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.charge.model.WySmsLog" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="BTS_TYPE" property="btsType" jdbcType="DECIMAL" />
+    <result column="REMIND_USER" property="remindUser" jdbcType="VARCHAR" />
+    <result column="REMIND_TEL" property="remindTel" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="DECIMAL" />
+    <result column="IN_TIME" property="inTime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, INT_ID, BTS_TYPE, REMIND_USER, REMIND_TEL, CONTENT, STATUS, IN_TIME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from WY_SMS_LOG
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from WY_SMS_LOG
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.charge.model.WySmsLog" >
+    insert into WY_SMS_LOG (ID, INT_ID, BTS_TYPE, 
+      REMIND_USER, REMIND_TEL, CONTENT, 
+      STATUS, IN_TIME)
+    values (#{id,jdbcType=DECIMAL}, #{intId,jdbcType=DECIMAL}, #{btsType,jdbcType=DECIMAL}, 
+      #{remindUser,jdbcType=VARCHAR}, #{remindTel,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{status,jdbcType=DECIMAL}, #{inTime,jdbcType=DATE})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.charge.model.WySmsLog" >
+    update WY_SMS_LOG
+    <set >
+      <if test="intId != null" >
+        INT_ID = #{intId,jdbcType=DECIMAL},
+      </if>
+      <if test="btsType != null" >
+        BTS_TYPE = #{btsType,jdbcType=DECIMAL},
+      </if>
+      <if test="remindUser != null" >
+        REMIND_USER = #{remindUser,jdbcType=VARCHAR},
+      </if>
+      <if test="remindTel != null" >
+        REMIND_TEL = #{remindTel,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="inTime != null" >
+        IN_TIME = #{inTime,jdbcType=DATE},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

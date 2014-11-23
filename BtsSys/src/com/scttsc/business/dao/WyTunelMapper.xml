@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.WyTunelDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.business.model.WyTunel" >
+    <id column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL" />
+    <result column="LATITUDE" property="latitude" jdbcType="DECIMAL" />
+    <result column="IS_TUNEL" property="isTunel" jdbcType="VARCHAR" />
+    <result column="IS_RRU" property="isRru" jdbcType="VARCHAR" />
+    <result column="BTS_NAME" property="btsName" jdbcType="VARCHAR" />
+    <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR" />
+    <result column="BTS_ID" property="btsId" jdbcType="DECIMAL" />
+    <result column="CIRCUITROOM_OWNERSHIP" property="circuitroomOwnership" jdbcType="VARCHAR" />
+    <result column="TRANS_OWNERSHIP" property="transOwnership" jdbcType="VARCHAR" />
+    <result column="VENDOR_BTSTYPE" property="vendorBtstype" jdbcType="VARCHAR" />
+    <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
+    <result column="COUNTY_ID" property="countyId" jdbcType="DECIMAL" />
+    <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL" />
+    <result column="MANUAL_FLAG" property="manualFlag" jdbcType="DECIMAL" />
+    <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL" />
+    <result column="DELETETIME" property="deletetime" jdbcType="DATE" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="DATE" />
+    <result column="SERVICE_LEVEL" property="serviceLevel" jdbcType="VARCHAR" />
+    <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL" />
+    <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR" />
+    <result column="HIGHTRAIN_FLAG" property="hightrainFlag" jdbcType="VARCHAR" />
+    <result column="REDLINE_FLAG" property="redlineFlag" jdbcType="DECIMAL" />
+    <result column="cityname" property="city.cityName" jdbcType="VARCHAR" />
+    <result column="countryname" property="country.cityName" jdbcType="VARCHAR" />
+    <result column="c_name" property="reasonCons.name" jdbcType="VARCHAR"/>
+  </resultMap>
+
+    <resultMap id="BaseResultMap_2" type="com.scttsc.business.model.WyTunel" >
+        <id column="t_INT_ID" property="intId" jdbcType="DECIMAL" />
+        <result column="t_NAME" property="name" jdbcType="VARCHAR" />
+        <result column="t_LONGITUDE" property="longitude" jdbcType="DECIMAL" />
+        <result column="t_LATITUDE" property="latitude" jdbcType="DECIMAL" />
+        <result column="t_IS_TUNEL" property="isTunel" jdbcType="VARCHAR" />
+        <result column="t_IS_RRU" property="isRru" jdbcType="VARCHAR" />
+        <result column="t_BTS_NAME" property="btsName" jdbcType="VARCHAR" />
+        <result column="t_BSC_NAME" property="bscName" jdbcType="VARCHAR" />
+        <result column="t_BTS_ID" property="btsId" jdbcType="DECIMAL" />
+        <result column="t_CIRCUITROOM_OWNERSHIP" property="circuitroomOwnership" jdbcType="VARCHAR" />
+        <result column="t_TRANS_OWNERSHIP" property="transOwnership" jdbcType="VARCHAR" />
+        <result column="t_VENDOR_BTSTYPE" property="vendorBtstype" jdbcType="VARCHAR" />
+        <result column="t_CITY_ID" property="cityId" jdbcType="DECIMAL" />
+        <result column="t_COUNTY_ID" property="countyId" jdbcType="DECIMAL" />
+        <result column="t_RELATED_BTS" property="relatedBts" jdbcType="DECIMAL" />
+        <result column="t_MANUAL_FLAG" property="manualFlag" jdbcType="DECIMAL" />
+        <result column="t_DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL" />
+        <result column="t_DELETETIME" property="deletetime" jdbcType="DATE" />
+        <result column="t_UPDATETIME" property="updatetime" jdbcType="DATE" />
+        <result column="t_SERVICE_LEVEL" property="serviceLevel" jdbcType="VARCHAR" />
+        <result column="t_DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL" />
+        <result column="t_DELETE_TEXT" property="deleteText" jdbcType="VARCHAR" />
+        <result column="t_HIGHTRAIN_FLAG" property="hightrainFlag" jdbcType="VARCHAR" />
+        <result column="t_REDLINE_FLAG" property="redlineFlag" jdbcType="DECIMAL" />
+        <result column="cityname" property="city.cityName" jdbcType="VARCHAR" />
+        <result column="countryname" property="country.cityName" jdbcType="VARCHAR" />
+        <association column="t_INT_ID" property="wyTunelManual" resultMap="com.scttsc.business.dao.WyTunelManualDao.BaseResultMap_2"/>
+    </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    u.INT_ID, u.NAME, u.LONGITUDE, u.LATITUDE, u.IS_TUNEL, u.IS_RRU, u.BTS_NAME, u.BSC_NAME, u.BTS_ID,
+    u.CIRCUITROOM_OWNERSHIP, u.TRANS_OWNERSHIP, u.VENDOR_BTSTYPE, u.CITY_ID, u.COUNTY_ID, u.RELATED_BTS,
+    u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME, u.SERVICE_LEVEL, u.DELETE_RESONCODE,
+    u.DELETE_TEXT, u.HIGHTRAIN_FLAG, u.REDLINE_FLAG
+  </sql>
+
+
+   <sql id="Base_Column_List_2" >
+        t.INT_ID t_INT_ID, t.NAME t_NAME, t.LONGITUDE t_LONGITUDE, t.LATITUDE t_LATITUDE, t.IS_TUNEL t_IS_TUNEL, t.IS_RRU t_IS_RRU, t.BTS_NAME t_BTS_NAME, t.BSC_NAME t_BSC_NAME, t.BTS_ID t_BTS_ID,
+        t.CIRCUITROOM_OWNERSHIP t_CIRCUITROOM_OWNERSHIP, t.TRANS_OWNERSHIP t_TRANS_OWNERSHIP, t.VENDOR_BTSTYPE t_VENDOR_BTSTYPE, t.CITY_ID t_CITY_ID, t.COUNTY_ID t_COUNTY_ID, t.RELATED_BTS t_RELATED_BTS,
+        t.MANUAL_FLAG t_MANUAL_FLAG, t.DELETE_FLAG t_DELETE_FLAG, t.DELETETIME t_DELETETIME, t.UPDATETIME t_UPDATETIME, t.SERVICE_LEVEL t_SERVICE_LEVEL, t.DELETE_RESONCODE t_DELETE_RESONCODE,
+        t.DELETE_TEXT t_DELETE_TEXT, t.HIGHTRAIN_FLAG t_HIGHTRAIN_FLAG, t.REDLINE_FLAG t_REDLINE_FLAG
+    </sql>
+
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List"/>,a.name cityname,b.name countryname,c.name c_name
+        from WY_TUNEL u
+        left join wy_city a on a.id=u.CITY_ID
+        left join wy_city b on b.id=u.COUNTY_ID
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='ABANDONEDTYPE')c
+        ON c.code=u.DELETE_RESONCODE
+        )m
+        <where>
+            1=1
+            <if test="ids!=null">
+                and INT_ID in(${ids})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="ntxFlag!=null">
+                and DELETE_RESONCODE=0
+            </if>
+            <if test="ytxFlag!=null">
+                and DELETE_RESONCODE!=0
+            </if>
+            <if test="startTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd')>=#{startTime}
+            </if>
+            <if test="endTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd') &lt; #{endTime}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+            order by CITY_ID,COUNTY_ID
+        </where>
+       )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="countByMap" resultType="int">
+        select count(1)
+        from WY_TUNEL
+        <where>
+            1=1
+            <if test="ids!=null">
+                and INT_ID in(${ids})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsName!=null">
+                and BTS_NAME like #{btsName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID =  #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="startTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd')>=#{startTime}
+            </if>
+            <if test="endTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd') &lt; #{endTime}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectAssoByMap" resultMap="BaseResultMap_2">
+      select <include refid="Base_Column_List_2"/> ,
+      <include refid="com.scttsc.business.dao.WyTunelManualDao.Base_Column_List_2"/> ,x.name cityname,y.name countryname from wy_tunel t
+      left join wy_tunel_manual tm
+      on t.int_id=tm.int_id
+      left join wy_city x
+      on t.city_id=x.id
+      left join wy_city y
+      on t.county_id=y.id
+        <where>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            order by t.city_id,t.county_id
+        </where>
+    </select>
+
+
+    <select id="selectByConds" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from WY_TUNEL u
+        <where>
+            1=1
+            <if test="name!=null">
+                and name=#{namejdbcType=VARCHAR}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from WY_TUNEL u
+    where u.INT_ID = #{intId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from WY_TUNEL
+    where INT_ID = #{intId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.business.model.WyTunel" >
+    insert into WY_TUNEL (INT_ID, NAME, LONGITUDE, 
+      LATITUDE, IS_TUNEL, IS_RRU, 
+      BTS_NAME, BSC_NAME, BTS_ID, 
+      CIRCUITROOM_OWNERSHIP, TRANS_OWNERSHIP, VENDOR_BTSTYPE, 
+      CITY_ID, COUNTY_ID, RELATED_BTS, 
+      MANUAL_FLAG, DELETE_FLAG, DELETETIME, 
+      UPDATETIME, SERVICE_LEVEL, DELETE_RESONCODE, 
+      DELETE_TEXT, HIGHTRAIN_FLAG, REDLINE_FLAG
+      )
+    values (#{intId,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{longitude,jdbcType=DECIMAL}, 
+      #{latitude,jdbcType=DECIMAL}, #{isTunel,jdbcType=VARCHAR}, #{isRru,jdbcType=VARCHAR}, 
+      #{btsName,jdbcType=VARCHAR}, #{bscName,jdbcType=VARCHAR}, #{btsId,jdbcType=DECIMAL}, 
+      #{circuitroomOwnership,jdbcType=VARCHAR}, #{transOwnership,jdbcType=VARCHAR}, #{vendorBtstype,jdbcType=VARCHAR}, 
+      #{cityId,jdbcType=DECIMAL}, #{countyId,jdbcType=DECIMAL}, #{relatedBts,jdbcType=DECIMAL}, 
+      #{manualFlag,jdbcType=DECIMAL}, #{deleteFlag,jdbcType=DECIMAL}, #{deletetime,jdbcType=DATE}, 
+      #{updatetime,jdbcType=DATE}, #{serviceLevel,jdbcType=VARCHAR}, #{deleteResoncode,jdbcType=DECIMAL}, 
+      #{deleteText,jdbcType=VARCHAR}, #{hightrainFlag,jdbcType=VARCHAR}, #{redlineFlag,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.scttsc.business.model.WyTunel" >
+    insert into WY_TUNEL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="intId != null" >
+        INT_ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE,
+      </if>
+      <if test="latitude != null" >
+        LATITUDE,
+      </if>
+      <if test="isTunel != null" >
+        IS_TUNEL,
+      </if>
+      <if test="isRru != null" >
+        IS_RRU,
+      </if>
+      <if test="btsName != null" >
+        BTS_NAME,
+      </if>
+      <if test="bscName != null" >
+        BSC_NAME,
+      </if>
+      <if test="btsId != null" >
+        BTS_ID,
+      </if>
+      <if test="circuitroomOwnership != null" >
+        CIRCUITROOM_OWNERSHIP,
+      </if>
+      <if test="transOwnership != null" >
+        TRANS_OWNERSHIP,
+      </if>
+      <if test="vendorBtstype != null" >
+        VENDOR_BTSTYPE,
+      </if>
+      <if test="cityId != null" >
+        CITY_ID,
+      </if>
+      <if test="countyId != null" >
+        COUNTY_ID,
+      </if>
+      <if test="relatedBts != null" >
+        RELATED_BTS,
+      </if>
+      <if test="manualFlag != null" >
+        MANUAL_FLAG,
+      </if>
+      <if test="deleteFlag != null" >
+        DELETE_FLAG,
+      </if>
+      <if test="deletetime != null" >
+        DELETETIME,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+      <if test="serviceLevel != null" >
+        SERVICE_LEVEL,
+      </if>
+      <if test="deleteResoncode != null" >
+        DELETE_RESONCODE,
+      </if>
+      <if test="deleteText != null" >
+        DELETE_TEXT,
+      </if>
+      <if test="hightrainFlag != null" >
+        HIGHTRAIN_FLAG,
+      </if>
+      <if test="redlineFlag != null" >
+        REDLINE_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="intId != null" >
+        #{intId,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="isTunel != null" >
+        #{isTunel,jdbcType=VARCHAR},
+      </if>
+      <if test="isRru != null" >
+        #{isRru,jdbcType=VARCHAR},
+      </if>
+      <if test="btsName != null" >
+        #{btsName,jdbcType=VARCHAR},
+      </if>
+      <if test="bscName != null" >
+        #{bscName,jdbcType=VARCHAR},
+      </if>
+      <if test="btsId != null" >
+        #{btsId,jdbcType=DECIMAL},
+      </if>
+      <if test="circuitroomOwnership != null" >
+        #{circuitroomOwnership,jdbcType=VARCHAR},
+      </if>
+      <if test="transOwnership != null" >
+        #{transOwnership,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorBtstype != null" >
+        #{vendorBtstype,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=DECIMAL},
+      </if>
+      <if test="countyId != null" >
+        #{countyId,jdbcType=DECIMAL},
+      </if>
+      <if test="relatedBts != null" >
+        #{relatedBts,jdbcType=DECIMAL},
+      </if>
+      <if test="manualFlag != null" >
+        #{manualFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="deleteFlag != null" >
+        #{deleteFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="deletetime != null" >
+        #{deletetime,jdbcType=DATE},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=DATE},
+      </if>
+      <if test="serviceLevel != null" >
+        #{serviceLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteResoncode != null" >
+        #{deleteResoncode,jdbcType=DECIMAL},
+      </if>
+      <if test="deleteText != null" >
+        #{deleteText,jdbcType=VARCHAR},
+      </if>
+      <if test="hightrainFlag != null" >
+        #{hightrainFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="redlineFlag != null" >
+        #{redlineFlag,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.business.model.WyTunel" >
+    update WY_TUNEL
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="isTunel != null" >
+        IS_TUNEL = #{isTunel,jdbcType=VARCHAR},
+      </if>
+      <if test="isRru != null" >
+        IS_RRU = #{isRru,jdbcType=VARCHAR},
+      </if>
+      <if test="btsName != null" >
+        BTS_NAME = #{btsName,jdbcType=VARCHAR},
+      </if>
+      <if test="bscName != null" >
+        BSC_NAME = #{bscName,jdbcType=VARCHAR},
+      </if>
+      <if test="btsId != null" >
+        BTS_ID = #{btsId,jdbcType=DECIMAL},
+      </if>
+      <if test="circuitroomOwnership != null" >
+        CIRCUITROOM_OWNERSHIP = #{circuitroomOwnership,jdbcType=VARCHAR},
+      </if>
+      <if test="transOwnership != null" >
+        TRANS_OWNERSHIP = #{transOwnership,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorBtstype != null" >
+        VENDOR_BTSTYPE = #{vendorBtstype,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        CITY_ID = #{cityId,jdbcType=DECIMAL},
+      </if>
+      <if test="countyId != null" >
+        COUNTY_ID = #{countyId,jdbcType=DECIMAL},
+      </if>
+      <if test="relatedBts != null" >
+        RELATED_BTS = #{relatedBts,jdbcType=DECIMAL},
+      </if>
+      <if test="manualFlag != null" >
+        MANUAL_FLAG = #{manualFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="deleteFlag != null" >
+        DELETE_FLAG = #{deleteFlag,jdbcType=DECIMAL},
+      </if>
+      <if test="deletetime != null" >
+        DELETETIME = #{deletetime,jdbcType=DATE},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=DATE},
+      </if>
+      <if test="serviceLevel != null" >
+        SERVICE_LEVEL = #{serviceLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteResoncode != null" >
+        DELETE_RESONCODE = #{deleteResoncode,jdbcType=DECIMAL},
+      </if>
+      <if test="deleteText != null" >
+        DELETE_TEXT = #{deleteText,jdbcType=VARCHAR},
+      </if>
+      <if test="hightrainFlag != null" >
+        HIGHTRAIN_FLAG = #{hightrainFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="redlineFlag != null" >
+        REDLINE_FLAG = #{redlineFlag,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where INT_ID = #{intId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.scttsc.business.model.WyTunel" >
+    update WY_TUNEL
+    set NAME = #{name,jdbcType=VARCHAR},
+      LONGITUDE = #{longitude,jdbcType=DECIMAL},
+      LATITUDE = #{latitude,jdbcType=DECIMAL},
+      IS_TUNEL = #{isTunel,jdbcType=VARCHAR},
+      IS_RRU = #{isRru,jdbcType=VARCHAR},
+      BTS_NAME = #{btsName,jdbcType=VARCHAR},
+      BSC_NAME = #{bscName,jdbcType=VARCHAR},
+      BTS_ID = #{btsId,jdbcType=DECIMAL},
+      CIRCUITROOM_OWNERSHIP = #{circuitroomOwnership,jdbcType=VARCHAR},
+      TRANS_OWNERSHIP = #{transOwnership,jdbcType=VARCHAR},
+      VENDOR_BTSTYPE = #{vendorBtstype,jdbcType=VARCHAR},
+      CITY_ID = #{cityId,jdbcType=DECIMAL},
+      COUNTY_ID = #{countyId,jdbcType=DECIMAL},
+      RELATED_BTS = #{relatedBts,jdbcType=DECIMAL},
+      MANUAL_FLAG = #{manualFlag,jdbcType=DECIMAL},
+      DELETE_FLAG = #{deleteFlag,jdbcType=DECIMAL},
+      DELETETIME = #{deletetime,jdbcType=DATE},
+      UPDATETIME = #{updatetime,jdbcType=DATE},
+      SERVICE_LEVEL = #{serviceLevel,jdbcType=VARCHAR},
+      DELETE_RESONCODE = #{deleteResoncode,jdbcType=DECIMAL},
+      DELETE_TEXT = #{deleteText,jdbcType=VARCHAR},
+      HIGHTRAIN_FLAG = #{hightrainFlag,jdbcType=VARCHAR},
+      REDLINE_FLAG = #{redlineFlag,jdbcType=DECIMAL}
+    where INT_ID = #{intId,jdbcType=DECIMAL}
+  </update>
+
+    <update id="updateByMap">
+        update WY_TUNEL
+        <set>
+            <if test="manualFlag != null">
+                MANUAL_FLAG = #{manualFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteResoncode != null">
+                DELETE_RESONCODE = #{deleteResoncode,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteText != null">
+                DELETE_TEXT = #{deleteText,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <where>
+            1=1
+            <if test="intId!=null">
+                and INT_ID=#{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag=#{deleteFlag,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </update>
+
+
+    <!--自定义分组统计-->
+
+    <select id="selectWyTunelGroupByColumns" resultType="hashmap" parameterType="map">
+        select * from (select m.*,ROWNUM RN from
+        (
+        SELECT
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>,count(1) num
+        FROM
+        (SELECT <include refid="Base_Column_List"/>,
+        <include refid="com.scttsc.business.dao.WyTunelManualDao.Base_Column_List"/>,
+        e.name cityname,f.name countryname,o.NAME PROP_NAME,p.NAME SHAREFLAG_NAME,q.NAME ROAD_ID_NAME FROM wy_tunel u
+        LEFT JOIN wy_tunel_manual tm
+        ON tm.int_id=u.int_id
+        LEFT JOIN wy_city e ON
+        u.city_id=e.id
+        LEFT JOIN wy_city f ON
+        u.county_id=f.id
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TUNELPROP')o
+        ON o.code=tm.PROP
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TUNEL_SHARE')p
+        ON p.code=tm.SHAREFLAG
+        LEFT JOIN(select ID,NAME from wy_lib_road where delete_flag=0)q
+        ON q.ID=tm.ROAD_ID
+        WHERE u.delete_flag=0
+        )
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and city_id in(${cityIds})
+            </if>
+        </where>
+
+        GROUP BY
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>
+        <choose>
+            <when test="orderCondition != null">
+                order by ${orderCondition}
+            </when>
+            <otherwise>
+                order by NUM DESC
+            </otherwise>
+        </choose>
+        )m
+        <where>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="countWytunelGroupByColumns" resultType="int">
+        select count(1) from(
+        SELECT
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>,count(1) num
+        FROM
+        (SELECT <include refid="Base_Column_List"/>,
+        <include refid="com.scttsc.business.dao.WyTunelManualDao.Base_Column_List"/>,
+        e.name cityname,f.name countryname,o.NAME PROP_NAME,p.NAME SHAREFLAG_NAME,q.NAME ROAD_ID_NAME FROM wy_tunel u
+        LEFT JOIN wy_tunel_manual tm
+        ON tm.int_id=u.int_id
+        LEFT JOIN wy_city e ON
+        u.city_id=e.id
+        LEFT JOIN wy_city f ON
+        u.county_id=f.id
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TUNELPROP')o
+        ON o.code=tm.PROP
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TUNEL_SHARE')p
+        ON p.code=tm.SHAREFLAG
+        LEFT JOIN(select ID,NAME from wy_lib_road where delete_flag=0)q
+        ON q.ID=tm.ROAD_ID
+        WHERE u.delete_flag=0
+        )
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and city_id in(${cityIds})
+            </if>
+        </where>
+
+        GROUP BY
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>
+        )
+    </select>
+</mapper>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.baselibs.dao.TunnelLibDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.baselibs.model.TunnelLib" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
+    <result column="COUNTRY_ID" property="countryId" jdbcType="DECIMAL" />
+    <result column="ROAD_ID" property="roadId" jdbcType="DECIMAL" />
+    <result column="LENGTH" property="tunnellength" jdbcType="DECIMAL" />
+    <result column="DIRECTION" property="direction" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL" />
+    <result column="LATITUDE" property="latitude" jdbcType="DECIMAL" />
+    <result column="HEIGHT" property="height" jdbcType="DECIMAL" />
+    <result column="COVGTYPE" property="covgtype" jdbcType="VARCHAR" />
+    <result column="INSTALLADRESS" property="installadress" jdbcType="VARCHAR" />
+    <result column="RIGHTS" property="rights" jdbcType="VARCHAR" />
+    <result column="TOGBS" property="togbs" jdbcType="VARCHAR" />
+    <result column="TOGNAME" property="togname" jdbcType="VARCHAR" />
+    <result column="OPENTIME" property="opentime" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="DATE" />
+    <result column="UPDATEUSER" property="updateuser" jdbcType="DECIMAL" />
+    <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL" />
+    <result column="AUTO_FLAG" property="autoFlag" jdbcType="DECIMAL" />
+    
+     <result column="cityname" property="cityName" jdbcType="VARCHAR" />
+     <result column="countryname" property="countryName" jdbcType="VARCHAR" />
+     <result column="roadpropname" property="roadPropName" jdbcType="VARCHAR" />
+     <result column="roadname" property="roadName" jdbcType="VARCHAR" />
+
+     <association column="ROAD_ID" property="roadLib" javaType="com.scttsc.baselibs.model.RoadLib"
+                     select="com.scttsc.baselibs.dao.RoadLibDao.getById"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    u.ID, u.CITY_ID,u.NAME, u.COUNTRY_ID, u.ROAD_ID, u.LENGTH, u.DIRECTION, u.LONGITUDE, u.LATITUDE, u.HEIGHT, 
+    u.COVGTYPE, u.INSTALLADRESS, u.RIGHTS, u.TOGBS, u.TOGNAME, u.OPENTIME, u.ADDRESS, u.REMARK, u.UPDATETIME, 
+    u.UPDATEUSER,u.DELETE_FLAG,u.AUTO_FLAG
+  </sql>
+  
+    <select id="getByConds" resultMap="BaseResultMap">
+		select* from (select m.*,ROWNUM RN from
+		(select
+		<include refid="Base_Column_List" />,a.name cityname,b.name countryname,c.name roadname,d.name roadpropname
+		from WY_LIB_TUNNEL u
+		left join wy_city a on a.id=u.CITY_ID
+		left join wy_city b on b.id=u.COUNTRY_ID
+		left join WY_LIB_ROAD c on c.id=u.ROAD_ID
+		left join (select name,code from WY_CONS where groupcode='ROADPROP')d on d.code=c.ROAD_PROP
+		)m
+		<where>
+            and DELETE_FLAG=0
+			<if test="countryIds!=null">
+				and COUNTRY_ID in(${countryIds})
+			</if>
+            <if test="autoFlag!=null">
+                and AUTO_FLAG=#{autoFlag}
+            </if>
+			<if test="start!=null">
+				and RowNum &lt; (#{start} + #{pagesize})
+			</if>
+		</where>
+		)
+		<where>
+			<if test="start!=null">
+				RN >= #{start}
+			</if>
+		</where>
+	</select>
+
+	<select id="countByConds" resultType="int">
+		select count(1) from
+		(select
+		<include refid="Base_Column_List" />
+		from WY_LIB_TUNNEL u)
+		<where>
+			1=1 and DELETE_FLAG=0
+			<if test="countryIds!=null">
+				and COUNTRY_ID in(${countryIds})
+			</if>
+            <if test="autoFlag!=null">
+                and AUTO_FLAG=#{autoFlag}
+            </if>
+		</where>
+	</select>
+	
+  <select id="loadAll" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from WY_LIB_TUNNEL u where u.DELETE_FLAG=0
+  </select>
+	
+ 
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from WY_LIB_TUNNEL u
+    where ID = #{id,jdbcType=DECIMAL} and u.DELETE_FLAG=0
+  </select>
+
+
+    <update id="deleteByDeleteFlag">
+            update WY_LIB_TUNNEL set delete_flag=1,UPDATETIME=sysdate where id in(${ids})
+    </update>
+  
+  <delete id="delete">
+    delete from WY_LIB_TUNNEL
+    where ID in ${ids}
+  </delete>
+  
+  <insert id="insert" parameterType="com.scttsc.baselibs.model.TunnelLib" >
+    insert into WY_LIB_TUNNEL (ID, CITY_ID, COUNTRY_ID,NAME, 
+      ROAD_ID, LENGTH, DIRECTION, 
+      LONGITUDE, LATITUDE, HEIGHT, 
+      COVGTYPE, INSTALLADRESS, RIGHTS, 
+      TOGBS, TOGNAME, OPENTIME, 
+      ADDRESS, REMARK, UPDATETIME, 
+      UPDATEUSER)
+    values (WY_LIB_TUNNEL_SEQ.nextval, #{cityId,jdbcType=DECIMAL}, #{countryId,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR},
+      #{roadId,jdbcType=DECIMAL}, #{tunnellength,jdbcType=DECIMAL}, #{direction,jdbcType=VARCHAR},
+      #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, #{height,jdbcType=DECIMAL}, 
+      #{covgtype,jdbcType=VARCHAR}, #{installadress,jdbcType=VARCHAR}, #{rights,jdbcType=VARCHAR}, 
+      #{togbs,jdbcType=VARCHAR}, #{togname,jdbcType=VARCHAR}, #{opentime,jdbcType=DATE}, 
+      #{address,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, sysdate, 
+      #{updateuser,jdbcType=DECIMAL})
+  </insert>
+  
+  <update id="update" parameterType="com.scttsc.baselibs.model.TunnelLib" >
+    update WY_LIB_TUNNEL
+    set CITY_ID = #{cityId,jdbcType=DECIMAL},
+      COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+      NAME=#{name,jdbcType=VARCHAR},
+      ROAD_ID = #{roadId,jdbcType=DECIMAL},
+      LENGTH = #{tunnellength,jdbcType=DECIMAL},
+      DIRECTION = #{direction,jdbcType=VARCHAR},
+      LONGITUDE = #{longitude,jdbcType=DECIMAL},
+      LATITUDE = #{latitude,jdbcType=DECIMAL},
+      HEIGHT = #{height,jdbcType=DECIMAL},
+      COVGTYPE = #{covgtype,jdbcType=VARCHAR},
+      INSTALLADRESS = #{installadress,jdbcType=VARCHAR},
+      RIGHTS = #{rights,jdbcType=VARCHAR},
+      TOGBS = #{togbs,jdbcType=VARCHAR},
+      TOGNAME = #{togname,jdbcType=VARCHAR},
+      OPENTIME = #{opentime,jdbcType=DATE},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      UPDATETIME = sysdate,
+      UPDATEUSER = #{updateuser,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

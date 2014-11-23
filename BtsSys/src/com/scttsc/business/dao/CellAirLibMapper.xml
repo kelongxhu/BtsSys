@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.CellAirLibDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.business.model.CellAirLib">
+        <result column="CELL_INT_ID" property="cellIntId" jdbcType="DECIMAL"/>
+        <result column="AIR_ID" property="airId" jdbcType="DECIMAL"/>
+        <result column="AZIMUTH" property="azimuth" jdbcType="DECIMAL"/>
+        <result column="HANGHIGH" property="hanghigh" jdbcType="DECIMAL"/>
+        <result column="ELECTRONDIP" property="electrondip" jdbcType="DECIMAL"/>
+        <result column="ENGINEDIP" property="enginedip" jdbcType="DECIMAL"/>
+        <result column="TOTALDIP" property="totaldip" jdbcType="DECIMAL"/>
+        <association column="AIR_ID" property="airLib" javaType="com.scttsc.baselibs.model.AirLib"
+                     select="com.scttsc.baselibs.dao.AirLibDao.getById"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    CELL_INT_ID, AIR_ID, AZIMUTH, HANGHIGH, ELECTRONDIP, ENGINEDIP, TOTALDIP
+  </sql>
+
+    <insert id="insert" parameterType="com.scttsc.business.model.CellAirLib">
+    insert into WY_CELL_AIRLIB (CELL_INT_ID, AIR_ID, AZIMUTH, 
+      HANGHIGH, ELECTRONDIP, ENGINEDIP, 
+      TOTALDIP)
+    values (#{cellIntId,jdbcType=DECIMAL}, #{airId,jdbcType=DECIMAL}, #{azimuth,jdbcType=DECIMAL}, 
+      #{hanghigh,jdbcType=DECIMAL}, #{electrondip,jdbcType=DECIMAL}, #{enginedip,jdbcType=DECIMAL}, 
+      #{totaldip,jdbcType=DECIMAL})
+  </insert>
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_CELL_AIRLIB
+        <where>
+            1=1
+            <if test="cellId!=null">
+                and CELL_INT_ID=#{cellId,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByCellId" resultMap="BaseResultMap">
+           select
+           <include refid="Base_Column_List"/>
+           from WY_CELL_AIRLIB where  CELL_INT_ID=#{cellId,jdbcType=DECIMAL}
+     </select>
+
+
+    <delete id="deleteByMap">
+        delete WY_CELL_AIRLIB
+        <where>
+            1=1
+            <if test="cellId!=null">
+                and CELL_INT_ID=#{cellId,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </delete>
+
+   <update id="updateByMap">
+       update WY_CELL_AIRLIB set CELL_INT_ID=#{newCellIntId,jdbcType=DECIMAL}
+        where CELL_INT_ID = #{cellIntId,jdbcType=DECIMAL}
+   </update>
+
+</mapper>

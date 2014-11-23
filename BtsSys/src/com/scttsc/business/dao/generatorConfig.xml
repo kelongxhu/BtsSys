@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <context id="context1111" targetRuntime="MyBatis3">
+        <property name="suppressTypeWarnings" value="true"/>
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+                    <property name="searchString" value="Example$"/>
+                    <property name="replaceString" value="Criteria"/>
+        </plugin>
+        <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+                        connectionURL="jdbc:oracle:thin:@10.4.0.25:1521:orcl" userId="test1" password="test1"/>
+        <javaModelGenerator targetPackage="com.scttsc.business.model" targetProject="BtsSys"/>
+        <sqlMapGenerator targetPackage="com.scttsc.business.dao" targetProject="BtsSys"/>
+        <javaClientGenerator targetPackage="com.scttsc.business.dao" targetProject="BtsSys" type="XMLMAPPER"/>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+        <table tableName="WY_LOG" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="true"
+               enableInsert="true" enableSelectByPrimaryKey="true" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="ID" sqlStatement="select WY_LOG_SEQ.nextval from dual"/>
+            <columnOverride column="ID" javaType="Long"/>
+        </table>
+   </context>
+</generatorConfiguration>

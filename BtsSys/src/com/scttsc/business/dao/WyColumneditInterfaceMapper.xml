@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.WyColumneditInterfaceDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.business.model.WyColumneditInterface" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="CNCOLUMNNAME" property="cncolumnname" jdbcType="VARCHAR" />
+    <result column="ENCOLUMNNAME" property="encolumnname" jdbcType="VARCHAR" />
+    <result column="COLUMNVALUE" property="columnvalue" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="DECIMAL" />
+    <result column="STATUS" property="status" jdbcType="DECIMAL" />
+    <result column="USERID" property="userid" jdbcType="DECIMAL" />
+    <result column="INTIME" property="intime" jdbcType="TIMESTAMP" />
+    <result column="CONFIRMUSERID" property="confirmuserid" jdbcType="DECIMAL" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="COLUMNVALUE_OLD" property="columnValueOld" jdbcType="VARCHAR" />
+    <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
+  </resultMap>
+
+    <resultMap id="BaseResultMap_2" type="com.scttsc.business.model.WyColumneditInterface" >
+       <id column="I_ID" property="id" jdbcType="DECIMAL" />
+       <result column="I_INT_ID" property="intId" jdbcType="DECIMAL" />
+       <result column="I_NAME" property="name" jdbcType="VARCHAR" />
+       <result column="I_CNCOLUMNNAME" property="cncolumnname" jdbcType="VARCHAR" />
+       <result column="I_ENCOLUMNNAME" property="encolumnname" jdbcType="VARCHAR" />
+       <result column="I_COLUMNVALUE" property="columnvalue" jdbcType="VARCHAR" />
+       <result column="I_TYPE" property="type" jdbcType="DECIMAL" />
+       <result column="I_STATUS" property="status" jdbcType="DECIMAL" />
+       <result column="I_USERID" property="userid" jdbcType="DECIMAL" />
+       <result column="I_INTIME" property="intime" jdbcType="TIMESTAMP" />
+       <result column="I_CONFIRMUSERID" property="confirmuserid" jdbcType="DECIMAL" />
+       <result column="I_UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+       <result column="applyUserName" property="user.name" jdbcType="VARCHAR"/>
+       <result column="confirmUserName" property="confirmUser.name" jdbcType="VARCHAR"/>
+       <result column="cityname" property="cityname" jdbcType="VARCHAR" />
+       <result column="I_COLUMNVALUE_OLD" property="columnValueOld" jdbcType="VARCHAR" />
+       <result column="I_CITY_ID" property="cityId" jdbcType="DECIMAL" />
+     </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    ID, INT_ID,NAME, CNCOLUMNNAME, ENCOLUMNNAME, COLUMNVALUE, TYPE, STATUS, USERID, INTIME,
+    CONFIRMUSERID, UPDATETIME,COLUMNVALUE_OLD,CITY_ID
+  </sql>
+
+   <sql id="Base_Column_List_2" >
+        i.ID I_ID, i.INT_ID I_INT_ID,i.NAME I_NAME, i.CNCOLUMNNAME I_CNCOLUMNNAME, i.ENCOLUMNNAME I_ENCOLUMNNAME, i.COLUMNVALUE I_COLUMNVALUE, i.TYPE I_TYPE, i.STATUS I_STATUS, i.USERID I_USERID, i.INTIME I_INTIME,
+        i.CONFIRMUSERID I_CONFIRMUSERID, i.UPDATETIME I_UPDATETIME,i.COLUMNVALUE_OLD I_COLUMNVALUE_OLD,i.CITY_ID I_CITY_ID
+   </sql>
+
+  <select id="selectByMap" resultMap="BaseResultMap_2" >
+      select * from (select m.*,ROWNUM RN from
+             (select
+             <include refid="Base_Column_List_2"/>,u.name applyUserName,c.name confirmUserName,a.name cityname
+             from WY_COLUMNEDIT_INTERFACE i
+             left join FRAMEWORK_SECURITY_USER u on u.int_id=i.USERID
+             left join FRAMEWORK_SECURITY_USER c on c.int_id=i.CONFIRMUSERID
+             left join wy_city a on a.id=i.CITY_ID
+             <where>
+                 1=1
+                 <if test="cityIds!=null">
+                     and i.CITY_ID in(${cityIds})
+                 </if>
+                 <if test="type!=null">
+                     and i.TYPE=#{type,jdbcType=DECIMAL}
+                 </if>
+                 <if test="status!=null">
+                     and i.STATUS=#{status,jdbcType=DECIMAL}
+                 </if>
+             </where>  order by i.id desc
+             )m
+             <where>
+                 1=1
+                 <if test="start!=null">
+                     and RowNum &lt; (#{start} + #{pagesize})
+                 </if>
+             </where>
+             )
+             <where>
+                 <if test="start!=null">
+                     RN >= #{start}
+                 </if>
+             </where>
+  </select>
+
+  <select id="countByMap" resultType="int">
+      select count(1) from WY_COLUMNEDIT_INTERFACE
+      <where>
+              1=1
+                     <if test="cityIds!=null">
+                           and CITY_ID in(${cityIds})
+                     </if>
+                     <if test="type!=null">
+                         and TYPE=#{type,jdbcType=DECIMAL}
+                     </if>
+                     <if test="status!=null">
+                         and STATUS=#{status,jdbcType=DECIMAL}
+                     </if>
+       </where>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Long" >
+    select
+    <include refid="Base_Column_List" />
+    from WY_COLUMNEDIT_INTERFACE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Long" >
+    delete from WY_COLUMNEDIT_INTERFACE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.business.model.WyColumneditInterface" >
+    <selectKey resultType="Long" keyProperty="id" order="BEFORE" >
+      select WY_columnedit_interface_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_COLUMNEDIT_INTERFACE (ID, INT_ID,NAME, CNCOLUMNNAME,
+      ENCOLUMNNAME, COLUMNVALUE, TYPE,
+      STATUS, USERID, INTIME,
+      CONFIRMUSERID, UPDATETIME,COLUMNVALUE_OLD,CITY_ID)
+    values (#{id,jdbcType=DECIMAL}, #{intId,jdbcType=DECIMAL},#{name,jdbcType=VARCHAR}, #{cncolumnname,jdbcType=VARCHAR},
+      #{encolumnname,jdbcType=VARCHAR}, #{columnvalue,jdbcType=VARCHAR}, #{type,jdbcType=DECIMAL},
+      #{status,jdbcType=DECIMAL}, #{userid,jdbcType=DECIMAL}, #{intime,jdbcType=TIMESTAMP},
+      #{confirmuserid,jdbcType=DECIMAL}, #{updatetime,jdbcType=TIMESTAMP},#{columnValueOld,jdbcType=VARCHAR},#{cityId,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.scttsc.business.model.WyColumneditInterface" >
+    <selectKey resultType="Long" keyProperty="id" order="BEFORE" >
+      select WY_columnedit_interface_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_COLUMNEDIT_INTERFACE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      ID,
+      <if test="intId != null" >
+        INT_ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="cncolumnname != null" >
+        CNCOLUMNNAME,
+      </if>
+      <if test="encolumnname != null" >
+        ENCOLUMNNAME,
+      </if>
+      <if test="columnvalue != null" >
+        COLUMNVALUE,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+      <if test="intime != null" >
+        INTIME,
+      </if>
+      <if test="confirmuserid != null" >
+        CONFIRMUSERID,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=DECIMAL},
+      <if test="intId != null" >
+        #{intId,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null">
+          #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cncolumnname != null" >
+        #{cncolumnname,jdbcType=VARCHAR},
+      </if>
+      <if test="encolumnname != null" >
+        #{encolumnname,jdbcType=VARCHAR},
+      </if>
+      <if test="columnvalue != null" >
+        #{columnvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=DECIMAL},
+      </if>
+      <if test="intime != null" >
+        #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmuserid != null" >
+        #{confirmuserid,jdbcType=DECIMAL},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.business.model.WyColumneditInterface" >
+    update WY_COLUMNEDIT_INTERFACE
+    <set >
+      <if test="intId != null" >
+        INT_ID = #{intId,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null">
+         NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cncolumnname != null" >
+        CNCOLUMNNAME = #{cncolumnname,jdbcType=VARCHAR},
+      </if>
+      <if test="encolumnname != null" >
+        ENCOLUMNNAME = #{encolumnname,jdbcType=VARCHAR},
+      </if>
+      <if test="columnvalue != null" >
+        COLUMNVALUE = #{columnvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=DECIMAL},
+      </if>
+      <if test="intime != null" >
+        INTIME = #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmuserid != null" >
+        CONFIRMUSERID = #{confirmuserid,jdbcType=DECIMAL},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.scttsc.business.model.WyColumneditInterface" >
+    update WY_COLUMNEDIT_INTERFACE
+    set INT_ID = #{intId,jdbcType=DECIMAL},
+      NAME = #{name,jdbcType=VARCHAR},
+      CNCOLUMNNAME = #{cncolumnname,jdbcType=VARCHAR},
+      ENCOLUMNNAME = #{encolumnname,jdbcType=VARCHAR},
+      COLUMNVALUE = #{columnvalue,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=DECIMAL},
+      STATUS = #{status,jdbcType=DECIMAL},
+      USERID = #{userid,jdbcType=DECIMAL},
+      INTIME = #{intime,jdbcType=TIMESTAMP},
+      CONFIRMUSERID = #{confirmuserid,jdbcType=DECIMAL},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

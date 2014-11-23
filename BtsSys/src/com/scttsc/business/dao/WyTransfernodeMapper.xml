@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.WyTransfernodeDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.business.model.WyTransfernode" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
+    <result column="COUNTRY_ID" property="countryId" jdbcType="DECIMAL" />
+    <result column="CITY_NAME" property="cityName" jdbcType="VARCHAR" />
+    <result column="COUNTRY_NAME" property="countryName" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="DECIMAL" />
+    <result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL" />
+    <result column="LATITUDE" property="latitude" jdbcType="DECIMAL" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <collection property="btsList" ofType="com.scttsc.business.model.BtsManual">
+        <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
+        <result column="BTS_NAME" property="name" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CITY_ID, COUNTRY_ID, NAME, TYPE, LONGITUDE, LATITUDE, REMARK
+  </sql>
+  <sql id="orderby-condition">
+        <trim prefix="ORDER BY">
+            <choose>
+              <when test="sortname==null">ID</when>
+              <when test="sortname=='cityName'">CITY_ID</when>
+              <when test="sortname=='countryName'">COUNTRY_ID</when>
+              <when test="sortname=='name'">NAME</when>
+              <when test="sortname=='typeName'">TYPE</when>
+              <when test="sortname=='longitude'">LONGITUDE</when>
+              <when test="sortname=='latitude'">LATITUDE</when>
+              <when test="sortname=='remark'">REMARK</when>
+            </choose>
+            <if test="sortname != null and sortorder != null">${sortorder}</if>
+            <if test="sortname == null and sortorder != null">${sortorder}</if>
+            <if test="sortname == null and sortorder == null">desc</if>
+        </trim>
+  </sql>
+  <select id="selectTransferList" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List" />,
+        CITY_NAME,
+        COUNTRY_NAME,
+        TYPE_NAME,
+        INT_ID,
+        BTS_NAME
+      from
+      (
+        select
+          x.*,
+          y.name CITY_NAME,
+          z.name COUNTRY_NAME,
+          m.name TYPE_NAME,
+          n.INT_ID,
+          n.name BTS_NAME,
+          ROWNUM RN
+        from
+          WY_TRANSFERNODE x
+        left join
+          WY_CITY y
+        on
+          x.CITY_ID = y.ID
+        left join
+          WY_CITY z
+        on
+          x.COUNTRY_ID = z.ID
+        left join
+          WY_CONS m
+        on
+          x.TYPE = m.CODE
+        left join
+          WY_BTS_MANUAL n
+        on
+          '2_'||x.NAME = n.TRAN_UPSITENAME
+        <where>
+          m.GROUPCODE = 'TRANSFER'
+          <if test="countryIds!=null">
+            and x.COUNTRY_ID in(${countryIds})
+          </if>
+          <if test="type!=null">
+            and x.TYPE = ${type}
+          </if>
+          <if test="name!=null">
+            and x.NAME like '%${name}%'
+          </if>
+          <if test="start!=null">
+            and ROWNUM &lt; (#{start} + #{pagesize})
+          </if>
+        </where>
+      )
+      <where>
+        <if test="start!=null">
+          RN &gt;= #{start}
+        </if>
+      </where>
+      <include refid="orderby-condition"/>
+  </select>
+    <select id="selectTransferCount" resultType="int">
+        select count(1) from WY_TRANSFERNODE x
+        <where>
+            1=1
+            <if test="countryIds!=null">
+                and x.COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="type!=null">
+                and x.TYPE = ${type}
+            </if>
+            <if test="name!=null">
+                and x.NAME like '%${name}%'
+            </if>
+        </where>
+
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Long">
+    select
+        <include refid="Base_Column_List" />,
+        CITY_NAME,
+        COUNTRY_NAME,
+        TYPE_NAME,
+        INT_ID,
+        BTS_NAME
+    from
+      (
+        select
+          x.*,
+          y.name CITY_NAME,
+          z.name COUNTRY_NAME,
+          m.name TYPE_NAME,
+          n.INT_ID,
+          n.name BTS_NAME
+        from
+          WY_TRANSFERNODE x
+        left join
+          WY_CITY y
+        on
+          x.CITY_ID = y.ID
+        left join
+          WY_CITY z
+        on
+          x.COUNTRY_ID = z.ID
+        left join
+          WY_CONS m
+        on
+          x.TYPE = m.CODE
+        left join
+          WY_BTS_MANUAL n
+        on
+          '2_'||x.NAME = n.TRAN_UPSITENAME
+        where
+          m.GROUPCODE = 'TRANSFER'
+        and
+          x.ID = #{id,jdbcType=DECIMAL}
+      )
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Long" >
+    delete from WY_TRANSFERNODE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByPks" parameterType="String" >
+    delete from WY_TRANSFERNODE
+    where ID in (${value})
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.business.model.WyTransfernode" >
+    <selectKey resultType="Long" keyProperty="id" order="BEFORE" >
+      select WY_TRANSFERNODE_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_TRANSFERNODE (ID, CITY_ID, COUNTRY_ID, 
+      NAME, TYPE, LONGITUDE, 
+      LATITUDE, REMARK)
+    values (#{id,jdbcType=DECIMAL}, #{cityId,jdbcType=DECIMAL}, #{countryId,jdbcType=DECIMAL}, 
+      #{name,jdbcType=VARCHAR}, #{type,jdbcType=DECIMAL}, #{longitude,jdbcType=DECIMAL}, 
+      #{latitude,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.scttsc.business.model.WyTransfernode" >
+    <selectKey resultType="Long" keyProperty="id" order="BEFORE" >
+      select WY_TRANSFERNODE_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_TRANSFERNODE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      ID,
+      <if test="cityId != null" >
+        CITY_ID,
+      </if>
+      <if test="countryId != null" >
+        COUNTRY_ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE,
+      </if>
+      <if test="latitude != null" >
+        LATITUDE,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=DECIMAL},
+      <if test="cityId != null" >
+        #{cityId,jdbcType=DECIMAL},
+      </if>
+      <if test="countryId != null" >
+        #{countryId,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=DECIMAL},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.business.model.WyTransfernode" >
+    update WY_TRANSFERNODE
+    <set >
+      <if test="cityId != null" >
+        CITY_ID = #{cityId,jdbcType=DECIMAL},
+      </if>
+      <if test="countryId != null" >
+        COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=DECIMAL},
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.scttsc.business.model.WyTransfernode" >
+    update WY_TRANSFERNODE
+    set CITY_ID = #{cityId,jdbcType=DECIMAL},
+      COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+      NAME = #{name,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=DECIMAL},
+      LONGITUDE = #{longitude,jdbcType=DECIMAL},
+      LATITUDE = #{latitude,jdbcType=DECIMAL},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

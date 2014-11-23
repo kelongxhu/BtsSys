@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scttsc.healthy.dao.WyGradeperiodcfgDao">
+  <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.WyGradeperiodcfg">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="VALUE1" jdbcType="DECIMAL" property="value1" />
+    <result column="VALUE2" jdbcType="DECIMAL" property="value2" />
+    <result column="COLOR" jdbcType="VARCHAR" property="color" />
+    <result column="RANK" jdbcType="DECIMAL" property="rank" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, NAME, VALUE1, VALUE2, COLOR, RANK
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WY_GRADEPERIODCFG
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Long">
+    delete from WY_GRADEPERIODCFG
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.healthy.model.WyGradeperiodcfg">
+    <selectKey keyProperty="id" order="BEFORE" resultType="Long">
+      select WY_GRADEperiodCfg_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_GRADEPERIODCFG (ID, NAME, VALUE1, 
+      VALUE2, COLOR, RANK
+      )
+    values (#{id,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{value1,jdbcType=DECIMAL}, 
+      #{value2,jdbcType=DECIMAL}, #{color,jdbcType=VARCHAR}, #{rank,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.scttsc.healthy.model.WyGradeperiodcfg">
+    <selectKey keyProperty="id" order="BEFORE" resultType="Long">
+      select WY_GRADEperiodCfg_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_GRADEPERIODCFG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      ID,
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="value1 != null">
+        VALUE1,
+      </if>
+      <if test="value2 != null">
+        VALUE2,
+      </if>
+      <if test="color != null">
+        COLOR,
+      </if>
+      <if test="rank != null">
+        RANK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=DECIMAL},
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="value1 != null">
+        #{value1,jdbcType=DECIMAL},
+      </if>
+      <if test="value2 != null">
+        #{value2,jdbcType=DECIMAL},
+      </if>
+      <if test="color != null">
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.healthy.model.WyGradeperiodcfg">
+    update WY_GRADEPERIODCFG
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="value1 != null">
+        VALUE1 = #{value1,jdbcType=DECIMAL},
+      </if>
+      <if test="value2 != null">
+        VALUE2 = #{value2,jdbcType=DECIMAL},
+      </if>
+      <if test="color != null">
+        COLOR = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        RANK = #{rank,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.scttsc.healthy.model.WyGradeperiodcfg">
+    update WY_GRADEPERIODCFG
+    set NAME = #{name,jdbcType=VARCHAR},
+      VALUE1 = #{value1,jdbcType=DECIMAL},
+      VALUE2 = #{value2,jdbcType=DECIMAL},
+      COLOR = #{color,jdbcType=VARCHAR},
+      RANK = #{rank,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

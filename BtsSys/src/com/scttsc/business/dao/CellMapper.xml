@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.CellDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.business.model.Cell">
+        <result column="INT_ID" property="intId" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
+        <result column="COUNTRY_ID" property="countryId" jdbcType="DECIMAL"/>
+        <result column="IS_INDOOR" property="isIndoor" jdbcType="VARCHAR"/>
+        <result column="IS_RRU" property="isRru" jdbcType="VARCHAR"/>
+        <result column="IS_GF" property="isGf" jdbcType="VARCHAR"/>
+        <result column="IS_OR" property="isOr" jdbcType="DECIMAL"/>
+        <result column="IS_RR" property="isRr" jdbcType="DECIMAL"/>
+        <result column="IS_SR" property="isSr" jdbcType="DECIMAL"/>
+        <result column="WY_BTS_INT_ID" property="wyBtsIntId" jdbcType="DECIMAL"/>
+        <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL"/>
+        <result column="MANUAL_FLAG" property="manualFlag" jdbcType="DECIMAL"/>
+        <result column="DELETETIME" property="deletetime" jdbcType="DATE"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
+        <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL"/>
+        <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR"/>
+        <result column="cityname" property="cityName" jdbcType="VARCHAR"/>
+        <result column="countryname" property="country.cityName" jdbcType="VARCHAR"/>
+        <result column="c_name" property="cons.name" jdbcType="VARCHAR"/>
+        <result column="BTSID" property="btsId" jdbcType="DECIMAL"/>
+        <result column="CELLID" property="cellId" jdbcType="DECIMAL"/>
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR"/>
+        <result column="CI" property="ci" jdbcType="DECIMAL"/>
+        <result column="PN" property="pn" jdbcType="DECIMAL"/>
+        <result column="LAC" property="lac" jdbcType="DECIMAL"/>
+        <result column="DO_CELL" property="doCell" jdbcType="DECIMAL"/>
+        <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL"/>
+
+        <!--一对一的c_cell表
+        <association column="INT_ID" property="ccell" javaType="com.scttsc.business.model.Ccell"
+             select="com.scttsc.business.dao.CcellDao.selectById"/>
+        -->
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+		INT_ID, NAME, CITY_ID, COUNTRY_ID, IS_INDOOR, IS_RRU, IS_GF, IS_OR, IS_RR,
+		IS_SR,
+		WY_BTS_INT_ID, DELETE_FLAG, MANUAL_FLAG, DELETETIME, UPDATETIME,DELETE_RESONCODE,DELETE_TEXT,
+		BTSID,CELLID,BSC_NAME,CI,PN,LAC,DO_CELL,RELATED_BTS
+	</sql>
+    <sql id="Base_Column_List1">
+		u.INT_ID, u.NAME, u.CITY_ID, u.COUNTRY_ID, u.IS_INDOOR,u.IS_RRU, u.IS_GF, u.IS_OR, u.IS_RR,
+		u.IS_SR,u.WY_BTS_INT_ID, u.DELETE_FLAG, u.MANUAL_FLAG, u.DELETETIME, u.UPDATETIME,u.DELETE_RESONCODE,u.DELETE_TEXT,
+		u.BTSID,u.CELLID,u.BSC_NAME,u.CI,u.PN,u.LAC,u.DO_CELL,u.RELATED_BTS
+	</sql>
+
+
+    <sql id="orderby-condition">
+               <trim prefix="ORDER BY" suffixOverrides=",">
+                   <if test="sortname==null">INT_ID</if>
+                   <if test="sortname=='name'">NAME</if>
+                   <if test="sortname=='cityName'">CITY_ID</if>
+                   <if test="sortname=='country.cityName'">COUNTY_ID</if>
+                   <if test="sortname=='cellId'">CELLID</if>
+                   <if test="sortname=='bscName'">BSC_NAME</if>
+                   <if test="sortname=='btsId'">BTSID</if>
+                   <if test="sortname=='ci'">CI</if>
+                   <if test="sortname=='pn'">PN</if>
+                   <if test="sortname=='doCell'">DO_CELL</if>
+                   <if test="sortname=='isIndoor'">IS_INDOOR</if>
+                   <if test="sortname=='isRru'">IS_RRU</if>
+                   <if test="sortname=='isGf'">IS_GF</if>
+                   <if test="sortname=='manualFlag'">MANUAL_FLAG</if>
+                   <if test="sortorder != null">${sortorder}</if>
+               </trim>
+           </sql>
+
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List1"/>,a.name cityname,b.name countryname,c.name c_name
+        from WY_CELL u
+        left join wy_city a on a.id=u.CITY_ID
+        left join wy_city b on b.id=u.COUNTRY_ID
+        left join wy_cons c on c.groupcode='ABANDONEDTYPE' and c.code=u.DELETE_RESONCODE
+        )m
+        <where>
+            1=1
+            <if test="ids!=null">
+               and int_id in(${ids})
+            </if>
+            <if test="cityId!=null">
+                and CITY_ID in(${cityId})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="btsIntId!=null">
+                and WY_BTS_INT_ID=#{btsIntId,jdbcType=DECIMAL}
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="name!=null">
+                and NAME like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+             <if test="manualFlag!=null">
+                and MANUAL_FLAG = #{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="ntxFlag!=null">
+                and DELETE_RESONCODE=0
+            </if>
+            <if test="ytxFlag!=null">
+                and DELETE_RESONCODE!=0
+            </if>
+            <if test="startTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd')>=#{startTime}
+            </if>
+            <if test="endTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd') &lt; #{endTime}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        <include refid="orderby-condition"/>)
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByBtsId" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_CELL where WY_BTS_INT_ID=#{btsIntId,jdbcType=DECIMAL}
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_CELL where INT_ID=#{id,jdbcType=DECIMAL}
+    </select>
+
+
+    <select id="countCarrierByCell" resultType="int">
+        select count(1) from c_carrier
+        <where>
+            1=1
+            <if test="cellId!=null">
+                and RELATED_CELL=#{cellId,jdbcType=DECIMAL}
+            </if>
+            <if test="carType!=null">
+                and CAR_TYPE=#{carType,jdbcType=VARCHAR}
+            </if>
+            <if test="cityId!=null">
+                and CITY_ID in(${cityId})
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+    <select id="countByMap" resultType="int">
+        select count(1) from WY_CELL
+        <where>
+            1=1
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="countryIds!=null">
+                and COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="btsIntId!=null">
+                and WY_BTS_INT_ID=#{btsIntId,jdbcType=DECIMAL}
+            </if>
+            <if test="btsIntId!=null">
+                and WY_BTS_INT_ID=#{btsIntId,jdbcType=DECIMAL}
+            </if>
+            <if test="cityId!=null">
+                and CITY_ID in(${cityId})
+            </if>
+            <if test="name!=null">
+                and NAME like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and PN = #{pn,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG = #{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="startTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd')>=#{startTime}
+            </if>
+            <if test="endTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd') &lt; #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateByMap">
+        update WY_CELL
+        <set>
+            <if test="manualFlag != null">
+                MANUAL_FLAG = #{manualFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteResoncode != null">
+                DELETE_RESONCODE = #{deleteResoncode,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteText != null">
+                DELETE_TEXT = #{deleteText,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <where>
+            1=1
+            <if test="intId!=null">
+                and INT_ID=#{intId,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </update>
+
+
+    <select id="selectExportCellDataByMap" resultType="hashmap">
+        SELECT a.int_id,a.name,e.name cityname,f.name countryname,a.CELLID,b.msc_name,a.bsc_name,
+        a.btsid,a.ci,a.pn,(case(a.do_cell) when 0 then '1X' when 1 then 'DO' when 2 then '1X+DO' end) do_cell,a.is_indoor,a.is_rru,a.is_gf,d.name
+        WY_BTS_NAME,b.bts_name,d.longitude,d.latitude,c.celltype,b.capacity,b.pn_inc,b.numfa,b.numfa_do,
+        d.vendor_btstype,g.tower_type,g.tower_high,c.feederlength FROM wy_cell a
+        LEFT JOIN c_cell b
+        ON a.int_id=b.int_id
+        LEFT JOIN wy_cell_manual c
+        ON a.int_id=c.int_id
+        LEFT JOIN wy_bts d
+        ON a.WY_BTS_INT_ID=d.int_id
+        LEFT JOIN wy_bts_manual g
+        ON a.wy_bts_int_id=g.int_id
+        LEFT JOIN wy_city e
+        ON a.city_id=e.id
+        LEFT JOIN wy_city f
+        ON a.COUNTRY_ID=f.id
+        <where>
+            1=1 AND a.delete_flag=0
+            <if test="countryIds!=null">
+                and a.COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and a.NAME like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="bscName!=null">
+                and a.BSC_NAME like #{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and a.btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="ci!=null">
+                and a.CI = #{ci,jdbcType=DECIMAL}
+            </if>
+            <if test="pn!=null">
+                and a.PN = #{pn,jdbcType=DECIMAL}
+            </if>
+            <if test="intId!=null">
+                and a.int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+        </where>
+        ORDER BY a.city_id,a.COUNTRY_ID ASC
+    </select>
+
+
+    <select id="selectCellGroupByColumns" resultType="hashmap">
+        select * from (select m.*,ROWNUM RN from
+        (
+        SELECT
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>,count(1) num
+        FROM
+        (SELECT a.name, A.City_Id, A.Country_Id,e.name cityname,f.name countryname,a.CELLID,b.msc_name,a.bsc_name,
+        a.btsid,a.ci,a.pn,(case(a.do_cell) when 0 then '1X' when 1 then 'DO' when 2 then '1X+DO' end)
+        do_cell,a.is_indoor,a.is_rru,a.is_gf,d.name
+        WY_BTS_NAME,b.bts_name,d.longitude,d.latitude,c.celltype,b.capacity,b.pn_inc,b.numfa,b.numfa_do,
+        d.vendor_btstype,g.tower_type,g.tower_high,c.feederlength FROM wy_cell a
+        LEFT JOIN c_cell b
+        ON a.int_id=b.int_id
+        LEFT JOIN wy_cell_manual c
+        ON a.int_id=c.int_id
+        LEFT JOIN wy_bts d
+        ON a.WY_BTS_INT_ID=d.int_id
+        LEFT JOIN wy_bts_manual g
+        ON a.wy_bts_int_id=g.int_id
+        LEFT JOIN wy_city e
+        ON a.city_id=e.id
+        LEFT JOIN wy_city f
+        ON a.COUNTRY_ID=f.id
+        where
+        1=1 AND a.delete_flag=0
+        )
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and city_id in(${cityIds})
+            </if>
+        </where>
+
+        GROUP BY
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>
+        <choose>
+            <when test="orderCondition != null">
+                order by ${orderCondition}
+            </when>
+            <otherwise>
+                order by NUM DESC
+            </otherwise>
+        </choose>
+        )m
+        <where>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="countCellGroupByColumns" resultType="int">
+        select count(1) from
+        (
+        SELECT
+               <if test="sqlsb!=null">
+                   ${sqlsb}
+               </if>,count(1) num
+               FROM
+               (SELECT a.name,A.City_Id, A.Country_Id,e.name cityname,f.name countryname,a.CELLID,b.msc_name,a.bsc_name,
+               a.btsid,a.ci,a.pn,(case(a.do_cell) when 0 then '1X' when 1 then 'DO' when 2 then '1X+DO' end)
+               do_cell,a.is_indoor,a.is_rru,a.is_gf,d.name
+               WY_BTS_NAME,b.bts_name,d.longitude,d.latitude,c.celltype,b.capacity,b.pn_inc,b.numfa,b.numfa_do,
+               d.vendor_btstype,g.tower_type,g.tower_high,c.feederlength FROM wy_cell a
+               LEFT JOIN c_cell b
+               ON a.int_id=b.int_id
+               LEFT JOIN wy_cell_manual c
+               ON a.int_id=c.int_id
+               LEFT JOIN wy_bts d
+               ON a.WY_BTS_INT_ID=d.int_id
+               LEFT JOIN wy_bts_manual g
+               ON a.wy_bts_int_id=g.int_id
+               LEFT JOIN wy_city e
+               ON a.city_id=e.id
+               LEFT JOIN wy_city f
+               ON a.COUNTRY_ID=f.id
+               where
+               1=1 AND a.delete_flag=0
+               )
+               <where>
+                   1=1
+                   <if test="cityIds!=null">
+                       and city_id in(${cityIds})
+                   </if>
+               </where>
+
+               GROUP BY
+               <if test="sqlsb!=null">
+                   ${sqlsb}
+               </if>
+        )
+    </select>
+
+
+    <select id="selectCellByMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_CELL
+        <where>
+            1=1
+            <if test="bscName!=null">
+                and BSC_NAME=#{bscName,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsId = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="cellId!=null">
+                and cellId= #{cellId,jdbcType=DECIMAL}
+            </if>
+            <if test="cellId!=null">
+                and cellId= #{cellId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="name!=null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="nameStr!=null">
+                and substr(name,INSTR(name,'_', 1, 3)+1) = #{nameStr,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="schooljson" namespace="/schooljson" extends="json-default">
+	
+		<!-- 校园库 -->	
+		<action name="schoolLibData" class="com.scttsc.baselibs.web.SchoolLibAction"
+			method="schoolLibData">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		<action name="initCityTree" class="com.scttsc.baselibs.web.SchoolLibAction" method="initCityTree">
+			<result type="json" name="success"/>
+		</action>
+		<action name="initCountryTree" class="com.scttsc.baselibs.web.SchoolLibAction" method="initCountryTree">
+			<result type="json" name="success"/>
+		</action>
+        <action name="initAllCountryTree" class="com.scttsc.baselibs.web.SchoolLibAction" method="initAllCountryTree">
+			<result type="json" name="success"/>
+		</action>
+        <action name="initAllCityTree" class="com.scttsc.baselibs.web.SchoolLibAction" method="initAllCityTree">
+			<result type="json" name="success"/>
+		</action>
+		<action name="cons" class="com.scttsc.baselibs.web.SchoolLibAction"
+			method="cons">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+        <action name="cons2" class="com.scttsc.baselibs.web.SchoolLibAction"
+        			method="cons2">
+        			<result name="success" type="json">
+        				 <param name="root">jsonMap</param>
+        			</result>
+       </action>
+		<action name="addSchoolLib" class="com.scttsc.baselibs.web.SchoolLibAction"
+			method="addSchoolLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="delSchoolLib" class="com.scttsc.baselibs.web.SchoolLibAction"
+			method="delSchoolLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="hotTree" class="com.scttsc.baselibs.web.SchoolLibAction"
+			method="hotTree">
+			<result name="success" type="json" />
+		</action>
+		
+		<action name="upImage" class="com.scttsc.baselibs.web.SchoolLibAction" method="upImage">
+			<result type="json" name="success"/>
+		</action>
+		
+		
+		
+		<!-- 天线库 -->
+		<action name="airLibData" class="com.scttsc.baselibs.web.AirLibAction"
+			method="airLibData">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="addAirLib" class="com.scttsc.baselibs.web.AirLibAction"
+			method="addAirLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="editAirLib" class="com.scttsc.baselibs.web.AirLibAction"
+			method="editAirLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="delAirLib" class="com.scttsc.baselibs.web.AirLibAction"
+			method="delAirLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="airTree" class="com.scttsc.baselibs.web.AirLibAction" method="airTree">
+			<result type="json" name="success"/>
+		</action>
+		
+		
+		<!-- 道路库 -->
+		<action name="roadLibData" class="com.scttsc.baselibs.web.RoadLibAction"
+			method="roadLibData">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="addRoadLib" class="com.scttsc.baselibs.web.RoadLibAction"
+			method="addRoadLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="editRoadLib" class="com.scttsc.baselibs.web.RoadLibAction"
+			method="editRoadLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="delRoadLib" class="com.scttsc.baselibs.web.RoadLibAction"
+			method="delRoadLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="roadTree" class="com.scttsc.baselibs.web.RoadLibAction"
+			method="roadTree">
+			<result name="success" type="json" />
+		</action>
+		
+		<action name="roadTunnelTree" class="com.scttsc.baselibs.web.RoadLibAction"
+			method="roadTunnelTree">
+			<result name="success" type="json" />
+		</action>
+		
+		
+		
+		<!-- 景区库 -->
+		<action name="secneryLibData" class="com.scttsc.baselibs.web.SecneryLibAction"
+			method="secneryLibData">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="addSecneryLib" class="com.scttsc.baselibs.web.SecneryLibAction"
+			method="addSecneryLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="editSecneryLib" class="com.scttsc.baselibs.web.SecneryLibAction"
+			method="editSecneryLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="delSecneryLib" class="com.scttsc.baselibs.web.SecneryLibAction"
+			method="delSecneryLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<!-- 乡镇库 -->
+		
+		<action name="vitoLibData" class="com.scttsc.baselibs.web.VitoLibAction"
+			method="vitoLibData">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="townTree" class="com.scttsc.baselibs.web.VitoLibAction" method="townTree">
+			<result type="json" name="success"/>
+		</action>
+		
+		<action name="vitoTree" class="com.scttsc.baselibs.web.VitoLibAction" method="vitoTree">
+			<result type="json" name="success"/>
+		</action>
+		
+		<action name="addVitoLib" class="com.scttsc.baselibs.web.VitoLibAction"
+			method="addVitoLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		<action name="editVitoLib" class="com.scttsc.baselibs.web.VitoLibAction"
+			method="editVitoLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		<action name="delVitoLib" class="com.scttsc.baselibs.web.VitoLibAction"
+			method="delVitoLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<!-- 隧道库 -->
+		
+		<action name="tunnelLibData" class="com.scttsc.baselibs.web.TunnelLibAction"
+			method="tunnelLibData">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		
+		<action name="addTunnelLib" class="com.scttsc.baselibs.web.TunnelLibAction"
+			method="addTunnelLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		<action name="editTunnelLib" class="com.scttsc.baselibs.web.TunnelLibAction"
+			method="editTunnelLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+		<action name="delTunnelLib" class="com.scttsc.baselibs.web.TunnelLibAction"
+			method="delTunnelLib">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>   
+			</result>
+		</action>
+
+        <!--导入乡镇库-->
+        <action name="importTownInputData" class="com.scttsc.baselibs.web.VitoLibAction"
+			method="importTownInputData">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>
+			</result>
+		</action>
+
+
+         <!--导入农村库-->
+         <action name="importCountryInputData" class="com.scttsc.baselibs.web.VitoLibAction"
+			method="importCountryInputData">
+			<result name="success" type="json">
+				 <param name="root">jsonMap</param>
+			</result>
+		</action>
+
+
+        <!-- 盲点 -->
+        <action name="blindData" class="com.scttsc.baselibs.web.BlindAction" method="blindData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="addBlind" class="com.scttsc.baselibs.web.BlindAction" method="addBlind">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="deleteBlind" class="com.scttsc.baselibs.web.BlindAction" method="deleteBlind">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="editBlind" class="com.scttsc.baselibs.web.BlindAction" method="editBlind">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="importBlindInputData" class="com.scttsc.baselibs.web.BlindAction" method="importBlindInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+
+
+
+    </package>
+
+	<package name="school" namespace="/school" extends="default">
+		
+		<!-- 校园库 -->
+		<action name="schoolLib" class="com.scttsc.baselibs.web.SchoolLibAction"
+			method="schoolLib">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/schoollib/schoolList.jsp
+			</result>
+		</action>
+		
+		<action name="addPage" class="com.scttsc.baselibs.web.SchoolLibAction"
+			method="addPage">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/schoollib/schoolAdd.jsp
+			</result>
+		</action>
+
+        <action name="schoolInfo" class="com.scttsc.baselibs.web.SchoolLibAction"
+			method="schoolInfo">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/schoollib/schoolInfo.jsp
+			</result>
+		</action>
+		
+		<!-- 天线库-->
+		
+		<action name="airLib" class="com.scttsc.baselibs.web.AirLibAction"
+			method="airLib">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/airlib/airList.jsp
+			</result>
+		</action>
+		
+		<action name="airEditPage" class="com.scttsc.baselibs.web.AirLibAction"
+			method="airEditPage">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/airlib/airEdit.jsp
+			</result>
+		</action>
+
+        <action name="airInfo" class="com.scttsc.baselibs.web.AirLibAction"
+			method="airInfo">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/airlib/airInfo.jsp
+			</result>
+		</action>
+		
+		<!-- 道路库 -->
+		<action name="roadLib" class="com.scttsc.baselibs.web.RoadLibAction"
+			method="roadLib">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/roadlib/roadList.jsp
+			</result>
+		</action>
+		
+		<action name="editRoadLibPage" class="com.scttsc.baselibs.web.RoadLibAction"
+			method="editRoadLibPage">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/roadlib/roadEdit.jsp
+			</result>
+		</action>
+
+        <action name="roadInfo" class="com.scttsc.baselibs.web.RoadLibAction"
+			method="roadInfo">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/roadlib/roadInfo.jsp
+			</result>
+		</action>
+		
+		
+		<!-- 景区库 -->
+		<action name="secneryLib" class="com.scttsc.baselibs.web.SecneryLibAction"
+			method="secneryLib">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/secnerylib/secneryList.jsp
+			</result>
+		</action>
+		
+		<action name="secneryEditPage" class="com.scttsc.baselibs.web.SecneryLibAction"
+			method="secneryEditPage">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/secnerylib/secneryEdit.jsp
+			</result>
+		</action>
+
+        <action name="secneryInfo" class="com.scttsc.baselibs.web.SecneryLibAction"
+			method="secneryInfo">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/secnerylib/secneryInfo.jsp
+			</result>
+		</action>
+
+
+		
+		<!-- 乡镇库 -->
+		
+		<action name="vitoLib" class="com.scttsc.baselibs.web.VitoLibAction"
+			method="vitoLib">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/vitolib/vitoList.jsp
+			</result>
+		</action>
+		
+		<action name="vitoLibEditPage" class="com.scttsc.baselibs.web.VitoLibAction"
+			method="vitoLibEditPage">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/vitolib/vitoEdit.jsp
+			</result>
+		</action>
+
+        <action name="vitoInfo" class="com.scttsc.baselibs.web.VitoLibAction"
+			method="vitoInfo">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/vitolib/vitoInfo.jsp
+			</result>
+		</action>
+		
+		
+		<!-- 隧道库 -->
+		<action name="tunnelLib" class="com.scttsc.baselibs.web.TunnelLibAction"
+			method="tunnelLib">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/tunnellib/tunnelList.jsp
+			</result>
+		</action>
+		
+		<action name="tunnelLibEditPage" class="com.scttsc.baselibs.web.TunnelLibAction"
+			method="tunnelLibEditPage">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/tunnellib/tunnelEdit.jsp
+			</result>
+		</action>
+
+        <action name="tunnelInfo" class="com.scttsc.baselibs.web.TunnelLibAction"
+			method="tunnelInfo">
+			<result name="success" type="dispatcher">
+				/appviews/baselibs/tunnellib/tunnelInfo.jsp
+			</result>
+		</action>
+
+        <action name="exportTownTemplate" class="com.scttsc.baselibs.web.VitoLibAction"
+                method="exportTownTemplate"></action>
+
+        <action name="exportCountryTemplate" class="com.scttsc.baselibs.web.VitoLibAction"
+                method="exportCountryTemplate"></action>
+
+
+        <!-- 盲点 -->
+        <action name="blind" class="com.scttsc.baselibs.web.BlindAction" method="blind">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/blind/blindList.jsp
+            </result>
+        </action>
+
+        <action name="blindInfo" class="com.scttsc.baselibs.web.BlindAction" method="blindInfo">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/blind/blindInfo.jsp
+            </result>
+        </action>
+
+        <action name="blindEdit" class="com.scttsc.baselibs.web.BlindAction" method="blindEdit">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/blind/blindEdit.jsp
+            </result>
+        </action>
+
+        <action name="blindImport" class="com.scttsc.baselibs.web.BlindAction" method="blindImport">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/blind/blindImport.jsp
+            </result>
+        </action>
+
+        <action name="exportBlindTemplate" class="com.scttsc.baselibs.web.BlindAction" method="exportBlindTemplate">
+        </action>
+
+        <action name="exportBlindData" class="com.scttsc.baselibs.web.BlindAction" method="exportBlindData">
+        </action>
+
+
+    </package>
+
+
+</struts>

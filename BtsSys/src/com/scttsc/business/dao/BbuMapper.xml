@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.BbuDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.business.model.Bbu">
+        <result column="INT_ID" property="intId" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="BBU_NO" property="bbuNo" jdbcType="VARCHAR"/>
+        <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL"/>
+        <result column="LATITUDE" property="latitude" jdbcType="DECIMAL"/>
+        <result column="BTS_NAME" property="btsName" jdbcType="VARCHAR"/>
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR"/>
+        <result column="BTS_ID" property="btsId" jdbcType="DECIMAL"/>
+        <result column="CIRCUITROOM_OWNERSHIP" property="circuitroomOwnership" jdbcType="VARCHAR"/>
+        <result column="TRANS_OWNERSHIP" property="transOwnership" jdbcType="VARCHAR"/>
+        <result column="VENDOR_BTSTYPE" property="vendorBtstype" jdbcType="VARCHAR"/>
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
+        <result column="COUNTY_ID" property="countyId" jdbcType="DECIMAL"/>
+        <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL"/>
+        <result column="IS_SHARE" property="isShare" jdbcType="DECIMAL"/>
+        <result column="BBU_TYPE" property="bbuType" jdbcType="DECIMAL"/>
+        <result column="RELATE_WYBTS" property="relateWybts" jdbcType="DECIMAL"/>
+        <result column="MANUAL_FLAG" property="manualFlag" jdbcType="DECIMAL"/>
+        <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL"/>
+        <result column="DELETETIME" property="deletetime" jdbcType="DATE"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
+        <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL"/>
+        <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR"/>
+        <result column="sharebbucount" property="shareBbuCount" jdbcType="DECIMAL"/>
+
+        <result column="c_name" property="cons.name" jdbcType="VARCHAR"/>
+
+        <result column="cityname" property="cityName" jdbcType="VARCHAR"/>
+        <result column="countryname" property="country.cityName" jdbcType="VARCHAR"/>
+
+
+        <result column="msc_name" property="mscName" jdbcType="VARCHAR"/>
+        <result column="usestatus" property="useStatus" jdbcType="VARCHAR"/>
+        <result column="do_bts" property="doBts" jdbcType="VARCHAR"/>
+
+        <association column="RELATED_BTS" property="cBts" javaType="com.scttsc.business.model.CBts"
+                     select="com.scttsc.business.dao.CBtsDao.selectById"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    INT_ID, NAME, BBU_NO, LONGITUDE, LATITUDE, BTS_NAME, BSC_NAME, BTS_ID, CIRCUITROOM_OWNERSHIP, 
+    TRANS_OWNERSHIP, VENDOR_BTSTYPE, CITY_ID, COUNTY_ID, RELATED_BTS, IS_SHARE, BBU_TYPE, 
+    RELATE_WYBTS, MANUAL_FLAG, DELETE_FLAG, DELETETIME, UPDATETIME,DELETE_RESONCODE,DELETE_TEXT
+  </sql>
+    <sql id="Base_Column_List1">
+    u.INT_ID, u.NAME, u.BBU_NO, u.LONGITUDE, u.LATITUDE, u.BTS_NAME, u.BSC_NAME, u.BTS_ID, u.CIRCUITROOM_OWNERSHIP,
+    u.TRANS_OWNERSHIP, u.VENDOR_BTSTYPE, u.CITY_ID, u.COUNTY_ID, u.RELATED_BTS, u.IS_SHARE, u.BBU_TYPE,
+    u.RELATE_WYBTS, u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME,u.DELETE_RESONCODE,u.DELETE_TEXT
+  </sql>
+
+
+    <sql id="orderby-condition">
+         <trim prefix="ORDER BY" suffixOverrides=",">
+             <if test="sortname=='name'">NAME</if>
+             <if test="sortname=='cityName'">CITY_ID</if>
+             <if test="sortname=='country.cityName'">COUNTY_ID</if>
+             <if test="sortname=='bscName'">BSC_NAME</if>
+             <if test="sortname=='btsId'">BTS_ID</if>
+             <if test="sortname=='shareBbuCount'">sharebbucount</if>
+             <if test="sortname=='circuitroomOwnership'">CIRCUITROOM_OWNERSHIP</if>
+             <if test="sortname=='transOwnership'">TRANS_OWNERSHIP</if>
+             <if test="sortname=='manualFlag'">MANUAL_FLAG</if>
+             <if test="sortorder != null">${sortorder}</if>
+         </trim>
+     </sql>
+
+
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List1"/>,a.name cityname,b.name countryname,c.name c_name,
+        (SELECT COUNT(1) FROM wy_bbu WHERE relate_wybts=u.int_id) sharebbucount
+        from WY_BBU u
+        left join wy_city a on a.id=u.CITY_ID
+        left join wy_city b on b.id=u.COUNTY_ID
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='ABANDONEDTYPE')c
+        ON c.code=u.DELETE_RESONCODE
+        )m
+        <where>
+            1=1
+            <if test="ids!=null">
+                and int_id in(${ids})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="name!=null">
+                and NAME like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="isShare!=null">
+                and IS_SHARE=#{isShare,jdbcType=DECIMAL}
+            </if>
+            <if test="bbuType!=null">
+                and bbu_type in (${bbuType})
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="startTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd')>=#{startTime}
+            </if>
+            <if test="endTime!=null">
+                and to_char(DELETETIME,'yyyy-MM-dd') &lt; #{endTime}
+            </if>
+            <if test="ntxFlag!=null">
+                and DELETE_RESONCODE=0
+            </if>
+            <if test="ytxFlag!=null">
+                and DELETE_RESONCODE!=0
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        <include refid = "orderby-condition"/>)
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="countByExample" parameterType="Map" resultType="int">
+          select count(*) from WY_BBU
+          <where>
+              1=1
+              <if test="countryIds!=null">
+                  and COUNTY_ID in(${countryIds})
+              </if>
+              <if test="name!=null">
+                  and NAME like #{name}
+              </if>
+              <if test="bscName!=null">
+                  and BSC_NAME like #{bscName}
+              </if>
+              <if test="btsId!=null">
+                  and BTS_ID = #{btsId,jdbcType=DECIMAL}
+              </if>
+              <if test="isShare!=null">
+                  and IS_SHARE=#{isShare,jdbcType=DECIMAL}
+              </if>
+              <if test="bbuType!=null">
+                  and bbu_type in (${bbuType})
+              </if>
+              <if test="deleteFlag!=null">
+                  and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+              </if>
+              <if test="manualFlag!=null">
+                  and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+              </if>
+              <if test="startTime!=null">
+                  and to_char(DELETETIME,'yyyy-MM-dd')>=#{startTime}
+              </if>
+              <if test="endTime!=null">
+                  and to_char(DELETETIME,'yyyy-MM-dd') &lt; #{endTime}
+              </if>
+          </where>
+      </select>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_BBU
+        where
+        INT_ID=#{id,jdbcType=DECIMAL}
+    </select>
+
+    <select id="selectBbuByConds" resultMap="BaseResultMap">
+        select<include refid="Base_Column_List1"/>,a.msc_name msc_name,a.usestatus usestatus,
+        a.DO_bts do_bts from WY_BBU u
+        left join c_bts a on a.int_id=u.related_bts
+        <where>
+            1=1
+            <if test="relateWyBts!=null">
+                and u.relate_wybts=#{relateWyBts,jdbcType=DECIMAL}
+            </if>
+            <if test="countryIds!=null">
+                and u.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="isShare!=null">
+                and IS_SHARE=#{isShare,jdbcType=DECIMAL}
+            </if>
+            <if test="bbuType!=null">
+                and u.BBU_TYPE in (${bbuType})
+            </if>
+            <if test="deleteFlag!=null">
+                and u.delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+        </where>
+        order by u.BBU_NO
+    </select>
+
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select<include refid="Base_Column_List1"/>
+        from WY_BBU u
+        <where>
+            1=1
+            <if test="isShare!=null">
+                and IS_SHARE=#{isShare,jdbcType=DECIMAL}
+            </if>
+            <if test="bbuType!=null">
+                and u.BBU_TYPE in (${bbuType})
+            </if>
+            <if test="deleteFlag!=null">
+                and u.delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and u.MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="name!=null">
+                and u.NAME=#{name}
+            </if>
+        </where>
+    </select>
+
+
+    <delete id="deleteById" parameterType="Long">
+    delete from WY_BBU
+    where INT_ID = #{id,jdbcType=DECIMAL}
+  </delete>
+
+
+
+
+    <update id="updateByMap">
+        update WY_BBU
+        <set>
+            <if test="manualFlag != null">
+                MANUAL_FLAG = #{manualFlag,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteResoncode != null">
+                DELETE_RESONCODE = #{deleteResoncode,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteText != null">
+                DELETE_TEXT = #{deleteText,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <where>
+            1=1
+            <if test="intId!=null">
+                and INT_ID=#{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag=#{deleteFlag,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </update>
+
+
+    <!--导出所有字段查询-->
+    <select id="selectExportBbuDataByMap" resultType="hashmap">
+        SELECT a.int_id,a.name,e.name cityname,f.name
+        countryname,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,
+        a.circuitroom_ownership,a.trans_ownership,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
+        a.vendor_btstype,c.mr_strut,q.name mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
+        c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
+        C.Tran_Isnode,c.tran_sitenum,c.sour_model,c.sour_fac,c.sour_module_model,c.sour_module_num,c.sour_capa,
+        c.box_model,c.box_fac,c.cell_model,c.cell_fac,c.cell_capa,c.cell_num,c.cell_power,c.cell_duar,c.cell_ustime,
+        c.ac_model,c.ac_fac,c.ac_num,c.dh_model,c.dh_fac,c.xf_model,c.xf_fac FROM wy_bbu a
+        LEFT JOIN c_bts b
+        ON b.int_id=a.related_bts
+        LEFT JOIN wy_bbu_manual c
+        ON c.int_id=a.int_id
+        LEFT JOIN wy_city e ON
+        a.city_id=e.id
+        LEFT JOIN wy_city f ON
+        a.county_id=f.id
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='MRSTRUT')q
+        ON q.code=c.mr_strut
+        <where>
+            1=1 and a.delete_flag=0 and a.is_share=0 and a.bbu_type in(1,2)
+            <if test="countryIds!=null">
+                and a.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and a.name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and a.BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and a.BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="intId!=null">
+                and a.int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+        </where>
+        ORDER BY a.city_id,a.county_id ASC
+    </select>
+
+
+    <!--自定义字段统计功能SqL-->
+
+
+      <select id="selectBbuGroupByColumns" resultType="hashmap" parameterType="map">
+          select * from (select m.*,ROWNUM RN from
+          (
+          SELECT
+          <if test="sqlsb!=null">
+              ${sqlsb}
+          </if>,count(1) num
+          FROM
+          (SELECT a.int_id,a.name,e.name cityname,f.name
+                  countryname,a.city_id,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,
+                  a.circuitroom_ownership,a.trans_ownership,a.Is_Share,a.Bbu_Type,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
+                  a.vendor_btstype,c.mr_strut,q.name mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
+                  c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
+                  C.Tran_Isnode,c.tran_sitenum,c.sour_model,c.sour_fac,c.sour_module_model,c.sour_module_num,c.sour_capa,
+                  c.box_model,c.box_fac,c.cell_model,c.cell_fac,c.cell_capa,c.cell_num,c.cell_power,c.cell_duar,c.cell_ustime,
+                  c.ac_model,c.ac_fac,c.ac_num,c.dh_model,c.dh_fac,c.xf_model,c.xf_fac FROM wy_bbu a
+                  LEFT JOIN c_bts b
+                  ON b.int_id=a.related_bts
+                  LEFT JOIN wy_bbu_manual c
+                  ON c.int_id=a.int_id
+                  LEFT JOIN wy_city e ON
+                  a.city_id=e.id
+                  LEFT JOIN wy_city f ON
+                  a.county_id=f.id
+                  LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='MRSTRUT')q
+                  ON q.code=c.mr_strut
+          WHERE a.delete_flag=0
+          )
+          <where>
+              1=1
+              <if test="cityIds!=null">
+                  and city_id in(${cityIds})
+              </if>
+              <if test="isShare!=null">
+                  and is_share=#{isShare,jdbcType=DECIMAL}
+              </if>
+              <if test="bbuType!=null">
+                  and Bbu_Type in(${bbuType})
+              </if>
+          </where>
+
+          GROUP BY
+          <if test="sqlsb!=null">
+              ${sqlsb}
+          </if>
+          <choose>
+              <when test="orderCondition != null">
+                  order by ${orderCondition}
+              </when>
+              <otherwise>
+                  order by NUM DESC
+              </otherwise>
+          </choose>
+          )m
+          <where>
+              <if test="start!=null">
+                  and RowNum &lt; (#{start} + #{pagesize})
+              </if>
+          </where>
+          )
+          <where>
+              <if test="start!=null">
+                  RN >= #{start}
+              </if>
+          </where>
+      </select>
+
+
+    <select id="countBbuGroupByColumns" resultType="int">
+           select count(1) from(
+        SELECT
+                <if test="sqlsb!=null">
+                    ${sqlsb}
+                </if>,count(1) num
+                FROM
+                (SELECT a.int_id,a.name,e.name cityname,f.name
+                        countryname,a.city_id,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,
+                        a.circuitroom_ownership,a.trans_ownership,a.Is_Share,a.Bbu_Type,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
+                        a.vendor_btstype,c.mr_strut,q.name mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
+                        c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
+                        C.Tran_Isnode,c.tran_sitenum,c.sour_model,c.sour_fac,c.sour_module_model,c.sour_module_num,c.sour_capa,
+                        c.box_model,c.box_fac,c.cell_model,c.cell_fac,c.cell_capa,c.cell_num,c.cell_power,c.cell_duar,c.cell_ustime,
+                        c.ac_model,c.ac_fac,c.ac_num,c.dh_model,c.dh_fac,c.xf_model,c.xf_fac FROM wy_bbu a
+                        LEFT JOIN c_bts b
+                        ON b.int_id=a.related_bts
+                        LEFT JOIN wy_bbu_manual c
+                        ON c.int_id=a.int_id
+                        LEFT JOIN wy_city e ON
+                        a.city_id=e.id
+                        LEFT JOIN wy_city f ON
+                        a.county_id=f.id
+                        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='MRSTRUT')q
+                        ON q.code=c.mr_strut
+                WHERE a.delete_flag=0
+                )
+                <where>
+                    1=1
+                    <if test="cityIds!=null">
+                        and city_id in(${cityIds})
+                    </if>
+                    <if test="isShare!=null">
+                        and is_share=#{isShare,jdbcType=DECIMAL}
+                    </if>
+                    <if test="bbuType!=null">
+                        and Bbu_Type in(${bbuType})
+                    </if>
+                </where>
+
+                GROUP BY
+                <if test="sqlsb!=null">
+                    ${sqlsb}
+                </if>
+           )
+       </select>
+</mapper>

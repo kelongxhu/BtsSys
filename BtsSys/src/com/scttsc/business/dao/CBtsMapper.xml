@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.CBtsDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.business.model.CBts">
+        <result column="INT_ID" property="intId" jdbcType="DECIMAL"/>
+        <result column="OBJECT_RDN" property="objectRdn" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="BSSID" property="bssid" jdbcType="DECIMAL"/>
+        <result column="BTSID" property="btsid" jdbcType="DECIMAL"/>
+        <result column="VENDOR_ID" property="vendorId" jdbcType="DECIMAL"/>
+        <result column="OMC_ID" property="omcId" jdbcType="DECIMAL"/>
+        <result column="RELATED_OMC" property="relatedOmc" jdbcType="DECIMAL"/>
+        <result column="RELATED_MSC" property="relatedMsc" jdbcType="DECIMAL"/>
+        <result column="RELATED_BSC" property="relatedBsc" jdbcType="DECIMAL"/>
+        <result column="MSC_NAME" property="mscName" jdbcType="VARCHAR"/>
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR"/>
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
+        <result column="CONFIRMED" property="confirmed" jdbcType="DECIMAL"/>
+        <result column="SYS_TYPE" property="sysType" jdbcType="DECIMAL"/>
+        <result column="TIME_STAMP" property="timeStamp" jdbcType="DATE"/>
+        <result column="NUMCE" property="numce" jdbcType="DECIMAL"/>
+        <result column="NUMFA" property="numfa" jdbcType="DECIMAL"/>
+        <result column="NUMRRU" property="numrru" jdbcType="DECIMAL"/>
+        <result column="NUMTCH" property="numtch" jdbcType="DECIMAL"/>
+        <result column="CAPACITY" property="capacity" jdbcType="FLOAT"/>
+        <result column="BTSCLASS" property="btsclass" jdbcType="DECIMAL"/>
+        <result column="BTSTYPE" property="btstype" jdbcType="DECIMAL"/>
+        <result column="STATUS" property="status" jdbcType="DECIMAL"/>
+        <result column="GRADE" property="grade" jdbcType="VARCHAR"/>
+        <result column="LONGITUDE" property="longitude" jdbcType="FLOAT"/>
+        <result column="LATITUDE" property="latitude" jdbcType="FLOAT"/>
+        <result column="VENDOR_BTSTYPE" property="vendorBtstype" jdbcType="VARCHAR"/>
+        <result column="CELL_CARRIER_NUM_1X" property="cellCarrierNum1x" jdbcType="VARCHAR"/>
+        <result column="CELL_CARRIER_NUM_DO" property="cellCarrierNumDo" jdbcType="VARCHAR"/>
+        <result column="CUTOVERSTATUS" property="cutoverstatus" jdbcType="DECIMAL"/>
+        <result column="USESTATUS" property="usestatus" jdbcType="DECIMAL"/>
+        <result column="CHANGETIME" property="changetime" jdbcType="DATE"/>
+        <result column="NOTE" property="note" jdbcType="VARCHAR"/>
+        <result column="DO_BTS" property="doBts" jdbcType="DECIMAL"/>
+        <result column="RELATED_RNC" property="relatedRnc" jdbcType="DECIMAL"/>
+        <result column="RNC_NAME" property="rncName" jdbcType="VARCHAR"/>
+        <result column="DCSID" property="dcsid" jdbcType="DECIMAL"/>
+        <result column="RNCID" property="rncid" jdbcType="DECIMAL"/>
+        <result column="RELATED_DCS" property="relatedDcs" jdbcType="DECIMAL"/>
+        <result column="UNIQUE_RDN" property="uniqueRdn" jdbcType="VARCHAR"/>
+        <result column="CHANNEL_NBR" property="channelNbr" jdbcType="DECIMAL"/>
+        <result column="NBR_2M" property="nbr2m" jdbcType="DECIMAL"/>
+        <result column="NUMFADO" property="numfado" jdbcType="DECIMAL"/>
+        <result column="SID" property="sid" jdbcType="DECIMAL"/>
+        <result column="NID" property="nid" jdbcType="DECIMAL"/>
+        <result column="BANDABIS" property="bandabis" jdbcType="FLOAT"/>
+        <result column="NUMCEDO" property="numcedo" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    INT_ID, OBJECT_RDN, NAME, BSSID, BTSID, VENDOR_ID, OMC_ID, RELATED_OMC, RELATED_MSC, 
+    RELATED_BSC, MSC_NAME, BSC_NAME, CITY_ID, CONFIRMED, SYS_TYPE, TIME_STAMP, NUMCE, 
+    NUMFA, NUMRRU, NUMTCH, CAPACITY, BTSCLASS, BTSTYPE, STATUS, GRADE, LONGITUDE, LATITUDE, 
+    VENDOR_BTSTYPE, CELL_CARRIER_NUM_1X, CELL_CARRIER_NUM_DO, CUTOVERSTATUS, USESTATUS, 
+    CHANGETIME, NOTE, DO_BTS, RELATED_RNC, RNC_NAME, DCSID, RNCID, RELATED_DCS, UNIQUE_RDN, 
+    CHANNEL_NBR, NBR_2M, NUMFADO, SID, NID, BANDABIS, NUMCEDO
+  </sql>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select
+        <include refid="Base_Column_List"/>
+        from C_BTS where int_id=#{intId,jdbcType=DECIMAL}
+    </select>
+
+    <select id="selectBtsByConds" resultType="hashmap">
+        select * from(select t.name,t.grade,SUBSTR(t.UNIQUE_rdn,-6) bscid,t.btsid,t.bsc_name,
+        substr(t.bsc_name,0,INSTR(t.bsc_name,'_',1, 1)-1) cityname from c_Bts t)
+        <where>
+            1=1
+            <if test="bscId!=null">
+                and bscid=#{bscId,jdbcType=VARCHAR}
+            </if>
+            <if test="btsId!=null">
+                and btsid=#{btsId,jdbcType=VARCHAR}
+            </if>
+            <if test="cityName!=null">
+                and cityname=#{cityName,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

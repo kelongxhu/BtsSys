@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.healthy.dao.WyBtsAlarmDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.WyBtsAlarm" >
+    <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="ALARM_NUM" property="alarmNum" jdbcType="DECIMAL" />
+    <result column="ALARM_CODE" property="alarmCode" jdbcType="DECIMAL" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.scttsc.healthy.model.WyBtsAlarm" >
+    insert into WY_BTS_ALARM (INT_ID, ALARM_NUM, ALARM_CODE, 
+      UPDATETIME)
+    values (#{intId,jdbcType=DECIMAL}, #{alarmNum,jdbcType=DECIMAL}, #{alarmCode,jdbcType=DECIMAL}, 
+      #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <delete id="delete">
+      delete WY_BTS_ALARM
+  </delete>
+</mapper>

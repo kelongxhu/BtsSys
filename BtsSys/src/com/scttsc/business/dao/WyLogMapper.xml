@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.WyLogDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.business.model.WyLog" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="LOGFUN" property="logfun" jdbcType="VARCHAR" />
+    <result column="LOGOBJ" property="logobj" jdbcType="VARCHAR" />
+    <result column="LOGCONTENT" property="logcontent" jdbcType="VARCHAR" />
+    <result column="LOGTIME" property="logtime" jdbcType="TIMESTAMP" />
+    <result column="USERID" property="userid" jdbcType="DECIMAL" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, LOGFUN, LOGOBJ, LOGCONTENT, LOGTIME, USERID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from WY_LOG
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Long" >
+    delete from WY_LOG
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.business.model.WyLog" >
+    <selectKey resultType="Long" keyProperty="id" order="BEFORE" >
+      select WY_LOG_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_LOG (ID, LOGFUN, LOGOBJ, 
+      LOGCONTENT, LOGTIME, USERID
+      )
+    values (#{id,jdbcType=DECIMAL}, #{logfun,jdbcType=VARCHAR}, #{logobj,jdbcType=VARCHAR}, 
+      #{logcontent,jdbcType=VARCHAR}, #{logtime,jdbcType=TIMESTAMP}, #{userid,jdbcType=DECIMAL}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.scttsc.business.model.WyLog" >
+    update WY_LOG
+    set LOGFUN = #{logfun,jdbcType=VARCHAR},
+      LOGOBJ = #{logobj,jdbcType=VARCHAR},
+      LOGCONTENT = #{logcontent,jdbcType=VARCHAR},
+      LOGTIME = #{logtime,jdbcType=DATE},
+      USERID = #{userid,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

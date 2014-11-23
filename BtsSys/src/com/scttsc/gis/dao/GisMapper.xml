@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.gis.dao.GisDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.gis.model.Gis">
+        <result column="INT_ID" property="intId" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL"/>
+        <result column="LATITUDE" property="latitude" jdbcType="DECIMAL"/>
+        <result column="IS_INDOOR" property="isIndoor" jdbcType="VARCHAR"/>
+        <result column="IS_RRU" property="isRru" jdbcType="VARCHAR"/>
+        <result column="BTS_NAME" property="btsName" jdbcType="VARCHAR"/>
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR"/>
+        <result column="BTS_ID" property="btsId" jdbcType="DECIMAL"/>
+        <result column="CIRCUITROOM_OWNERSHIP" property="circuitroomOwnership" jdbcType="VARCHAR"/>
+        <result column="TRANS_OWNERSHIP" property="transOwnership" jdbcType="VARCHAR"/>
+        <result column="VENDOR_BTSTYPE" property="vendorBtstype" jdbcType="VARCHAR"/>
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
+        <result column="COUNTY_ID" property="countyId" jdbcType="DECIMAL"/>
+        <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL"/>
+        <result column="MANUAL_FLAG" property="manualFlag" jdbcType="DECIMAL"/>
+        <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL"/>
+        <result column="DELETETIME" property="deletetime" jdbcType="DATE"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
+        <result column="SERVICE_LEVEL" property="serviceLevel" jdbcType="VARCHAR"/>
+        <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL"/>
+        <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR"/>
+
+        <result column="TOTAL_GRADE" property="totalGrade" jdbcType="DECIMAL" />
+        <result column="CELL_NAME" property="cellName" jdbcType="VARCHAR"/>
+        <result column="TRAN_UPSITENAME" property="tranUpSiteName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap1" type="com.scttsc.business.model.Bbu">
+        <result column="INT_ID" property="intId" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="BBU_NO" property="bbuNo" jdbcType="VARCHAR"/>
+        <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL"/>
+        <result column="LATITUDE" property="latitude" jdbcType="DECIMAL"/>
+        <result column="BTS_NAME" property="btsName" jdbcType="VARCHAR"/>
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR"/>
+        <result column="BTS_ID" property="btsId" jdbcType="DECIMAL"/>
+        <result column="CIRCUITROOM_OWNERSHIP" property="circuitroomOwnership" jdbcType="VARCHAR"/>
+        <result column="TRANS_OWNERSHIP" property="transOwnership" jdbcType="VARCHAR"/>
+        <result column="VENDOR_BTSTYPE" property="vendorBtstype" jdbcType="VARCHAR"/>
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
+        <result column="COUNTY_ID" property="countyId" jdbcType="DECIMAL"/>
+        <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL"/>
+        <result column="IS_SHARE" property="isShare" jdbcType="DECIMAL"/>
+        <result column="BBU_TYPE" property="bbuType" jdbcType="DECIMAL"/>
+        <result column="RELATE_WYBTS" property="relateWybts" jdbcType="DECIMAL"/>
+        <result column="MANUAL_FLAG" property="manualFlag" jdbcType="DECIMAL"/>
+        <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL"/>
+        <result column="DELETETIME" property="deletetime" jdbcType="DATE"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
+        <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL"/>
+        <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.scttsc.gis.model.LatLng">
+        <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL"/>
+        <result column="LATITUDE" property="latitude" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    u.INT_ID, u.NAME, u.LONGITUDE, u.LATITUDE, u.IS_INDOOR, u.IS_RRU, u.BTS_NAME, u.BSC_NAME, u.BTS_ID, 
+    u.CIRCUITROOM_OWNERSHIP, u.TRANS_OWNERSHIP, u.VENDOR_BTSTYPE, u.CITY_ID, u.COUNTY_ID, u.RELATED_BTS, 
+    u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME, u.SERVICE_LEVEL,u.DELETE_RESONCODE,u.DELETE_TEXT,
+    u.TOTAL_GRADE, u.CELL_NAME, u.TRAN_UPSITENAME
+   </sql>
+
+   <sql id="Base_Column_List1">
+    INT_ID, NAME, BBU_NO, BTS_NAME, BSC_NAME, BTS_ID, CIRCUITROOM_OWNERSHIP,
+    TRANS_OWNERSHIP, VENDOR_BTSTYPE, CITY_ID, COUNTY_ID, RELATED_BTS, IS_SHARE, BBU_TYPE,
+    RELATE_WYBTS, MANUAL_FLAG, DELETE_FLAG, DELETETIME, UPDATETIME,DELETE_RESONCODE,DELETE_TEXT
+  </sql>
+
+
+    <sql id="orderby-condition">
+        <trim prefix="ORDER BY" suffixOverrides=",">
+            <if test="sortname=='name'">NAME</if>
+            <if test="sortname=='cityName'">CITY_ID</if>
+            <if test="sortname=='country.cityName'">COUNTY_ID</if>
+            <if test="sortname=='bscName'">BSC_NAME</if>
+            <if test="sortname=='btsId'">BTS_ID</if>
+            <if test="sortname=='serviceLevel'">SERVICE_LEVEL</if>
+            <if test="sortname=='circuitroomOwnership'">CIRCUITROOM_OWNERSHIP</if>
+            <if test="sortname=='transOwnership'">TRANS_OWNERSHIP</if>
+            <if test="sortname=='isRru'">IS_RRU</if>
+            <if test="sortname=='btsName'">BTS_NAME</if>
+            <if test="sortname=='vendorBtstype'">VENDOR_BTSTYPE</if>
+            <if test="sortname=='manualFlag'">MANUAL_FLAG</if>
+            <if test="sortorder != null">${sortorder}</if>
+        </trim>
+    </sql>
+
+    <select id="countByMap" resultType="int">
+        select count(1) from
+        (select
+        <include refid="Base_Column_List"/>
+        from (SELECT A.*, B.TOTAL_GRADE, D.CELL_NAME, E.TRAN_UPSITENAME
+        FROM WY_BTS A
+        LEFT JOIN WY_GRADE B ON B.INT_ID=A.INT_ID
+        LEFT JOIN (SELECT WY_BTS_INT_ID, replace(WMSYS.WM_CONCAT(C.NAME),',','；') CELL_NAME
+        FROM WY_CELL C WHERE C.DELETE_FLAG = 0
+        GROUP BY WY_BTS_INT_ID) D ON D.WY_BTS_INT_ID = A.INT_ID
+        LEFT JOIN WY_BTS_MANUAL E ON E.INT_ID = A.INT_ID
+        WHERE A.DELETE_FLAG=0
+        ORDER BY A.NAME) u)
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and CITY_ID in(${cityIds})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="isIndoor!=null">
+                and IS_INDOOR=#{isIndoor,jdbcType=VARCHAR}
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsName!=null">
+                and BTS_NAME like #{btsName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select * from(
+        select
+        <include refid="Base_Column_List"/>,ROWNUM RN
+        from (SELECT A.*, B.TOTAL_GRADE, D.CELL_NAME, E.TRAN_UPSITENAME
+        FROM WY_BTS A
+        LEFT JOIN WY_GRADE B ON B.INT_ID=A.INT_ID
+        LEFT JOIN (SELECT WY_BTS_INT_ID, replace(WMSYS.WM_CONCAT(C.NAME),',','；') CELL_NAME
+        FROM WY_CELL C WHERE C.DELETE_FLAG = 0
+        GROUP BY WY_BTS_INT_ID) D ON D.WY_BTS_INT_ID = A.INT_ID
+        LEFT JOIN WY_BTS_MANUAL E ON E.INT_ID = A.INT_ID
+        WHERE A.DELETE_FLAG=0
+        ORDER BY A.NAME) u
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and CITY_ID in(${cityIds})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="isIndoor!=null">
+                and IS_INDOOR=#{isIndoor,jdbcType=VARCHAR}
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsName!=null">
+                and BTS_NAME like #{btsName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+          <if test="start!=null">
+            RN >= #{start}
+          </if>
+        </where>
+    </select>
+
+    <select id="countBbuByMap" resultType="int">
+        select
+        count(1)
+        from WY_BBU
+        <where>
+            1 = 1
+            <if test="ids!=null">
+                and int_id in(${ids})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="name!=null">
+                and NAME like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="isShare!=null">
+                and IS_SHARE=#{isShare,jdbcType=DECIMAL}
+            </if>
+            <if test="bbuType!=null">
+                and bbu_type in (${bbuType})
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="ntxFlag!=null">
+                and DELETE_RESONCODE=0
+            </if>
+            <if test="ytxFlag!=null">
+                and DELETE_RESONCODE!=0
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBbuByMap" resultMap="BaseResultMap1">
+        select a.*,b.longitude,b.latitude from(
+        select
+        <include refid="Base_Column_List1"/>,ROWNUM RN
+        from WY_BBU
+        <where>
+            1 = 1
+            <if test="ids!=null">
+                and int_id in(${ids})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="name!=null">
+                and NAME like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="isShare!=null">
+                and IS_SHARE=#{isShare,jdbcType=DECIMAL}
+            </if>
+            <if test="bbuType!=null">
+                and bbu_type in (${bbuType})
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="ntxFlag!=null">
+                and DELETE_RESONCODE=0
+            </if>
+            <if test="ytxFlag!=null">
+                and DELETE_RESONCODE!=0
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        ) a left join wy_bbu_manual b on a.int_id = b.int_id
+        <where>
+        <if test="start!=null">
+          a.RN >= #{start}
+        </if>
+        </where>
+    </select>
+
+    <select id="selectSzLatLngFromBtsByName" parameterType="java.lang.String" resultMap="BaseResultMap2">
+      select
+        T.LATITUDE,
+        T.LONGITUDE
+      from
+        WY_BTS T
+      where
+        T.NAME = #{value}
+    </select>
+
+    <select id="selectSzLatLngFromBbuByName" parameterType="java.lang.String" resultMap="BaseResultMap2">
+      select
+        T.LATITUDE,
+        T.LONGITUDE
+      from
+        WY_BBU T
+      where
+        T.NAME = #{value}
+    </select>
+
+    <select id="getLatlngSum" resultMap="BaseResultMap">
+        select SUM(LONGITUDE) LONGITUDE, SUM(LATITUDE) LATITUDE
+        from (
+        select
+        <include refid="Base_Column_List"/>
+        from (SELECT A.*, B.TOTAL_GRADE, D.CELL_NAME, E.TRAN_UPSITENAME
+        FROM WY_BTS A
+        LEFT JOIN WY_GRADE B ON B.INT_ID=A.INT_ID
+        LEFT JOIN (SELECT WY_BTS_INT_ID, replace(WMSYS.WM_CONCAT(C.NAME),',','；') CELL_NAME
+        FROM WY_CELL C WHERE C.DELETE_FLAG = 0
+        GROUP BY WY_BTS_INT_ID) D ON D.WY_BTS_INT_ID = A.INT_ID
+        LEFT JOIN WY_BTS_MANUAL E ON E.INT_ID = A.INT_ID
+        WHERE A.DELETE_FLAG=0
+        ORDER BY A.NAME) u  )
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and CITY_ID in(${cityIds})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="isIndoor!=null">
+                and IS_INDOOR=#{isIndoor,jdbcType=VARCHAR}
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsName!=null">
+                and BTS_NAME like #{btsName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+    <select id="countLatlngNoZero" resultType="int">
+        select count(1)
+        from (
+        select
+        <include refid="Base_Column_List"/>
+        from (SELECT A.*, B.TOTAL_GRADE, D.CELL_NAME, E.TRAN_UPSITENAME
+        FROM WY_BTS A
+        LEFT JOIN WY_GRADE B ON B.INT_ID=A.INT_ID
+        LEFT JOIN (SELECT WY_BTS_INT_ID, replace(WMSYS.WM_CONCAT(C.NAME),',','；') CELL_NAME
+        FROM WY_CELL C WHERE C.DELETE_FLAG = 0
+        GROUP BY WY_BTS_INT_ID) D ON D.WY_BTS_INT_ID = A.INT_ID
+        LEFT JOIN WY_BTS_MANUAL E ON E.INT_ID = A.INT_ID
+        WHERE A.DELETE_FLAG=0
+        ORDER BY A.NAME) u )
+        <where>
+            1=1
+            and ( LONGITUDE!=0 OR LATITUDE!=0 )
+            <if test="cityIds!=null">
+                and CITY_ID in(${cityIds})
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="intId!=null">
+                and int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+            <if test="isIndoor!=null">
+                and IS_INDOOR=#{isIndoor,jdbcType=VARCHAR}
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and BSC_NAME like #{bscName}
+            </if>
+            <if test="btsName!=null">
+                and BTS_NAME like #{btsName}
+            </if>
+            <if test="btsId!=null">
+                and BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="manualFlag!=null">
+                and MANUAL_FLAG=#{manualFlag,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+
+
+
+
+</mapper>

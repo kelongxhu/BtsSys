@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.healthy.dao.WySpeciallyGradeDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.WySpeciallyGrade" >
+    <result column="SPECID" property="specid" jdbcType="DECIMAL" />
+    <result column="GRADECFGID" property="gradecfgid" jdbcType="DECIMAL" />
+  </resultMap>
+
+  <delete id="delete" parameterType="Long">
+      delete WY_SPECIALLY_GRADE where SPECID=#{specialId,jdbcType=DECIMAL}
+  </delete>
+
+  <insert id="insert" parameterType="com.scttsc.healthy.model.WySpeciallyGrade" >
+    insert into WY_SPECIALLY_GRADE (SPECID, GRADECFGID)
+    values (#{specid,jdbcType=DECIMAL}, #{gradecfgid,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.scttsc.healthy.model.WySpeciallyGrade" >
+    insert into WY_SPECIALLY_GRADE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="specid != null" >
+        SPECID,
+      </if>
+      <if test="gradecfgid != null" >
+        GRADECFGID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="specid != null" >
+        #{specid,jdbcType=DECIMAL},
+      </if>
+      <if test="gradecfgid != null" >
+        #{gradecfgid,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+</mapper>

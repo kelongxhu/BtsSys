@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scttsc.healthy.dao.GzBtsCheckDao">
+  <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.GzBtsCheck">
+    <id column="INT_ID" jdbcType="DECIMAL" property="intId" />
+    <id column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <id column="REPORT_TIME" jdbcType="DATE" property="reportTime" />
+    <result column="BTS_NAME" jdbcType="VARCHAR" property="btsName" />
+    <result column="BTS_TYPE" jdbcType="VARCHAR" property="btsType" />
+    <result column="REGION_CODE" jdbcType="DECIMAL" property="regionCode" />
+    <result column="IMSI" jdbcType="VARCHAR" property="imsi" />
+    <result column="SUMLEVEL" jdbcType="DECIMAL" property="sumlevel" />
+    <result column="STATE" jdbcType="DECIMAL" property="state" />
+    <result column="SIGNIN_TIME" jdbcType="DATE" property="signinTime" />
+    <result column="SIGNOUT_TIME" jdbcType="DATE" property="signoutTime" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="SOLUTION" jdbcType="VARCHAR" property="solution" />
+    <result column="ORDERNUMBER" jdbcType="OTHER" property="ordernumber" />
+    <result column="ISEND" jdbcType="OTHER" property="isend" />
+    <result column="GRADE" jdbcType="VARCHAR" property="grade" />
+    <result column="CITY_ID" jdbcType="DECIMAL" property="cityId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    INT_ID, USER_NAME, REPORT_TIME, BTS_NAME, BTS_TYPE, REGION_CODE, IMSI, SUMLEVEL, 
+    STATE, SIGNIN_TIME, SIGNOUT_TIME, DESCRIPTION, SOLUTION, ORDERNUMBER, ISEND, GRADE, 
+    CITY_ID
+  </sql>
+  <select id="selectBy" resultMap="BaseResultMap">
+          SELECT* FROM
+          (select
+                   a.*,rank() over (partition by a.int_id
+                  order by a.report_time desc) seq
+                  from GZ_BTS_CHECK a)
+                  WHERE
+                  1=1
+                  AND seq=1
+                  <if test="intId!=null">
+                      and INT_ID=#{intId,jdbcType=DECIMAL}
+                  </if>
+  </select>
+</mapper>

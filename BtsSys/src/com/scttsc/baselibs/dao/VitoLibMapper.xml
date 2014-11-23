@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.baselibs.dao.VitoLibDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.baselibs.model.VitoLib" >
+
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
+    <result column="COUNTRY_ID" property="countryId" jdbcType="DECIMAL" />
+    <result column="PARENT_ID" property="parentId" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="GPS_LONG" property="gpsLong" jdbcType="DECIMAL" />
+    <result column="GPS_LAT" property="gpsLat" jdbcType="DECIMAL" />
+    <result column="CMDA1X_COVGRATE" property="cmda1xCovgrate" jdbcType="DECIMAL" />
+    <result column="MOBGSM_COVGRATE" property="mobgsmCovgrate" jdbcType="DECIMAL" />
+    <result column="COVG_DIF_COVGRATE" property="covgDifCovgrate" jdbcType="DECIMAL" />
+    <result column="UNICGSM_COVGRATE" property="unicgsmCovgrate" jdbcType="DECIMAL" />
+    <result column="EVDO_COVGRATE" property="evdoCovgrate" jdbcType="DECIMAL" />
+    <result column="CDMA1X_MOS" property="cdma1xMos" jdbcType="DECIMAL" />
+    <result column="MOBGSM_MOS" property="mobgsmMos" jdbcType="DECIMAL" />
+    <result column="UNICGSM_MOS" property="unicgsmMos" jdbcType="DECIMAL" />
+    <result column="TESTTIME" property="testtime" jdbcType="VARCHAR" />
+    <result column="TESTUSER" property="testuser" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="UPDATEUSER" property="updateuser" jdbcType="DECIMAL" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL" />
+    
+    <result column="cityname" property="cityName" jdbcType="VARCHAR" />
+    <result column="countryname" property="countryName" jdbcType="VARCHAR" />
+    <result column="parentname" property="parentName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    u.ID, u.CITY_ID, u.COUNTRY_ID, u.PARENT_ID, u.NAME, u.GPS_LONG, u.GPS_LAT, u.CMDA1X_COVGRATE, u.MOBGSM_COVGRATE, 
+    u.COVG_DIF_COVGRATE, u.UNICGSM_COVGRATE, u.EVDO_COVGRATE, u.CDMA1X_MOS, u.MOBGSM_MOS, u.UNICGSM_MOS, 
+    u.TESTTIME, u.TESTUSER, u.UPDATETIME, u.UPDATEUSER, u.REMARK,u.DELETE_FLAG
+  </sql>
+  
+  <select id="getByConds" resultMap="BaseResultMap">
+		select* from (select m.*,ROWNUM RN from
+		(select
+		<include refid="Base_Column_List" />,a.name cityname,b.name countryname,c.name parentname
+		from WY_LIB_VITO u
+		left join wy_city a on a.id=u.CITY_ID
+		left join wy_city b on b.id=u.COUNTRY_ID
+		left join WY_LIB_VITO c on c.id=u.PARENT_ID
+		)m
+		<where>
+            and DELETE_FLAG=0
+			<if test="countryId!=null">
+				and COUNTRY_ID in(${countryId})
+			</if>
+			<if test="town!=null">
+				and PARENT_ID=0
+			</if>
+			<if test="country!=null">
+				and PARENT_ID!=0
+			</if>
+			<if test="start!=null">
+				and RowNum &lt; (#{start} + #{pagesize})
+			</if>
+		</where>
+			order by id
+		)
+		<where>
+			<if test="start!=null">
+				RN >= #{start}
+			</if>
+		</where>
+	</select>
+
+	<select id="countByConds" resultType="int">
+		select count(1) from
+		(select
+		<include refid="Base_Column_List" />
+		from WY_LIB_VITO u)
+		<where>
+			1=1 and DELETE_FLAG=0
+			 <if test="countryId!=null">
+			    and COUNTRY_ID in(${countryId})
+			</if>
+			<if test="town!=null">
+				and PARENT_ID=0
+			</if>
+			<if test="country!=null">
+				and PARENT_ID!=0
+			</if>
+		</where>
+	</select>
+  
+  
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from WY_LIB_VITO u
+    where u.ID = #{id,jdbcType=DECIMAL} and u.DELETE_FLAG=0
+  </select>
+  
+  <select id="getByMap" resultMap="BaseResultMap">
+  	select<include refid="Base_Column_List"/> from WY_LIB_VITO u
+  	<where>
+  	    1=1 and u.DELETE_FLAG=0
+  		<if test="countryId!=null">
+  			and COUNTRY_ID=#{countryId,jdbcType=DECIMAL}
+  		</if>
+  		<if test="parentId!=null">
+  			and PARENT_ID=#{parentId,jdbcType=DECIMAL}
+  		</if>
+        <if test="name!=null">
+            and NAME=#{name,jdbcType=VARCHAR}
+        </if>
+  	</where>
+  </select>
+  
+  
+  
+  
+ 
+  <delete id="delete">
+    delete from WY_LIB_VITO
+    where ID in(${ids})
+  </delete>
+
+    <update id="deleteByDeleteFlag">
+            update WY_LIB_VITO set delete_flag=1,UPDATETIME=sysdate where id in(${ids})
+     </update>
+  
+  <insert id="insert" parameterType="com.scttsc.baselibs.model.VitoLib" >
+    insert into WY_LIB_VITO (ID, CITY_ID, COUNTRY_ID, 
+      PARENT_ID, NAME, GPS_LONG, 
+      GPS_LAT, CMDA1X_COVGRATE, MOBGSM_COVGRATE, 
+      COVG_DIF_COVGRATE, UNICGSM_COVGRATE, EVDO_COVGRATE, 
+      CDMA1X_MOS, MOBGSM_MOS, UNICGSM_MOS, 
+      TESTTIME, TESTUSER, UPDATETIME, 
+      UPDATEUSER, REMARK)
+    values (WY_LIB_VITO_SEQ.nextval, #{cityId,jdbcType=DECIMAL}, #{countryId,jdbcType=DECIMAL}, 
+      #{parentId,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{gpsLong,jdbcType=DECIMAL}, 
+      #{gpsLat,jdbcType=DECIMAL}, #{cmda1xCovgrate,jdbcType=DECIMAL}, #{mobgsmCovgrate,jdbcType=DECIMAL}, 
+      #{covgDifCovgrate,jdbcType=DECIMAL}, #{unicgsmCovgrate,jdbcType=DECIMAL}, #{evdoCovgrate,jdbcType=DECIMAL}, 
+      #{cdma1xMos,jdbcType=DECIMAL}, #{mobgsmMos,jdbcType=DECIMAL}, #{unicgsmMos,jdbcType=DECIMAL}, 
+      #{testtime,jdbcType=VARCHAR}, #{testuser,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP},
+      #{updateuser,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR})
+  </insert>
+ 
+  <update id="update" parameterType="com.scttsc.baselibs.model.VitoLib" >
+    update WY_LIB_VITO
+    set CITY_ID = #{cityId,jdbcType=DECIMAL},
+      COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+      PARENT_ID = #{parentId,jdbcType=DECIMAL},
+      NAME = #{name,jdbcType=VARCHAR},
+      GPS_LONG = #{gpsLong,jdbcType=DECIMAL},
+      GPS_LAT = #{gpsLat,jdbcType=DECIMAL},
+      CMDA1X_COVGRATE = #{cmda1xCovgrate,jdbcType=DECIMAL},
+      MOBGSM_COVGRATE = #{mobgsmCovgrate,jdbcType=DECIMAL},
+      COVG_DIF_COVGRATE = #{covgDifCovgrate,jdbcType=DECIMAL},
+      UNICGSM_COVGRATE = #{unicgsmCovgrate,jdbcType=DECIMAL},
+      EVDO_COVGRATE = #{evdoCovgrate,jdbcType=DECIMAL},
+      CDMA1X_MOS = #{cdma1xMos,jdbcType=DECIMAL},
+      MOBGSM_MOS = #{mobgsmMos,jdbcType=DECIMAL},
+      UNICGSM_MOS = #{unicgsmMos,jdbcType=DECIMAL},
+      TESTTIME = #{testtime,jdbcType=VARCHAR},
+      TESTUSER = #{testuser,jdbcType=VARCHAR},
+      UPDATETIME = sysdate,
+      UPDATEUSER = #{updateuser,jdbcType=DECIMAL},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

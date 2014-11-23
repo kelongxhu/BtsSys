@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="interface" namespace="/interface" extends="json-default">
+
+        <!-- 非室分站点 -->
+        <action name="bts" class="com.scttsc.clientinterface.web.ClientAction"
+                method="bts">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+                <param name="contentType">text/html</param>
+            </result>
+        </action>
+
+        <action name="bbu" class="com.scttsc.clientinterface.web.ClientAction"
+                method="bbu">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+                <param name="contentType">text/html</param>
+            </result>
+        </action>
+        <action name="indoor" class="com.scttsc.clientinterface.web.ClientAction"
+                method="indoor">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+                <param name="contentType">text/html</param>
+            </result>
+        </action>
+        <action name="cell" class="com.scttsc.clientinterface.web.ClientAction"
+                method="cell">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+                <param name="contentType">text/html</param>
+            </result>
+        </action>
+
+
+        <action name="updatebts" class="com.scttsc.clientinterface.web.ClientAction"
+                       method="updatebts">
+                   <result name="success" type="json">
+                       <param name="root">jsonMap</param>
+                       <param name="contentType">text/html</param>
+                   </result>
+        </action>
+
+        <action name="updatebbu" class="com.scttsc.clientinterface.web.ClientAction"
+                              method="updatebbu">
+                          <result name="success" type="json">
+                              <param name="root">jsonMap</param>
+                              <param name="contentType">text/html</param>
+                          </result>
+         </action>
+
+        <action name="updateIndoor" class="com.scttsc.clientinterface.web.ClientAction"
+                              method="updateIndoor">
+                          <result name="success" type="json">
+                              <param name="root">jsonMap</param>
+                              <param name="contentType">text/html</param>
+                          </result>
+         </action>
+
+        <action name="updateCell" class="com.scttsc.clientinterface.web.ClientAction"
+                              method="updateCell">
+                          <result name="success" type="json">
+                              <param name="root">jsonMap</param>
+                              <param name="contentType">text/html</param>
+                          </result>
+         </action>
+
+        <action name="getCons" class="com.scttsc.clientinterface.web.ClientAction"
+                                   method="getCons">
+                               <result name="success" type="json">
+                                   <param name="root">jsonMap</param>
+                                   <param name="contentType">text/html</param>
+                               </result>
+        </action>
+
+        <action name="getAlarm" class="com.scttsc.clientinterface.web.ClientAction"
+                                     method="getAlarm">
+                                 <result name="success" type="json">
+                                     <param name="root">jsonMap</param>
+                                     <param name="contentType">text/html</param>
+                                 </result>
+        </action>
+
+
+
+
+
+    </package>
+
+</struts>

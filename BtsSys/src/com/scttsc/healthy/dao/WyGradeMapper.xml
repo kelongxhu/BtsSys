@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scttsc.healthy.dao.WyGradeDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.WyGrade" >
+       <result column="GRADE_INT_ID" property="intId" jdbcType="DECIMAL" />
+       <result column="INFO_GRADE" property="infoGrade" jdbcType="DECIMAL" />
+       <result column="INSP_GRADE" property="inspGrade" jdbcType="DECIMAL" />
+       <result column="ALARM_GRADE" property="alarmGrade" jdbcType="DECIMAL" />
+       <result column="WIRELESS_GRADE" property="wirelessGrade" jdbcType="DECIMAL" />
+       <result column="TOTAL_GRADE" property="totalGrade" jdbcType="DECIMAL" />
+       <result column="GRADE_UPDATETIME" property="updatetime" jdbcType="DATE" />
+       <result column="CITY_NAME" property="cityName" jdbcType="VARCHAR" />
+       <result column="COUNTY_NAME" property="countyName" jdbcType="VARCHAR" />
+       <association property="bts" resultMap="com.scttsc.business.dao.BtsDao.BaseResultMap" />
+       <collection property="wyRulecfgList" javaType="ArrayList" ofType="com.scttsc.healthy.model.WyRulecfg" resultMap="com.scttsc.healthy.dao.WyRulecfgDao.BaseResultMap2"/>
+     </resultMap>
+
+
+    <resultMap id="ResultMapForList" type="com.scttsc.healthy.model.WyGrade">
+        <result column="GRADE_INT_ID" jdbcType="DECIMAL" property="intId"/>
+        <result column="INFO_GRADE" jdbcType="DECIMAL" property="infoGrade"/>
+        <result column="INSP_GRADE" jdbcType="DECIMAL" property="inspGrade"/>
+        <result column="ALARM_GRADE" jdbcType="DECIMAL" property="alarmGrade"/>
+        <result column="WIRELESS_GRADE" jdbcType="DECIMAL" property="wirelessGrade"/>
+        <result column="TOTAL_GRADE" jdbcType="DECIMAL" property="totalGrade"/>
+        <result column="GRADE_UPDATETIME" jdbcType="DATE" property="updatetime"/>
+        <result column="CITY_NAME" jdbcType="VARCHAR" property="cityName"/>
+        <result column="COUNTY_NAME" jdbcType="VARCHAR" property="countyName"/>
+        <association property="bts" resultMap="com.scttsc.business.dao.BtsDao.BaseResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    a.INT_ID GRADE_INT_ID, a.INFO_GRADE, a.INSP_GRADE, a.ALARM_GRADE, a.WIRELESS_GRADE, a.TOTAL_GRADE, a.UPDATETIME GRADE_UPDATETIME
+    </sql>
+
+
+    <sql id="orderby-condition">
+        <trim prefix="ORDER BY">
+            <choose>
+              <when test="sortname==null">
+                CITY_ID,TOTAL_GRADE desc
+              </when>
+              <when test="sortname=='cityName'">CITY_NAME</when>
+              <when test="sortname=='countyName'">COUNTY_NAME</when>
+              <when test="sortname=='name'">NAME</when>
+              <when test="sortname=='infoGrade'">INFO_GRADE</when>
+              <when test="sortname=='inspGrade'">INSP_GRADE</when>
+              <when test="sortname=='alarmGrade'">ALARM_GRADE</when>
+              <when test="sortname=='wirelessGrade'">WIRELESS_GRADE</when>
+              <when test="sortname=='totalGrade'">TOTAL_GRADE</when>
+            </choose>
+            <if test="sortorder != null">${sortorder}</if>
+        </trim>
+    </sql>
+
+    <select id="selectGradeCount" resultType="int">
+        select
+          count(1)
+        from
+        (
+            select
+              e.*,
+              ROWNUM RN
+            from
+            (
+                select
+                x.*,
+                y.name CITY_NAME,
+                z.name COUNTY_NAME
+                from
+                (
+                    select
+                    <include refid="Base_Column_List"/>,
+                    b.*
+                    from
+                    WY_GRADE a,
+                    WY_BTS b
+                    where
+                    a.INT_ID = b.INT_ID
+                ) x
+                left join
+                  WY_CITY y
+                on
+                  x.CITY_ID = y.ID
+                left join
+                  WY_CITY z
+                on
+                  x.COUNTY_ID = z.ID
+                <where>
+                    <if test="countryIds!=null">
+                        x.COUNTY_ID in(${countryIds})
+                    </if>
+                    <if test="nameSearch!=null">
+                        and x.NAME like '%${nameSearch}%'
+                    </if>
+                </where>
+                <include refid="orderby-condition"/>
+            ) e
+            <where>
+                <if test="start!=null">
+                    ROWNUM &lt; (#{start} + #{pagesize})
+                </if>
+            </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN &gt;= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectGradeList" resultMap="ResultMapForList">
+        select
+          *
+        from
+        (
+            select
+              e.*,
+              ROWNUM RN
+            from
+            (
+                select
+                x.*,
+                y.name CITY_NAME,
+                z.name COUNTY_NAME
+                from
+                (
+                    select
+                    <include refid="Base_Column_List"/>,
+                    b.*
+                    from
+                    WY_GRADE a,
+                    WY_BTS b
+                    where
+                    a.INT_ID = b.INT_ID
+                ) x
+                left join
+                  WY_CITY y
+                on
+                  x.CITY_ID = y.ID
+                left join
+                  WY_CITY z
+                on
+                  x.COUNTY_ID = z.ID
+                <where>
+                    <if test="countryIds!=null">
+                        x.COUNTY_ID in(${countryIds})
+                    </if>
+                    <if test="nameSearch!=null">
+                        and x.NAME like '%${nameSearch}%'
+                    </if>
+                </where>
+                <include refid="orderby-condition"/>
+            ) e
+            <where>
+                <if test="start!=null">
+                    ROWNUM &lt; (#{start} + #{pagesize})
+                </if>
+            </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN &gt;= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_GRADE a
+        where a.INT_ID = #{intId,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+        delete from WY_GRADE
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+      </delete>
+
+    <select id="getAllInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>,<include refid="com.scttsc.healthy.dao.WyRulecfgDao.Base_Column_List2"/>,d.* from wy_grade a left join wy_grade_detail b on a.int_id = b.int_id left join wy_rulecfg rl on b.gradecfgid = rl.id left join wy_bts d on a.int_id = d.int_id where a.int_id = ${value}
+    </select>
+
+    <select id="countBtsGradeNumByCityIds" parameterType="java.lang.String" resultType="java.util.Map">
+        select
+          n.rank,
+          n.color,
+          m.*
+        from
+            (
+                select
+                  x.name,count(y.int_id) num
+                from
+                  wy_gradeperiodcfg x
+                left join
+                  (
+                    select
+                      a.int_id,nvl(a.total_grade, 0) total_grade
+                    from
+                      wy_grade a,wy_bts b
+                    where
+                      a.int_id = b.int_id
+                    and
+                      b.delete_flag = 0
+                    <if test="value != '' and value != null">
+                    and
+                      b.city_id in(${value})
+                    </if>
+                  ) y
+                on
+                  (
+                    y.total_grade >= x.value1
+                    and
+                    y.total_grade &lt; x.value2
+                  )
+                or
+                  (
+                    y.total_grade &lt; x.value2
+                    and
+                    x.value1 is null
+                  )
+                or
+                  (
+                    y.total_grade >= x.value1
+                    and
+                    x.value2 is null
+                  )
+                group by
+                  x.name
+            ) m
+        left join
+          wy_gradeperiodcfg n
+        on
+          m.name = n.name
+        order by
+          n.rank desc
+    </select>
+
+    <select id="getSortedBtsAvgGradeWithCity" resultType="java.util.Map">
+        select
+          rownum rn,
+          s.*
+        from
+        (
+            select
+              n.name,
+              m.*
+            from
+              wy_city n
+            left join
+              (
+                  select
+                    city_id,
+                    round(avg(info_grade), 2) avg_info_grade,
+                    round(avg(insp_grade), 2) avg_insp_grade,
+                    round(avg(alarm_grade), 2) avg_alarm_grade,
+                    round(avg(wireless_grade), 2) avg_wireless_grade,
+                    round(avg(total_grade), 2) avg_total_grade
+                  from
+                    (
+                      select
+                        *
+                      from
+                        wy_grade a,
+                        wy_bts b
+                      where
+                        a.int_id = b.int_id
+                      and
+                        b.delete_flag = 0
+                    )
+                  group by
+                    city_id
+              ) m
+            on
+              m.city_id = n.id
+            where
+              n.parentid = 10001
+            order by
+              m.avg_total_grade desc nulls last
+        ) s
+    </select>
+
+    <insert id="insert" parameterType="com.scttsc.healthy.model.WyGrade">
+        insert into WY_GRADE (INT_ID, INFO_GRADE, INSP_GRADE,
+          ALARM_GRADE, WIRELESS_GRADE, TOTAL_GRADE,
+          UPDATETIME)
+        values (#{intId,jdbcType=DECIMAL}, #{infoGrade,jdbcType=DECIMAL}, #{inspGrade,jdbcType=DECIMAL},
+          #{alarmGrade,jdbcType=DECIMAL}, #{wirelessGrade,jdbcType=DECIMAL}, #{totalGrade,jdbcType=DECIMAL},
+          #{updatetime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.scttsc.healthy.model.WyGrade">
+        insert into WY_GRADE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="intId != null">
+                INT_ID,
+            </if>
+            <if test="infoGrade != null">
+                INFO_GRADE,
+            </if>
+            <if test="inspGrade != null">
+                INSP_GRADE,
+            </if>
+            <if test="alarmGrade != null">
+                ALARM_GRADE,
+            </if>
+            <if test="wirelessGrade != null">
+                WIRELESS_GRADE,
+            </if>
+            <if test="totalGrade != null">
+                TOTAL_GRADE,
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="intId != null">
+                #{intId,jdbcType=DECIMAL},
+            </if>
+            <if test="infoGrade != null">
+                #{infoGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="inspGrade != null">
+                #{inspGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="alarmGrade != null">
+                #{alarmGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="wirelessGrade != null">
+                #{wirelessGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="totalGrade != null">
+                #{totalGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.healthy.model.WyGrade">
+        update WY_GRADE
+        <set>
+            <if test="infoGrade != null">
+                INFO_GRADE = #{infoGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="inspGrade != null">
+                INSP_GRADE = #{inspGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="alarmGrade != null">
+                ALARM_GRADE = #{alarmGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="wirelessGrade != null">
+                WIRELESS_GRADE = #{wirelessGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="totalGrade != null">
+                TOTAL_GRADE = #{totalGrade,jdbcType=DECIMAL},
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.scttsc.healthy.model.WyGrade">
+        update WY_GRADE
+        set INFO_GRADE = #{infoGrade,jdbcType=DECIMAL},
+          INSP_GRADE = #{inspGrade,jdbcType=DECIMAL},
+          ALARM_GRADE = #{alarmGrade,jdbcType=DECIMAL},
+          WIRELESS_GRADE = #{wirelessGrade,jdbcType=DECIMAL},
+          TOTAL_GRADE = #{totalGrade,jdbcType=DECIMAL},
+          UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+      </update>
+</mapper>

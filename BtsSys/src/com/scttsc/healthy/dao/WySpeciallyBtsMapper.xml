@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.healthy.dao.WySpeciallyBtsDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.WySpeciallyBts">
+        <result column="SPECID" property="specid" jdbcType="DECIMAL"/>
+        <result column="BTS_INT_ID" property="btsIntId" jdbcType="DECIMAL"/>
+        <result column="UPDATETIME" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMapCfg" type="com.scttsc.healthy.model.WySpeciallycfg">
+        <id column="ID" property="id" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="SPECDESC" property="specdesc" jdbcType="VARCHAR"/>
+        <result column="USERID" property="userid" jdbcType="DECIMAL"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMapBts" type="com.scttsc.healthy.model.WySpeciallyBts">
+        <result column="SPECID" property="specid" jdbcType="DECIMAL"/>
+        <result column="BTS_INT_ID" property="btsIntId" jdbcType="DECIMAL"/>
+        <result column="UPDATETIME1" property="updateTime" jdbcType="TIMESTAMP"/>
+        <association property="bts" resultMap="com.scttsc.business.dao.BtsDao.BaseResultMap"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List_2">
+           s.SPECID, s.BTS_INT_ID, s.UPDATETIME UPDATETIME1
+    </sql>
+
+    <insert id="insert" parameterType="com.scttsc.healthy.model.WySpeciallyBts">
+         insert into WY_SPECIALLY_BTS (SPECID, BTS_INT_ID,UPDATETIME)
+         values (#{specid,jdbcType=DECIMAL}, #{btsIntId,jdbcType=DECIMAL,#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.scttsc.healthy.model.WySpeciallyBts">
+        insert into WY_SPECIALLY_BTS
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="specid != null">
+                SPECID,
+            </if>
+            <if test="btsIntId != null">
+                BTS_INT_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="specid != null">
+                #{specid,jdbcType=DECIMAL},
+            </if>
+            <if test="btsIntId != null">
+                #{btsIntId,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteAll">
+        delete WY_SPECIALLY_BTS
+    </delete>
+
+    <sql id="Base_Column_List">
+        ID, NAME, SPECDESC, USERID, UPDATETIME
+    </sql>
+
+    <select id="specialListByCorrection" resultMap="BaseResultMapCfg">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List"/>
+        from WY_SPECIALLYCFG
+        where id in
+        (
+        select distinct specid
+        from WY_SPECIALLY_BTS
+        where 1=1
+        <if test="specialName != null">
+            and specid in
+            (select id from WY_SPECIALLYCFG where name like #{specialName,jdbcType=VARCHAR})
+        </if>
+        <if test="btsName != null">
+            and bts_int_id in
+            (select int_id from WY_BTS where name like #{btsName,jdbcType=VARCHAR})
+        </if>
+        )
+        )m
+        <where>
+            1=1
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="specialCountByCorrection" resultType="int">
+        select count(1) from WY_SPECIALLYCFG
+        where id in
+        (
+        select distinct specid
+        from WY_SPECIALLY_BTS
+        where 1=1
+        <if test="specialName != null">
+            and specid in
+            (select id from WY_SPECIALLYCFG where name like #{specialName,jdbcType=VARCHAR})
+        </if>
+        <if test="btsName != null">
+            and bts_int_id in
+            (select int_id from WY_BTS where name like #{btsName,jdbcType=VARCHAR})
+        </if>
+        )
+    </select>
+
+
+    <select id="specialBtsListByCorrection" resultMap="BaseResultMapBts">
+        select * from (select m.*,ROWNUM RN from
+        (
+        SELECT<include refid="Base_Column_List_2"/>,
+        <include refid="com.scttsc.business.dao.BtsDao.Base_Column_List"/>
+        FROM wy_specially_bts s,wy_bts u
+        WHERE s.bts_int_id=u.int_id
+        <if test="specialId != null">
+            and specid = #{specialId,jdbcType=INTEGER}
+        </if>
+        )m
+        <where>
+            1=1
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="specialBtsCountByCorrection" resultType="int">
+        select COUNT(1) from
+        wy_specially_bts where 1=1
+        <if test="specialId != null">
+            and specid = #{specialId,jdbcType=INTEGER}
+        </if>
+    </select>
+
+</mapper>

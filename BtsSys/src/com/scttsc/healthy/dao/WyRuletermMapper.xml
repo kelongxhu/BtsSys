@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scttsc.healthy.dao.WyRuletermDao">
+
+    <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.WyRuleterm">
+        <id column="ID" jdbcType="DECIMAL" property="id" />
+        <result column="RULECFGID" jdbcType="DECIMAL" property="rulecfgid" />
+        <result column="SUBCFGID" jdbcType="DECIMAL" property="subcfgid" />
+        <result column="SYMBOL" jdbcType="DECIMAL" property="symbol" />
+        <result column="VALUE1" jdbcType="VARCHAR" property="value1" />
+        <result column="VALUE2" jdbcType="VARCHAR" property="value2" />
+        <result column="DATATYPE" jdbcType="DECIMAL" property="dataType" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.scttsc.healthy.model.WyRuleterm">
+        <id column="R_ID" jdbcType="DECIMAL" property="id" />
+        <result column="R_RULECFGID" jdbcType="DECIMAL" property="rulecfgid" />
+        <result column="R_SUBCFGID" jdbcType="DECIMAL" property="subcfgid" />
+        <result column="R_SYMBOL" jdbcType="DECIMAL" property="symbol" />
+        <result column="R_VALUE1" jdbcType="VARCHAR" property="value1" />
+        <result column="R_VALUE2" jdbcType="VARCHAR" property="value2" />
+        <result column="R_DATATYPE" jdbcType="DECIMAL" property="dataType" />
+        <association javaType="com.scttsc.healthy.model.WySubcfg" property="wySubcfg" resultMap="com.scttsc.healthy.dao.WySubcfgDao.BaseResultMap2" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    ID, RULECFGID, SUBCFGID, SYMBOL, VALUE1, VALUE2,DATATYPE
+    </sql>
+
+    <sql id="Base_Column_List2">
+        r.ID R_ID,r.RULECFGID R_RULECFGID,r.SUBCFGID R_SUBCFGID,r.SYMBOL R_SYMBOL,r.VALUE1 R_VALUE1,r.VALUE2 R_VALUE2,r.DATATYPE R_DATATYPE
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from WY_RULETERM
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+
+    <select id="selectByRuleId" resultMap="BaseResultMap2" parameterType="Long">
+        select
+              <include refid="Base_Column_List2"/>,
+              <include refid="com.scttsc.healthy.dao.WySubcfgDao.Base_Column_List2"/>
+              from wy_ruleterm r
+              left join WY_SUBCFG s on s.id=r.SUBCFGID
+              where r.RULECFGID = #{ruleCfgId,jdbcType=DECIMAL}
+    </select>
+
+
+    <delete id="deleteByRuleCfg" parameterType="Long">
+    delete from WY_RULETERM
+    where RULECFGID = #{ruleCfgId,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="com.scttsc.healthy.model.WyRuleterm">
+        <selectKey keyProperty="id" order="BEFORE" resultType="Long">
+            select WY_ruleterm_SEQ.nextval from dual
+        </selectKey>
+        insert into WY_RULETERM (ID, RULECFGID, SUBCFGID,
+        SYMBOL, VALUE1, VALUE2,DATATYPE
+        )
+        values (#{id,jdbcType=DECIMAL}, #{rulecfgid,jdbcType=DECIMAL}, #{subcfgid,jdbcType=DECIMAL},
+        #{symbol,jdbcType=DECIMAL}, #{value1,jdbcType=VARCHAR}, #{value2,jdbcType=VARCHAR},#{dataType,jdbcType=DECIMAL}
+        )
+    </insert>
+
+</mapper>

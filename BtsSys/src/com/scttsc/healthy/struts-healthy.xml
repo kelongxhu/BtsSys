@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="healthyjson" namespace="/healthyjson" extends="json-default">
+        <action name="ruleCfgList" class="com.scttsc.healthy.web.RuleAction"
+                method="ruleCfgList">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="subCfg" class="com.scttsc.healthy.web.RuleAction"
+                method="subCfg">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="addRuleCfg" class="com.scttsc.healthy.web.RuleAction"
+                method="addRuleCfg">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="del" class="com.scttsc.healthy.web.RuleAction"
+                method="del">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="ruleCfgListByType" class="com.scttsc.healthy.web.RuleAction"
+                method="ruleCfgListByType">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="ruleItems" class="com.scttsc.healthy.web.RuleAction"
+                     method="ruleItems">
+                 <result name="success" type="json">
+                     <param name="root">jsonMap</param>
+                 </result>
+        </action>
+        <action name="queryGridList" class="com.scttsc.healthy.web.GradeAction"
+                method="queryGridList">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <!-- 首页报表 -->
+        <action name="countBtsGradeNumForFusionChart" class="com.scttsc.healthy.web.GradeAction"
+                method="countBtsGradeNumForFusionChart">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="getSortedBtsAvgGradeWithCity" class="com.scttsc.healthy.web.GradeAction"
+                method="getSortedBtsAvgGradeWithCity">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <!--专项配置-->
+        <action name="specialCfgList" class="com.scttsc.healthy.web.SpecialAction"
+                method="specialCfgList">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="specialRules" class="com.scttsc.healthy.web.RuleAction"
+                method="specialRules">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="addSpecial" class="com.scttsc.healthy.web.SpecialAction"
+                method="addSpecial">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="delSpecial" class="com.scttsc.healthy.web.SpecialAction"
+                method="delSpecial">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+         <!--专项整改-->
+         <action name="specialListByCorrection" class="com.scttsc.healthy.web.SpecialCorrectionAction"
+                method="specialListByCorrection">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="specialBtsListByCorrection" class="com.scttsc.healthy.web.SpecialCorrectionAction"
+                method="specialBtsListByCorrection">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="getSum" class="com.scttsc.healthy.web.RuleAction"
+                method="getSum">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+    </package>
+
+    <package name="healthy" namespace="/healthy" extends="default">
+        <action name="ruleCfg" class="com.scttsc.healthy.web.RuleAction"
+                method="ruleCfg">
+            <result name="success" type="dispatcher">
+                /appviews/healthy/gradecfg/gradeCfgList.jsp
+            </result>
+        </action>
+        <action name="addCfgPg" class="com.scttsc.healthy.web.RuleAction"
+                method="addCfgPg">
+            <result name="success" type="dispatcher">
+                /appviews/healthy/gradecfg/gradeCfgAdd.jsp
+            </result>
+        </action>
+        <action name="ruleCfgInfo" class="com.scttsc.healthy.web.RuleAction"
+                method="ruleCfgInfo">
+            <result name="success" type="dispatcher">
+                /appviews/healthy/gradecfg/gradeCfgInfo.jsp
+            </result>
+        </action>
+        <action name="showGradeList" class="com.scttsc.healthy.web.GradeAction"
+                method="showGradeList">
+            <result name="success" type="dispatcher">
+                /appviews/healthy/grade/gradeList.jsp
+            </result>
+        </action>
+        <action name="showGradeDetail" class="com.scttsc.healthy.web.GradeAction"
+                method="showGradeDetail">
+            <result name="success" type="dispatcher">
+                /appviews/healthy/grade/gradeDetail.jsp
+            </result>
+            <result name="error" type="dispatcher">
+                /appviews/common/json.jsp
+            </result>
+        </action>
+        <!--专项配置-->
+        <action name="specialCfg" class="com.scttsc.healthy.web.SpecialAction"
+                method="specialCfg">
+            <result name="success" type="dispatcher">
+                /appviews/healthy/special/specialList.jsp
+            </result>
+        </action>
+
+        <action name="addPage" class="com.scttsc.healthy.web.SpecialAction"
+                method="addPage">
+            <result name="success" type="dispatcher">
+                /appviews/healthy/special/specialAdd.jsp
+            </result>
+        </action>
+
+        <action name="specialInfo" class="com.scttsc.healthy.web.SpecialAction"
+                method="specialInfo">
+            <result name="success" type="dispatcher">
+                /appviews/healthy/special/specialInfo.jsp
+            </result>
+        </action>
+        <!--专项整改-->
+        <action name="specialCorrectionPage" class="com.scttsc.healthy.web.SpecialCorrectionAction"
+                method="specialCorrectionPage">
+            <result name="success" type="dispatcher">
+                /appviews/healthy/special/specialCorrection.jsp
+            </result>
+        </action>
+
+
+    </package>
+
+
+</struts>

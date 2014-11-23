@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.admin.dao.RoleMenuDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.admin.model.RoleMenu">
+        <result column="ROLE_ID" property="roleId" jdbcType="DECIMAL"/>
+        <result column="MENU_ID" property="menuId" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ROLE_ID, MENU_ID
+    </sql>
+
+    <select id="selectByRole" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select<include refid="Base_Column_List"/>from WY_ROLE_MENU where role_id=#{roleId,jdbcType=DECIMAL}
+    </select>
+
+    <delete id="deleteByRole" parameterType="java.math.BigDecimal">
+    delete from WY_ROLE_MENU where role_id=#{roleId,jdbcType=DECIMAL}
+  </delete>
+
+    <insert id="insert" parameterType="com.scttsc.admin.model.RoleMenu">
+    insert into WY_ROLE_MENU (ROLE_ID, MENU_ID)
+    values (#{roleId,jdbcType=DECIMAL}, #{menuId,jdbcType=DECIMAL})
+  </insert>
+</mapper>

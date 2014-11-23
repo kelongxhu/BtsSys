@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.healthy.dao.WyGradeDetailDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.WyGradeDetail" >
+    <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="GRADECFGID" property="gradecfgid" jdbcType="DECIMAL" />
+    <result column="GRADE" property="grade" jdbcType="DECIMAL" />
+  </resultMap>
+  <insert id="insert" parameterType="com.scttsc.healthy.model.WyGradeDetail" >
+    insert into WY_GRADE_DETAIL (INT_ID, GRADECFGID, GRADE
+      )
+    values (#{intId,jdbcType=DECIMAL}, #{gradecfgid,jdbcType=DECIMAL}, #{grade,jdbcType=DECIMAL}
+      )
+  </insert>
+
+    <delete id="deleteByBtsIntId" parameterType="Long">
+        delete from WY_GRADE_DETAIL
+            where INT_ID = #{btsIntId,jdbcType=DECIMAL}
+    </delete>
+</mapper>

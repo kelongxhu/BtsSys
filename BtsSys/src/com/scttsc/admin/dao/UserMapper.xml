@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.admin.dao.UserDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.admin.model.User" >
+
+    <id column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="IDENTITY" property="identity" jdbcType="VARCHAR" />
+    <result column="DEPARTMENT_ID" property="departmentId" jdbcType="DECIMAL" />
+    <result column="CREATETIME" property="createtime" jdbcType="DATE" />
+    <result column="DELETED" property="deleted" jdbcType="DECIMAL" />
+    <result column="CREATEUSER" property="createuser" jdbcType="DECIMAL" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="PWD_MODIFY_TIME" property="pwdModifyTime" jdbcType="DATE" />
+    
+    <result column="departmentname" property="departMent.name" jdbcType="VARCHAR" />
+    <result column="cityid" property="city.id" jdbcType="DECIMAL" />
+    <result column="cityname" property="city.cityName" jdbcType="VARCHAR" />
+    <result column="city_id" property="city.cityId" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    u.INT_ID, u.NAME, u.MOBILE, u.PHONE, u.EMAIL, u.ADDRESS, u.IDENTITY, u.DEPARTMENT_ID, u.CREATETIME, 
+    u.DELETED, u.CREATEUSER, u.USERNAME, u.PASSWORD, u.PWD_MODIFY_TIME
+  </sql>
+ 
+  <select id="getByPriKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />,a.name departmentname,b.id cityid,b.name cityname,b.city_id city_id
+    from FRAMEWORK_SECURITY_USER u
+    LEFT JOIN FRAMEWORK_DEPARTMENT a ON u.department_id=a.int_id
+	LEFT JOIN (SELECT ID,parentid,NAME,city_id FROM wy_city WHERE parentid IN(-1,10001))b
+	ON b.city_id=a.region_id
+    where u.INT_ID = #{intId,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="login" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />,a.name departmentname,b.id cityid,b.name cityname,b.city_id city_id
+    from FRAMEWORK_SECURITY_USER u
+     LEFT JOIN FRAMEWORK_DEPARTMENT a ON u.department_id=a.int_id
+	LEFT JOIN (SELECT ID,parentid,NAME,city_id FROM wy_city WHERE parentid IN(-1,10001))b
+	ON b.city_id=a.region_id
+    <where>
+    	1=1
+    		<if test="intId!=null">
+    			and u.INT_ID = #{intId,jdbcType=DECIMAL}
+    		</if>
+            <if test="userName!=null">
+                and u.USERNAME=#{userName,jdbcType=VARCHAR}
+            </if>
+    </where>
+  </select>
+
+
+   <select id="selectByImsi" resultMap="BaseResultMap">
+      SELECT <include refid="Base_Column_List" />,a.imsi FROM framework_security_user u,gz_imsi_user a
+      WHERE u.username=a.username and a.imsi=#{imsi,jdbcType=VARCHAR}
+   </select>
+  
+ 
+</mapper>

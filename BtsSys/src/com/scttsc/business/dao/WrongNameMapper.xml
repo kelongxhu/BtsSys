@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.WrongNameDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.business.model.WrongName">
+        <result column="INT_ID" property="intId" jdbcType="DECIMAL"/>
+        <result column="CELL_NAME" property="cellName" jdbcType="VARCHAR"/>
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR"/>
+        <result column="BTS_ID" property="btsId" jdbcType="DECIMAL"/>
+        <result column="BTSNAME" property="btsname" jdbcType="VARCHAR"/>
+        <result column="INTIME" property="intime" jdbcType="DATE"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
+        <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL"/>
+        <result column="TYPE" property="type" jdbcType="DECIMAL"/>
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
+
+        <result column="city_name" property="city.cityName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    u.INT_ID, u.CELL_NAME, u.BSC_NAME, u.BTS_ID, u.BTSNAME, u.INTIME, u.UPDATETIME, u.DELETE_FLAG, u.TYPE,
+    u.CITY_ID
+    </sql>
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List"/>,c.name city_name
+        from WY_WRONGNAME u
+        left join wy_city c
+        on u.city_id=c.id
+        )m
+        <where>
+            1=1 and DELETE_FLAG=0
+            <if test="cityIds!=null">
+                and CITY_ID in(${cityIds})
+            </if>
+            <if test="type!=null">
+                and u.TYPE=#{type,jdbcType=DECIMAL}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="countByMap" resultType="int">
+        select count(1) from WY_WRONGNAME
+        <where>
+            1=1 and DELETE_FLAG=0
+            <if test="cityIds!=null">
+                and CITY_ID in(${cityIds})
+            </if>
+            <if test="type!=null">
+                and TYPE=#{type,jdbcType=DECIMAL}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.healthy.dao.WySpeciallycfgDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.WySpeciallycfg" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="SPECDESC" property="specdesc" jdbcType="VARCHAR" />
+    <result column="USERID" property="userid" jdbcType="DECIMAL" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+    <resultMap id="BaseResultMap_2" type="com.scttsc.healthy.model.WySpeciallycfg" >
+        <id column="SP_ID" property="id" jdbcType="DECIMAL" />
+        <result column="SP_NAME" property="name" jdbcType="VARCHAR" />
+        <result column="SP_SPECDESC" property="specdesc" jdbcType="VARCHAR" />
+        <result column="SP_USERID" property="userid" jdbcType="DECIMAL" />
+        <result column="SP_UPDATETIME" property="updatetime" jdbcType="TIMESTAMP" />
+        <collection property="wyRulecfgList" javaType="ArrayList"
+                          resultMap="com.scttsc.healthy.dao.WyRulecfgDao.BaseResultMap2"/>
+      </resultMap>
+    <sql id="Base_Column_List">
+    ID, NAME, SPECDESC, USERID, UPDATETIME
+  </sql>
+    <sql id="Base_Column_List_2">
+        sp.ID SP_ID, sp.NAME SP_NAME, sp.SPECDESC SP_SPECDESC, sp.USERID SP_USERID, sp.UPDATETIME SP_UPDATETIME
+      </sql>
+
+    <select id="selectSpeciallyList" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List"/>
+        from WY_SPECIALLYCFG
+        )m
+        <where>
+            1=1
+            <if test="name!=null">
+                and NAME like #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSpeciallyCount" resultType="int">
+        select count(1) from WY_SPECIALLYCFG
+        <where>
+            1=1
+            <if test="name!=null">
+                and NAME like #{name,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap_2" parameterType="Long" >
+    select
+        <include refid="Base_Column_List_2"/>,
+        <include refid="com.scttsc.healthy.dao.WyRulecfgDao.Base_Column_List2"/>,
+        <include refid="com.scttsc.healthy.dao.WyRuletermDao.Base_Column_List2"/>,
+        <include refid="com.scttsc.healthy.dao.WySubcfgDao.Base_Column_List2"/>
+        from WY_SPECIALLYCFG sp
+        LEFT JOIN wy_specially_grade a
+        ON a.specid=sp.id
+        LEFT JOIN wy_rulecfg rl
+        ON rl.id=a.gradecfgid
+        left join wy_ruleterm r on r.rulecfgid=rl.id
+        left join WY_SUBCFG s on s.id=r.SUBCFGID
+    where sp.ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap_2">
+      select
+             <include refid="Base_Column_List_2"/>,
+             <include refid="com.scttsc.healthy.dao.WyRulecfgDao.Base_Column_List2"/>,
+             <include refid="com.scttsc.healthy.dao.WyRuletermDao.Base_Column_List2"/>,
+             <include refid="com.scttsc.healthy.dao.WySubcfgDao.Base_Column_List2"/>
+             from WY_SPECIALLYCFG sp
+             LEFT JOIN wy_specially_grade a
+             ON a.specid=sp.id
+             LEFT JOIN wy_rulecfg rl
+             ON rl.id=a.gradecfgid
+             left join wy_ruleterm r on r.rulecfgid=rl.id
+             left join WY_SUBCFG s on s.id=r.SUBCFGID
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="Long" >
+    delete from WY_SPECIALLYCFG
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.healthy.model.WySpeciallycfg" >
+    <selectKey resultType="Long" keyProperty="id" order="BEFORE" >
+      select wy_speciallyCfg_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_SPECIALLYCFG (ID, NAME, SPECDESC, 
+      USERID, UPDATETIME
+      )
+    values (#{id,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{specdesc,jdbcType=VARCHAR}, 
+       #{userid,jdbcType=DECIMAL}, #{updatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.scttsc.healthy.model.WySpeciallycfg" >
+    <selectKey resultType="Long" keyProperty="id" order="BEFORE" >
+      select wy_speciallyCfg_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_SPECIALLYCFG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      ID,
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="specdesc != null" >
+        SPECDESC,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=DECIMAL},
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="specdesc != null" >
+        #{specdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=DECIMAL},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.healthy.model.WySpeciallycfg" >
+    update WY_SPECIALLYCFG
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="specdesc != null" >
+        SPECDESC = #{specdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=DECIMAL},
+      </if>
+      <if test="updatetime != null" >
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.scttsc.healthy.model.WySpeciallycfg" >
+    update WY_SPECIALLYCFG
+    set NAME = #{name,jdbcType=VARCHAR},
+      SPECDESC = #{specdesc,jdbcType=VARCHAR},
+      USERID = #{userid,jdbcType=DECIMAL},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

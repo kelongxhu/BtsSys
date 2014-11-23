@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.CellManualDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.business.model.CellManual">
+        <id column="INT_ID" property="intId" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR"/>
+        <result column="CI" property="ci" jdbcType="DECIMAL"/>
+        <result column="GFFLAG" property="gfflag" jdbcType="VARCHAR"/>
+        <result column="GFNUM" property="gfnum" jdbcType="DECIMAL"/>
+        <result column="CELLTYPE" property="celltype" jdbcType="VARCHAR"/>
+        <result column="INDOORNUM" property="indoornum" jdbcType="DECIMAL"/>
+        <result column="BORDERFLAG" property="borderflag" jdbcType="VARCHAR"/>
+        <result column="DOFRQNUM" property="dofrqnum" jdbcType="DECIMAL"/>
+        <result column="DOPN" property="dopn" jdbcType="DECIMAL"/>
+        <result column="FEEDERLENGTH" property="feederlength" jdbcType="DECIMAL"/>
+        <result column="COVERAREA" property="coverarea" jdbcType="VARCHAR"/>
+        <result column="COVERROAD" property="coverroad" jdbcType="VARCHAR"/>
+        <result column="COVERHOT" property="coverhot" jdbcType="VARCHAR"/>
+        <result column="RADII" property="radii" jdbcType="VARCHAR"/>
+        <result column="BOUNDARYCELLFLAG" property="boundarycellflag" jdbcType="VARCHAR"/>
+        <result column="BORDERPROVINCE" property="borderprovince" jdbcType="VARCHAR"/>
+        <result column="BORDERCITY" property="bordercity" jdbcType="VARCHAR"/>
+        <result column="FIXTEXT" property="fixtext" jdbcType="VARCHAR"/>
+        <result column="MAR" property="mar" jdbcType="DECIMAL"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
+        <result column="UPDATEUSER" property="updateuser" jdbcType="DECIMAL"/>
+        <collection property="airLibs" column="INT_ID" ofType="com.scttsc.business.model.CellAirLib"
+                    select="com.scttsc.business.dao.CellAirLibDao.selectByCellId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    INT_ID, NAME, BSC_NAME, CI, GFFLAG, GFNUM, CELLTYPE, INDOORNUM, BORDERFLAG, DOFRQNUM, 
+    DOPN, FEEDERLENGTH, COVERAREA, COVERROAD, COVERHOT, RADII, BOUNDARYCELLFLAG, BORDERPROVINCE, 
+    BORDERCITY, FIXTEXT, MAR, REMARK, UPDATETIME, UPDATEUSER
+  </sql>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_CELL_MANUAL
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+    </select>
+
+    <insert id="insert" parameterType="com.scttsc.business.model.CellManual">
+        insert into WY_CELL_MANUAL
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="intId != null">
+                INT_ID,
+            </if>
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="bscName != null">
+                BSC_NAME,
+            </if>
+            <if test="ci != null">
+                CI,
+            </if>
+            <if test="gfflag != null">
+                GFFLAG,
+            </if>
+            <if test="gfnum != null">
+                GFNUM,
+            </if>
+            <if test="celltype != null">
+                CELLTYPE,
+            </if>
+            <if test="indoornum != null">
+                INDOORNUM,
+            </if>
+            <if test="borderflag != null">
+                BORDERFLAG,
+            </if>
+            <if test="dofrqnum != null">
+                DOFRQNUM,
+            </if>
+            <if test="dopn != null">
+                DOPN,
+            </if>
+            <if test="feederlength != null">
+                FEEDERLENGTH,
+            </if>
+            <if test="coverarea != null">
+                COVERAREA,
+            </if>
+            <if test="coverroad != null">
+                COVERROAD,
+            </if>
+            <if test="coverhot != null">
+                COVERHOT,
+            </if>
+            <if test="radii != null">
+                RADII,
+            </if>
+            <if test="boundarycellflag != null">
+                BOUNDARYCELLFLAG,
+            </if>
+            <if test="borderprovince != null">
+                BORDERPROVINCE,
+            </if>
+            <if test="bordercity != null">
+                BORDERCITY,
+            </if>
+            <if test="fixtext != null">
+                FIXTEXT,
+            </if>
+            <if test="mar != null">
+                MAR,
+            </if>
+            <if test="remark != null">
+                REMARK,
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME,
+            </if>
+            <if test="updateuser != null">
+                UPDATEUSER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="intId != null">
+                #{intId,jdbcType=DECIMAL},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="bscName != null">
+                #{bscName,jdbcType=VARCHAR},
+            </if>
+            <if test="ci != null">
+                #{ci,jdbcType=DECIMAL},
+            </if>
+            <if test="gfflag != null">
+                #{gfflag,jdbcType=VARCHAR},
+            </if>
+            <if test="gfnum != null">
+                #{gfnum,jdbcType=DECIMAL},
+            </if>
+            <if test="celltype != null">
+                #{celltype,jdbcType=VARCHAR},
+            </if>
+            <if test="indoornum != null">
+                #{indoornum,jdbcType=DECIMAL},
+            </if>
+            <if test="borderflag != null">
+                #{borderflag,jdbcType=VARCHAR},
+            </if>
+            <if test="dofrqnum != null">
+                #{dofrqnum,jdbcType=DECIMAL},
+            </if>
+            <if test="dopn != null">
+                #{dopn,jdbcType=DECIMAL},
+            </if>
+            <if test="feederlength != null">
+                #{feederlength,jdbcType=DECIMAL},
+            </if>
+            <if test="coverarea != null">
+                #{coverarea,jdbcType=VARCHAR},
+            </if>
+            <if test="coverroad != null">
+                #{coverroad,jdbcType=VARCHAR},
+            </if>
+            <if test="coverhot != null">
+                #{coverhot,jdbcType=VARCHAR},
+            </if>
+            <if test="radii != null">
+                #{radii,jdbcType=VARCHAR},
+            </if>
+            <if test="boundarycellflag != null">
+                #{boundarycellflag,jdbcType=VARCHAR},
+            </if>
+            <if test="borderprovince != null">
+                #{borderprovince,jdbcType=VARCHAR},
+            </if>
+            <if test="bordercity != null">
+                #{bordercity,jdbcType=VARCHAR},
+            </if>
+            <if test="fixtext != null">
+                #{fixtext,jdbcType=VARCHAR},
+            </if>
+            <if test="mar != null">
+                #{mar,jdbcType=DECIMAL},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=DATE},
+            </if>
+            <if test="updateuser != null">
+                #{updateuser,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.scttsc.business.model.CellManual">
+        update WY_CELL_MANUAL
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="bscName != null">
+                BSC_NAME = #{bscName,jdbcType=VARCHAR},
+            </if>
+            <if test="ci != null">
+                CI = #{ci,jdbcType=DECIMAL},
+            </if>
+            <if test="gfflag != null">
+                GFFLAG = #{gfflag,jdbcType=VARCHAR},
+            </if>
+            <if test="gfnum != null">
+                GFNUM = #{gfnum,jdbcType=DECIMAL},
+            </if>
+            <if test="celltype != null">
+                CELLTYPE = #{celltype,jdbcType=VARCHAR},
+            </if>
+            <if test="indoornum != null">
+                INDOORNUM = #{indoornum,jdbcType=DECIMAL},
+            </if>
+            <if test="borderflag != null">
+                BORDERFLAG = #{borderflag,jdbcType=VARCHAR},
+            </if>
+            <if test="dofrqnum != null">
+                DOFRQNUM = #{dofrqnum,jdbcType=DECIMAL},
+            </if>
+            <if test="dopn != null">
+                DOPN = #{dopn,jdbcType=DECIMAL},
+            </if>
+            <if test="feederlength != null">
+                FEEDERLENGTH = #{feederlength,jdbcType=DECIMAL},
+            </if>
+            <if test="coverarea != null">
+                COVERAREA = #{coverarea,jdbcType=VARCHAR},
+            </if>
+            <if test="coverroad != null">
+                COVERROAD = #{coverroad,jdbcType=VARCHAR},
+            </if>
+            <if test="coverhot != null">
+                COVERHOT = #{coverhot,jdbcType=VARCHAR},
+            </if>
+            <if test="radii != null">
+                RADII = #{radii,jdbcType=VARCHAR},
+            </if>
+            <if test="boundarycellflag != null">
+                BOUNDARYCELLFLAG = #{boundarycellflag,jdbcType=VARCHAR},
+            </if>
+            <if test="borderprovince != null">
+                BORDERPROVINCE = #{borderprovince,jdbcType=VARCHAR},
+            </if>
+            <if test="bordercity != null">
+                BORDERCITY = #{bordercity,jdbcType=VARCHAR},
+            </if>
+            <if test="fixtext != null">
+                FIXTEXT = #{fixtext,jdbcType=VARCHAR},
+            </if>
+            <if test="mar != null">
+                MAR = #{mar,jdbcType=DECIMAL},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                UPDATETIME = #{updatetime,jdbcType=DATE},
+            </if>
+            <if test="updateuser != null">
+                UPDATEUSER = #{updateuser,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+    </update>
+
+    <delete id="deleteById" parameterType="java.math.BigDecimal">
+       delete WY_CELL_MANUAL where INT_ID = #{intId,jdbcType=DECIMAL}
+   </delete>
+
+    <update id="updateByInterface" parameterType="java.util.Map">
+           update WY_CELL_MANUAL
+           <set>
+               <if test="NAME != null">
+                   NAME = #{NAME,jdbcType=VARCHAR},
+               </if>
+               <if test="BSC_NAME != null">
+                   BSC_NAME = #{BSC_NAME,jdbcType=VARCHAR},
+               </if>
+               <if test="CI != null">
+                   CI = #{CI,jdbcType=DECIMAL},
+               </if>
+               <if test="GFFLAG != null">
+                   GFFLAG = #{GFFLAG,jdbcType=VARCHAR},
+               </if>
+               <if test="GFNUM != null">
+                   GFNUM = #{GFNUM,jdbcType=DECIMAL},
+               </if>
+               <if test="CELLTYPE != null">
+                   CELLTYPE = #{CELLTYPE,jdbcType=VARCHAR},
+               </if>
+               <if test="INDOORNUM != null">
+                   INDOORNUM = #{INDOORNUM,jdbcType=DECIMAL},
+               </if>
+               <if test="BORDERFLAG != null">
+                   BORDERFLAG = #{BORDERFLAG,jdbcType=VARCHAR},
+               </if>
+               <if test="DOFRQNUM != null">
+                   DOFRQNUM = #{DOFRQNUM,jdbcType=DECIMAL},
+               </if>
+               <if test="DOPN != null">
+                   DOPN = #{DOPN,jdbcType=DECIMAL},
+               </if>
+               <if test="FEEDERLENGTH != null">
+                   FEEDERLENGTH = #{FEEDERLENGTH,jdbcType=DECIMAL},
+               </if>
+               <if test="COVERAREA != null">
+                   COVERAREA = #{COVERAREA,jdbcType=VARCHAR},
+               </if>
+               <if test="COVERROAD != null">
+                   COVERROAD = #{COVERROAD,jdbcType=VARCHAR},
+               </if>
+               <if test="COVERHOT != null">
+                   COVERHOT = #{COVERHOT,jdbcType=VARCHAR},
+               </if>
+               <if test="RADII != null">
+                   RADII = #{RADII,jdbcType=VARCHAR},
+               </if>
+               <if test="BOUNDARYCELLFLAG != null">
+                   BOUNDARYCELLFLAG = #{BOUNDARYCELLFLAG,jdbcType=VARCHAR},
+               </if>
+               <if test="BORDERPROVINCE != null">
+                   BORDERPROVINCE = #{BORDERPROVINCE,jdbcType=VARCHAR},
+               </if>
+               <if test="BORDERCITY != null">
+                   BORDERCITY = #{BORDERCITY,jdbcType=VARCHAR},
+               </if>
+               <if test="FIXTEXT != null">
+                   FIXTEXT = #{FIXTEXT,jdbcType=VARCHAR},
+               </if>
+               <if test="MAR != null">
+                   MAR = #{MAR,jdbcType=DECIMAL},
+               </if>
+               <if test="REMARK != null">
+                   REMARK = #{REMARK,jdbcType=VARCHAR},
+               </if>
+               <if test="UPDATETIME != null">
+                   UPDATETIME = #{UPDATETIME,jdbcType=DATE},
+               </if>
+               <if test="UPDATEUSER != null">
+                   UPDATEUSER = #{UPDATEUSER,jdbcType=DECIMAL},
+               </if>
+           </set>
+           where INT_ID = #{INT_ID,jdbcType=DECIMAL}
+       </update>
+
+
+    <update id="updateByIntID">
+        update WY_CELL_MANUAL set INT_ID = #{newIntId,jdbcType=DECIMAL}
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+    </update>
+
+
+</mapper>

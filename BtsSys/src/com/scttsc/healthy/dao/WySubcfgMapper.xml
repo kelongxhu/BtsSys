@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.healthy.dao.WySubcfgDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.healthy.model.WySubcfg">
+        <id column="ID" property="id" jdbcType="DECIMAL"/>
+        <result column="SUB" property="sub" jdbcType="VARCHAR"/>
+        <result column="SUBCHILD" property="subchild" jdbcType="VARCHAR"/>
+        <result column="COLUMNNAME" property="columnname" jdbcType="VARCHAR"/>
+        <result column="SEQ" property="seq" jdbcType="DECIMAL"/>
+        <result column="SUBDESC" property="subdesc" jdbcType="VARCHAR"/>
+        <result column="SUBTYPE" property="subType" jdbcType="DECIMAL"/>
+        <result column="CODE1" property="code1" jdbcType="DECIMAL"/>
+        <result column="CODE2" property="code2" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.scttsc.healthy.model.WySubcfg">
+        <id column="S_ID" property="id" jdbcType="DECIMAL"/>
+        <result column="S_SUB" property="sub" jdbcType="VARCHAR"/>
+        <result column="S_SUBCHILD" property="subchild" jdbcType="VARCHAR"/>
+        <result column="S_COLUMNNAME" property="columnname" jdbcType="VARCHAR"/>
+        <result column="S_SEQ" property="seq" jdbcType="DECIMAL"/>
+        <result column="S_SUBDESC" property="subdesc" jdbcType="VARCHAR"/>
+        <result column="S_SUBTYPE" property="subType" jdbcType="DECIMAL"/>
+        <result column="S_CODE1" property="code1" jdbcType="DECIMAL"/>
+        <result column="S_CODE2" property="code2" jdbcType="DECIMAL"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    ID, SUB, SUBCHILD, COLUMNNAME, SEQ, SUBDESC,SUBTYPE,CODE1,CODE2
+  </sql>
+
+    <sql id="Base_Column_List2">
+        s.ID S_ID, s.SUB S_SUB, s.SUBCHILD S_SUBCHILD,s.COLUMNNAME S_COLUMNNAME, s.SEQ S_SEQ, s.SUBDESC S_SUBDESC,s.SUBTYPE S_SUBTYPE,s.CODE1 S_CODE1,s.CODE2 S_CODE2
+      </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_SUBCFG
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from WY_SUBCFG
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="com.scttsc.healthy.model.WySubcfg">
+    insert into WY_SUBCFG (ID, SUB, SUBCHILD,
+      COLUMNNAME, SEQ,
+      SUBDESC)
+    values (#{id,jdbcType=DECIMAL}, #{sub,jdbcType=VARCHAR}, #{subchild,jdbcType=VARCHAR},
+      #{columnname,jdbcType=VARCHAR}, #{seq,jdbcType=DECIMAL},
+      #{subdesc,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.scttsc.healthy.model.WySubcfg">
+        insert into WY_SUBCFG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="sub != null">
+                SUB,
+            </if>
+            <if test="subchild != null">
+                SUBCHILD,
+            </if>
+            <if test="columnname != null">
+                COLUMNNAME,
+            </if>
+            <if test="seq != null">
+                SEQ,
+            </if>
+            <if test="subdesc != null">
+                SUBDESC,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="sub != null">
+                #{sub,jdbcType=VARCHAR},
+            </if>
+            <if test="subchild != null">
+                #{subchild,jdbcType=VARCHAR},
+            </if>
+            <if test="columnname != null">
+                #{columnname,jdbcType=VARCHAR},
+            </if>
+            <if test="seq != null">
+                #{seq,jdbcType=DECIMAL},
+            </if>
+            <if test="subdesc != null">
+                #{subdesc,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.healthy.model.WySubcfg">
+        update WY_SUBCFG
+        <set>
+            <if test="sub != null">
+                SUB = #{sub,jdbcType=VARCHAR},
+            </if>
+            <if test="subchild != null">
+                SUBCHILD = #{subchild,jdbcType=VARCHAR},
+            </if>
+            <if test="columnname != null">
+                COLUMNNAME = #{columnname,jdbcType=VARCHAR},
+            </if>
+            <if test="seq != null">
+                SEQ = #{seq,jdbcType=DECIMAL},
+            </if>
+            <if test="subdesc != null">
+                SUBDESC = #{subdesc,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.scttsc.healthy.model.WySubcfg">
+    update WY_SUBCFG
+    set SUB = #{sub,jdbcType=VARCHAR},
+      SUBCHILD = #{subchild,jdbcType=VARCHAR},
+      COLUMNNAME = #{columnname,jdbcType=VARCHAR},
+      SEQ = #{seq,jdbcType=DECIMAL},
+      SUBDESC = #{subdesc,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+    <select id="selectSubCfgByMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_SUBCFG
+        <where>
+            1=1
+            <if test="subType!=null">
+                and SUBTYPE=#{subType,jdbcType=DECIMAL}
+            </if>
+        </where>
+        ORDER BY SUBTYPE,seq
+    </select>
+</mapper>

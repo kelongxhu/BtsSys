@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.WyTunelManualDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.business.model.WyTunelManual" >
+    <id column="INT_ID" property="intId" jdbcType="DECIMAL" />
+    <result column="PROP" property="prop" jdbcType="DECIMAL" />
+    <result column="ROAD_ID" property="roadId" jdbcType="DECIMAL" />
+    <result column="TUNEL_LENGTH" property="tunelLength" jdbcType="DECIMAL" />
+    <result column="ANTENNATYPE" property="antennatype" jdbcType="VARCHAR" />
+    <result column="LINETYPE" property="linetype" jdbcType="VARCHAR" />
+    <result column="COVERTYPE" property="covertype" jdbcType="VARCHAR" />
+    <result column="COVERRANGEDESC" property="coverrangedesc" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="TUNEL_HIGH" property="tunelHigh" jdbcType="DECIMAL" />
+    <result column="RRUNUM" property="rrunum" jdbcType="DECIMAL" />
+    <result column="RRUADDRESS" property="rruaddress" jdbcType="VARCHAR" />
+    <result column="REPEATERNUM" property="repeaternum" jdbcType="DECIMAL" />
+    <result column="REPEATERADDRESS" property="repeateraddress" jdbcType="VARCHAR" />
+    <result column="DRYNUM" property="drynum" jdbcType="DECIMAL" />
+    <result column="DRYADDRESS" property="dryaddress" jdbcType="VARCHAR" />
+    <result column="SHAREFLAG" property="shareflag" jdbcType="DECIMAL" />
+    <result column="MCHROOMFLAG" property="mchroomflag" jdbcType="VARCHAR" />
+    <result column="MCHROONAREA" property="mchroonarea" jdbcType="DECIMAL" />
+    <result column="METERADRESS" property="meteradress" jdbcType="VARCHAR" />
+    <result column="BUILDDATE" property="builddate" jdbcType="DATE" />
+    <result column="OWNER" property="owner" jdbcType="VARCHAR" />
+    <result column="OWNERTEL" property="ownertel" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="INTIME" property="intime" jdbcType="DATE" />
+    <result column="INUSER" property="inuser" jdbcType="DECIMAL" />
+  </resultMap>
+
+    <resultMap id="BaseResultMap_2" type="com.scttsc.business.model.WyTunelManual" >
+        <id column="tm_INT_ID" property="intId" jdbcType="DECIMAL" />
+        <result column="tm_PROP" property="prop" jdbcType="DECIMAL" />
+        <result column="tm_ROAD_ID" property="roadId" jdbcType="DECIMAL" />
+        <result column="tm_TUNEL_LENGTH" property="tunelLength" jdbcType="DECIMAL" />
+        <result column="tm_ANTENNATYPE" property="antennatype" jdbcType="VARCHAR" />
+        <result column="tm_LINETYPE" property="linetype" jdbcType="VARCHAR" />
+        <result column="tm_COVERTYPE" property="covertype" jdbcType="VARCHAR" />
+        <result column="tm_COVERRANGEDESC" property="coverrangedesc" jdbcType="VARCHAR" />
+        <result column="tm_ADDRESS" property="address" jdbcType="VARCHAR" />
+        <result column="tm_TUNEL_HIGH" property="tunelHigh" jdbcType="DECIMAL" />
+        <result column="tm_RRUNUM" property="rrunum" jdbcType="DECIMAL" />
+        <result column="tm_RRUADDRESS" property="rruaddress" jdbcType="VARCHAR" />
+        <result column="tm_REPEATERNUM" property="repeaternum" jdbcType="DECIMAL" />
+        <result column="tm_REPEATERADDRESS" property="repeateraddress" jdbcType="VARCHAR" />
+        <result column="tm_DRYNUM" property="drynum" jdbcType="DECIMAL" />
+        <result column="tm_DRYADDRESS" property="dryaddress" jdbcType="VARCHAR" />
+        <result column="tm_SHAREFLAG" property="shareflag" jdbcType="DECIMAL" />
+        <result column="tm_MCHROOMFLAG" property="mchroomflag" jdbcType="VARCHAR" />
+        <result column="tm_MCHROONAREA" property="mchroonarea" jdbcType="DECIMAL" />
+        <result column="tm_METERADRESS" property="meteradress" jdbcType="VARCHAR" />
+        <result column="tm_BUILDDATE" property="builddate" jdbcType="DATE" />
+        <result column="tm_OWNER" property="owner" jdbcType="VARCHAR" />
+        <result column="tm_OWNERTEL" property="ownertel" jdbcType="VARCHAR" />
+        <result column="tm_REMARK" property="remark" jdbcType="VARCHAR" />
+        <result column="tm_INTIME" property="intime" jdbcType="DATE" />
+        <result column="tm_INUSER" property="inuser" jdbcType="DECIMAL" />
+    </resultMap>
+
+  <sql id="Base_Column_List" >
+    tm.INT_ID,tm.PROP, tm.ROAD_ID, tm.TUNEL_LENGTH,
+    tm.ANTENNATYPE, tm.LINETYPE, tm.COVERTYPE, tm.COVERRANGEDESC, tm.ADDRESS, tm.TUNEL_HIGH, tm.RRUNUM, tm.RRUADDRESS,
+    tm.REPEATERNUM, tm.REPEATERADDRESS, tm.DRYNUM, tm.DRYADDRESS, tm.SHAREFLAG, tm.MCHROOMFLAG, tm.MCHROONAREA,
+    tm.METERADRESS, tm.BUILDDATE, tm.OWNER, tm.OWNERTEL, tm.REMARK, tm.INTIME, tm.INUSER
+  </sql>
+
+    <sql id="Base_Column_List_2" >
+        tm.INT_ID tm_INT_ID,tm.PROP tm_PROP, tm.ROAD_ID tm_ROAD_ID, tm.TUNEL_LENGTH tm_TUNEL_LENGTH,
+        tm.ANTENNATYPE tm_ANTENNATYPE, tm.LINETYPE tm_LINETYPE, tm.COVERTYPE tm_COVERTYPE, tm.COVERRANGEDESC tm_COVERRANGEDESC, tm.ADDRESS tm_ADDRESS, tm.TUNEL_HIGH tm_TUNEL_HIGH, tm.RRUNUM tm_RRUNUM, tm.RRUADDRESS tm_RRUADDRESS,
+        tm.REPEATERNUM tm_REPEATERNUM, tm.REPEATERADDRESS tm_REPEATERADDRESS, tm.DRYNUM tm_DRYNUM, tm.DRYADDRESS tm_DRYADDRESS, tm.SHAREFLAG tm_SHAREFLAG, tm.MCHROOMFLAG tm_MCHROOMFLAG, tm.MCHROONAREA tm_MCHROONAREA,
+        tm.METERADRESS tm_METERADRESS, tm.BUILDDATE tm_BUILDDATE, tm.OWNER tm_OWNER, tm.OWNERTEL tm_OWNERTEL, tm.REMARK tm_REMARK, tm.INTIME tm_INTIME, tm.INUSER tm_INUSER
+    </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from WY_TUNEL_MANUAL tm
+    where tm.INT_ID = #{intId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from WY_TUNEL_MANUAL
+    where INT_ID = #{intId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.business.model.WyTunelManual" >
+    insert into WY_TUNEL_MANUAL (INT_ID,
+      PROP, ROAD_ID, TUNEL_LENGTH, 
+      ANTENNATYPE, LINETYPE, COVERTYPE, 
+      COVERRANGEDESC, ADDRESS, TUNEL_HIGH, 
+      RRUNUM, RRUADDRESS, REPEATERNUM, 
+      REPEATERADDRESS, DRYNUM, DRYADDRESS, 
+      SHAREFLAG, MCHROOMFLAG, MCHROONAREA, 
+      METERADRESS, BUILDDATE, OWNER, 
+      OWNERTEL, REMARK, INTIME, 
+      INUSER)
+    values (#{intId,jdbcType=DECIMAL},
+      #{prop,jdbcType=DECIMAL}, #{roadId,jdbcType=DECIMAL}, #{tunelLength,jdbcType=DECIMAL},
+      #{antennatype,jdbcType=VARCHAR}, #{linetype,jdbcType=VARCHAR}, #{covertype,jdbcType=VARCHAR}, 
+      #{coverrangedesc,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{tunelHigh,jdbcType=DECIMAL}, 
+      #{rrunum,jdbcType=DECIMAL}, #{rruaddress,jdbcType=VARCHAR}, #{repeaternum,jdbcType=DECIMAL}, 
+      #{repeateraddress,jdbcType=VARCHAR}, #{drynum,jdbcType=DECIMAL}, #{dryaddress,jdbcType=VARCHAR}, 
+      #{shareflag,jdbcType=DECIMAL}, #{mchroomflag,jdbcType=VARCHAR}, #{mchroonarea,jdbcType=DECIMAL}, 
+      #{meteradress,jdbcType=VARCHAR}, #{builddate,jdbcType=DATE}, #{owner,jdbcType=VARCHAR}, 
+      #{ownertel,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{intime,jdbcType=DATE}, 
+      #{inuser,jdbcType=DECIMAL})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.business.model.WyTunelManual" >
+    update WY_TUNEL_MANUAL
+    <set >
+      <if test="prop != null" >
+        PROP = #{prop,jdbcType=DECIMAL},
+      </if>
+      <if test="roadId != null" >
+        ROAD_ID = #{roadId,jdbcType=VARCHAR},
+      </if>
+      <if test="tunelLength != null" >
+        TUNEL_LENGTH = #{tunelLength,jdbcType=DECIMAL},
+      </if>
+      <if test="antennatype != null" >
+        ANTENNATYPE = #{antennatype,jdbcType=VARCHAR},
+      </if>
+      <if test="linetype != null" >
+        LINETYPE = #{linetype,jdbcType=VARCHAR},
+      </if>
+      <if test="covertype != null" >
+        COVERTYPE = #{covertype,jdbcType=VARCHAR},
+      </if>
+      <if test="coverrangedesc != null" >
+        COVERRANGEDESC = #{coverrangedesc,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="tunelHigh != null" >
+        TUNEL_HIGH = #{tunelHigh,jdbcType=DECIMAL},
+      </if>
+      <if test="rrunum != null" >
+        RRUNUM = #{rrunum,jdbcType=DECIMAL},
+      </if>
+      <if test="rruaddress != null" >
+        RRUADDRESS = #{rruaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="repeaternum != null" >
+        REPEATERNUM = #{repeaternum,jdbcType=DECIMAL},
+      </if>
+      <if test="repeateraddress != null" >
+        REPEATERADDRESS = #{repeateraddress,jdbcType=VARCHAR},
+      </if>
+      <if test="drynum != null" >
+        DRYNUM = #{drynum,jdbcType=DECIMAL},
+      </if>
+      <if test="dryaddress != null" >
+        DRYADDRESS = #{dryaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="shareflag != null" >
+        SHAREFLAG = #{shareflag,jdbcType=DECIMAL},
+      </if>
+      <if test="mchroomflag != null" >
+        MCHROOMFLAG = #{mchroomflag,jdbcType=VARCHAR},
+      </if>
+      <if test="mchroonarea != null" >
+        MCHROONAREA = #{mchroonarea,jdbcType=DECIMAL},
+      </if>
+      <if test="meteradress != null" >
+        METERADRESS = #{meteradress,jdbcType=VARCHAR},
+      </if>
+      <if test="builddate != null" >
+        BUILDDATE = #{builddate,jdbcType=DATE},
+      </if>
+      <if test="owner != null" >
+        OWNER = #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="ownertel != null" >
+        OWNERTEL = #{ownertel,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="intime != null" >
+        INTIME = #{intime,jdbcType=DATE},
+      </if>
+      <if test="inuser != null" >
+        INUSER = #{inuser,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where INT_ID = #{intId,jdbcType=DECIMAL}
+  </update>
+
+    <update id="updateByIntID">
+        update WY_TUNEL_MANUAL set INT_ID = #{newIntId,jdbcType=DECIMAL}
+        where INT_ID = #{intId,jdbcType=DECIMAL}
+    </update>
+
+
+</mapper>

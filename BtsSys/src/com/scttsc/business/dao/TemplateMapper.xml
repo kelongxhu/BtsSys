@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.business.dao.TemplateDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.business.model.Template">
+        <id column="ID" property="id" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="COLUMNS_CONFIGS" property="columnsConfigs" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="DECIMAL"/>
+        <result column="USER_ID" property="userId" jdbcType="DECIMAL"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="SHAREFLAG" property="shareflag" jdbcType="DECIMAL"/>
+        <result column="USEFLAG" property="useFlag" jdbcType="DECIMAL"/>
+
+        <result column="username" property="user.name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    u.ID,u.NAME, u.COLUMNS_CONFIGS, u.TYPE, u.USER_ID, u.UPDATE_TIME, u.SHAREFLAG,u.USEFLAG
+  </sql>
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List"/>,a.NAME username
+        from WY_TEMPLATE u
+        left join FRAMEWORK_SECURITY_USER a on a.INT_ID=u.USER_ID
+        )m
+        <where>
+            1=1
+            <if test="typeId!=null">
+                and TYPE=#{typeId,jdbcType=DECIMAL}
+            </if>
+            <if test="useFlag!=null">
+                and USEFLAG=#{useFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="userId!=null">
+                and (USER_ID=#{userId,jdbcType=DECIMAL} or shareflag=1)
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="countByMap" resultType="int">
+        select count(1) from (
+        select
+        <include refid="Base_Column_List"/>,a.NAME username
+        from WY_TEMPLATE u
+        left join FRAMEWORK_SECURITY_USER a on a.INT_ID=u.USER_ID
+        <where>
+            1=1
+            <if test="typeId!=null">
+                and u.TYPE=#{typeId,jdbcType=DECIMAL}
+            </if>
+            <if test="useFlag!=null">
+                and USEFLAG=#{useFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="userId!=null">
+                and (u.USER_ID=#{userId,jdbcType=DECIMAL} or u.shareflag=1)
+            </if>
+        </where>
+        )
+    </select>
+
+
+    <select id="selectTemplateByMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,a.NAME username
+        from WY_TEMPLATE u
+        left join FRAMEWORK_SECURITY_USER a on a.INT_ID=u.USER_ID
+        <where>
+            1=1
+            <if test="typeId!=null">
+                and u.TYPE=#{typeId,jdbcType=DECIMAL}
+            </if>
+            <if test="useFlag!=null">
+                and USEFLAG=#{useFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="userId!=null">
+                and (u.USER_ID=#{userId,jdbcType=DECIMAL} or u.shareflag=1)
+            </if>
+        </where>
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_TEMPLATE u
+        where u.ID = #{id,jdbcType=DECIMAL}
+    </select>
+
+    <delete id="deleteById" parameterType="java.math.BigDecimal">
+    delete from WY_TEMPLATE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+
+    <insert id="insert" parameterType="com.scttsc.business.model.Template">
+    insert into WY_TEMPLATE (ID,NAME, COLUMNS_CONFIGS, TYPE,
+      USER_ID, UPDATE_TIME, SHAREFLAG,USEFLAG
+      )
+    values (WY_TEMPLATE_SEQ.nextval,#{name,jdbcType=VARCHAR},  #{columnsConfigs,jdbcType=VARCHAR}, #{type,jdbcType=DECIMAL},
+      #{userId,jdbcType=DECIMAL}, #{updateTime,jdbcType=TIMESTAMP}, #{shareflag,jdbcType=DECIMAL},#{useFlag,jdbcType=DECIMAL}
+      )
+  </insert>
+
+    <update id="update" parameterType="com.scttsc.business.model.Template">
+        update WY_TEMPLATE
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="columnsConfigs != null">
+                COLUMNS_CONFIGS = #{columnsConfigs,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=DECIMAL},
+            </if>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=DECIMAL},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shareflag != null">
+                SHAREFLAG = #{shareflag,jdbcType=DECIMAL},
+            </if>
+            <if test="useFlag != null">
+                USEFLAG = #{useFlag,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+</mapper>
