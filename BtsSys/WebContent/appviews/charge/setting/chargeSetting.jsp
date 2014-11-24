@@ -84,12 +84,13 @@
 	                $.ligerDialog.alert('请选择一条录入！');
 	                return;
 	            }
-	            var id, btsType;
+	            var id, btsType, costType;
 	            $(rows).each(function() {
 	                id = this.intId;
 	                btsType = this.btsType;
+	                costType = this.costType;
 	            });
-	            window.location.href = "${ctx}/charge/setting.action?intId="+id+"&btsType="+btsType;
+	            window.location.href = "${ctx}/charge/setting.action?intId="+id+"&btsType="+btsType+"&costType="+costType;
 			}
 			
 			function exportInputData(){}
