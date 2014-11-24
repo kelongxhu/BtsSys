@@ -46,7 +46,11 @@ public class WyBtsCharge {
 
     private BigDecimal inUser;//插入用户
 
-    private Date nextRemindTime;//计算下次提醒时间
+    private Date lastPayTime;//上次缴费时间
+
+    private Date nextPayTime;//下次缴费时间
+
+    private Integer isRemind;//本周期是否已经短信提醒
 
 
     //冗余基站字段
@@ -292,11 +296,27 @@ public class WyBtsCharge {
         this.inUser = inUser;
     }
 
-    public Date getNextRemindTime() {
-        return nextRemindTime;
+    public Date getLastPayTime() {
+        return lastPayTime;
     }
 
-    public void setNextRemindTime(Date nextRemindTime) {
-        this.nextRemindTime = nextRemindTime;
+    public void setLastPayTime(Date lastPayTime) {
+        this.lastPayTime = lastPayTime;
+    }
+
+    public Date getNextPayTime() {
+        return nextPayTime;
+    }
+
+    public void setNextPayTime(Date nextPayTime) {
+        this.nextPayTime = nextPayTime;
+    }
+
+    public Integer getIsRemind() {
+        return isRemind;
+    }
+
+    public void setIsRemind(Integer isRemind) {
+        this.isRemind = isRemind;
     }
 }
