@@ -1,15 +1,14 @@
 <%@ page language="java" pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<%@ include file="/appviews/common/tag.jsp"%>
-		<script type="text/javascript"
-			src="${ctx}/resources/js/ajaxfileupload.js"></script>
-		<script src="${ctx}/resources/uploadify/jquery.uploadify.js"
-			type="text/javascript"></script>
-		<link rel="stylesheet" type="text/css"
-			href="${ctx}/resources/uploadify/uploadify.css">
+		<script type="text/javascript" src="${ctx}/resources/My97DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="${ctx}/resources/js/ajaxfileupload.js"></script>
+		<script src="${ctx}/resources/uploadify/jquery.uploadify.js" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="${ctx}/resources/uploadify/uploadify.css">
 		<style type="text/css">
 			#msg {
 				padding-left: 16px;
@@ -20,247 +19,87 @@
 			}
 		</style>
 		<script type="text/javascript">
-	//注册表单验证
-	$(function() {
-		$("#contractStarttime").ligerDateEditor({ label: '', format: "yyyy-MM-dd", labelAlign: 'right',width : 200});
-		$("#contractEndtime").ligerDateEditor({ label: '', format: "yyyy-MM-dd", labelAlign: 'right',width : 200});
-		
-		//$("#remindUser").ligerTextBox({width : 200 });
+			//注册表单验证
+			$(function() {
+				
+				//$("#remindUser").ligerTextBox({width : 200 });
 		
 		
-
-
-	});
-
-	//初始化主设备安装位置
-	var typeURL1 = "${ctx}/schooljson/cons.action?groupCode=BTSINSTALL";
-	var sl1;
-	$.getJSON(typeURL1, function(data) {
-		sl1 = $("#installPosVal").ligerComboBox( {
-			data : data.Rows,
-			width : 200,
-			selectBoxWidth : 200,
-			textField : 'name',
-			valueField : 'code',
-			valueFieldID : 'installPos'
-		});
-		sl1.selectValue('${btsManual.installPos}');
-	});
-
-	//初始化塔桅类型
-	var typeURL2 = "${ctx}/schooljson/cons.action?groupCode=TOWERTYPE";
-	var sl2;
-	$.getJSON(typeURL2, function(data) {
-		sl2 = $("#towerTypeVal").ligerComboBox( {
-			data : data.Rows,
-			width : 200,
-			selectBoxWidth : 200,
-			textField : 'name',
-			valueField : 'code',
-			valueFieldID : 'towerType'
-		});
-		sl2.selectValue('${btsManual.towerType}');
-	});
-
-	//初始化机房结构
-	var typeURL3 = "${ctx}/schooljson/cons.action?groupCode=MRSTRUT";
-	var sl3;
-	$.getJSON(typeURL3, function(data) {
-		sl3 = $("#mrStrutVal").ligerComboBox( {
-			data : data.Rows,
-			width : 200,
-			selectBoxWidth : 200,
-			textField : 'name',
-			valueField : 'code',
-			valueFieldID : 'mrStrut'
-		});
-		sl3.selectValue('${btsManual.mrStrut}');
-	});
-
-	$(function() {
-		var v = $("#form1").validate( {
-			ignore : "",
-			submitHandler : function(form) {
-				//form.submit();
-			jQuery(form).ajaxSubmit(function(json) {
-				if (json.result == 1) {
-					alert('操作成功!');
-				} else {
-					alert('操作失败!');
-				}
-				window.location.href = "${ctx}/business/bts.action";
 			});
-		}
-		});
-	});
-
-	function add() {
-		$("#form1").submit();
-	}
-
-	//返回
-	function back() {
-		javascript: history.go(-1);
-	}
-
-	var upDialog;
-
-	function up() {
-		upDialog = $.ligerDialog.open( {
-			height : 150,
-			width : 300,
-			target : $("#forUploader"),
-			title : '上传塔桅照片'
-		});
-	}
-
-	function upImage() {
-		var fileName = document.getElementById("file").value;
-		if (fileName.length < 1) {
-			alert("上传图片不能为空!");
-			return;
-		}
-		var type = fileName.substring(fileName.lastIndexOf(".") + 1);
-		if (!(type == "jpg")) {
-			alert("请上传jpg类型图片!");
-			return;
-		}
-
-		$.ajaxFileUpload( {
-			url : '${ctx}/schooljson/upImage.action',
-			secureuri : false,
-			fileElementId : 'file',
-			dataType : 'text',
-			type : "post",
-			cache : false,
-			timeout : 5000,
-			success : function(data, status) {
-				if (data.indexOf("error") >= 0) {
-					alert("文件上传失败");
-				} else {
-					var mmsDo = eval("(" + data + ")");
-					var sc = mmsDo.result;
-					if (sc == "1") {
-						address = mmsDo.address;
-						alert("上传成功");
-						$("#towerPic").val(address);
-						upDialog.close();
-					} else {
-						alert("上传失败");
-					}
+		
+			$(function() {
+				var v = $("#form1").validate( {
+					ignore : "",
+					submitHandler : function(form) {
+					//form.submit();
+					jQuery(form).ajaxSubmit(function(json) {
+						if (json.result == 1) {
+							alert('操作成功!');
+						} else {
+							alert('操作失败!');
+						}
+						window.location.href = "${ctx}/charge/chargeSetting.action";
+					});
 				}
-			},
-			error : function(data, status, e) {
-				alert(e);
+				});
+			});
+		
+			function add() {
+				$("#form1").submit();
 			}
-		});
-	}
-
-	$(function() {
-		//塔跪照片
-		$("#uploadify").uploadify( {
-			method : 'post',
-			swf : '${ctx}/resources/uploadify/uploadify.swf',
-			uploader : '${ctx}/businessjson/importFile.action',
-			cancelImg : '${ctx}/resources/uploadify/uploadify-cancel.png',
-			fileObjName : 'file',
-			fileSizeLimit : 0,
-			multi : false,
-			removeCompleted : false,
-			fileSizeLimit : '10MB',
-			buttonText : '选择文件',
-			buttonClass : 'some-class',
-			height : 21,
-			width : 75,
-			auto : true,
-			fileTypeDesc : 'jpg文件',//上传文件类型说明
-			fileTypeExts : '*.jpg', //控制可上传文件的扩展名，启用本项时需同时声明fileDesc
-			onInit : function() {
-				$("#uploadify-queue").hide();
-			},
-			onSelect : function(file) {
-				//$("#path").val(file.name);
-		},
-		onUploadSuccess : function(file, data, response) {
-			data = eval('(' + data + ')');
-			if (data.result == 1) {
-				$("#towerPic").val(data.address);
-				$("#msg").html("上传成功!");
-			} else {
-				$("#msg").html("上传失败!");
+		
+			//返回
+			function back() {
+				javascript: history.go(-1);
 			}
-		}
-		});
-
-		//机房照片
-		$("#jf_uploadify").uploadify( {
-			method : 'post',
-			swf : '${ctx}/resources/uploadify/uploadify.swf',
-			uploader : '${ctx}/businessjson/importFile.action',
-			cancelImg : '${ctx}/resources/uploadify/uploadify-cancel.png',
-			fileObjName : 'file',
-			fileSizeLimit : 0,
-			multi : false,
-			removeCompleted : false,
-			fileSizeLimit : '10MB',
-			buttonText : '选择文件',
-			buttonClass : 'some-class',
-			height : 21,
-			width : 75,
-			auto : true,
-			fileTypeDesc : 'jpg文件',//上传文件类型说明
-			fileTypeExts : '*.jpg', //控制可上传文件的扩展名，启用本项时需同时声明fileDesc
-			onInit : function() {
-				$("#jf_uploadify-queue").hide();
-			},
-			onSelect : function(file) {
-				//$("#path").val(file.name);
-		},
-		onUploadSuccess : function(file, data, response) {
-			data = eval('(' + data + ')');
-			if (data.result == 1) {
-				$("#mrPic").val(data.address);
-				$("#jf_msg").html("上传成功!");
-			} else {
-				$("#jf_msg").html("上传失败!");
+			
+			$(function() {
+			    $("#pz_uploadify").uploadify({
+			        method    : 'post',
+			        swf           : '${ctx}/resources/uploadify/uploadify.swf',
+			        uploader      : '${ctx}/chargejson/uploadFile.action;jsessionid=${pageContext.session.id}',
+			        cancelImg :  '${ctx}/resources/uploadify-cancel.png',
+			        fileObjName     : 'file',
+			        successTimeout:600,
+			        multi  : false,
+			        removeCompleted : false,
+			        fileSizeLimit : '10MB',
+			        buttonText      : '选择文件',
+			        height        : 25,
+			        width         : 70 ,
+			        auto :false,
+			        fileTypeDesc: 'All Files',//上传文件类型说明
+			        fileTypeExts: '*.*', //控制可上传文件的扩展名，启用本项时需同时声明fileDesc
+			        onInit   : function() {
+			            $("#pz_uploadify-queue").hide();
+			        },
+			        onSelect : function(file) {
+			            $("#proofFile").val(file.name);
+			        },
+			        onUploadProgress: function(file,bytesUploaded,bytesTotal,totalBytesUploaded,totalBytesTotal){
+			            $('#msg').html('已上传:'+(totalBytesTotal/bytesTotal)*100);
+			        },
+			        onUploadSuccess : function(file, data, response) {
+			            data = eval('(' + data + ')');
+			            var status=data["fileDTO"].status;
+			            if(status==1){
+			                $("#proofFile").val(data["fileDTO"].uuid);
+			                $("#msg").html("上传成功!");
+			            }else{
+			                $("#msg").html("上传失败!");
+			            }
+			        }
+			    });
+			});
+			
+			//上传
+			function uploadifyUpload() {
+			    $('#pz_uploadify').uploadify('upload', '*');
+				//    $("#msg").html("请稍等,正在上传。。");
+				//    $("#msg").addClass("tipMsg");
+			    return false;
 			}
-		}
-		});
-
-	});
-
-	//选择上游节点对话框
-
-	function showDilog() {
-		$.ligerDialog.open( {
-			height : 512,
-			url : '${ctx}/appviews/business/bts/topTransferNode.jsp',
-			width : 1100,
-			name : 'columns',
-			title : "选择传输拓扑上游站点",
-			showMax : true,
-			showToggle : true,
-			showMin : true,
-			isResize : true,
-			isHidden : false
-		});
-	}
-
-	function showDownDilog() {
-		$.ligerDialog.open( {
-			height : 512,
-			url : '${ctx}/appviews/business/bts/downTransferNode.jsp',
-			width : 1100,
-			name : 'columns',
-			title : "选择传输拓扑下游站点",
-			showMax : true,
-			showToggle : true,
-			showMin : true,
-			isResize : true,
-			isHidden : false
-		});
-	}
-</script>
+		</script>
 	</head>
 	<body>
 		<!-- 标题 -->
@@ -274,7 +113,7 @@
 			</div>
 			<div class="content">
 				<form method="post" name="form1" id="form1"
-					action="${ctx}/businessjson/addBtsManual.action">
+					action="${ctx}/chargejson/doChargeSetting.action">
 					<div class="tabbable tabs-left">
 						<ul class="nav nav-tabs nav-stacked" id="mytab"></ul>
 						<div class="tab-content">
@@ -321,25 +160,51 @@
 											${WyBtsCharge.btsId}
 										</td>
 									</tr>
-									
-									<!-- 房租  -->
-									<tr>
-										<th colspan="4">
-											<span class="label label-success">房租费用设置</span>
-										</th>
-									</tr>
+
+									<c:choose>
+										<c:when test="${param.costType=='1'}">
+											<!-- 房租  -->
+											<tr>
+												<th colspan="4">
+													<span class="label label-success">房租费用设置</span>
+												</th>
+											</tr>
+										</c:when>
+										<c:when test="${param.costType=='2'}">		
+											<!-- 物业 -->									
+											<tr>
+												<th colspan="4">
+													<span class="label label-success">物业费用设置</span>
+												</th>
+											</tr>										
+										</c:when>
+										<c:when test="${param.costType=='3'}">		
+											<!-- 电费 -->										
+											<tr>
+												<th colspan="4">
+													<span class="label label-success">电费费用设置</span>
+												</th>
+											</tr>										
+										</c:when>
+										<c:otherwise/>
+									</c:choose>			
+																							
 									<tr>
 										<td>
 											<span style="color: red;">*</span>合同开始日期：
 										</td>
 										<td>
-											<input name="wyBtsCharge.contractStarttime" class="required" type="text" id="contractStarttime" />
+											<input name="wyBtsCharge.contractStarttime" type="text" id="contractStarttime" 
+												class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" 
+												value="<fmt:formatDate value='${WyBtsCharge.contractEndtime }' pattern='yyyy-MM-dd' />"/>
 										</td>
 										<td>
 											<span style="color: red;">*</span>合同结束日期:
 										</td>
 										<td>
-											<input name="wyBtsCharge.contractEndtime" class="required" type="text" id="contractEndtime" />
+											<input name="wyBtsCharge.contractEndtime" type="text" id="contractEndtime" 
+												class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" 
+												value="<fmt:formatDate value='${WyBtsCharge.contractEndtime }' pattern='yyyy-MM-dd' />"/>
 										</td>
 									</tr>
 									<tr>
@@ -347,244 +212,94 @@
 											<span style="color: red;">*</span>缴费周期：
 										</td>
 										<td>
-											<input name="wyBtsCharge.payCycle" type="text" class="input150 required number" />
+											<input name="wyBtsCharge.payCycle" type="text" class="input150 required number" value="${WyBtsCharge.payCycle }"/>
 											<span style="color: red; font-size: 10px">(注：月)</span>
 										</td>
 										<td>
 											<span style="color: red;">*</span>缴费日期:
 										</td>
 										<td>
-											<input name="wyBtsCharge.payDay" type="text" class="input150 required number" />
+											<input name="wyBtsCharge.payDay" type="text" class="input150 required number" value="${WyBtsCharge.payDay }"/>
 										</td>
 									</tr>
 									<tr>
-										<td>
-											<span style="color: red;">*</span>提前提醒周期：
-										</td>
-										<td>
-											<input name="wyBtsCharge.aheadDay" type="text" class="input150 required number" />
-										</td>
 										<td>
 											<span style="color: red;">*</span>提醒人员:
 										</td>
 										<td>
-											<input name="wyBtsCharge.remindUser" type="text" class="input150 required" />
+											<input name="wyBtsCharge.remindUser" type="text" class="input150 required" value="${WyBtsCharge.remindUser }"/>
 										</td>
-									</tr>
-									<tr>
 										<td>
 											<span style="color: red;">*</span>提醒号码：
 										</td>
 										<td>
 											<input name="wyBtsCharge.remindTel" type="text"
-												class="input150 required"/>
-										</td>
+												class="input150 required" value="${WyBtsCharge.remindTel }"/>
+										</td>										
+									</tr>
+									<tr>
 										<td>
 											<span style="color: red;">*</span>金额：
 										</td>
 										<td>
 											<input name="wyBtsCharge.money" type="text"
-												class="input150 required number"/>
-										</td>										
-									</tr>
-									<tr>
-										<td>
-											<span style="color: red;">*</span>合同附件：
-										</td>
-										<td>
-											<input name="wyBtsCharge.contractFile" type="text"
-												class="input150 required"/>
-										</td>
-										<td>
-											<span style="color: red;">*</span>备注：
-										</td>
-										<td>
-											<input name="wyBtsCharge.remark" type="text"
-												class="input150 required"/>
-										</td>										
-									</tr>									
-									<tr>
+												class="input150 required number" value="${WyBtsCharge.money }"/>
+										</td>		
 										<td>
 											对方联系号码：
 										</td>
 										<td>
 											<input name="wyBtsCharge.eachTel" type="text"
-												class="input150"/>
-										</td>
+												class="input150" value="${WyBtsCharge.eachTel }"/>
+										</td>																		
+									</tr>
+									<tr>
 										<td>
 											对方账号名称：
 										</td>
 										<td>
 											<input name="wyBtsCharge.eachAccountname" type="text"
-												class="input150"/>
-										</td>										
-									</tr>	
-									<tr>
+												class="input150" value="${WyBtsCharge.eachAccountname }"/>
+										</td>		
 										<td>
 											对方银行账号：
 										</td>
 										<td>
 											<input name="wyBtsCharge.eachBanknum" type="text"
-												class="input150"/>
-										</td>
-									</tr>
-									<!-- 物业 -->									
-									<tr>
-										<th colspan="4">
-											<span class="label label-success">物业费用设置</span>
-										</th>
-									</tr>
-									<tr>
-										<td>
-											<span style="color: red;">*</span>合同开始日期：
-										</td>
-										<td>
-											<input name="wyBtsCharge.contractStarttime" class="required" type="text" id="contractStarttime" />
-										</td>
-										<td>
-											<span style="color: red;">*</span>合同结束日期:
-										</td>
-										<td>
-											<input name="wyBtsCharge.contractEndtime" class="required" type="text" id="contractEndtime" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<span style="color: red;">*</span>缴费周期：
-										</td>
-										<td>
-											<input name="wyBtsCharge.payCycle" type="text" class="input150 required number" />
-											<span style="color: red; font-size: 10px">(注：月)</span>
-										</td>
-										<td>
-											<span style="color: red;">*</span>缴费日期:
-										</td>
-										<td>
-											<input name="wyBtsCharge.payDay" type="text" class="input150 required number" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<span style="color: red;">*</span>提前提醒周期：
-										</td>
-										<td>
-											<input name="wyBtsCharge.aheadDay" type="text" class="input150 required number" />
-										</td>
-										<td>
-											<span style="color: red;">*</span>提醒人员:
-										</td>
-										<td>
-											<input name="wyBtsCharge.remindUser" type="text" class="input150 required" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<span style="color: red;">*</span>提醒号码：
-										</td>
-										<td>
-											<input name="wyBtsCharge.remindTel" type="text"
-												class="input150 required"/>
-										</td>
-										<td>
-											<span style="color: red;">*</span>金额：
-										</td>
-										<td>
-											<input name="wyBtsCharge.money" type="text"
-												class="input150 required number"/>
-										</td>										
-									</tr>
+												class="input150" value="${WyBtsCharge.eachBanknum }"/>
+										</td>																		
+									</tr>	
 									<tr>
 										<td>
 											<span style="color: red;">*</span>合同附件：
 										</td>
 										<td>
-											<input name="wyBtsCharge.contractFile" type="text"
-												class="input150 required"/>
-										</td>
+											<div style="float:left">
+									            <input name="wyBtsCharge.contractFile" id="proofFile" type="text" readonly="readonly" class="input150 required" value="${WyBtsCharge.contractFile }"/>
+									        </div>
+									        <div style="float:left">
+									            <input id="pz_uploadify" name="pz_uploadify" type="file" multiple="true">
+									        </div>
+										</td>	
+								        <td colspan="2">
+								            <button class="btn btn-success" onclick="$('#pz_uploadify').uploadify('upload', '*'); return false;" title="Upload File"><i class="icon-ok icon-white"></i>上传</button>
+								            <span id="msg" class="tipMsg"></span>
+								        </td>																			
+									</tr>
+									<tr>
 										<td>
 											<span style="color: red;">*</span>备注：
-										</td>
-										<td>
-											<input name="wyBtsCharge.remark" type="text"
-												class="input150 required"/>
-										</td>										
-									</tr>									
-									<tr>
-										<td>
-											对方联系号码：
-										</td>
-										<td>
-											<input name="wyBtsCharge.eachTel" type="text"
-												class="input150"/>
-										</td>
-										<td>
-											对方账号名称：
-										</td>
-										<td>
-											<input name="wyBtsCharge.eachAccountname" type="text"
-												class="input150"/>
-										</td>										
-									</tr>	
-									<tr>
-										<td>
-											对方银行账号：
-										</td>
-										<td>
-											<input name="wyBtsCharge.eachBanknum" type="text"
-												class="input150"/>
-										</td>
-									</tr>
-									<!-- 电费 -->										
-									<tr>
-										<th colspan="4">
-											<span class="label label-success">电费费用设置</span>
-										</th>
-									</tr>
-									<tr>
-										<td>
-											油机类型：
-										</td>
-										<td>
-											<input name="btsManual.oeType" type="text" class="input150"
-												value="${btsManual.oeType}" />
-										</td>
-										<td>
-											油机型号:
-										</td>
-										<td>
-											<input name="btsManual.oeModel" type="text" class="input150"
-												value="${btsManual.oeModel}" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											油机功率：
-										</td>
-										<td>
-											<input name="btsManual.oePower" type="text" class="input150"
-												value="${btsManual.oePower}" />
-										</td>
-										<td>
-											厂家：
-										</td>
-										<td>
-											<input name="btsManual.oeFac" type="text" class="input150"
-												value="${btsManual.oeFac}" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											备注：
 										</td>
 										<td colspan="3">
-											<textarea name="btsManual.remark" id="remark" cols="55"
-												rows="2">${btsManual.remark}</textarea>
-										</td>
-									</tr>
+                							<textarea name="wyBtsCharge.remark" class="area150">${WyBtsCharge.remark}</textarea>
+										</td>		
+									</tr>											
 								</table>
+								<input type="hidden" name="wyBtsCharge.intId" value="${param.intId }">
+								<input type="hidden" name="wyBtsCharge.btsType" value="${param.btsType }">
+								<input type="hidden" name="wyBtsCharge.costType" value="${param.costType }">
 							</div>
 						</div>
-
 
 						<div class="form-actions_2">
 							<button class="btn btn-info" type="button" onclick='add();'>

@@ -61,6 +61,7 @@
 	            $("#toptoolbar").ligerToolBar({
 	                items: [
 	                    { text: '设置/编辑', click: settingOrEdit , icon:'add'},
+	                    { text: '删除', click: del , icon:'delete'},
 	                    { text: '导出模板', click: exportInputData , icon:'logout'},
 		                { text: '导入数据', click: importInput , icon:'save'}
 	                ]
@@ -92,6 +93,36 @@
 	            });
 	            window.location.href = "${ctx}/charge/setting.action?intId="+id+"&btsType="+btsType+"&costType="+costType;
 			}
+			
+			//删除操作
+		 	function del(){
+		 		var rows = gridObj.getCheckedRows();
+				var str="";
+				$(rows).each(function() {
+					str += this.id + ",";
+				});
+				if (str.length == 0) {
+					 $.ligerDialog.alert('请选择要删除的数据！');
+					return;
+				} else {
+					str = str.substring(0, str.length - 1);
+				}
+		
+				$.ligerDialog.confirm('确认删除', function (yes) { 
+					var params = {
+							ids : str
+						};
+				$.getJSON('${ctx}/schooljson/deleteBlind.action', params, function(json) {
+					 if (json.result == 1) {
+						 alert('删除成功!');
+					}else{
+						 alert('删除失败！');
+					} 
+					 gridObj.loadData();
+				 });
+					
+				});
+		 	}
 			
 			function exportInputData(){}
 			function importInput(){}
