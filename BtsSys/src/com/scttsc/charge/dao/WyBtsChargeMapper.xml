@@ -371,16 +371,16 @@
                 BALANCE = #{balance,jdbcType=DECIMAL},
             </if>
             <if test="inTime!=null">
-                IN_TIME=#{inTime,jdbcType=TIMESTAMP}
+                IN_TIME=#{inTime,jdbcType=TIMESTAMP},
             </if>
             <if test="inUser!=null">
-                IN_USER=#{inUser,jdbcType=DECIMAL}
+                IN_USER=#{inUser,jdbcType=DECIMAL},
             </if>
             <if test="lastPayTime!=null">
-                LAST_PAY_TIME=#{lastPayTime,jdbcType=DATE}
+                LAST_PAY_TIME=#{lastPayTime,jdbcType=DATE},
             </if>
             <if test="nextPayTime!=null">
-                NEXT_PAY_TIME=#{nextPayTime,jdbcType=DATE}
+                NEXT_PAY_TIME=#{nextPayTime,jdbcType=DATE},
             </if>
             <if test="isRemind!=null">
                 IS_REMIND=#{isRemind,jdbcType=DECIMAL}
@@ -393,7 +393,7 @@
     <select id="selectWyBtsChargeSettingByMap" resultMap="BaseResultMap">
         select * from (select m.*,ROWNUM RN from
         (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,a.contract_starttime,a.contract_endtime,
-	      		a.ahead_day,a.money,a.contract_file,a.remark,a.each_tel,a.each_accountname,a.each_banknum,a.pay_type,a.bank_account, a.balance,
+	      		a.ahead_day,a.money,a.contract_file,a.remark,a.each_tel,a.each_accountname,a.each_banknum,a.pay_type,a.bank_account, a.balance,a.last_pay_time,
         		b.int_id,b.bts_id btsId,b.name btsName,b.bsc_name bscName,
         		c.name cityName,d.name countryName,${btsType} btsType,${costType} costType 
         from wy_bts b
@@ -470,7 +470,7 @@
     <select id="selectWyBbuChargeSettingByMap" resultMap="BaseResultMap">
         select * from (select m.*,ROWNUM RN from
         (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,a.contract_starttime,a.contract_endtime,
-	      		a.ahead_day,a.money,a.contract_file,a.remark,a.each_tel,a.each_accountname,a.each_banknum,a.pay_type,a.bank_account, a.balance,
+	      		a.ahead_day,a.money,a.contract_file,a.remark,a.each_tel,a.each_accountname,a.each_banknum,a.pay_type,a.bank_account, a.balance,a.last_pay_time,
         		b.int_id,b.bts_id btsId,b.name btsName,b.bsc_name bscName,
         		c.name cityName,d.name countryName,${btsType} btsType,${costType} costType 
         from wy_bbu b
@@ -539,7 +539,7 @@
     <select id="selectWyTunelChargeSettingByMap" resultMap="BaseResultMap">
         select * from (select m.*,ROWNUM RN from
         (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,a.contract_starttime,a.contract_endtime,
-	      		a.ahead_day,a.money,a.contract_file,a.remark,a.each_tel,a.each_accountname,a.each_banknum,a.pay_type,a.bank_account, a.balance,
+	      		a.ahead_day,a.money,a.contract_file,a.remark,a.each_tel,a.each_accountname,a.each_banknum,a.pay_type,a.bank_account, a.balance,a.last_pay_time,
         		b.int_id,b.bts_id btsId,b.name btsName,b.bsc_name bscName,
         		c.name cityName,d.name countryName,${btsType} btsType,${costType} costType 
         from wy_tunel b
