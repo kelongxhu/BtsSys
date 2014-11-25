@@ -392,9 +392,10 @@
     <!-- 费用设置 -->
     <select id="selectWyBtsChargeSettingByMap" resultMap="BaseResultMap">
         select * from (select m.*,ROWNUM RN from
-        (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,
-        b.int_id,b.name btsName,b.bsc_name bscName,b.bts_id btsId,
-        c.name cityName,d.name countryName,${btsType} btsType
+        (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,a.contract_starttime,a.contract_endtime,
+	      		a.ahead_day,a.money,a.contract_file,a.remark,a.each_tel,a.each_accountname,a.each_banknum,a.pay_type,a.bank_account, a.balance,
+        		b.int_id,b.bts_id btsId,b.name btsName,b.bsc_name bscName,
+        		c.name cityName,d.name countryName,${btsType} btsType,${costType} costType 
         from wy_bts b
         left join (select u.* from WY_BTS_CHARGE u where u.BTS_TYPE = ${btsType} and u.cost_type = ${costType}) a on
         b.INT_ID = a.INT_ID
@@ -468,9 +469,10 @@
 
     <select id="selectWyBbuChargeSettingByMap" resultMap="BaseResultMap">
         select * from (select m.*,ROWNUM RN from
-        (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,
-        b.int_id,b.bts_id btsId,b.name btsName,b.bsc_name bscName,
-        c.name cityName,d.name countryName,${btsType} btsType
+        (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,a.contract_starttime,a.contract_endtime,
+	      		a.ahead_day,a.money,a.contract_file,a.remark,a.each_tel,a.each_accountname,a.each_banknum,a.pay_type,a.bank_account, a.balance,
+        		b.int_id,b.bts_id btsId,b.name btsName,b.bsc_name bscName,
+        		c.name cityName,d.name countryName,${btsType} btsType,${costType} costType 
         from wy_bbu b
         left join (select u.* from WY_BTS_CHARGE u where u.BTS_TYPE = ${btsType} and u.cost_type = ${costType}) a on
         b.INT_ID = a.INT_ID
@@ -536,9 +538,10 @@
 
     <select id="selectWyTunelChargeSettingByMap" resultMap="BaseResultMap">
         select * from (select m.*,ROWNUM RN from
-        (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,
-        b.int_id,b.name btsName,b.bsc_name bscName,b.bts_id btsId,
-        c.name cityName,d.name countryName,${btsType} btsType
+        (select a.pay_cycle,a.pay_day,a.remind_user,a.remind_tel,a.contract_starttime,a.contract_endtime,
+	      		a.ahead_day,a.money,a.contract_file,a.remark,a.each_tel,a.each_accountname,a.each_banknum,a.pay_type,a.bank_account, a.balance,
+        		b.int_id,b.bts_id btsId,b.name btsName,b.bsc_name bscName,
+        		c.name cityName,d.name countryName,${btsType} btsType,${costType} costType 
         from wy_tunel b
         left join (select u.* from WY_BTS_CHARGE u where u.BTS_TYPE = ${btsType} and u.cost_type = ${costType}) a on
         b.INT_ID = a.INT_ID
@@ -602,6 +605,12 @@
         )
     </select>
 
+    <select id="selectBtsChargeSettingByMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_BTS_CHARGE u
+        where u.INT_ID = #{intId} and u.COST_TYPE=#{costType}
+    </select>
 
     <update id="updateByMap" parameterType="hashmap">
         update WY_BTS_CHARGE

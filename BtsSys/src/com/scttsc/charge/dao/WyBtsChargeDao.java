@@ -131,4 +131,11 @@ public interface WyBtsChargeDao {
      * @throws Exception
      */
     int updateByMap(Map<String, Object> param) throws Exception;
+    
+    /**
+     * 根据int_id,costType查询bts费用信息
+     * @param param
+     * @throws Exception
+     */
+    WyBtsCharge selectBtsChargeSettingByMap(Map<String,Object> param)throws Exception;
 }
