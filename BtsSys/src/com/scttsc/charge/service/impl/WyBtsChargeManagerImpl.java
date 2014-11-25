@@ -99,51 +99,60 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
     public List<WyBtsCharge> selectWyBtsChargeSettingByMap(
             final Map<String, Object> param, int btsType) throws Exception {
         List<WyBtsCharge> wyBtsChargeList = null;
-        switch (btsType) {
-            case 1:
-                param.put("isInDoor", "是");
-                wyBtsChargeList = wyBtsChargeDao.selectWyBtsChargeSettingByMap(param);
-                break;
-            case 2:
-                wyBtsChargeList = wyBtsChargeDao.selectWyBbuChargeSettingByMap(param);
-                break;
-            case 3:
-                param.put("isInDoor", "否");
-                wyBtsChargeList = wyBtsChargeDao.selectWyBtsChargeSettingByMap(param);
-                break;
-            case 6:
-                wyBtsChargeList = wyBtsChargeDao.selectWyTunelChargeSettingByMap(param);
-                break;
-            default:
-                break;
-        }
+        try {
+			switch (btsType) {
+			    case 1:
+			        param.put("isInDoor", "是");
+			        wyBtsChargeList = wyBtsChargeDao.selectWyBtsChargeSettingByMap(param);
+			        break;
+			    case 2:
+			        wyBtsChargeList = wyBtsChargeDao.selectWyBbuChargeSettingByMap(param);
+			        break;
+			    case 3:
+			        param.put("isInDoor", "否");
+			        wyBtsChargeList = wyBtsChargeDao.selectWyBtsChargeSettingByMap(param);
+			        break;
+			    case 6:
+			        wyBtsChargeList = wyBtsChargeDao.selectWyTunelChargeSettingByMap(param);
+			        break;
+			    default:
+			        break;
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			throw new Exception(e);
+		}
         return wyBtsChargeList;
     }
 
-    public int selectWyBtsChargeSettingCountByMap(final Map<String, Object> param,
-                                                  int btsType) throws Exception {
-        int count = 0;
-        switch (btsType) {
-            case 1:
-                param.put("isInDoor", "是");
-                count = wyBtsChargeDao.selectWyBtsChargeSettingCountByMap(param);
-                break;
-            case 2:
-                count = wyBtsChargeDao.selectWyBbuChargeSettingCountByMap(param);
-                break;
-            case 3:
-                param.put("isInDoor", "否");
-                count = wyBtsChargeDao.selectWyBtsChargeSettingCountByMap(param);
-                break;
-            case 6:
-                count = wyBtsChargeDao.selectWyTunelChargeSettingCountByMap(param);
-                break;
-            default:
-                break;
-        }
-        return count;
-    }
-
+	public int selectWyBtsChargeSettingCountByMap(
+			final Map<String, Object> param, int btsType) throws Exception {
+		int count = 0;
+		try {
+			switch (btsType) {
+			case 1:
+				param.put("isInDoor", "是");
+				count = wyBtsChargeDao.selectWyBtsChargeSettingCountByMap(param);
+				break;
+			case 2:
+				count = wyBtsChargeDao.selectWyBbuChargeSettingCountByMap(param);
+				break;
+			case 3:
+				param.put("isInDoor", "否");
+				count = wyBtsChargeDao.selectWyBtsChargeSettingCountByMap(param);
+				break;
+			case 6:
+				count = wyBtsChargeDao.selectWyTunelChargeSettingCountByMap(param);
+				break;
+			default:
+				break;
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			throw new Exception(e);
+		}
+		return count;
+	}
 
     public int updateByMap(Map<String, Object> param) throws Exception {
         return wyBtsChargeDao.updateByMap(param);
@@ -170,4 +179,22 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
         paramMap.put("isRemind", 1);
         return wyBtsChargeDao.updateByMap(paramMap) + smgpDao.insert(smgp);
     }
+
+	@Override
+	public void doChargeSetting(WyBtsCharge wyBtsCharge) throws Exception {
+		try {
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("intId", wyBtsCharge.getIntId());
+			param.put("costType", wyBtsCharge.getCostType());
+			WyBtsCharge tmp = wyBtsChargeDao.selectBtsChargeSettingByMap(param);
+			if(tmp == null){
+				wyBtsChargeDao.insert(wyBtsCharge);
+			} else {
+				wyBtsChargeDao.updateByPrimaryKeySelective(wyBtsCharge);
+			}
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+			throw new Exception(e);
+		}
+	}
 }
