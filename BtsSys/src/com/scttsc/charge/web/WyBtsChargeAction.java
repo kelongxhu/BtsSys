@@ -1,6 +1,7 @@
 package com.scttsc.charge.web;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import com.scttsc.admin.model.User;
 import com.scttsc.charge.model.WyBtsCharge;
 import com.scttsc.charge.service.WyBtsChargeManager;
 import com.scttsc.common.util.Common;
+import com.scttsc.common.util.ConstantUtil;
 import com.scttsc.common.util.StringUtil;
 import com.scttsc.common.web.BaseAction;
 
@@ -27,6 +29,8 @@ public class WyBtsChargeAction extends BaseAction {
 	
 	private static Logger logger = Logger.getLogger(WyBtsChargeAction.class);
 	
+	private static String GROUP_CODE = "CHARGE_REMIND_CYCLE";
+	
 	//参数
 	private BigDecimal intId;
 	private String countryIds;
@@ -37,6 +41,8 @@ public class WyBtsChargeAction extends BaseAction {
     private String btsName;
     private String bscName;
     private Integer btsId;
+    
+    private WyBtsCharge wyBtsCharge; 
     
     @Autowired
     private WyBtsChargeManager wyBtsChargeManager;
@@ -81,9 +87,30 @@ public class WyBtsChargeAction extends BaseAction {
      * @throws Exception
      */
     public String setting()throws Exception {
-    	Map<String, Object> paramMap = buildParamMap();
-    	List<WyBtsCharge> list = wyBtsChargeManager.selectWyBtsChargeSettingByMap(paramMap, btsType);
-    	getRequest().setAttribute("WyBtsCharge", list.get(0));
+    	try {
+			Map<String, Object> paramMap = buildParamMap();
+			List<WyBtsCharge> list = wyBtsChargeManager.selectWyBtsChargeSettingByMap(paramMap, btsType);
+			getRequest().setAttribute("WyBtsCharge", list.get(0));
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+    	return SUCCESS;
+    }
+    
+    public String doChargeSetting() throws Exception{
+    	try {
+    		User user = (User) this.getSession().getAttribute("user");
+    		short aheadDay = (short)ConstantUtil.getInstance().getCons(GROUP_CODE, String.valueOf(wyBtsCharge.getCostType())).getCode();
+    		
+    		wyBtsCharge.setInUser(new BigDecimal(user.getIntId()));
+    		wyBtsCharge.setInTime(new Date());
+    		wyBtsCharge.setAheadDay(aheadDay);
+    		wyBtsChargeManager.doChargeSetting(wyBtsCharge);
+    		jsonMap.put("result", 1);
+		} catch (Exception e) {
+			jsonMap.put("result", 0);
+			logger.error(e.getMessage(), e);
+		}
     	return SUCCESS;
     }
 	
@@ -179,6 +206,14 @@ public class WyBtsChargeAction extends BaseAction {
 
 	public void setWyBtsChargeManager(WyBtsChargeManager wyBtsChargeManager) {
 		this.wyBtsChargeManager = wyBtsChargeManager;
+	}
+
+	public WyBtsCharge getWyBtsCharge() {
+		return wyBtsCharge;
+	}
+
+	public void setWyBtsCharge(WyBtsCharge wyBtsCharge) {
+		this.wyBtsCharge = wyBtsCharge;
 	}
     
 }
