@@ -51,6 +51,12 @@
                 <param name="root">jsonMap</param>
             </result>
         </action>
+        
+        <action name="doChargeSetting" class="com.scttsc.charge.web.WyBtsChargeAction" method="doChargeSetting">
+    		<result name="success" type="json">
+    			<param name="root">jsonMap</param>
+    		</result>
+    	</action>
 
     </package>
 
@@ -92,7 +98,7 @@
     			/appviews/charge/setting/chargeInput.jsp
     		</result>
     	</action>
-
+    	
         <action name="exportTemplateExcel" class="com.scttsc.charge.web.WyBtsChargeListAction" method="exportTemplateExcel"/>
         <action name="payExport" class="com.scttsc.charge.web.WyBtsChargeListAction" method="payExport"/>
     </package>
