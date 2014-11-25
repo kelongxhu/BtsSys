@@ -1,11 +1,10 @@
 package com.scttsc.charge.service;
 
-import com.scttsc.charge.model.Smgp;
-import com.scttsc.charge.model.WyBtsCharge;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+
+import com.scttsc.charge.model.WyBtsCharge;
 
 /**
  * Created by _think on 2014/11/10.
@@ -44,4 +43,6 @@ public interface WyBtsChargeManager {
      */
     public int updateByMap(Map<String,Object> param)throws Exception;
 
+    void doChargeSetting(WyBtsCharge wyBtsCharge)throws Exception;
+    
 }
