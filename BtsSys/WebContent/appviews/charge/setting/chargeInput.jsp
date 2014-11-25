@@ -212,23 +212,36 @@
 											<span style="color: red;">*</span>缴费周期：
 										</td>
 										<td>
-											<input name="wyBtsCharge.payCycle" type="text" class="input150 required number" value="${WyBtsCharge.payCycle }"/>
+											<input name="wyBtsCharge.payCycle" type="text" class="input150 required number" 
+												   <c:if test="${!empty WyBtsCharge.payCycle }">value="${WyBtsCharge.payCycle }"</c:if>
+												   <c:if test="${empty WyBtsCharge.payCycle }">value="1"</c:if>
+												   />
 											<span style="color: red; font-size: 10px">(注：月)</span>
 										</td>
+										<td>
+											<span style="color: red;">*</span>上次缴费月份:
+										</td>
+										<td>
+											<input name="wyBtsCharge.lastPayTime" type="text" 
+												class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy-MM'})" 
+												value="<fmt:formatDate value='${WyBtsCharge.lastPayTime }' pattern='yyyy-MM'/>"/>
+										</td>										
+									</tr>
+									<tr>
 										<td>
 											<span style="color: red;">*</span>缴费日期:
 										</td>
 										<td>
 											<input name="wyBtsCharge.payDay" type="text" class="input150 required number" value="${WyBtsCharge.payDay }"/>
-										</td>
-									</tr>
-									<tr>
+										</td>									
 										<td>
 											<span style="color: red;">*</span>提醒人员:
 										</td>
 										<td>
 											<input name="wyBtsCharge.remindUser" type="text" class="input150 required" value="${WyBtsCharge.remindUser }"/>
 										</td>
+									</tr>
+									<tr>
 										<td>
 											<span style="color: red;">*</span>提醒号码：
 										</td>
@@ -236,8 +249,6 @@
 											<input name="wyBtsCharge.remindTel" type="text"
 												class="input150 required" value="${WyBtsCharge.remindTel }"/>
 										</td>										
-									</tr>
-									<tr>
 										<td>
 											<span style="color: red;">*</span>金额：
 										</td>
@@ -245,15 +256,15 @@
 											<input name="wyBtsCharge.money" type="text"
 												class="input150 required number" value="${WyBtsCharge.money }"/>
 										</td>		
+									</tr>
+									<tr>
 										<td>
 											对方联系号码：
 										</td>
 										<td>
 											<input name="wyBtsCharge.eachTel" type="text"
 												class="input150" value="${WyBtsCharge.eachTel }"/>
-										</td>																		
-									</tr>
-									<tr>
+										</td>											
 										<td>
 											对方账号名称：
 										</td>
@@ -261,21 +272,23 @@
 											<input name="wyBtsCharge.eachAccountname" type="text"
 												class="input150" value="${WyBtsCharge.eachAccountname }"/>
 										</td>		
+									</tr>
+									<tr>
 										<td>
 											对方银行账号：
 										</td>
 										<td>
 											<input name="wyBtsCharge.eachBanknum" type="text"
 												class="input150" value="${WyBtsCharge.eachBanknum }"/>
-										</td>																		
+										</td>										
 									</tr>	
 									<tr>
 										<td>
-											<span style="color: red;">*</span>合同附件：
+											合同附件：
 										</td>
 										<td>
 											<div style="float:left">
-									            <input name="wyBtsCharge.contractFile" id="proofFile" type="text" readonly="readonly" class="input150 required" value="${WyBtsCharge.contractFile }"/>
+									            <input name="wyBtsCharge.contractFile" id="proofFile" type="text" readonly="readonly" class="input150" value="${WyBtsCharge.contractFile }"/>
 									        </div>
 									        <div style="float:left">
 									            <input id="pz_uploadify" name="pz_uploadify" type="file" multiple="true">
@@ -288,7 +301,7 @@
 									</tr>
 									<tr>
 										<td>
-											<span style="color: red;">*</span>备注：
+											备注：
 										</td>
 										<td colspan="3">
                 							<textarea name="wyBtsCharge.remark" class="area150">${WyBtsCharge.remark}</textarea>
