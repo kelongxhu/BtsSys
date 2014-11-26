@@ -181,7 +181,6 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
         return wyBtsChargeDao.updateByMap(paramMap) + smgpDao.insert(smgp);
     }
 
-	@Override
 	public void doChargeSetting(WyBtsCharge wyBtsCharge) throws Exception {
 		try {
 			Map<String, Object> param = new HashMap<String, Object>();
@@ -194,7 +193,7 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
 				wyBtsChargeDao.updateByPrimaryKeySelective(wyBtsCharge);
 			}
 		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
 			throw new Exception(e);
 		}
 	}

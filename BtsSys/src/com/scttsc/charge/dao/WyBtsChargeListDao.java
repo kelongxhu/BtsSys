@@ -28,4 +28,6 @@ public interface WyBtsChargeListDao {
     List<PayStatistDto> statisticsPay(Map<String, Object> param) throws Exception;
 
     int countStatisticsPay(Map<String, Object> param) throws Exception;
+
+    int deleteByPrimaryKeys(List<BigDecimal> idList)throws Exception;
 }

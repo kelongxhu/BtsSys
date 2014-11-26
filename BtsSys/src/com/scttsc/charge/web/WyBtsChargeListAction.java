@@ -56,6 +56,8 @@ public class WyBtsChargeListAction extends BaseAction {
     //费用
     private BigDecimal intId;
 
+    private String ids;//缴费ID
+
     //文件上传
     private File file;
     private String fileFileName;
@@ -168,6 +170,28 @@ public class WyBtsChargeListAction extends BaseAction {
                 chargeBill.setInTime(new Date());
                 chargeBill.setInUser(user.getIntId().intValue());
                 wyBtsChargeListManager.insert(chargeBill);
+                jsonMap.put("result", 1);
+            }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            jsonMap.put("result", 0);
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 删除缴费费用
+     * @return
+     */
+    public String payDel() {
+        try {
+            List<BigDecimal> idList = new ArrayList<BigDecimal>();
+            if (!Common.isEmpty(ids)) {
+                String[] idsArr = ids.split(",");
+                for (String id : idsArr) {
+                    idList.add(new BigDecimal(id));
+                }
+                wyBtsChargeListManager.deleteByPrimaryKeys(idList);
                 jsonMap.put("result", 1);
             }
         } catch (Exception e) {
@@ -540,11 +564,13 @@ public class WyBtsChargeListAction extends BaseAction {
 
     /**
      * 缴费统计页面
+     *
      * @return
      */
-    public String payStat(){
+    public String payStat() {
         return SUCCESS;
     }
+
     /**
      * 缴费统计
      *
@@ -599,11 +625,11 @@ public class WyBtsChargeListAction extends BaseAction {
         if (!StringUtil.isEmpty(btsType)) {
             param.put("btsType", btsType);
         }
-        if(!StringUtil.isEmpty(startTime)){
-            param.put("startTime",startTime);
+        if (!StringUtil.isEmpty(startTime)) {
+            param.put("startTime", startTime);
         }
-        if(!StringUtil.isEmpty(endTime)){
-            param.put("endTime",endTime);
+        if (!StringUtil.isEmpty(endTime)) {
+            param.put("endTime", endTime);
         }
         return param;
     }
@@ -710,5 +736,13 @@ public class WyBtsChargeListAction extends BaseAction {
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+
+    public String getIds() {
+        return ids;
+    }
+
+    public void setIds(String ids) {
+        this.ids = ids;
     }
 }

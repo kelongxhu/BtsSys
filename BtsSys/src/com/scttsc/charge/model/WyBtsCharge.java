@@ -1,5 +1,7 @@
 package com.scttsc.charge.model;
 
+import com.scttsc.common.util.DateUtils;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -61,6 +63,9 @@ public class WyBtsCharge {
     private Integer btsId;
 
     private String costTypeStr;
+
+    private String nextPayTimeStr;
+    private String isRemindStr;
 
 
     public BigDecimal getIntId() {
@@ -318,5 +323,33 @@ public class WyBtsCharge {
 
     public void setIsRemind(Integer isRemind) {
         this.isRemind = isRemind;
+    }
+
+
+    public String getNextPayTimeStr() {
+        return nextPayTime == null ? "" : DateUtils.DateToStr(nextPayTime, "yyyy-MM-dd");
+    }
+
+    public void setNextPayTimeStr(String nextPayTimeStr) {
+        this.nextPayTimeStr = nextPayTimeStr;
+    }
+
+    public String getIsRemindStr() {
+        if (isRemind == null) {
+            return "";
+        }
+        switch (isRemind) {
+            case 0:
+                isRemindStr = "未提醒";
+                break;
+            case 1:
+                isRemindStr = "已提醒";
+                break;
+        }
+        return isRemindStr;
+    }
+
+    public void setIsRemindStr(String isRemindStr) {
+        this.isRemindStr = isRemindStr;
     }
 }

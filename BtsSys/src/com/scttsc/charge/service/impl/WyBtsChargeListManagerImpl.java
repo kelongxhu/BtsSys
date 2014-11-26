@@ -119,4 +119,8 @@ public class WyBtsChargeListManagerImpl implements WyBtsChargeListManager {
     public int countStatisticsPay(Map<String, Object> param) throws Exception {
         return chargeListDao.countStatisticsPay(param);
     }
+
+    public int deleteByPrimaryKeys(List<BigDecimal> idList) throws Exception {
+        return chargeListDao.deleteByPrimaryKeys(idList);
+    }
 }

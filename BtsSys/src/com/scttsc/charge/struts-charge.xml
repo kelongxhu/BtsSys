@@ -46,6 +46,14 @@
             </result>
         </action>
 
+        <!--删除费用-->
+        <action name="payDel" class="com.scttsc.charge.web.WyBtsChargeListAction"
+                method="payDel">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
         <!--缴费统计-->
         <action name="statPay" class="com.scttsc.charge.web.WyBtsChargeListAction"
                 method="statPay">
@@ -53,6 +61,8 @@
                 <param name="root">jsonMap</param>
             </result>
         </action>
+
+
 
         <action name="queryBtsData" class="com.scttsc.charge.web.WyBtsChargeAction" method="query">
         	<result name="success" type="json">

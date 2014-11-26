@@ -48,4 +48,13 @@ public interface WyBtsChargeListManager {
     int countStatisticsPay(Map<String, Object> param) throws Exception;
 
 
+    /**
+     * batch del
+     * @param idList
+     * @return
+     * @throws Exception
+     */
+    int deleteByPrimaryKeys(List<BigDecimal> idList)throws Exception;
+
+
 }

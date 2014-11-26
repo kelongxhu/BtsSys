@@ -158,6 +158,14 @@
     delete from WY_BTS_CHARGE_LIST
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
+
+  <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+      delete from WY_BTS_CHARGE_LIST WHERE ID IN
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+      </foreach>
+  </delete>
+
   <insert id="insert" parameterType="com.scttsc.charge.model.WyBtsChargeList" >
     insert into WY_BTS_CHARGE_LIST (ID, INT_ID,NAME,CITY_ID,COUNTRY_ID,BSC_NAME,BTS_ID, BTS_TYPE,
       COST_TYPE, MONEY, PROOF_FILE, 
