@@ -8,6 +8,7 @@
 <script type="text/javascript" src="${ctx}/resources/My97DatePicker/WdatePicker.js"></script>
  <script src="${ctx}/resources/uploadify/jquery.uploadify.js" type="text/javascript"></script>
  <link rel="stylesheet" type="text/css" href="${ctx}/resources/uploadify/uploadify.css">
+    <link href="${ctx}/resources/ligerUI/1.1.9/skins/Gray/css/all.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 </style>
 
@@ -26,6 +27,8 @@
             $("#payTypeTd").addClass("required");
         }
     }
+
+    var gridObj;
 $(function() {
 
     init();
@@ -46,23 +49,54 @@ $(function() {
                 },
                errorPlacement : function(error, element) {
                    error.appendTo(element.parent());
-//                   var arr=["propVal","covertypeVal","shareflagVal","mchroomflagVal","builddate"];
-//                   var id=element.attr("id");
-//                   var index=arr.indexOf(id);
-//                   if(index>-1){
-//                       var parent = element.parent().parent().parent();
-//                       var div = $("<div style='float: left;'></div>");
-//                       div.append(error);
-//                       div.insertAfter(parent);
-//                   }else{
-//                       error.appendTo(element.parent());
-//                   }
                 }
                // success : function(lable) {
                  //   lable.ligerHideTip();
                  //   lable.remove();
                 //}
             });
+
+
+
+    gridObj = $("#maingrid").ligerGrid({
+        columns: [
+            {display:'缴费金额',name:'money',width : 140,align:'center'},
+            {display:'缴费人员',name:'payUser',width : 80,align:'center'},
+            {display:'缴费时间',name:'payTimeStr',width : 80,align:'center'},
+            {display:'是否超时',name:'isTimeoutStr',width :80,align:'center'},
+            {display:'底度',name:'baseDegree',width :80,align:'center'},
+            {display:'当月度数',name:'monthDegree',width :80,align:'center'} ,
+            {display:'缴费方式',name:'payTypeStr',width :80,align:'center'} ,
+            {display:'缴费凭证',name:'proofFileName',width :300,align:'center'}
+        ],
+        toolbar: {
+            items: [
+                {text: '增加', click: add, icon: 'add', type: 1},
+                {line: true},
+                {text: '编辑',click: add, icon: 'modify',type: 2},
+                {line: true},
+                {text: '删除',click: payDel,icon: 'delete',type: 3}
+            ]
+        },
+        usePager:false,
+        rownumbers:true,
+        showTitle : false,
+        url:'${ctx}/chargejson/payDetailList.action?intId=${charge.intId}&costType=${charge.costType}',
+        checkbox : true,
+        width: '98%',
+        height:'250'
+    });
+
+    var costType= "${charge.costType}";//费用类型
+    if(costType=='3'){
+        gridObj.toggleCol('baseDegree', true);
+        gridObj.toggleCol('monthDegree', true);
+        gridObj.toggleCol('payTypeStr', true);
+    }else{
+        gridObj.toggleCol('baseDegree', false);
+        gridObj.toggleCol('monthDegree', false);
+        gridObj.toggleCol('payTypeStr', false);
+    }
 });
 
 
@@ -115,13 +149,35 @@ $(function() {
     });
 });
 
-//上传
-function uploadifyUpload() {
-    $('#pz_uploadify').uploadify('upload', '*');
-//    $("#msg").html("请稍等,正在上传。。");
-//    $("#msg").addClass("tipMsg");
-    return false;
-}
+ function payDel(){
+     var rows = gridObj.getCheckedRows();
+     var str="";
+     $(rows).each(function() {
+         str += this.id + ",";
+     });
+     if (str.length == 0) {
+         $.ligerDialog.alert('请选择要删除的数据！');
+         return;
+     } else {
+         str = str.substring(0, str.length - 1);
+     }
+
+     $.ligerDialog.confirm('确认删除', function (yes) {
+         var params = {
+             ids : str
+         };
+         $.getJSON('${ctx}/chargejson/payDel.action', params, function(json) {
+             if (json.result == 1) {
+                 alert('删除成功!');
+             }else{
+                 alert('删除失败！');
+             }
+             gridObj.loadData();
+         });
+
+     });
+ }
+
 </script>
 
 
@@ -233,6 +289,7 @@ function uploadifyUpload() {
                 </button>
                </div>
 </form>
+    <div id="maingrid"></div>
 
 </div>
 </div>

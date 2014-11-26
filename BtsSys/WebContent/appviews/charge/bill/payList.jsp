@@ -93,7 +93,9 @@ function btsGrid(url) {
             {display:'缴费周期',name:'payCycle',width : 60,align:'center'},
             {display:'缴费日期',name:'payDay',width : 60,align:'center'},
             {display:'提醒人员',name:'remindUser',width : 80,align:'center'},
-            {display:'提醒号码',name:'remindTel',width : 100,align:'center'}
+            {display:'提醒号码',name:'remindTel',width : 100,align:'center'},
+            {display:'下次缴费时间',name:'nextPayTimeStr',width : 100,align:'center'},
+            {display:'提醒状态',name:'isRemindStr',width : 100,align:'center'}
         ],
         toolbar: {
             items: [
