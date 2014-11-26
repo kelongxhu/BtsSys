@@ -5,6 +5,7 @@ import com.scttsc.charge.dao.WyBtsChargeDao;
 import com.scttsc.charge.model.Smgp;
 import com.scttsc.charge.model.WyBtsCharge;
 import com.scttsc.charge.service.WyBtsChargeManager;
+import com.scttsc.common.util.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -166,13 +167,13 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
         }
         StringBuilder msgContent = new StringBuilder();
         msgContent.append(remindUser + ",您好.");
-        msgContent.append(wyBtsCharge.getBtsName() + "缴费类型:" + wyBtsCharge.getCostTypeStr() + "缴费时间是:" + wyBtsCharge.getNextPayTime());
-        msgContent.append("请提前缴费。谢谢");
+        msgContent.append(wyBtsCharge.getBtsName()+ wyBtsCharge.getCostTypeStr() + "缴费时间是," +
+                DateUtils.formatDateTime(wyBtsCharge.getNextPayTime(), "yyyy-MM-dd"));
+        msgContent.append(",请提前缴费。谢谢");
         Smgp smgp = new Smgp();
         smgp.setServiceId("wyzb");
         smgp.setDesttermId(wyBtsCharge.getRemindTel());
         smgp.setMsgContent(msgContent.toString());
-        smgpDao.insert(smgp);//插入短息信息
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("intId", wyBtsCharge.getIntId());
         paramMap.put("costType", wyBtsCharge.getCostType());

@@ -31,12 +31,14 @@
 
 
 
+
+
   <sql id="Base_Column_List" >
     u.ID, u.INT_ID,u.NAME,u.CITY_ID,u.COUNTRY_ID,u.BSC_NAME,u.BTS_ID,u.BTS_TYPE, u.COST_TYPE, u.MONEY, u.PROOF_FILE, u.REMARK, u.PAY_TIME, u.PAY_USER, u.IS_TIMEOUT,
     u.IN_TIME,u.IN_USER, u.MONTH_DEGREE, u.BASE_DEGREE, u.PAY_TYPE
   </sql>
 
-    <resultMap id="BTS_ResultMap" type="com.scttsc.charge.dto.BtsDTO">
+    <resultMap id="BTS_ResultMap" type="com.scttsc.charge.dto.BtsDto">
         <result column="INT_ID" property="intId" jdbcType="DECIMAL" />
         <result column="NAME" property="name" jdbcType="VARCHAR" />
         <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
@@ -231,4 +233,63 @@
     </set>
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+
+
+    <resultMap id="PayStatDtoResultMap" type="com.scttsc.charge.dto.PayStatistDto" >
+        <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+        <result column="country_name" property="countryName" jdbcType="VARCHAR" />
+        <result column="MONEY" property="money" jdbcType="DECIMAL" />
+        <result column="COST_TYPE" property="costType" jdbcType="DECIMAL" />
+    </resultMap>
+
+
+    <select id="statisticsPay" resultMap="PayStatDtoResultMap">
+        SELECT c.name city_name,d.name country_name,u.cost_type,u.money from
+        (select city_id, country_id,cost_type,sum(money) money from WY_BTS_CHARGE_list
+        <where>
+            1=1
+            <if test="countryIds!=null">
+                and COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="btsType!=null">
+                and bts_Type=#{btsType}
+            </if>
+            <if test="costType!=null">
+                and cost_Type=#{costType}
+            </if>
+            <if test="startTime!=null">
+                and pay_Time>  to_date(#{startTime},'yyyy-MM-dd')
+            </if>
+            <if test="endTime!=null">
+                and pay_Time &lt; to_date(#{endTime},'yyyy-MM-dd')
+            </if>
+        </where>
+        group by city_id, country_id,cost_type)u
+        left join wy_city c on c.id=u.city_id
+        left join wy_city d on d.id=u.country_id
+    </select>
+
+    <select id="countStatisticsPay" resultType="int">
+        select count(1) from (
+        select city_id, country_id,cost_type,sum(money) money from WY_BTS_CHARGE_list
+        <where>
+            <if test="countryIds!=null">
+                and COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="btsType!=null">
+                and bts_Type=#{btsType}
+            </if>
+            <if test="costType!=null">
+                and cost_Type=#{costType}
+            </if>
+            <if test="startTime!=null">
+                and pay_Time>  to_date(#{startTime},'yyyy-MM-dd')
+            </if>
+            <if test="endTime!=null">
+                and pay_Time &lt; to_date(#{endTime},'yyyy-MM-dd')
+            </if>
+        </where>
+        group by city_id, country_id,cost_type
+        )
+    </select>
 </mapper>

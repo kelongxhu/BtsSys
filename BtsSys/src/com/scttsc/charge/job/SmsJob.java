@@ -24,17 +24,51 @@ public class SmsJob {
      */
     public void sendMsg() {
         try {
+            LOG.info("job Start==============");
             Map<String, Object> btsParam = new HashMap<String, Object>();
+            //室外
             List<WyBtsCharge> btsChargeList = wyBtsChargeManager.selectWyBtsChargeListByMap(btsParam, 1);
-            for (WyBtsCharge wyBtsCharge : btsChargeList) {
-                checkBts(wyBtsCharge);
+            if (btsChargeList != null) {
+                for (WyBtsCharge wyBtsCharge : btsChargeList) {
+                    checkBts(wyBtsCharge);
+                }
             }
+            LOG.info("分析室外基站费用数据:" + (btsChargeList == null ? 0 : btsChargeList.size()));
+            //纯bbu
+            List<WyBtsCharge> bbuChargeList = wyBtsChargeManager.selectWyBtsChargeListByMap(btsParam, 2);
+            if (bbuChargeList != null) {
+                for (WyBtsCharge wyBtsCharge : bbuChargeList) {
+                    checkBts(wyBtsCharge);
+                }
+            }
+            LOG.info("分析纯Bbu费用数据:" + (bbuChargeList == null ? 0 : bbuChargeList.size()));
+            //室外
+            List<WyBtsCharge> indoorChargeList = wyBtsChargeManager.selectWyBtsChargeListByMap(btsParam, 3);
+            if (indoorChargeList != null) {
+                for (WyBtsCharge wyBtsCharge : indoorChargeList) {
+                    checkBts(wyBtsCharge);
+                }
+            }
+            LOG.info("分析室内覆盖费用数据:" + (indoorChargeList == null ? 0 : indoorChargeList.size()));
+            //隧道
+            List<WyBtsCharge> tunelChargeList = wyBtsChargeManager.selectWyBtsChargeListByMap(btsParam, 6);
+            if (tunelChargeList != null) {
+                for (WyBtsCharge wyBtsCharge : tunelChargeList) {
+                    checkBts(wyBtsCharge);
+                }
+            }
+            LOG.info("分析隧道覆盖数据:" + (tunelChargeList == null ? 0 : tunelChargeList.size()));
+            LOG.info("job End=======");
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
     }
 
-
+    /**
+     * 更新每个基站的下次缴费时间、计算提醒时间、符合提醒条件发短信提醒
+     *
+     * @param wyBtsCharge
+     */
     public void checkBts(WyBtsCharge wyBtsCharge) {
         try {
             Date lastPayTime = wyBtsCharge.getLastPayTime();//基站设置上次缴费时间
@@ -43,6 +77,12 @@ public class SmsJob {
             int payCycle = wyBtsCharge.getPayCycle();//缴费周期
             int payDay = wyBtsCharge.getPayDay();//缴费天数
             int aheadDay = wyBtsCharge.getAheadDay();//提前多少天提醒
+            if (lastPayTime == null) {
+                lastPayTime = wyBtsCharge.getInTime();
+            }
+            if(lastPayTime==null){
+                return;
+            }
             Date curNextPayTime = getNextPayTime(lastPayTime, payCycle, payDay);//当前计算下次缴费时间（有更改周期的情况）
             //是否更新下次提醒时间,更改周期情况。
             boolean nextPayFlag = false;
@@ -80,6 +120,7 @@ public class SmsJob {
                     LOG.info("更新基站下次缴费时间===>" + wyBtsCharge.getIntId() + "_" + wyBtsCharge.getCostType());
                 }
             }
+            wyBtsCharge.setNextPayTime(curNextPayTime);
             if (paramMap != null) {
                 wyBtsChargeManager.updateByMap(paramMap);
             }
@@ -89,7 +130,13 @@ public class SmsJob {
         }
     }
 
-
+    /**
+     * 发送短信
+     *
+     * @param newNextPayTime
+     * @param now
+     * @param wyBtsCharge
+     */
     public void isSend(Date newNextPayTime, Date now, WyBtsCharge wyBtsCharge) {
         try {
             int aheadDay = wyBtsCharge.getAheadDay();

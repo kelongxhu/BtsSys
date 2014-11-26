@@ -616,10 +616,10 @@
         update WY_BTS_CHARGE
         <set>
             <if test="lastPayTime!=null">
-                LAST_PAY_TIME=#{lastPayTime,jdbcType=DATE}
+                LAST_PAY_TIME=#{lastPayTime,jdbcType=DATE},
             </if>
             <if test="nextPayTime!=null">
-                NEXT_PAY_TIME=#{nextPayTime,jdbcType=DATE}
+                NEXT_PAY_TIME=#{nextPayTime,jdbcType=DATE},
             </if>
             <if test="isRemind != null">
                 IS_REMIND = #{isRemind}

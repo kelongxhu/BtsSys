@@ -1,6 +1,7 @@
 package com.scttsc.charge.service;
 
-import com.scttsc.charge.dto.BtsDTO;
+import com.scttsc.charge.dto.BtsDto;
+import com.scttsc.charge.dto.PayStatistDto;
 import com.scttsc.charge.model.WyBtsChargeList;
 
 import java.math.BigDecimal;
@@ -19,30 +20,32 @@ public interface WyBtsChargeListManager {
 
     int updateByPrimaryKeySelective(WyBtsChargeList record);
 
-    List<WyBtsChargeList> selectByBtsId(BigDecimal intId,int costType) throws Exception;
+    List<WyBtsChargeList> selectByBtsId(BigDecimal intId, int costType) throws Exception;
 
     /**
      * get bts obj by name and btsType
+     *
      * @param name
      * @param btsType
      * @return
      */
-    public BtsDTO selectBtsByMap(Map<String,Object> param);
+    public BtsDto selectBtsByMap(Map<String, Object> param);
 
     /**
      * import charge data to DB
+     *
      * @param data
      * @return
      */
-    int importChargeData(List<Map<String,Object>> data);
+    int importChargeData(List<Map<String, Object>> data);
 
-    List<WyBtsChargeList> selectByMap(Map<String,Object> param)throws Exception;
+    List<WyBtsChargeList> selectByMap(Map<String, Object> param) throws Exception;
 
-    int countByMap(Map<String, Object> param)throws Exception;
+    int countByMap(Map<String, Object> param) throws Exception;
 
+    List<PayStatistDto> statisticsPay(Map<String, Object> param) throws Exception;
 
-
-
+    int countStatisticsPay(Map<String, Object> param) throws Exception;
 
 
 }

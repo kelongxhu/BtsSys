@@ -46,6 +46,14 @@
             </result>
         </action>
 
+        <!--缴费统计-->
+        <action name="statPay" class="com.scttsc.charge.web.WyBtsChargeListAction"
+                method="statPay">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
         <action name="queryBtsData" class="com.scttsc.charge.web.WyBtsChargeAction" method="query">
         	<result name="success" type="json">
                 <param name="root">jsonMap</param>
@@ -84,6 +92,12 @@
         <action name="payQuery" class="com.scttsc.charge.web.WyBtsChargeListAction" method="payQuery">
             <result name="success" type="dispatcher">
                 /appviews/charge/bill/payQuery.jsp
+            </result>
+        </action>
+        <!--费用统计-->
+        <action name="payStat" class="com.scttsc.charge.web.WyBtsChargeListAction" method="payStat">
+            <result name="success" type="dispatcher">
+                /appviews/charge/stat/payStat.jsp
             </result>
         </action>
 

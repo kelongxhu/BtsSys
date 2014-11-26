@@ -1,13 +1,12 @@
 package com.scttsc.charge.web;
 
 import com.scttsc.admin.model.User;
-import com.scttsc.baselibs.model.Cons;
-import com.scttsc.business.model.Bts;
 import com.scttsc.business.util.Constants;
 import com.scttsc.business.util.ExcelHelper;
 import com.scttsc.business.util.Validity;
-import com.scttsc.charge.dto.BtsDTO;
-import com.scttsc.charge.dto.FileDTO;
+import com.scttsc.charge.dto.BtsDto;
+import com.scttsc.charge.dto.FileDto;
+import com.scttsc.charge.dto.PayStatistDto;
 import com.scttsc.charge.model.WyBtsCharge;
 import com.scttsc.charge.model.WyBtsChargeList;
 import com.scttsc.charge.service.WyBtsChargeListManager;
@@ -21,7 +20,6 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.mail.Store;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,6 +40,8 @@ public class WyBtsChargeListAction extends BaseAction {
     private Integer btsId;
     private Integer btsType;
     private Integer costType;
+    private String startTime;
+    private String endTime;
 
 
     @Autowired
@@ -121,7 +121,7 @@ public class WyBtsChargeListAction extends BaseAction {
         User user = (User) this.getSession().getAttribute("user");
         String fileName = DateConvert.formatDateToString(new Date(), "yyyyMMddHHmmss") + "_" + this.fileFileName;
         File desFile = new File(StoreUtil.storeTmpDir() + "/" + fileName);//存儲路徑
-        FileDTO fileDTO = new FileDTO();
+        FileDto fileDTO = new FileDto();
         try {
             FileUtils.copyFile(file, desFile);
             fileDTO.setUuid(fileName);
@@ -384,7 +384,7 @@ public class WyBtsChargeListAction extends BaseAction {
                     Map<String, Object> param = new HashMap<String, Object>();
                     param.put("btsName", cellValue);
                     param.put("cellValue", btsType);
-                    BtsDTO btsDTO = wyBtsChargeListManager.selectBtsByMap(param);
+                    BtsDto btsDTO = wyBtsChargeListManager.selectBtsByMap(param);
                     if (btsDTO != null) {
                         map.put("intId", btsDTO.getIntId());
                         map.put("btsType", btsDTO.getBtsType());
@@ -538,6 +538,38 @@ public class WyBtsChargeListAction extends BaseAction {
         return null;
     }
 
+    /**
+     * 缴费统计页面
+     * @return
+     */
+    public String payStat(){
+        return SUCCESS;
+    }
+    /**
+     * 缴费统计
+     *
+     * @return
+     */
+    public String statPay() {
+        int total = 0;
+        List<PayStatistDto> list = null;
+        Map<String, Object> paramMap = buildParamMap();
+        try {
+            total = wyBtsChargeListManager.countStatisticsPay(paramMap);
+            if (total < pagesize) {
+                page = 1;
+            }
+            paramMap.put("start", (page - 1) * pagesize + 1);
+            paramMap.put("pagesize", pagesize);
+            list = wyBtsChargeListManager.statisticsPay(paramMap);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
+        setJsonMapRows(list);
+        setJsonMapTotal(total);
+        return SUCCESS;
+    }
+
 
     /**
      * build query condition
@@ -566,6 +598,12 @@ public class WyBtsChargeListAction extends BaseAction {
         }
         if (!StringUtil.isEmpty(btsType)) {
             param.put("btsType", btsType);
+        }
+        if(!StringUtil.isEmpty(startTime)){
+            param.put("startTime",startTime);
+        }
+        if(!StringUtil.isEmpty(endTime)){
+            param.put("endTime",endTime);
         }
         return param;
     }
@@ -656,5 +694,21 @@ public class WyBtsChargeListAction extends BaseAction {
 
     public void setFileContentType(String fileContentType) {
         this.fileContentType = fileContentType;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 }

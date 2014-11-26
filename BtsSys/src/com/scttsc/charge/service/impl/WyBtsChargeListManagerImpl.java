@@ -5,7 +5,8 @@ import com.scttsc.business.service.BtsManager;
 import com.scttsc.business.service.TunelManager;
 import com.scttsc.business.util.DateConverter;
 import com.scttsc.charge.dao.WyBtsChargeListDao;
-import com.scttsc.charge.dto.BtsDTO;
+import com.scttsc.charge.dto.BtsDto;
+import com.scttsc.charge.dto.PayStatistDto;
 import com.scttsc.charge.model.WyBtsChargeList;
 import com.scttsc.charge.service.WyBtsChargeListManager;
 import org.apache.commons.beanutils.BeanUtils;
@@ -42,10 +43,10 @@ public class WyBtsChargeListManagerImpl implements WyBtsChargeListManager {
     }
 
     public int insert(WyBtsChargeList record) {
-        Map<String,Object> param=new HashMap<String, Object>();
-        param.put("intId",record.getIntId());
-        BtsDTO btsDTO=selectBtsByMap(param);
-        if(btsDTO!=null){
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("intId", record.getIntId());
+        BtsDto btsDTO = selectBtsByMap(param);
+        if (btsDTO != null) {
             record.setBtsName(btsDTO.getName());
             record.setBscName(btsDTO.getBscName());
             record.setBtsId(btsDTO.getBtsId());
@@ -70,12 +71,12 @@ public class WyBtsChargeListManagerImpl implements WyBtsChargeListManager {
         return chargeListDao.selectByBtsId(param);
     }
 
-    public BtsDTO selectBtsByMap(Map<String,Object> param) {
-        BtsDTO btsDTO = null;
+    public BtsDto selectBtsByMap(Map<String, Object> param) {
+        BtsDto btsDTO = null;
         try {
-            List<BtsDTO> btsDTOs=chargeListDao.selectBtsByMap(param);
-            if(btsDTOs!=null&&btsDTOs.size()>0){
-                btsDTO=btsDTOs.get(0);
+            List<BtsDto> btsDTOs = chargeListDao.selectBtsByMap(param);
+            if (btsDTOs != null && btsDTOs.size() > 0) {
+                btsDTO = btsDTOs.get(0);
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -103,11 +104,19 @@ public class WyBtsChargeListManagerImpl implements WyBtsChargeListManager {
     }
 
 
-    public List<WyBtsChargeList> selectByMap(Map<String, Object> param)throws Exception{
+    public List<WyBtsChargeList> selectByMap(Map<String, Object> param) throws Exception {
         return chargeListDao.selectByMap(param);
     }
 
-    public int countByMap(Map<String, Object> param)throws Exception {
+    public int countByMap(Map<String, Object> param) throws Exception {
         return chargeListDao.countByMap(param);
+    }
+
+    public List<PayStatistDto> statisticsPay(Map<String, Object> param) throws Exception {
+        return chargeListDao.statisticsPay(param);
+    }
+
+    public int countStatisticsPay(Map<String, Object> param) throws Exception {
+        return chargeListDao.countStatisticsPay(param);
     }
 }

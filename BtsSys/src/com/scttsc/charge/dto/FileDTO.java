@@ -3,7 +3,7 @@ package com.scttsc.charge.dto;
 /**
  * Created by _think on 2014/11/16.
  */
-public class FileDTO {
+public class FileDto {
     private int status = 1;//1=上传成功,0=上传失败
     private String uuid;
 

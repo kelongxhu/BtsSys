@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by _think on 2014/11/19.
  */
-public class BtsDTO {
+public class BtsDto {
     private BigDecimal intId;//基站INT_ID
     private String name;
     private Integer cityId;

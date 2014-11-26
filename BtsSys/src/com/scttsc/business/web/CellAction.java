@@ -297,6 +297,7 @@ public class CellAction extends BaseAction {
                 int libType = cellLib.getLibType();
                 switch (libType) {
                     case 1:
+                        //校园库
                         SchoolLib schoolLib = schoolLibManager.getById(cellLib.getLibId().longValue());
                         schoolLibs.add(schoolLib);
                         break;
@@ -392,9 +393,6 @@ public class CellAction extends BaseAction {
                 name = Common.decodeURL(name).trim();
                 map.put("name", "%" + name + "%");
             }
-            total = cellManager.countByMap(map);
-            map.put("start", 0);
-            map.put("pagesize", (total + 1));
             list = cellManager.selectByMap(map);
             POIFSFileSystem fis = new POIFSFileSystem(new FileInputStream(
                     templatePath));
@@ -404,16 +402,12 @@ public class CellAction extends BaseAction {
             // 创建整个Excel表 //根据查询条件从DB取出list，生成excel
             int rowIndex = 1;
             for (Cell c : list) {
-                Ccell ccell = cellManager.selectCcellById(new Long(c.getIntId()));
-                if (ccell == null) {
-                    continue;
-                }
                 List<String> cList = new ArrayList<String>();
                 cList.add(StringUtil.null2String(rowIndex));
                 cList.add(StringUtil.null2String(c.getIntId()));
                 cList.add(StringUtil.null2String(c.getName()));
-                cList.add(StringUtil.null2String(ccell.getBscName()));
-                cList.add(StringUtil.null2String(ccell.getCi()));//CI
+                cList.add(StringUtil.null2String(c.getBscName()));
+                cList.add(StringUtil.null2String(c.getCi()));//CI
                 String gF = c.getIsGf();
                 if ("0".equals(gF)) {
                     cList.add("否");
@@ -421,7 +415,6 @@ public class CellAction extends BaseAction {
                     cList.add("是");
                 }
                 cList.add(StringUtil.null2String(c.getIsGf()));//功分编号
-
                 int manualFlag = c.getManualFlag().intValue();
                 if (manualFlag == 1) {
                     //小区手工数据录入

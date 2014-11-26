@@ -135,7 +135,7 @@
                 and RowNum &lt; (#{start} + #{pagesize})
             </if>
         </where>
-        <include refid="orderby-condition"/>)
+          )
         <where>
             <if test="start!=null">
                 RN >= #{start}
