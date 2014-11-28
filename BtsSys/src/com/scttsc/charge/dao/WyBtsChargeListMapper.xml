@@ -144,8 +144,8 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
     select 
     <include refid="Base_Column_List" />
-    from WY_BTS_CHARGE_LIST
-    where ID = #{id,jdbcType=DECIMAL}
+    from WY_BTS_CHARGE_LIST u
+    where u.ID = #{id,jdbcType=DECIMAL}
   </select>
 
   <select id="selectByBtsId" resultMap="BaseResultMap">

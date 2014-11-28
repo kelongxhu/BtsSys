@@ -57,6 +57,7 @@ public class WyBtsChargeListAction extends BaseAction {
     private BigDecimal intId;
 
     private String ids;//缴费ID
+    private BigDecimal id;//缴费ID
 
     //文件上传
     private File file;
@@ -106,7 +107,12 @@ public class WyBtsChargeListAction extends BaseAction {
         //基站类型，INT_ID,COST_TYPE
         WyBtsCharge charge = null;
         try {
-            charge = wyBtsChargeManager.selectByPrimaryKey(intId, costType, btsType);//
+            if (id != null) {
+                chargeBill = wyBtsChargeListManager.selectByPrimaryKey(id);
+                charge = wyBtsChargeManager.selectByPrimaryKey(chargeBill.getIntId(), chargeBill.getCostType(), chargeBill.getBtsType());
+            } else {
+                charge = wyBtsChargeManager.selectByPrimaryKey(intId, costType, btsType);
+            }
             this.getRequest().setAttribute("charge", charge);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -143,35 +149,44 @@ public class WyBtsChargeListAction extends BaseAction {
     public String payAdd() {
         User user = (User) this.getSession().getAttribute("user");
         try {
-            if (!StringUtil.isEmpty(chargeBill)) {
-                //将文件从临时目录copy到正式目录...copy 成功清除临时目录文件...
-                String proofFile = chargeBill.getProofFile();
-                if (!StringUtils.isEmpty(proofFile)) {
-                    String path = Constants.PROOF_FILE + proofFile;
-                    String descPath = getRequest().getSession()
-                            .getServletContext().getRealPath(path);
-                    StoreUtil.copyFile(proofFile, descPath);
-                    chargeBill.setProofFile(path);
-                }
-                //是否延时,周期为15号，如果>15则判断延时
-                Date payTime = chargeBill.getPayTime();
-                Calendar c = Calendar.getInstance();
-                c.setTime(payTime);
-                int day = c.get(Calendar.DATE);
-                if (day > chargeBill.getPayCycle()) {
-                    chargeBill.setIsTimeout((short) 1);//超时
-                } else {
-                    chargeBill.setIsTimeout((short) 0);//不超时
-                }
-                //缴费方式，默认为人工
-                if (Common.isEmpty(chargeBill.getPayType())) {
-                    chargeBill.setPayType((short) 1);
-                }
+            if (StringUtil.isEmpty(chargeBill)) {
+                jsonMap.put("result", 0);
+                return SUCCESS;
+            }
+            //将文件从临时目录copy到正式目录...copy 成功清除临时目录文件...
+            String proofFile = chargeBill.getProofFile();
+            if (!StringUtils.isEmpty(proofFile) && !proofFile.contains(Constants.PROOF_FILE)) {
+                //新上傳文件，如果是更新则路径为/store_file/
+                String path = Constants.PROOF_FILE + proofFile;
+                String descPath = getRequest().getSession()
+                        .getServletContext().getRealPath(path);
+                StoreUtil.copyFile(proofFile, descPath);
+                chargeBill.setProofFile(path);
+            } else {
+                chargeBill.setProofFile(null);//忽略编辑字段
+            }
+            //是否延时,周期为15号，如果>15则判断延时
+            Date payTime = chargeBill.getPayTime();
+            Calendar c = Calendar.getInstance();
+            c.setTime(payTime);
+            int day = c.get(Calendar.DATE);
+            if (day > chargeBill.getPayDay()) {
+                chargeBill.setIsTimeout((short) 1);//超时
+            } else {
+                chargeBill.setIsTimeout((short) 0);//不超时
+            }
+            //缴费方式，默认为人工
+            if (Common.isEmpty(chargeBill.getPayType())) {
+                chargeBill.setPayType((short) 1);
+            }
+            if (chargeBill.getId() == null) {
                 chargeBill.setInTime(new Date());
                 chargeBill.setInUser(user.getIntId().intValue());
                 wyBtsChargeListManager.insert(chargeBill);
-                jsonMap.put("result", 1);
+            } else {
+                wyBtsChargeListManager.updateByPrimaryKeySelective(chargeBill);
             }
+            jsonMap.put("result", 1);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             jsonMap.put("result", 0);
@@ -181,6 +196,7 @@ public class WyBtsChargeListAction extends BaseAction {
 
     /**
      * 删除缴费费用
+     *
      * @return
      */
     public String payDel() {
@@ -744,5 +760,14 @@ public class WyBtsChargeListAction extends BaseAction {
 
     public void setIds(String ids) {
         this.ids = ids;
+    }
+
+
+    public BigDecimal getId() {
+        return id;
+    }
+
+    public void setId(BigDecimal id) {
+        this.id = id;
     }
 }

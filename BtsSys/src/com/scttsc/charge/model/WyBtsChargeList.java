@@ -43,7 +43,7 @@ public class WyBtsChargeList {
     private String isTimeoutStr;//是否延期
     private String proofFileName;//凭证名称
     private String payTypeStr;//缴费类型
-
+    private Integer payDay;//从费用设置处冗余一个payDay统计是否超时
 
     //冗余基站字段
     private String cityName;
@@ -294,7 +294,7 @@ public class WyBtsChargeList {
     }
 
     public String getCostTypeStr() {
-        if(costType==null){
+        if (costType == null) {
             return "";
         }
         switch (costType) {
@@ -331,5 +331,13 @@ public class WyBtsChargeList {
 
     public void setCountryId(Integer countryId) {
         this.countryId = countryId;
+    }
+
+    public Integer getPayDay() {
+        return payDay;
+    }
+
+    public void setPayDay(Integer payDay) {
+        this.payDay = payDay;
     }
 }
