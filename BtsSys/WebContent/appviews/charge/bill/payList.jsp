@@ -111,7 +111,7 @@ function btsGrid(url) {
         url:url,
         checkbox : true,
         width: '100%',
-        height:'99%',
+        height:'99.9%',
         onDblClickRow :btsInfo
     });
     $("#pageloading").hide();

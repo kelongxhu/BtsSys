@@ -26,6 +26,11 @@
             $("#monthDegree").addClass("required").addClass("number");
             $("#payTypeTd").addClass("required");
         }
+
+        if ("${chargeBill.payType==null?"":chargeBill.payType}" != "") {
+            var pp = "${chargeBill.payType}";
+            $("#payType option[value='" + pp + "']").attr("selected", "selected");
+        }
     }
 
     var gridObj;
@@ -71,11 +76,9 @@ $(function() {
         ],
         toolbar: {
             items: [
-                {text: '增加', click: add, icon: 'add', type: 1},
+                {text: '编辑',click: payEdit, icon: 'modify'},
                 {line: true},
-                {text: '编辑',click: add, icon: 'modify',type: 2},
-                {line: true},
-                {text: '删除',click: payDel,icon: 'delete',type: 3}
+                {text: '删除',click: payDel,icon: 'delete'}
             ]
         },
         usePager:false,
@@ -178,6 +181,23 @@ $(function() {
      });
  }
 
+    function payEdit(){
+        var rows = gridObj.getCheckedRows();
+        var j=rows.length;
+        if(j==0){
+            $.ligerDialog.alert('请选择要编辑的数据！');
+            return;
+        }else if (j > 1) {
+            $.ligerDialog.alert('请选择一条编辑！');
+            return;
+        }
+        var id;
+        $(rows).each(function() {
+            id=this.id;
+        });
+        window.location.href="${ctx}/charge/payAddPage.action?id="+id;
+    }
+
 </script>
 
 
@@ -204,6 +224,7 @@ $(function() {
                 <input name="chargeBill.btsType" type="hidden" value="${charge.btsType}"/>
                 <input name="chargeBill.costType" type="hidden" value="${charge.costType}"/>
                 <input name="chargeBill.payCycle" type="hidden" value="${charge.payCycle}">
+                <input name="chargeBill.payDay" type="hidden" value="${charge.payDay}">
             </td>
             <td width="150px">所属BSC:</td>
             <td width="300px">${charge.bscName}</td>
@@ -230,16 +251,19 @@ $(function() {
         <tr>
             <td><span style="color: red;">*</span>金额:</td>
             <td>
-               <input name="chargeBill.money" type="text" class="input150 required number" value="${charge.money}"/>
+               <input name="chargeBill.id" type="hidden" value="${chargeBill.id}"/>
+               <input name="chargeBill.money" type="text" class="input150 required number"  <c:if test="${!empty chargeBill }">value="${chargeBill.money }"</c:if>
+                      <c:if test="${empty chargeBill }">value="${charge.money}"</c:if>/>
             </td>
             <td><span style="color: red;">*</span>缴费时间:</td>
             <td>
-                <input type="text" name="chargeBill.payTime" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})"/>
+                <input type="text" name="chargeBill.payTime" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" value="${chargeBill.payTimeStr}"/>
             </td>
         </tr>
         <tr>
             <td><span style="color: red;">*</span>缴费人员：</td>
-            <td><input name="chargeBill.payUser" type="text" class="input150 required" value="${charge.remindUser}"/>
+            <td><input name="chargeBill.payUser" type="text" class="input150 required"  <c:if test="${!empty chargeBill }">value="${chargeBill.payUser}"</c:if>
+                       <c:if test="${empty chargeBill }">value="${charge.remindUser}"</c:if>/>
             </td>
             <td id="PayTypeLable" class="noneCss"><span style="color: red;">*</span>缴费方式：</td>
             <td id="payTypeTd" class="noneCss">
@@ -260,7 +284,7 @@ $(function() {
         <td><label>缴费凭证上传:</label></td>
         <td>
         <div style="float:left">
-            <input name="chargeBill.proofFile" id="proofFile"  type="text" readonly="readonly" class="input150"/>
+            <input name="chargeBill.proofFile" id="proofFile"  type="text" readonly="readonly" class="input150" value="${chargeBill.proofFile}"/>
         </div>
         <div style="float:left">
             <input id="pz_uploadify" name="pz_uploadify" type="file" multiple="true">
