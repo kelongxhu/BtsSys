@@ -16,9 +16,9 @@
 
         function init() {
             <%--var btsType = "${btsType}";--%>
-            var costType = "${costType}";
+            <%--var costType = "${costType}";--%>
 //            $("#btsType option[value='" + btsType + "']").attr("selected", true);
-            $("#costType option[value='" + costType + "']").attr("selected", true);
+//            $("#costType option[value='" + costType + "']").attr("selected", true);
             //设置不可更改
 //            $("#btsType").attr("disabled", "disabled");
 //            $("#costType").attr("disabled", "disabled");
@@ -69,8 +69,8 @@
 
         //上传
         function uploadifyUpload() {
-            var costType=$("#costType").val();
-            $('#uploadify').uploadify('settings','formData',{ 'costType':costType});
+//            var costType=$("#costType").val();
+//            $('#uploadify').uploadify('settings','formData',{ 'costType':costType});
             $('#uploadify').uploadify('upload', '*');
             $("#msg").html("请稍等,正在导入。。。");
             $("#msg").addClass("progressCss");
@@ -115,18 +115,18 @@
                     <%--</select>--%>
                 <%--</div>--%>
             <%--</div>--%>
-            <div class="control-group">
-                <label class="control-label">费用类型：</label>
+            <%--<div class="control-group">--%>
+                <%--<label class="control-label">费用类型：</label>--%>
 
-                <div class="controls">
-                    <select id="costType">
-                        <option value="">请选择</option>
-                        <option value="1">房租</option>
-                        <option value="2">物业</option>
-                        <option value="3">电费</option>
-                    </select>
-                </div>
-            </div>
+                <%--<div class="controls">--%>
+                    <%--<select id="costType">--%>
+                        <%--<option value="">请选择</option>--%>
+                        <%--<option value="1">房租</option>--%>
+                        <%--<option value="2">物业</option>--%>
+                        <%--<option value="3">电费</option>--%>
+                    <%--</select>--%>
+                <%--</div>--%>
+            <%--</div>--%>
             <div class="control-group">
                 <label class="control-label">选择文件:</label>
 

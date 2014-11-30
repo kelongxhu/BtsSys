@@ -102,8 +102,9 @@ function btsGrid(url) {
         toolbar: {
             items: [
                 {text: '增加', click: add, icon: 'add'},
-                {text: '导出模板', click: exportTemplateExcel, icon: 'add'},
-                {text: '导入', click: importPage, icon: 'add'}
+                {text: '导出模板', click: exportTemplateExcel, icon: 'calendar'},
+                {text: '导入', click: importPage, icon: 'photograph'},
+                {text: '导出', click: exportChargeSetting, icon: 'print'}
             ]
         },
         rownumbers:true,
@@ -186,7 +187,19 @@ function exportTemplateExcel(){
     var btsId = $("#btsId").val();
     var contractEndtime=$("#contractEndtime").val();
     var money=$("#money").val();
-    window.location.href="${ctx}/charge/exportTemplateExcel.action??countryIds=" + cityIds + "&btsName=" + btsName + "&bscName=" + bscName + "&btsId=" + btsId+"&btsType="+btsType+"&costType="+costType+"&contractEndtime="+contractEndtime+"&money="+money;
+    window.location.href="${ctx}/charge/exportTemplateExcel.action?countryIds=" + cityIds + "&btsName=" + btsName + "&bscName=" + bscName + "&btsId=" + btsId+"&btsType="+btsType+"&costType="+costType+"&contractEndtime="+contractEndtime+"&money="+money;
+}
+
+function exportChargeSetting(){
+    var btsType = $("#typeId").val();//基站類型
+    var costType= $("#costType").val();//费用类型
+    var cityIds = $("#cityIdVal").val().replace(/;/g, ',');
+    var btsName = $("#btsName").val();
+    var bscName = $("#bscName").val();
+    var btsId = $("#btsId").val();
+    var contractEndtime=$("#contractEndtime").val();
+    var money=$("#money").val();
+    window.location.href="${ctx}/charge/exportChargeSetting.action?countryIds=" + cityIds + "&btsName=" + btsName + "&bscName=" + bscName + "&btsId=" + btsId+"&btsType="+btsType+"&costType="+costType+"&contractEndtime="+contractEndtime+"&money="+money;
 }
 
 function importPage(){
