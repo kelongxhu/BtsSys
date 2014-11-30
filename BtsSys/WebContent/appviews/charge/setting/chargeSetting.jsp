@@ -98,8 +98,10 @@
 		 	function del(){
 		 		var rows = gridObj.getCheckedRows();
 				var str="";
+				var costType;
 				$(rows).each(function() {
-					str += this.id + ",";
+					str += this.intId + ",";
+					costType = this.costType;
 				});
 				if (str.length == 0) {
 					 $.ligerDialog.alert('请选择要删除的数据！');
@@ -107,12 +109,12 @@
 				} else {
 					str = str.substring(0, str.length - 1);
 				}
-		
 				$.ligerDialog.confirm('确认删除', function (yes) { 
 					var params = {
-							ids : str
+							ids : str,
+							costType:costType
 						};
-				$.getJSON('${ctx}/schooljson/deleteBlind.action', params, function(json) {
+				$.getJSON('${ctx}/chargejson/deleteChargeSetting.action', params, function(json) {
 					 if (json.result == 1) {
 						 alert('删除成功!');
 					}else{
@@ -124,8 +126,21 @@
 				});
 		 	}
 			
-			function exportInputData(){}
-			function importInput(){}
+			function exportInputData(){
+				var typeId = $("#typeId").val();
+			    var costType = $("#costType").val();
+			    var cityIds = $("#cityIdVal").val().replace(/;/g, ',');
+			    var btsName = $("#btsName").val();
+			    var bscName = $("#bscName").val();
+			    var btsId = $("#btsId").val();
+			    var url = encodeURI("${ctx}/charge/exportBtsData.action?countryIds=" 
+			    		+ cityIds + "&btsType=" + typeId + "&costType=" + costType
+			    		+ "&btsName=" + btsName + "&bscName=" + bscName + "&btsId=" + btsId);
+			    window.location.href = url;
+			}
+			function importInput(){
+				window.location.href = "${ctx}/charge/importCharges.action";
+			}
 
 			//查询
 			function toSearch() {
@@ -169,7 +184,7 @@
 			
 			//基站显示信息
 			function btsInfo(data) {
-			    window.location.href = "${ctx}/business/btsInfo.action?intId=" + data.intId;
+			    window.location.href = "${ctx}/charge/btsChargeInfo.action?intId=" + data.intId+"&btsType="+data.btsType;
 			}
 			
 			//高级检索
