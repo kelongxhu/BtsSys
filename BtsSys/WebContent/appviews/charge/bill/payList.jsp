@@ -62,9 +62,10 @@ $(function() {
 
 
     //控件
-    $("#name").ligerTextBox({width : 150 });
-    $("#bscName").ligerTextBox({width : 150 });
-    $("#btsId").ligerTextBox({width : 150 });
+    $("#btsName").ligerTextBox({width : 100 });
+    $("#bscName").ligerTextBox({width : 100 });
+    $("#btsId").ligerTextBox({width : 100 });
+    $("#money").ligerTextBox({width : 100 });
 
 
 
@@ -88,9 +89,10 @@ function btsGrid(url) {
             {display:'本地网',name:'cityName',width : 60,align:'center'},
             {display:'区县',name:'countryName',width : 60,align:'center'},
             {display:'所属BSC',name:'bscName',width :100,align:'center'} ,
-            {display:'BTSID',name:'btsId',width :60,align:'center',isSort:true} ,
+            {display:'BTSID',name:'btsId',width :60,align:'center'} ,
             {display:'费用类型',name:'costTypeStr',width :60,align:'center'} ,
-            {display:'缴费周期',name:'payCycle',width : 60,align:'center'},
+            {display:'缴费周期(月)',name:'payCycle',width :80,align:'center'},
+            {display:'缴费金额',name:'money',width : 60,align:'center'},
             {display:'缴费日期',name:'payDay',width : 60,align:'center'},
             {display:'提醒人员',name:'remindUser',width : 80,align:'center'},
             {display:'提醒号码',name:'remindTel',width : 100,align:'center'},
@@ -147,7 +149,9 @@ function toSearch() {
     var btsName = $("#btsName").val();
     var bscName = $("#bscName").val();
     var btsId = $("#btsId").val();
-    var url= encodeURI("${ctx}/chargejson/wyBtsChargeList.action?countryIds=" + cityIds + "&btsName=" + btsName + "&bscName=" + bscName + "&btsId=" + btsId+"&btsType="+btsType+"&costType="+costType);
+    var contractEndtime=$("#contractEndtime").val();
+    var money=$("#money").val();
+    var url= encodeURI("${ctx}/chargejson/wyBtsChargeList.action?countryIds=" + cityIds + "&btsName=" + btsName + "&bscName=" + bscName + "&btsId=" + btsId+"&btsType="+btsType+"&costType="+costType+"&contractEndtime="+contractEndtime+"&money="+money);
     btsGrid(url);
 }
 
@@ -174,8 +178,15 @@ function btsInfo(data) {
 }
 
 function exportTemplateExcel(){
+    var btsType = $("#typeId").val();//基站類型
     var costType= $("#costType").val();//费用类型
-    window.location.href="${ctx}/charge/exportTemplateExcel.action?costType="+costType;
+    var cityIds = $("#cityIdVal").val().replace(/;/g, ',');
+    var btsName = $("#btsName").val();
+    var bscName = $("#bscName").val();
+    var btsId = $("#btsId").val();
+    var contractEndtime=$("#contractEndtime").val();
+    var money=$("#money").val();
+    window.location.href="${ctx}/charge/exportTemplateExcel.action??countryIds=" + cityIds + "&btsName=" + btsName + "&bscName=" + bscName + "&btsId=" + btsId+"&btsType="+btsType+"&costType="+costType+"&contractEndtime="+contractEndtime+"&money="+money;
 }
 
 function importPage(){
@@ -225,7 +236,7 @@ function importPage(){
         </table>
         <table id="ydzdgcs" class="tab_send" cellpadding="0" cellspacing="0" style="display:none;" border="0">
             <tr>
-                <td width="50px" align="left">基站名称:</td>
+                <td width="60px" align="left">基站名称:</td>
                 <td>
                     <input type="text" id="btsName"/>
                 </td>
@@ -236,6 +247,14 @@ function importPage(){
                 <td width="50px" align="left">btsid:</td>
                 <td>
                     <input type="text" id="btsId"/>
+                </td>
+                <td width="60px" align="left">合同到期:</td>
+                <td>
+                    <input type="text" id="contractEndtime" class="Wdate input100" onFocus="WdatePicker({dateFmt: 'yyyy-MM'})"/>
+                </td>
+                <td width="50px" align="left">费用:</td>
+                <td>
+                    <input type="text" id="money"/>
                 </td>
             </tr>
         </table>

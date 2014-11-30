@@ -15,14 +15,15 @@
     <script type="text/javascript">
 
         function init() {
-            var btsType = "${btsType}";
+            <%--var btsType = "${btsType}";--%>
             var costType = "${costType}";
-            $("#btsType option[value='" + btsType + "']").attr("selected", true);
+//            $("#btsType option[value='" + btsType + "']").attr("selected", true);
             $("#costType option[value='" + costType + "']").attr("selected", true);
             //设置不可更改
-            $("#btsType").attr("disabled", "disabled");
-            $("#costType").attr("disabled", "disabled");
+//            $("#btsType").attr("disabled", "disabled");
+//            $("#costType").attr("disabled", "disabled");
         }
+
 
 
         $(function () {
@@ -31,13 +32,13 @@
                 method: 'post',
                 swf: '${ctx}/resources/uploadify/uploadify.swf',
                 uploader: '${ctx}/chargejson/importPayInputData.action;jsessionid=${pageContext.session.id}',
-                formData: {'btsType': '${btsType}', 'costType': '${costType}'},
+                <%--formData: {'btsType':'${btsType}', 'costType':'${costType}'},--%>
                 fileObjName: 'file',
                 fileSizeLimit: 0,
                 successTimeout: 600,
                 multi: false,
                 removeCompleted: false,
-                fileSizeLimit: '10MB',
+                fileSizeLimit: '100MB',
                 buttonText: '选择文件',
                 height: 30,
                 width: 120,
@@ -68,6 +69,8 @@
 
         //上传
         function uploadifyUpload() {
+            var costType=$("#costType").val();
+            $('#uploadify').uploadify('settings','formData',{ 'costType':costType});
             $('#uploadify').uploadify('upload', '*');
             $("#msg").html("请稍等,正在导入。。。");
             $("#msg").addClass("progressCss");
@@ -100,19 +103,18 @@
                     </span>
                 </div>
             </div>
-            <div class="control-group">
-                <label class="control-label">基站类型：</label>
-
-                <div class="controls">
-                    <select id="btsType">
-                        <option value="">请选择</option>
-                        <option value="1">室外覆盖站点</option>
-                        <option value="2">纯bbu站点</option>
-                        <option value="3">室内覆盖站点</option>
-                        <option value="6">隧道覆盖站点</option>
-                    </select>
-                </div>
-            </div>
+            <%--<div class="control-group">--%>
+                <%--<label class="control-label">基站类型：</label>--%>
+                <%--<div class="controls">--%>
+                    <%--<select id="btsType">--%>
+                        <%--<option value="">请选择</option>--%>
+                        <%--<option value="1">室外覆盖站点</option>--%>
+                        <%--<option value="2">纯bbu站点</option>--%>
+                        <%--<option value="3">室内覆盖站点</option>--%>
+                        <%--<option value="6">隧道覆盖站点</option>--%>
+                    <%--</select>--%>
+                <%--</div>--%>
+            <%--</div>--%>
             <div class="control-group">
                 <label class="control-label">费用类型：</label>
 
