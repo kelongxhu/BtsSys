@@ -75,6 +75,18 @@
     			<param name="root">jsonMap</param>
     		</result>
     	</action>
+    	
+    	<action name="deleteChargeSetting" class="com.scttsc.charge.web.WyBtsChargeAction" method="deleteChargeSetting">
+    		<result name="success" type="json">
+    			<param name="root">jsonMap</param>
+    		</result>
+    	</action>
+    	
+    	<action name="importChargeData" class="com.scttsc.charge.web.WyBtsChargeAction" method="importChargeData">
+    		<result name="success" type="json">
+    			<param name="root">jsonMap</param>
+    		</result>    		
+    	</action>
 
     </package>
 
@@ -122,6 +134,21 @@
     			/appviews/charge/setting/chargeInput.jsp
     		</result>
     	</action>
+    	
+    	<action name="btsChargeInfo" class="com.scttsc.charge.web.WyBtsChargeAction" method="btsChargeInfo">
+    		<result name="success" type="dispatcher">
+    			/appviews/charge/setting/chargeInfo.jsp
+    		</result>    	
+    	</action>
+    	
+        <action name="importCharges" class="com.scttsc.charge.web.WyBtsChargeAction" method="importCharges">
+	        <result name="success" type="dispatcher">
+	            /appviews/charge/setting/chargeImport.jsp
+	        </result>
+        </action>    	
+    	
+    	<action name="downloadAttachment" class="com.scttsc.charge.web.WyBtsChargeAction" method="downloadAttachment"></action>
+    	<action name="exportBtsData" class="com.scttsc.charge.web.WyBtsChargeAction" method="exportBtsData"></action>
     	
         <action name="exportTemplateExcel" class="com.scttsc.charge.web.WyBtsChargeListAction" method="exportTemplateExcel"/>
         <action name="payExport" class="com.scttsc.charge.web.WyBtsChargeListAction" method="payExport"/>
