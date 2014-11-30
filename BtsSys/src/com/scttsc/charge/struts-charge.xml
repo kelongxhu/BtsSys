@@ -152,5 +152,7 @@
     	
         <action name="exportTemplateExcel" class="com.scttsc.charge.web.WyBtsChargeListAction" method="exportTemplateExcel"/>
         <action name="payExport" class="com.scttsc.charge.web.WyBtsChargeListAction" method="payExport"/>
+        <action name="exportChargeSetting" class="com.scttsc.charge.web.WyBtsChargeListAction" method="exportChargeSetting"/>
+
     </package>
 </struts>

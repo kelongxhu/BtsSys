@@ -86,7 +86,7 @@ public class WyBtsChargeListManagerImpl implements WyBtsChargeListManager {
     }
 
 
-    public int importChargeData(List<Map<String, Object>> data) {
+    public int insertChargeData(List<Map<String, Object>> data) {
         int success = 0;
         try {
             for (Map<String, Object> objectMap : data) {

@@ -296,6 +296,7 @@ public class WyBtsChargeListAction extends BaseAction {
                 cList.add(btsCharge.getCountryName());
                 cList.add(btsCharge.getBscName());
                 cList.add(btsCharge.getBtsId() + "");
+                cList.add(btsCharge.getCostTypeStr());//费用类型
                 // 创建行 //创建第rowIndex行
                 HSSFRow row = demoSheet.createRow((short) rowIndex);
                 for (short j = 0; j < cList.size(); j++) {
@@ -359,40 +360,17 @@ public class WyBtsChargeListAction extends BaseAction {
             int rows = sheet.getPhysicalNumberOfRows(); // 得到行数
             HSSFCell cell = null;
             HSSFRow row = sheet.getRow(0);//首行
-            int lastNum = row.getLastCellNum();
-            boolean flag = false;
-            switch (costType) {
-                case 1:
-                    if (lastNum != 11) {
-                        flag = true;
-                    }
-                    break;
-                case 2:
-                    if (lastNum != 11) {
-                        flag = true;
-                    }
-                    break;
-                case 3:
-                    if (lastNum != 14) {
-                        flag = true;
-                    }
-                    break;
-            }
-            if (flag) {
-                jsonMap.put("result", 2);//导入对应费用类型模板
-                return SUCCESS;
-            }
             List<String> errorList = new ArrayList<String>();
             List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
             for (int i = 1; i < rows; i++) // 从第二行开始取数
             {
                 row = sheet.getRow(i);
-                Map obj = parseRoomChargeObj(i - 1, row, errorList, costType);
+                Map obj = parseRoomChargeObj(i - 1, row, errorList);
                 if (obj != null) {
                     data.add(obj);
                 }
             }
-            int sucess = wyBtsChargeListManager.importChargeData(data);
+            int sucess = wyBtsChargeListManager.insertChargeData(data);
             jsonMap.put("result", 1);
             jsonMap.put("sucess", sucess);
             jsonMap.put("errorList", errorList);
@@ -413,11 +391,24 @@ public class WyBtsChargeListAction extends BaseAction {
      * @param btsType
      * @return
      */
-    public Map<String, Object> parseRoomChargeObj(int rowNum, HSSFRow row, List<String> errorList, int costType) {
+    public Map<String, Object> parseRoomChargeObj(int rowNum, HSSFRow row, List<String> errorList) {
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Validity> coulmnMap = null;
         User user = (User) this.getSession().getAttribute("user");
         try {
+            HSSFCell costTypeCell = ExcelUtil.getCell(row, 7);
+            String costTypeText = ExcelHelper.getValue(costTypeCell);
+            if ("房租".equals(costTypeText)) {
+                costType = 1;
+            } else if ("物业".equals(costTypeText)) {
+                costType = 2;
+            } else if ("电费".equals(costTypeText)) {
+                costType = 3;
+            }
+            if (Common.isEmpty(costType)) {
+                errorList.add("第" + rowNum + "行,校验失败,费用类型请验证是否是房租、物业、电费");
+                return null;
+            }
             switch (costType) {
                 case 1:
                     coulmnMap = ExcelHelper.getRoomChargeCoulmnMap();
@@ -479,7 +470,7 @@ public class WyBtsChargeListAction extends BaseAction {
             map.put("inUser", user.getIntId());
             map.put("inTime", new Date());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             errorList.add("第" + rowNum + "行:" + "程序解析异常...");
             return null;
         }
@@ -644,55 +635,59 @@ public class WyBtsChargeListAction extends BaseAction {
 
     /**
      * 根据查询条件导出费用设置基站列表
+     *
      * @return
      */
-    public String exportChargeSetting(){
+    public String exportChargeSetting() {
         User user = (User) getSession().getAttribute("user");
         int total = 0;
-        List<WyBtsChargeList> list = null;
+        List<WyBtsCharge> list = null;
         String path = FileRealPath.getPath();
         String templatePath = path + "template";
-        String fileName = "基站缴费清单数据";
+        String fileName = "基站费用设置数据";
         switch (costType) {
             case 1:
-                templatePath += "/roomPayDataTemplate.xls";
+                templatePath += "/roomchargeDataTemplate.xls";
                 fileName += "_房租.xls";
                 break;
             case 2:
-                templatePath += "/roomPayDataTemplate.xls";
+                templatePath += "/roomchargeDataTemplate.xls";
                 fileName += "_物业.xls";
                 break;
             case 3:
-                templatePath += "/powerPayDataTemplate.xls";
+                templatePath += "/powerchargeDataTemplate.xls";
                 fileName += "_电费.xls";
                 break;
         }
         try {
-            Map<String, Object> map = buildParamMap();
-            total = wyBtsChargeListManager.countByMap(map);
-            map.put("start", 0);
-            map.put("pagesize", (total + 1));
-            list = wyBtsChargeListManager.selectByMap(map);
+            Map<String, Object> paramMap = buildParamMap();
+            list = wyBtsChargeManager.selectWyBtsChargeListByMap(paramMap, btsType);
             POIFSFileSystem fis = new POIFSFileSystem(new FileInputStream(
                     templatePath));
             HSSFWorkbook demoWorkBook = ExcelUtil.getWorkbook(fis);// 得到工作薄
             HSSFCellStyle style = ExcelUtil.setStyle(demoWorkBook);
             HSSFSheet demoSheet = ExcelUtil.getSheet(demoWorkBook, 0);// 第一个工作sheet:工作指引
             // 创建整个Excel表 //根据查询条件从DB取出list，生成excel
-            int rowIndex = 2;
-            for (WyBtsChargeList chargeList : list) {
+            int rowIndex = 1;
+            for (WyBtsCharge charge : list) {
                 List<String> cList = new ArrayList<String>();
-                cList.add(StringUtil.null2String(rowIndex - 1));
-                cList.add(chargeList.getBtsName());//基站名称
-                cList.add(chargeList.getCityName());
-                cList.add(chargeList.getCountryName());
-                cList.add(chargeList.getBscName());
-                cList.add(chargeList.getBtsId() + "");
-                cList.add(chargeList.getCostTypeStr());
-                cList.add(chargeList.getMoney() + "");
-                cList.add(chargeList.getPayTimeStr());
-                cList.add(chargeList.getPayUser());//缴费人员
-                cList.add(chargeList.getRemark());//备注
+                cList.add(charge.getBtsName());//基站名称
+                cList.add(charge.getCityName());
+                cList.add(charge.getCountryName());
+                cList.add(charge.getBscName());
+                cList.add(charge.getBtsId() + "");
+                cList.add(charge.getCostTypeStr());
+                if (costType == 1 || costType == 2) {
+                    cList.add(charge.getContractStarttimeStr());
+                    cList.add(charge.getContractEndtimeStr());
+                }
+                cList.add(StringUtil.null2String(charge.getMoney()));
+                cList.add(StringUtil.null2String(charge.getPayCycle()));//缴费周期
+                cList.add(StringUtil.null2String(charge.getPayDay()));//缴费日期
+                cList.add(StringUtil.null2String(charge.getAheadDay()));//提前日期
+                cList.add(charge.getRemindUser());//备注
+                cList.add(charge.getRemindTel());//备注
+                cList.add(charge.getRemark());//备注
                 // 创建行 //创建第rowIndex行
                 HSSFRow row = demoSheet.createRow((short) rowIndex);
                 for (short j = 0; j < cList.size(); j++) {

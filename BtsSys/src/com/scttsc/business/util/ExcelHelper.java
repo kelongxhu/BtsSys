@@ -533,6 +533,7 @@ public class ExcelHelper {
         cols.put("countryId",  new Validity("区县", true, 1, null));//忽略
         cols.put("bscName",  new Validity("bscName", true, 1, null));//忽略
         cols.put("btsId", new Validity("btsId", true, 1, null));//忽略
+        cols.put("costType", new Validity("费用类型", true, 1, new String[]{"房租","物业","电费"}));//忽略
         cols.put("money", new Validity("金额", true, 2, null)); // 不能为空
         cols.put("payTime", new Validity("缴费时间", true, 5, null));
         cols.put("payUser", new Validity("缴费人员", true, 1, null));
@@ -555,6 +556,7 @@ public class ExcelHelper {
         cols.put("countryId",  new Validity("区县", true, 1, null));//忽略
         cols.put("bscName",  new Validity("bscName", true, 1, null));//忽略
         cols.put("btsId", new Validity("btsId", true, 1, null));//忽略
+        cols.put("costType", new Validity("费用类型", true, 1, new String[]{"房租","物业","电费"}));//忽略
         cols.put("money", new Validity("金额", true, 2, null)); // 不能为空
         cols.put("baseDegree", new Validity("底度", true, 2, null)); // 不能为空
         cols.put("monthDegree", new Validity("当月度数", true, 2, null)); // 不能为空

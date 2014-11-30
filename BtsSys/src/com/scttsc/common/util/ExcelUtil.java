@@ -87,6 +87,18 @@ public class ExcelUtil {
     }
 
     /**
+     * 得到列
+     *
+     * @param row
+     * @param j
+     * @return
+     */
+    public static HSSFCell getCell(HSSFRow row, int j) {
+        HSSFCell cell = row.getCell((short) (j));//Excel
+        return cell;
+    }
+
+    /**
      * 得到列设置为str
      *
      * @param i
@@ -200,6 +212,7 @@ public class ExcelUtil {
 
     /**
      * 生成表头样式
+     *
      * @param workbook
      * @return
      */

@@ -67,6 +67,9 @@ public class WyBtsCharge {
     private String nextPayTimeStr;
     private String isRemindStr;
 
+    private String contractStarttimeStr;
+    private String contractEndtimeStr;
+
 
     public BigDecimal getIntId() {
         return intId;
@@ -351,5 +354,21 @@ public class WyBtsCharge {
 
     public void setIsRemindStr(String isRemindStr) {
         this.isRemindStr = isRemindStr;
+    }
+
+    public String getContractStarttimeStr() {
+        return contractStarttime == null ? "" : DateUtils.DateToStr(contractStarttime, "yyyy-MM-dd");
+    }
+
+    public void setContractStarttimeStr(String contractStarttimeStr) {
+        this.contractStarttimeStr = contractStarttimeStr;
+    }
+
+    public String getContractEndtimeStr() {
+        return contractEndtime == null ? "" : DateUtils.DateToStr(contractEndtime, "yyyy-MM-dd");
+    }
+
+    public void setContractEndtimeStr(String contractEndtimeStr) {
+        this.contractEndtimeStr=contractEndtimeStr;
     }
 }
