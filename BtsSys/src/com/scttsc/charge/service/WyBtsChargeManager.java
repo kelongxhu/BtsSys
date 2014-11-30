@@ -45,4 +45,20 @@ public interface WyBtsChargeManager {
 
     void doChargeSetting(WyBtsCharge wyBtsCharge)throws Exception;
     
+    /**
+     * 
+     * @param ids
+     * @param costType
+     * @throws Exception
+     */
+    void deleteChargeSetting(String ids, int costType)throws Exception;
+    
+    /**
+     * 
+     * @param param
+     * @return
+     * @throws Exception
+     */
+    List<WyBtsCharge> selectBtsChargeSettingListByMap(Map<String,Object> param)throws Exception;
+    
 }
