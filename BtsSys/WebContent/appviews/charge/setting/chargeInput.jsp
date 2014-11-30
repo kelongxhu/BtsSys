@@ -21,10 +21,33 @@
 		<script type="text/javascript">
 			//注册表单验证
 			$(function() {
-				
-				//$("#remindUser").ligerTextBox({width : 200 });
-		
-		
+				var combox = $("#payTypeVal").ligerComboBox({  
+			         data: [
+			             { text: '人工缴费', id: '1' },
+			             { text: '自动代扣', id: '2' }
+			         ], 
+			         width : 200,
+					 selectBoxWidth: 200,
+			         valueFieldID: 'payType',
+			         onSelected:function(data){
+			         	if(data == '1'){
+			         		$("#accountInfo").hide();
+			         		$("#payCycle").html("缴费周期");
+			         		$("#payDay").html("缴费日期");
+			         	}else if(data == '2'){
+			         		$("#accountInfo").show();
+			         		$("#payCycle").html("代扣周期");
+			         		$("#payDay").html("代扣日期");
+			         	}
+					 }
+			     });
+
+				if('${WyBtsCharge.payType}' == '1'){
+					$("#accountInfo").hide();
+				}else if('${WyBtsCharge.payType}' == '2'){
+					$("#accountInfo").show();
+				}
+							     
 			});
 		
 			$(function() {
@@ -99,6 +122,7 @@
 				//    $("#msg").addClass("tipMsg");
 			    return false;
 			}
+			
 		</script>
 	</head>
 	<body>
@@ -188,7 +212,8 @@
 										</c:when>
 										<c:otherwise/>
 									</c:choose>			
-																							
+												
+									<c:if test="${param.costType=='1'||param.costType=='2'}">
 									<tr>
 										<td>
 											<span style="color: red;">*</span>合同开始日期：
@@ -207,9 +232,22 @@
 												value="<fmt:formatDate value='${WyBtsCharge.contractEndtime }' pattern='yyyy-MM-dd' />"/>
 										</td>
 									</tr>
+									</c:if>											
+									
+									<c:if test="${param.costType=='3'}">
 									<tr>
 										<td>
-											<span style="color: red;">*</span>缴费周期：
+											<span style="color: red;">*</span>缴费方式:
+										</td>
+										<td>
+											<input name="payTypeVal" id="payTypeVal" type="text" class="required"/>
+											<input name="wyBtsCharge.payType" id="payType" type="hidden" value="${WyBtsCharge.payType }"/>
+										</td>
+									</tr>									
+									</c:if>	
+									<tr>
+										<td>
+											<span style="color: red;">*</span><span id="payCycle">缴费周期：</span>
 										</td>
 										<td>
 											<input name="wyBtsCharge.payCycle" type="text" class="input150 required number" 
@@ -229,7 +267,7 @@
 									</tr>
 									<tr>
 										<td>
-											<span style="color: red;">*</span>缴费日期:
+											<span style="color: red;">*</span><span id="payDay">缴费日期:</span> 
 										</td>
 										<td>
 											<input name="wyBtsCharge.payDay" type="text" class="input150 required number" value="${WyBtsCharge.payDay }"/>
@@ -250,13 +288,16 @@
 												class="input150 required" value="${WyBtsCharge.remindTel }"/>
 										</td>										
 										<td>
-											<span style="color: red;">*</span>金额：
+											<span style="color: red;">*</span>
+											<c:if test="${param.costType=='3'}">单价:</c:if>
+											<c:if test="${param.costType=='1'||param.costType=='2'}">金额：</c:if>
 										</td>
 										<td>
 											<input name="wyBtsCharge.money" type="text"
 												class="input150 required number" value="${WyBtsCharge.money }"/>
 										</td>		
 									</tr>
+									<c:if test="${param.costType=='1'||param.costType=='2'}">
 									<tr>
 										<td>
 											对方联系号码：
@@ -275,13 +316,33 @@
 									</tr>
 									<tr>
 										<td>
-											对方银行账号：
+											<span>对方银行账号：</span>
 										</td>
 										<td>
 											<input name="wyBtsCharge.eachBanknum" type="text"
 												class="input150" value="${WyBtsCharge.eachBanknum }"/>
-										</td>										
+										</td>	
+									</tr>									
+									</c:if>
+									<c:if test="${param.costType=='3'}">
+									<tr id="accountInfo">
+										<td>
+											代扣银行账号：
+										</td>
+										<td>
+											<input name="wyBtsCharge.bankAccount" type="text"
+												class="input150" value="${WyBtsCharge.bankAccount }"/>
+										</td>	
+										<td>
+											当前账户余额：
+										</td>
+										<td>
+											<input name="wyBtsCharge.balance" type="text"
+												class="input150" value="${WyBtsCharge.balance }"/>
+										</td>											
 									</tr>	
+									</c:if>
+									<c:if test="${param.costType=='1'||param.costType=='2'}">
 									<tr>
 										<td>
 											合同附件：
@@ -306,7 +367,8 @@
 										<td colspan="3">
                 							<textarea name="wyBtsCharge.remark" class="area150">${WyBtsCharge.remark}</textarea>
 										</td>		
-									</tr>											
+									</tr>		
+									</c:if>									
 								</table>
 								<input type="hidden" name="wyBtsCharge.intId" value="${param.intId }">
 								<input type="hidden" name="wyBtsCharge.btsType" value="${param.btsType }">
