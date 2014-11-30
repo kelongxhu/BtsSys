@@ -360,9 +360,6 @@
             <if test="btsType != null">
                 BTS_TYPE = #{btsType,jdbcType=DECIMAL},
             </if>
-            <if test="costType != null">
-                COST_TYPE = #{costType,jdbcType=DECIMAL},
-            </if>
             <if test="contractStarttime != null">
                 CONTRACT_STARTTIME = #{contractStarttime,jdbcType=DATE},
             </if>
@@ -427,7 +424,7 @@
                 IS_REMIND=#{isRemind,jdbcType=DECIMAL}
             </if>
         </set>
-        where INT_ID = #{intId,jdbcType=DECIMAL}
+        where INT_ID = #{intId,jdbcType=DECIMAL} and COST_TYPE = #{costType,jdbcType=DECIMAL}
     </update>
 
     <!-- 费用设置 -->
@@ -646,11 +643,16 @@
         )
     </select>
 
-    <select id="selectBtsChargeSettingByMap" resultMap="BaseResultMap">
+    <select id="selectBtsChargeSettingListByMap" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from WY_BTS_CHARGE u
-        where u.INT_ID = #{intId} and u.COST_TYPE=#{costType}
+        <where>
+        	u.INT_ID = #{intId}
+        	<if test="costType!=null">
+                and u.COST_TYPE=#{costType}
+            </if>
+        </where>
     </select>
 
     <update id="updateByMap" parameterType="hashmap">
@@ -668,4 +670,8 @@
         </set>
         where INT_ID=#{intId} and COST_TYPE=#{costType}
     </update>
+    
+    <delete id="deleteChargeSetting">
+    	delete from WY_BTS_CHARGE where INT_ID in (#{ids}) and COST_TYPE = #{costType}
+    </delete>
 </mapper>
