@@ -10,6 +10,8 @@ public class WySmsLog {
 
     private Short btsType;
 
+    private Short costType;
+
     private String remindUser;
 
     private String remindTel;
@@ -82,5 +84,13 @@ public class WySmsLog {
 
     public void setInTime(Date inTime) {
         this.inTime = inTime;
+    }
+
+    public Short getCostType() {
+        return costType;
+    }
+
+    public void setCostType(Short costType) {
+        this.costType = costType;
     }
 }

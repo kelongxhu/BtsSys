@@ -20,6 +20,7 @@ public class Validity {
     private String msg;//提示信息
 
     private int index;
+    private boolean ignore;
 
 
     //定义数据类型
@@ -35,6 +36,7 @@ public class Validity {
         isEmput = emput;
         this.dataType = dataType;
         this.borderValue = borderValue;
+        ignore=false;
     }
 
     /**
@@ -182,5 +184,14 @@ public class Validity {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+
+    public boolean isIgnore() {
+        return ignore;
+    }
+
+    public void setIgnore() {
+        this.ignore = true;
     }
 }

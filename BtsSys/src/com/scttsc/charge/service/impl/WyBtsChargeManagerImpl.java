@@ -2,8 +2,10 @@ package com.scttsc.charge.service.impl;
 
 import com.scttsc.charge.dao.SmgpDao;
 import com.scttsc.charge.dao.WyBtsChargeDao;
+import com.scttsc.charge.dao.WySmsLogDao;
 import com.scttsc.charge.model.Smgp;
 import com.scttsc.charge.model.WyBtsCharge;
+import com.scttsc.charge.model.WySmsLog;
 import com.scttsc.charge.service.WyBtsChargeManager;
 import com.scttsc.common.util.DateUtils;
 import org.apache.log4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,8 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
     private WyBtsChargeDao wyBtsChargeDao;
     @Autowired
     private SmgpDao smgpDao;
+    @Autowired
+    private WySmsLogDao wySmsLogDao;
 
     public List<WyBtsCharge> selectWyBtsChargeListByMap(Map<String, Object> param, int btsType) throws Exception {
         List<WyBtsCharge> wyBtsCharges = null;
@@ -178,7 +183,17 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
         paramMap.put("intId", wyBtsCharge.getIntId());
         paramMap.put("costType", wyBtsCharge.getCostType());
         paramMap.put("isRemind", 1);
-        return wyBtsChargeDao.updateByMap(paramMap) + smgpDao.insert(smgp);
+        //记录提醒日志
+        WySmsLog wySmsLog=new WySmsLog();
+        wySmsLog.setIntId(wyBtsCharge.getIntId());
+        wySmsLog.setBtsType(wyBtsCharge.getBtsType());
+        wySmsLog.setCostType(wyBtsCharge.getCostType());
+        wySmsLog.setRemindUser(wyBtsCharge.getRemindUser());
+        wySmsLog.setRemindTel(wyBtsCharge.getRemindTel());
+        wySmsLog.setContent(msgContent.toString());
+        wySmsLog.setStatus((short)0);
+        wySmsLog.setInTime(new Date());
+        return wyBtsChargeDao.updateByMap(paramMap) + smgpDao.insert(smgp)+wySmsLogDao.insert(wySmsLog);
     }
 
 	public void doChargeSetting(WyBtsCharge wyBtsCharge) throws Exception {

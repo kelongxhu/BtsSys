@@ -1,6 +1,7 @@
 package com.scttsc.charge.dao;
 
 import com.scttsc.charge.model.WyBtsCharge;
+import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -138,4 +139,7 @@ public interface WyBtsChargeDao {
      * @throws Exception
      */
     WyBtsCharge selectBtsChargeSettingByMap(Map<String,Object> param)throws Exception;
+
+
+    WyBtsCharge selectByPrimaryKey(@Param(value="intId") BigDecimal intId,@Param(value="costType") Short costType);
 }

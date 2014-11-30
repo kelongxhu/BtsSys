@@ -42,6 +42,11 @@
   </sql>
 
 
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from WY_BTS_CHARGE u
+        where u.INT_ID = #{intId} and u.COST_TYPE=#{costType}
+    </select>
+
     <!--室外覆盖站点的费用设置-->
 
     <select id="selectWyBtsChargeListByMap" resultMap="BaseResultMap">
@@ -69,6 +74,12 @@
             </if>
             <if test="btsId!=null">
                 and b.bts_id=#{btsId}
+            </if>
+            <if test="contractEndtime!=null">
+                and to_char(a.CONTRACT_ENDTIME,'yyyy-MM')=#{contractEndtime}
+            </if>
+            <if test="money!=null">
+                and a.money>=#{money}
             </if>
         </where>
         )m
@@ -111,6 +122,12 @@
             <if test="btsId!=null">
                 and b.bts_id=#{btsId}
             </if>
+            <if test="contractEndtime!=null">
+                and to_char(a.CONTRACT_ENDTIME,'yyyy-MM')=#{contractEndtime}
+            </if>
+            <if test="money!=null">
+                and a.money>=#{money}
+            </if>
         </where>
         )
     </select>
@@ -141,6 +158,12 @@
             </if>
             <if test="btsId!=null">
                 and b.bts_id=#{btsId}
+            </if>
+            <if test="contractEndtime!=null">
+                and to_char(a.CONTRACT_ENDTIME,'yyyy-MM')=#{contractEndtime}
+            </if>
+            <if test="money!=null">
+                and a.money>=#{money}
             </if>
         </where>
         )m
@@ -184,6 +207,12 @@
             <if test="btsId!=null">
                 and b.bts_id=#{btsId}
             </if>
+            <if test="contractEndtime!=null">
+                and to_char(a.CONTRACT_ENDTIME,'yyyy-MM')=#{contractEndtime}
+            </if>
+            <if test="money!=null">
+                and a.money>=#{money}
+            </if>
         </where>
         )
     </select>
@@ -214,6 +243,12 @@
             </if>
             <if test="btsId!=null">
                 and b.bts_id=#{btsId}
+            </if>
+            <if test="contractEndtime!=null">
+                and to_char(a.CONTRACT_ENDTIME,'yyyy-MM')=#{contractEndtime}
+            </if>
+            <if test="money!=null">
+                and a.money>=#{money}
             </if>
         </where>
         )m
@@ -255,6 +290,12 @@
             </if>
             <if test="btsId!=null">
                 and b.bts_id=#{btsId}
+            </if>
+            <if test="contractEndtime!=null">
+                and to_char(a.CONTRACT_ENDTIME,'yyyy-MM')=#{contractEndtime}
+            </if>
+            <if test="money!=null">
+                and a.money>=#{money}
             </if>
         </where>
         )

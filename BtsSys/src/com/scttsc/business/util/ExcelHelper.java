@@ -65,7 +65,7 @@ public class ExcelHelper {
         cols.put("btsId", new Validity("基站网管编号", true, 2, null));//不能为空，数字
         cols.put("installPos", new Validity("主设备安装位置", true, 1, null));//不能为空，且要特殊处理
         cols.put("sharFlag", new Validity("是否共建共享", true, 1, new String[]{"是", "否"})); //不能为空，固定填值
-        cols.put("sharName", new Validity("共享方名称", true, 1, new String[]{"移动","联通","其他","无"}));//不能为空
+        cols.put("sharName", new Validity("共享方名称", true, 1, new String[]{"移动", "联通", "其他", "无"}));//不能为空
         cols.put("address", new Validity("详细地址", true, 1, null));//不能为空
         cols.put("openTime", new Validity("基站开通年月", true, 3, null));//不能为空  ,时间
         cols.put("tranModel", new Validity("规格型号", true, 1, null)); //不能为空
@@ -103,7 +103,7 @@ public class ExcelHelper {
         cols.put("mrWidth", new Validity("机房宽度（米）", false, 2, null));
         cols.put("mrHigh", new Validity("机房高度（米）", false, 2, null));
         cols.put("mrOwner", new Validity("机房所属业主或单位", false, 1, null));
-        cols.put("wdType", new Validity("市电引入方式", false, 1, new String[]{"10KV", "380V", "220V", "直流供电","直流远供"}));
+        cols.put("wdType", new Validity("市电引入方式", false, 1, new String[]{"10KV", "380V", "220V", "直流供电", "直流远供"}));
         cols.put("wdModel", new Validity("变压器型号", false, 1, null));
         cols.put("wdFac", new Validity("变压器厂家", false, 1, null));
         cols.put("wdGds", new Validity("所属供电局所", false, 1, null));
@@ -125,8 +125,8 @@ public class ExcelHelper {
         groupCodeMap.put("installPos", "BTSINSTALL");
         groupCodeMap.put("towerType", "TOWERTYPE");
         groupCodeMap.put("mrStrut", "MRSTRUT");
-        groupCodeMap.put("prop","TUNELPROP");
-        groupCodeMap.put("shareflag","TUNEL_SHARE");
+        groupCodeMap.put("prop", "TUNELPROP");
+        groupCodeMap.put("shareflag", "TUNEL_SHARE");
         return groupCodeMap;
     }
 
@@ -145,7 +145,7 @@ public class ExcelHelper {
         cols.put("longitude", new Validity("经度", true, 2, null));//不能为空，数字
         cols.put("latitude", new Validity("纬度", true, 2, null));//不能为空，数字
         cols.put("sharFlag", new Validity("是否共建共享", true, 1, new String[]{"是", "否"})); //不能为空，固定填值
-        cols.put("sharName", new Validity("共享方名称", true, 1, new String[]{"移动","联通","其他","无"}));//不能为空
+        cols.put("sharName", new Validity("共享方名称", true, 1, new String[]{"移动", "联通", "其他", "无"}));//不能为空
         cols.put("address", new Validity("详细地址", true, 1, null));//不能为空
         cols.put("openTime", new Validity("基站开通年月", true, 3, null));//不能为空
         cols.put("tranModel", new Validity("规格型号", true, 1, null)); //不能为空
@@ -168,7 +168,7 @@ public class ExcelHelper {
         cols.put("cellNum", new Validity("蓄电池组或UPS数量（组）", false, 2, null));
         cols.put("cellPower", new Validity("蓄电池组或UPS机房设备总耗电（A）", false, 2, null)); //整数
         cols.put("cellDuar", new Validity("蓄电池组或UPS支撑基站设备运行时长（小时）", false, 2, null));//整数
-        cols.put("cellUstime", new Validity("蓄电池组或UPS启用时间（年月）", false,3, null));
+        cols.put("cellUstime", new Validity("蓄电池组或UPS启用时间（年月）", false, 3, null));
         cols.put("acModel", new Validity("空调系统规格型号", false, 1, null));//选无
         cols.put("acFac", new Validity("空调系统生产厂家", false, 1, null));
         cols.put("acNum", new Validity("空调系统数量", false, 2, null));//数字
@@ -181,7 +181,7 @@ public class ExcelHelper {
         cols.put("mrWidth", new Validity("机房宽度（米）", false, 2, null));
         cols.put("mrHigh", new Validity("机房高度（米）", false, 2, null));
         cols.put("mrOwner", new Validity("机房所属业主或单位", false, 1, null));
-        cols.put("wdType", new Validity("市电引入方式", true, 1, new String[]{"10KV", "380V", "220V", "直流供电","直流远供"}));
+        cols.put("wdType", new Validity("市电引入方式", true, 1, new String[]{"10KV", "380V", "220V", "直流供电", "直流远供"}));
         cols.put("wdModel", new Validity("变压器型号", false, 1, null));
         cols.put("wdFac", new Validity("变压器厂家", true, 1, null));
         cols.put("wdGds", new Validity("所属供电局所", true, 1, null));
@@ -373,7 +373,6 @@ public class ExcelHelper {
     }
 
 
-
     /**
      * 组装导入隧道库的列
      *
@@ -385,16 +384,16 @@ public class ExcelHelper {
         cols.put("prop", new Validity("隧道性质" +
                 "", true, 1, null));
         cols.put("roadId", new Validity("所属道路", true, 1, null));
-        cols.put("tunelLength", new Validity("隧道长度", true,2, null));
+        cols.put("tunelLength", new Validity("隧道长度", true, 2, null));
         cols.put("antennatype", new Validity("天馈类型", true, 1, null));
         cols.put("linetype", new Validity("天线型号", true, 1, null));
-        cols.put("covertype", new Validity("覆盖类型", true, 1, new String[]{"单向覆盖","双向覆盖"}));
+        cols.put("covertype", new Validity("覆盖类型", true, 1, new String[]{"单向覆盖", "双向覆盖"}));
         cols.put("coverrangedesc", new Validity("覆盖范围描述", true, 1, null));
         cols.put("address", new Validity("详细地址", true, 1, null));
         cols.put("tunelHigh", new Validity("海拔高度", true, 2, null));
-        cols.put("rrunum", new Validity("信源设备数量", true,2, null));
+        cols.put("rrunum", new Validity("信源设备数量", true, 2, null));
         cols.put("rruaddress", new Validity("信源设备安装位置", true, 1, null));
-        cols.put("repeaternum", new Validity("下挂直放站数量", true,2, null));
+        cols.put("repeaternum", new Validity("下挂直放站数量", true, 2, null));
         cols.put("repeateraddress", new Validity("直放站安装位置", true, 1, null));
         cols.put("drynum", new Validity("下挂干放数量", true, 2, null));
         cols.put("dryaddress", new Validity("干放安装位置", true, 1, null));
@@ -410,23 +409,23 @@ public class ExcelHelper {
     }
 
 
-    public static String[] BLINDTYPE2 = new String[]{"高铁","高速公路","机场","车站港口码头","住宅小区","风景区",
-            "宾馆","写字楼","商场","体育场","地铁","海域","校园","隧道","医院","政府机关","工业园区","农村",
-            "水运","聚类市场","休闲娱乐场所","其它"};
+    public static String[] BLINDTYPE2 = new String[]{"高铁", "高速公路", "机场", "车站港口码头", "住宅小区", "风景区",
+            "宾馆", "写字楼", "商场", "体育场", "地铁", "海域", "校园", "隧道", "医院", "政府机关", "工业园区", "农村",
+            "水运", "聚类市场", "休闲娱乐场所", "其它"};
 
-    public static String[] SOLTYPE=new String[]{"网络优化","规划建站","辅助手段","WiFi解决"};
+    public static String[] SOLTYPE = new String[]{"网络优化", "规划建站", "辅助手段", "WiFi解决"};
 
-    public static String[] ASSISTTYPE= new String[]{"BPA","塔放","壁虎","手机伴侣","五类线","其它","无"};
+    public static String[] ASSISTTYPE = new String[]{"BPA", "塔放", "壁虎", "手机伴侣", "五类线", "其它", "无"};
 
-    public static String[] GRIDTYPE=new String[]{"市区","城郊","县城","乡镇","农村"};
+    public static String[] GRIDTYPE = new String[]{"市区", "城郊", "县城", "乡镇", "农村"};
 
-    public static String[] ISHAS=new String[]{"无","有"};
+    public static String[] ISHAS = new String[]{"无", "有"};
 
-    public static String[] STATUS=new String[]{"未解决","已解决"};
+    public static String[] STATUS = new String[]{"未解决", "已解决"};
 
-    public static String[] BLINDTYPE1=new String[]{"室外","室内"};
+    public static String[] BLINDTYPE1 = new String[]{"室外", "室内"};
 
-    public static String[] ISNO=new String[]{"否","是"};
+    public static String[] ISNO = new String[]{"否", "是"};
 
     public static Map<String, Validity> getBlindCoulmnMap() {
         Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
@@ -438,17 +437,17 @@ public class ExcelHelper {
         cols.put("name", new Validity("盲点名称", true, 1, null));//不能为空
         cols.put("address", new Validity("盲点地址", true, 1, null));//不能为空
         cols.put("landMark", new Validity("标志性建筑", true, 1, null));//不能为空
-        cols.put("isPlan", new Validity("是否有规划", false, 1,ISHAS));
-        cols.put("status", new Validity("盲点状态", true, 1,STATUS ));//不能为空
-        cols.put("gridType", new Validity("网格类型", true, 1,GRIDTYPE ));//不能为空
+        cols.put("isPlan", new Validity("是否有规划", false, 1, ISHAS));
+        cols.put("status", new Validity("盲点状态", true, 1, STATUS));//不能为空
+        cols.put("gridType", new Validity("网格类型", true, 1, GRIDTYPE));//不能为空
         cols.put("blindType1", new Validity("盲点区域类型1", true, 1, BLINDTYPE1));//不能为空
         cols.put("blindType2", new Validity("盲点区域类型2", false, 1, BLINDTYPE2));
-        cols.put("is1x", new Validity("是否1X盲点", true, 1,ISNO));//不能为空
-        cols.put("isDo", new Validity("是否DO盲点", true, 1,ISNO));//不能为空
+        cols.put("is1x", new Validity("是否1X盲点", true, 1, ISNO));//不能为空
+        cols.put("isDo", new Validity("是否DO盲点", true, 1, ISNO));//不能为空
         cols.put("isLte", new Validity("是否LTE盲点", true, 1, ISNO));//不能为空
         cols.put("causesBy", new Validity("形成原因", true, 1, null));//不能为空
         cols.put("solType", new Validity("解决方式", true, 1, SOLTYPE));//不能为空
-        cols.put("assistType", new Validity("辅助手段", false, 1,ASSISTTYPE));//不能为空
+        cols.put("assistType", new Validity("辅助手段", false, 1, ASSISTTYPE));//不能为空
         cols.put("planSolutionTime", new Validity("计划解决时间", false, Validity.D3, null));//不能为空
         cols.put("realSolutionTime", new Validity("实际解决时间", false, Validity.D3, null));//不能为空
         cols.put("remarks", new Validity("备注", false, 1, null));//不能为空
@@ -458,12 +457,19 @@ public class ExcelHelper {
 
     /**
      * 物业和房租导入字段
+     *
      * @return
      */
     public static Map<String, Validity> getRoomChargeCoulmnMap() {
         Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
         cols.put("btsName", new Validity("站点名称", true, 1, null));//不能为空
-        cols.put("money", new Validity("金额", true, 21, null)); // 不能为空
+        cols.put("intId",new Validity("INT_ID", true, 1, null));
+        cols.put("btsType",new Validity("BTS_TYPE", true, 1, null));
+        cols.put("cityId", new Validity("本地网", true, 1, null));//忽略
+        cols.put("countryId",  new Validity("区县", true, 1, null));//忽略
+        cols.put("bscName",  new Validity("bscName", true, 1, null));//忽略
+        cols.put("btsId", new Validity("btsId", true, 1, null));//忽略
+        cols.put("money", new Validity("金额", true, 2, null)); // 不能为空
         cols.put("payTime", new Validity("缴费时间", true, 5, null));
         cols.put("payUser", new Validity("缴费人员", true, 1, null));
         cols.put("remark", new Validity("备注", false, 1, null));
@@ -473,16 +479,23 @@ public class ExcelHelper {
 
     /**
      * 电费导入字段
+     *
      * @return
      */
     public static Map<String, Validity> getPowerChargeCoulmnMap() {
         Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
         cols.put("btsName", new Validity("站点名称", true, 1, null));//不能为空
-        cols.put("money", new Validity("金额", true,2, null)); // 不能为空
+        cols.put("intId",new Validity("INT_ID", true, 1, null));
+        cols.put("btsType",new Validity("BTS_TYPE", true, 1, null));
+        cols.put("cityId", new Validity("本地网", true, 1, null));//忽略
+        cols.put("countryId",  new Validity("区县", true, 1, null));//忽略
+        cols.put("bscName",  new Validity("bscName", true, 1, null));//忽略
+        cols.put("btsId", new Validity("btsId", true, 1, null));//忽略
+        cols.put("money", new Validity("金额", true, 2, null)); // 不能为空
         cols.put("baseDegree", new Validity("底度", true, 2, null)); // 不能为空
         cols.put("monthDegree", new Validity("当月度数", true, 2, null)); // 不能为空
         cols.put("monthDegree", new Validity("当月度数", true, 2, null)); // 不能为空
-        cols.put("payType", new Validity("缴费类型", true, 1, new String[]{"人工","代扣"})); // 不能为空
+        cols.put("payType", new Validity("缴费类型", true, 1, new String[]{"人工", "代扣"})); // 不能为空
         cols.put("payTime", new Validity("缴费时间", true, 5, null));
         cols.put("payUser", new Validity("缴费人员", true, 1, null));
         cols.put("remark", new Validity("备注", false, 1, null));
