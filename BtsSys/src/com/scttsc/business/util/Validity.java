@@ -194,4 +194,23 @@ public class Validity {
     public void setIgnore() {
         this.ignore = true;
     }
+
+    public String getDateFormater() {
+		String formater = null;
+		switch (dataType) {
+		case 3:
+			formater = "yyyy.MM";
+			break;
+		case 4:
+			formater = "yyyy-MM";
+			break;
+		case 5:
+			formater = "yyyy-MM-dd";
+			break;
+		default:
+			break;
+		}
+		return formater;
+	}
+    
 }
