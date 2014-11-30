@@ -138,7 +138,14 @@ public interface WyBtsChargeDao {
      * @param param
      * @throws Exception
      */
-    WyBtsCharge selectBtsChargeSettingByMap(Map<String,Object> param)throws Exception;
+    List<WyBtsCharge> selectBtsChargeSettingListByMap(Map<String,Object> param)throws Exception;
+    
+    /**
+     * 
+     * @param param
+     * @throws Exception
+     */
+    void deleteChargeSetting(Map<String,Object> param)throws Exception;
 
 
     WyBtsCharge selectByPrimaryKey(@Param(value="intId") BigDecimal intId,@Param(value="costType") Short costType);
