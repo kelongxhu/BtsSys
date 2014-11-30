@@ -5,7 +5,6 @@ import com.scttsc.admin.model.User;
 import com.scttsc.business.util.Constants;
 import com.scttsc.business.util.ExcelHelper;
 import com.scttsc.business.util.Validity;
-import com.scttsc.charge.dto.BtsDto;
 import com.scttsc.charge.dto.FileDto;
 import com.scttsc.charge.dto.PayStatistDto;
 import com.scttsc.charge.model.WyBtsCharge;
@@ -158,9 +157,9 @@ public class WyBtsChargeListAction extends BaseAction {
             }
             //将文件从临时目录copy到正式目录...copy 成功清除临时目录文件...
             String proofFile = chargeBill.getProofFile();
-            if (!StringUtils.isEmpty(proofFile) && !proofFile.contains(Constants.PROOF_FILE)) {
+            if (!StringUtils.isEmpty(proofFile) && !proofFile.contains(Constants.CHARGE_FILE)) {
                 //新上傳文件，如果是更新则路径为/store_file/
-                String path = Constants.PROOF_FILE + proofFile;
+                String path = Constants.CHARGE_FILE + proofFile;
                 String descPath = getRequest().getSession()
                         .getServletContext().getRealPath(path);
                 StoreUtil.copyFile(proofFile, descPath);

@@ -240,7 +240,7 @@ public class WyBtsChargeList {
         if (proofFile != null) {
             int index = proofFile.lastIndexOf("/");
             if (index != -1) {
-                proofFileName = proofFile.substring(Constants.PROOF_FILE.length());
+                proofFileName = proofFile.substring(Constants.CHARGE_FILE.length());
             } else {
                 proofFileName = proofFile;
             }

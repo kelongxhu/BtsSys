@@ -86,30 +86,26 @@ public class WyBtsChargeListManagerImpl implements WyBtsChargeListManager {
     }
 
 
-    public int insertChargeData(List<Map<String, Object>> data) {
+    public int insertChargeData(List<Map<String, Object>> data) throws Exception {
         int success = 0;
-        try {
-            for (Map<String, Object> objectMap : data) {
-                WyBtsChargeList chargeBill = new WyBtsChargeList();
-                DateConverter d = new DateConverter();
-                String[] datePattern = {"yyyy-MM-dd"};
-                d.setPatterns(datePattern);
-                ConvertUtils.register(d, Date.class);
-                BeanUtils.populate(chargeBill, objectMap);
-                Date payTime = chargeBill.getPayTime();
-                Calendar c = Calendar.getInstance();
-                c.setTime(payTime);
-                WyBtsCharge charge=wyBtsChargeDao.selectByPrimaryKey(chargeBill.getIntId(), chargeBill.getCostType());
-                int day = c.get(Calendar.DATE);
-                if (day > charge.getPayDay()) {
-                    chargeBill.setIsTimeout((short) 1);//超时
-                } else {
-                    chargeBill.setIsTimeout((short) 0);//不超时
-                }
-                success += chargeListDao.insert(chargeBill);
+        for (Map<String, Object> objectMap : data) {
+            WyBtsChargeList chargeBill = new WyBtsChargeList();
+            DateConverter d = new DateConverter();
+            String[] datePattern = {"yyyy-MM-dd"};
+            d.setPatterns(datePattern);
+            ConvertUtils.register(d, Date.class);
+            BeanUtils.populate(chargeBill, objectMap);
+            Date payTime = chargeBill.getPayTime();
+            Calendar c = Calendar.getInstance();
+            c.setTime(payTime);
+            WyBtsCharge charge = wyBtsChargeDao.selectByPrimaryKey(chargeBill.getIntId(), chargeBill.getCostType());
+            int day = c.get(Calendar.DATE);
+            if (day > charge.getPayDay()) {
+                chargeBill.setIsTimeout((short) 1);//超时
+            } else {
+                chargeBill.setIsTimeout((short) 0);//不超时
             }
-        } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            success += chargeListDao.insert(chargeBill);
         }
         return success;
     }

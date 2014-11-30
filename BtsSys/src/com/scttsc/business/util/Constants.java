@@ -32,7 +32,7 @@ public class Constants {
     public static int TRANSFER = 5;//传输
     public static int TUNEL = 6;//隧道
 
-    public static String PROOF_FILE = "/store_file/";
+    public static String CHARGE_FILE = "/charge_file/";
     public static String CONTRACT_FILE = "/contract_file/"; 
 
     public static String[] BTS_TYPE = {"室外覆盖站点", "纯BBU站点", "室内覆盖站点", "隧道覆盖站点"};

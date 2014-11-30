@@ -214,7 +214,6 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
 		}
 	}
 
-	@Override
 	public void deleteChargeSetting(String ids, int costType) throws Exception {
 		try {
 			Map<String, Object> param = new HashMap<String, Object>();
@@ -227,7 +226,6 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
 		}
 	}
 
-	@Override
 	public List<WyBtsCharge> selectBtsChargeSettingListByMap(
 			Map<String, Object> param) throws Exception {
 		return wyBtsChargeDao.selectBtsChargeSettingListByMap(param);

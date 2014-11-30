@@ -37,7 +37,7 @@ public interface WyBtsChargeListManager {
      * @param data
      * @return
      */
-    int insertChargeData(List<Map<String, Object>> data);
+    int insertChargeData(List<Map<String, Object>> data) throws Exception;
 
     List<WyBtsChargeList> selectByMap(Map<String, Object> param) throws Exception;
 
