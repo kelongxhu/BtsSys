@@ -25,7 +25,8 @@
 			}
 			
 			function downloadAttachment(intId, costType, fileName){
-				window.location.href = "${ctx}/charge/downloadAttachment.action?intId=" + intId + "&costType=" + costType + "&fileName=" + fileName;
+				var url = encodeURI("${ctx}/charge/downloadAttachment.action?intId=" + intId + "&costType=" + costType + "&fileName=" + fileName);
+				window.location.href = url;
 			}
 		</script>
 	</head>
@@ -187,18 +188,17 @@
 														合同附件：
 													</td>
 													<td>
-														${charge.contractFile }
+														<a href="javascript:void(0);" onclick="downloadAttachment('${charge.intId }', '${charge.costType }', '${charge.contractFile }');">
+															${charge.contractFile }
+														</a>
 													</td>	
-											        <td colspan="2">
-											            <button class="btn btn-success" onclick="downloadAttachment('${charge.intId }', '${charge.costType }', '${charge.contractFile }');" title="Upload File"><i class="icon-ok icon-white"></i>下载</button>
-											        </td>																			
 												</tr>
 												<tr>
 													<td>
 														备注：
 													</td>
 													<td colspan="3">
-			                							${charge.remark}
+			                							<textarea class="area150">${charge.remark}</textarea>
 													</td>		
 												</tr>																																																														
 											</c:when>
@@ -300,18 +300,17 @@
 														合同附件：
 													</td>
 													<td>
-														${charge.contractFile }
+														<a href="javascript:void(0);" onclick="downloadAttachment('${charge.intId }', '${charge.costType }', '${charge.contractFile }');">
+															${charge.contractFile }
+														</a>
 													</td>	
-											        <td colspan="2">
-											            <button class="btn btn-success" onclick="downloadAttachment('${charge.intId }', '${charge.costType }', '${charge.contractFile }');" title="Upload File"><i class="icon-ok icon-white"></i>下载</button>
-											        </td>																			
 												</tr>
 												<tr>
 													<td>
 														备注：
 													</td>
 													<td colspan="3">
-			                							${charge.remark}
+														<textarea class="area150">${charge.remark}</textarea>
 													</td>		
 												</tr>																																																																												
 											</c:when>
