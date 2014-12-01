@@ -19,6 +19,8 @@
 			}
 		</style>
 		<script type="text/javascript">
+			var select = false;
+			var upload = false;
 			//注册表单验证
 			$(function() {
 				var combox = $("#payTypeVal").ligerComboBox({  
@@ -68,7 +70,11 @@
 			});
 		
 			function add() {
-				$("#form1").submit();
+				if(select == true && upload == false){
+					alert('请上传附件');
+				}else{
+					$("#form1").submit();
+				}
 			}
 		
 			//返回
@@ -98,6 +104,7 @@
 			        },
 			        onSelect : function(file) {
 			            $("#proofFile").val(file.name);
+			            select = true;
 			        },
 			        onUploadProgress: function(file,bytesUploaded,bytesTotal,totalBytesUploaded,totalBytesTotal){
 			            $('#msg').html('已上传:'+(totalBytesTotal/bytesTotal)*100);
@@ -106,6 +113,7 @@
 			            data = eval('(' + data + ')');
 			            var status=data["fileDTO"].status;
 			            if(status==1){
+			            	upload = true;
 			                $("#proofFile").val(data["fileDTO"].uuid);
 			                $("#msg").html("上传成功!");
 			            }else{
