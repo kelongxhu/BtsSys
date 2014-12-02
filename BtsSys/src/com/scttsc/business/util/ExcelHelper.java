@@ -52,7 +52,7 @@ public class ExcelHelper {
 
     }
     
-    public static String getValue(HSSFCell cell, Validity validity) {
+    public static String getValue(HSSFCell cell, String formatePattern) {
         String ret = "";
         switch (cell.getCellType()) {
             case HSSFCell.CELL_TYPE_BLANK:
@@ -72,7 +72,7 @@ public class ExcelHelper {
                     //如果是时间格式
                     double d = cell.getNumericCellValue();
                     Date theDate = HSSFDateUtil.getJavaDate(d);
-                    DateFormat simpleDateFormat = new SimpleDateFormat(validity.getDateFormater());
+                    DateFormat simpleDateFormat = new SimpleDateFormat(formatePattern);
                     ret = simpleDateFormat.format(theDate);
                 } else {
                     //数字格式
@@ -151,14 +151,14 @@ public class ExcelHelper {
 
     public static Map<String, Validity> getBtsChargeCoulmnMap() {
     	Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
-        cols.put("contractStarttime", new Validity("合同开始日期", true, Validity.D3, null));//不能为空
+    	cols.put("contractStarttime", new Validity("合同开始日期", true, Validity.D3, null));//不能为空
         cols.put("contractEndtime", new Validity("合同结束日期", true, Validity.D3, null));//不能为空
         cols.put("payCycle", new Validity("缴费周期", true, Validity.NUM, null));//不能为空
         cols.put("payDay", new Validity("缴费日期", true, Validity.NUM, null));//不能为空
         cols.put("remindUser", new Validity("提醒人员", true, Validity.STR, null));//不能为空
         cols.put("remindTel", new Validity("提醒号码", true, Validity.STR, null));//不能为空
         cols.put("money", new Validity("金额", true, Validity.NUM, null));//不能为空
-        cols.put("lastPayTime", new Validity("上次缴费时间", true, Validity.D3, null));//不能为空
+        cols.put("lastPayTime", new Validity("上次缴费时间", true, Validity.D2, null));//不能为空
         cols.put("eachTel", new Validity("对方联系号码", false, Validity.STR, null));//不能为空
         cols.put("eachAccountname", new Validity("对方账号名称", false, Validity.STR, null));//不能为空
         cols.put("eachBanknum", new Validity("对方银行账号", false, Validity.STR, null));//不能为空
@@ -169,13 +169,14 @@ public class ExcelHelper {
     public static Map<String , Validity> getBtsPowerChargeCoulmnMap() {
     	Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
     	cols.put("payType", new Validity("缴费方式", true, Validity.STR, new String[]{"人工缴费","自动代扣"}));//不能为空
-    	cols.put("payCycle", new Validity("缴费周期", true, Validity.NUM, null));//不能为空
-    	cols.put("payDay", new Validity("缴费日期", true, Validity.NUM, null));//不能为空
+    	cols.put("payCycle", new Validity("缴费周期", true, Validity.STR, null));//不能为空
+    	cols.put("payDay", new Validity("缴费日期", true, Validity.STR, null));//不能为空
+    	cols.put("lastPayTime", new Validity("上次缴费时间", true, Validity.STR, null));//不能为空
     	cols.put("remindUser", new Validity("提醒人员", true, Validity.STR, null));//不能为空
     	cols.put("remindTel", new Validity("提醒号码", true, Validity.STR, null));//不能为空
-    	cols.put("money", new Validity("单价", true, Validity.NUM, null));//不能为空
+    	cols.put("money", new Validity("单价", true, Validity.STR, null));//不能为空
     	cols.put("bankAccount", new Validity("代扣银行账号", false, Validity.STR, null));//不能为空
-    	cols.put("balance", new Validity("当前账户余额", true, Validity.NUM, null));//不能为空
+    	cols.put("balance", new Validity("当前账户余额", false, Validity.STR, null));//不能为空
     	return cols;
     }
     
