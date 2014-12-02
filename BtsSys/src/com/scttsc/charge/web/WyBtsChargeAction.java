@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import java.util.Map;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -136,7 +134,7 @@ public class WyBtsChargeAction extends BaseAction {
     		copyAttachment(wyBtsCharge.getCostType(), wyBtsCharge.getIntId());
     		
     		initChargeProperties(wyBtsCharge);
-    		wyBtsChargeManager.doChargeSetting(wyBtsCharge);
+    		wyBtsChargeManager.inserOrUpdateChargeSetting(wyBtsCharge);
     		jsonMap.put("result", 1);
 		} catch (Exception e) {
 			jsonMap.put("result", 0);
@@ -150,7 +148,6 @@ public class WyBtsChargeAction extends BaseAction {
 		short aheadDay = (short)ConstantUtil.getInstance().getCons(GROUP_CODE, String.valueOf(charge.getCostType())).getCode();
 		
 		charge.setInUser(new BigDecimal(user.getIntId()));
-		charge.setInTime(new Date());
 		charge.setAheadDay(aheadDay);
 	}
     
@@ -194,7 +191,8 @@ public class WyBtsChargeAction extends BaseAction {
     	HttpServletResponse resp = getResponse();
     	ServletOutputStream servletOutputStream = resp.getOutputStream();
         try {
-        	String path = getAttachmentPath(costType, intId) + File.separator + fileName;
+        	String attachmentName = new String(fileName.getBytes("ISO8859-1"), "UTF-8");
+        	String path = getAttachmentPath(intId) + File.separator + attachmentName;
         	File file = new File(path);
         	InputStream fis = new BufferedInputStream(new FileInputStream(path));
         	byte[] buffer = new byte[fis.available()];
@@ -207,7 +205,7 @@ public class WyBtsChargeAction extends BaseAction {
             resp.setHeader("Cache-Control", "no-store");
             resp.setHeader("Pragrma", "no-cache");
             resp.setHeader("Content-Length", "" + file.length());
-            resp.setHeader("Content-Disposition", "attachment;filename=" + new String(fileName.getBytes("GBK"), "iso-8859-1"));
+            resp.setHeader("Content-Disposition", "attachment;filename=" + new String(attachmentName.getBytes("GBK"), "iso-8859-1"));
             resp.setDateHeader("Expires", 0);
             resp.setContentType("application/octet-stream");
 
@@ -233,12 +231,11 @@ public class WyBtsChargeAction extends BaseAction {
      * @return
      * @throws Exception
      */
-    @SuppressWarnings("deprecation")
 	public String exportBtsData() throws Exception{
         List<WyBtsCharge> wyBtsCharges = null;
         ServletOutputStream servletOutputStream = null;
         String path = FileRealPath.getPath();
-        String templatePath = path + "template" + "/btsChargeTemplate.xls";
+        String templatePath = path + "template/" + (costType == 3? "btsPowerChargeTemplate.xls" : "btsChargeTemplate.xls");
         String fileName = "基站费用待录入数据.xls";
     	try {
     		Map<String, Object> paramMap = buildParamMap();
@@ -250,21 +247,23 @@ public class WyBtsChargeAction extends BaseAction {
             // 创建整个Excel表 //根据查询条件从DB取出list，生成excel
             int rowIndex = 2;
             for (WyBtsCharge charge : wyBtsCharges) {
-            	if(StringUtil.isEmpty(charge.getAheadDay())){
+            	if(StringUtil.isEmpty(charge.getRemindUser())){
             		List<String> columnList = new ArrayList<String>();
             		columnList.add(StringUtil.null2String(rowIndex - 1));
             		columnList.add(StringUtil.null2String(charge.getIntId()));
             		columnList.add(StringUtil.null2String(charge.getBtsType()));
+            		columnList.add(StringUtil.null2String(charge.getCostType()));
             		columnList.add(StringUtil.null2String(charge.getBtsName()));
             		columnList.add(StringUtil.null2String(charge.getCityName()));
             		columnList.add(StringUtil.null2String(charge.getCountryName()));
             		columnList.add(StringUtil.null2String(charge.getBscName()));
             		columnList.add(StringUtil.null2String(charge.getBtsId()));
+            		columnList.add(StringUtil.null2String(charge.getCostTypeStr()));
             		// 创建行 //创建第rowIndex行
-            		HSSFRow row = sheet.createRow((short) rowIndex);
-            		for (short j = 0; j < columnList.size(); j++) {
+            		HSSFRow row = sheet.createRow(rowIndex - 1);
+            		for (int j = 0; j < columnList.size(); j++) {
             			// 创建第i个单元格
-            			HSSFCell cell = row.createCell((short) j);
+            			HSSFCell cell = row.createCell(j);
             			cell.setCellStyle(style);
             			cell.setCellValue(columnList.get(j));
             		}
@@ -273,6 +272,7 @@ public class WyBtsChargeAction extends BaseAction {
             }
             sheet.setColumnHidden(1, true);
             sheet.setColumnHidden(2, true);
+            sheet.setColumnHidden(3, true);
             
             HttpServletResponse resp = getResponse();
             servletOutputStream = resp.getOutputStream();
@@ -319,39 +319,28 @@ public class WyBtsChargeAction extends BaseAction {
             HSSFSheet sheet = workbook.getSheetAt(0); // 得到第一个sheet
             int rows = sheet.getPhysicalNumberOfRows(); // 得到行数
             HSSFRow row = null;
-            int sucess = 0;
             List<String> errorList = new ArrayList<String>();
             // 从第二行开始取数
+            List<Map<String, String>> chargeMapList = new ArrayList<Map<String,String>>();
             for (int i = 2; i < rows; i++) {
                 row = sheet.getRow(i);
-                WyBtsCharge roomCharge = parseCharge(i-1, 7, row, errorList);
-                if(roomCharge != null){
-                	roomCharge.setCostType(Short.parseShort("1"));
-                	initChargeProperties(roomCharge);
-                	wyBtsChargeManager.doChargeSetting(roomCharge);
-                	sucess++;
-                }
-                
-                WyBtsCharge propertyCharge = parseCharge(i-1, 19, row, errorList);
-                if(propertyCharge != null){
-                	propertyCharge.setCostType(Short.parseShort("2"));
-                	initChargeProperties(propertyCharge);
-                	wyBtsChargeManager.doChargeSetting(propertyCharge);
-                	sucess++;
-                }
-                
-                WyBtsCharge powerCharge = parsePowerCharge(i-1, 31, row, errorList);
-                if(powerCharge != null){
-                	powerCharge.setCostType(Short.parseShort("3"));
-                	initChargeProperties(powerCharge);
-                	wyBtsChargeManager.doChargeSetting(powerCharge);
-                	sucess++;
-                }
+            	Map<String, String> chargeMap = parseChargeMap(i-1, 9, row, errorList);
+            	if(null != chargeMap){
+        			//提醒天数
+        			short aheadDay = (short)ConstantUtil.getInstance().getCons(GROUP_CODE, chargeMap.get("costType")).getCode();
+        			if(chargeMap.containsKey("balance")&&StringUtil.isEmpty(chargeMap.get("balance"))){
+        				chargeMap.remove("balance");
+        			}
+        			chargeMap.put("aheadDay", aheadDay+"");
+        			chargeMap.put("inUser", user.getIntId()+"");
+            		chargeMapList.add(chargeMap);
+            	}
             }
+            
+            wyBtsChargeManager.insertChargeSetting(chargeMapList);
             jsonMap.put("result", 1);
-            jsonMap.put("sucess", sucess);
+            jsonMap.put("sucess", chargeMapList.size());
             jsonMap.put("errorList", errorList);
-
         } catch (Exception e) {
         	logger.error(e.getMessage(), e);
             jsonMap.put("result", 0);
@@ -359,27 +348,22 @@ public class WyBtsChargeAction extends BaseAction {
     	return SUCCESS;
     }
     
-	private WyBtsCharge parsePowerCharge(int rowNum, int cloumnStart, HSSFRow row, List<String> errorList) throws Exception {
-		WyBtsCharge charge = null;
-    	Map<String, Object> map = parseBaseMap(rowNum, row, errorList);
-        Map<String, Validity> coulmnMap = ExcelHelper.getBtsPowerChargeCoulmnMap();
+	private Map<String, String> parseChargeMap(int rowNum, int cloumnStart, HSSFRow row, List<String> errorList) throws Exception {
+    	Map<String, String> map = parseBaseMap(row);
+        Map<String, Validity> coulmnMap = "3".equals(map.get("costType"))?ExcelHelper.getBtsPowerChargeCoulmnMap():ExcelHelper.getBtsChargeCoulmnMap();
         try {
             int j = cloumnStart;
             for (String dataKey : coulmnMap.keySet()) {
                 Validity validity = coulmnMap.get(dataKey);
                 HSSFCell cell = row.getCell(++j);//Excel
-                String cellValue = "";
-                if (cell != null) {
-                    cellValue = ExcelHelper.getValue(cell);//Excel列值
-                }
-                boolean validtyFlag = validity.check(cellValue);  //验证字段
-                if (!validtyFlag) {
+                String cellValue = cell != null?cellValue = ExcelHelper.getValue(cell, validity.getDateFormater()):"";
+                if (!validity.check(cellValue)) {
                     //未经过校验，保存该列校验失败原因,该行不在导入
                     errorList.add("第" + rowNum + "行:" + "校验失败," + validity.getMsg());
                     return null;
                 }
                 if("payType".equals(dataKey)){
-                	map.put(dataKey, validity.getIndex()+1);
+                	map.put(dataKey, String.valueOf(validity.getIndex()+1));
                 }else{
                 	map.put(dataKey, cellValue);
                 }
@@ -389,65 +373,22 @@ public class WyBtsChargeAction extends BaseAction {
             errorList.add("第" + rowNum + "行:" + "程序解析异常...");
             return null;
         }
-
-    	charge = new WyBtsCharge();
-    	BeanUtils.copyProperties(charge, map);
     	
-    	return charge;
-    }
-    
-	private WyBtsCharge parseCharge(int rowNum, int cloumnStart, HSSFRow row, List<String> errorList) throws Exception {
-		WyBtsCharge charge = null;
-    	Map<String, Object> map = parseBaseMap(rowNum, row, errorList);
-        Map<String, Validity> coulmnMap = ExcelHelper.getBtsChargeCoulmnMap();
-        try {
-            int j = cloumnStart;
-            for (String dataKey : coulmnMap.keySet()) {
-                Validity validity = coulmnMap.get(dataKey);
-                HSSFCell cell = row.getCell(++j);//Excel
-                String cellValue = "";
-                if (cell != null) {
-                    cellValue = ExcelHelper.getValue(cell, validity);//Excel列值
-                }
-                boolean validtyFlag = validity.check(cellValue);  //验证字段
-                if (!validtyFlag) {
-                    //未经过校验，保存该列校验失败原因,该行不在导入
-                    errorList.add("第" + rowNum + "行:" + "校验失败," + validity.getMsg());
-                    return null;
-                }
-                if("contractStarttime".equals(dataKey)||"contractEndtime".equals(dataKey)
-                		||"lastPayTime".equals(dataKey)){
-                	map.put(dataKey, new SimpleDateFormat(validity.getDateFormater()).parseObject(cellValue));
-                }else{
-                	map.put(dataKey, cellValue);	
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            errorList.add("第" + rowNum + "行:" + "程序解析异常...");
-            return null;
-        }
-        //拷贝属性
-        charge = new WyBtsCharge();
-    	BeanUtils.copyProperties(charge, map);
-    	
-    	return charge;
+    	return map;
     }
     
     /**
      * 
      * @param rowNum
      * @param row
-     * @param errorList
      * @return
      * @throws Exception
      */
-	private Map<String, Object> parseBaseMap(int rowNum, HSSFRow row,
-			List<String> errorList) throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
+	private Map<String, String> parseBaseMap(HSSFRow row) throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			HSSFCell cell = null;
-			String[] properties = new String[] { "intId", "btsType" };
+			String[] properties = new String[] { "intId", "btsType", "costType" };
 			for (int i = 0; i < properties.length; i++) {
 				cell = row.getCell(i + 1);
 				map.put(properties[i], ExcelHelper.getValue(cell));
@@ -465,11 +406,10 @@ public class WyBtsChargeAction extends BaseAction {
      * @return
      * @throws Exception
      */
-    private String getAttachmentPath(int costType, BigDecimal intId) throws Exception{
+    private String getAttachmentPath(BigDecimal intId) throws Exception{
     	StringBuffer sb = new StringBuffer();
-    	String path = getRequest().getSession().getServletContext().getRealPath(Constants.CONTRACT_FILE);
-    	sb.append(path).append(File.separator).append(costType)
-    				   .append(File.separator).append(intId);
+    	String path = getRequest().getSession().getServletContext().getRealPath(Constants.CHARGE_FILE);
+    	sb.append(path).append(File.separator).append(intId);
     	return sb.toString();
     }
     
@@ -480,7 +420,7 @@ public class WyBtsChargeAction extends BaseAction {
      */
     private void deleteAttachment(String ids, int costType) throws Exception{
     	for(String id : ids.split(",")){
-        	String path = getAttachmentPath(costType, new BigDecimal(id));
+        	String path = getAttachmentPath(new BigDecimal(id));
         	StoreUtil.deleteDir(path);
     	}
     }
@@ -493,7 +433,7 @@ public class WyBtsChargeAction extends BaseAction {
     	//将文件从临时目录copy到正式目录...copy 成功清除临时目录文件...
         String contractFile = wyBtsCharge.getContractFile();
         if (!StringUtils.isEmpty(contractFile)) {
-            String descPath = getAttachmentPath(costType, intId);
+            String descPath = getAttachmentPath(intId);
             StoreUtil.copyFile(contractFile, descPath);
         }
     }

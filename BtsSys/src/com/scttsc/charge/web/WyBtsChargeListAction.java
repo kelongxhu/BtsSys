@@ -128,7 +128,6 @@ public class WyBtsChargeListAction extends BaseAction {
      * @return
      */
     public String uploadFile() {
-        User user = (User) this.getSession().getAttribute("user");
         String fileName = DateConvert.formatDateToString(new Date(), "yyyyMMddHHmmss") + "_" + this.fileFileName;
         File desFile = new File(StoreUtil.storeTmpDir() + "/" + fileName);//存儲路徑
         FileDto fileDTO = new FileDto();
@@ -159,11 +158,11 @@ public class WyBtsChargeListAction extends BaseAction {
             String proofFile = chargeBill.getProofFile();
             if (!StringUtils.isEmpty(proofFile) && !proofFile.contains(Constants.CHARGE_FILE)) {
                 //新上傳文件，如果是更新则路径为/store_file/
-                String path = Constants.CHARGE_FILE + proofFile;
+                String path = Constants.CHARGE_FILE + File.separator + chargeBill.getIntId();
                 String descPath = getRequest().getSession()
                         .getServletContext().getRealPath(path);
                 StoreUtil.copyFile(proofFile, descPath);
-                chargeBill.setProofFile(path);
+                //chargeBill.setProofFile(path);
             } else {
                 chargeBill.setProofFile(null);//忽略编辑字段
             }
@@ -298,9 +297,9 @@ public class WyBtsChargeListAction extends BaseAction {
                 cList.add(btsCharge.getCostTypeStr());//费用类型
                 // 创建行 //创建第rowIndex行
                 HSSFRow row = demoSheet.createRow((short) rowIndex);
-                for (short j = 0; j < cList.size(); j++) {
+                for (int j = 0; j < cList.size(); j++) {
                     // 创建第i个单元格
-                    HSSFCell cell = row.createCell((short) j);
+                    HSSFCell cell = row.createCell(j);
                     cell.setCellStyle(style);
                     cell.setCellValue(cList.get(j));
                 }
@@ -357,7 +356,6 @@ public class WyBtsChargeListAction extends BaseAction {
                     desFile.getPath())); // 得到excel对象
             HSSFSheet sheet = workbook.getSheetAt(0); // 得到第一个sheet
             int rows = sheet.getPhysicalNumberOfRows(); // 得到行数
-            HSSFCell cell = null;
             HSSFRow row = sheet.getRow(0);//首行
             List<String> errorList = new ArrayList<String>();
             List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
@@ -638,8 +636,6 @@ public class WyBtsChargeListAction extends BaseAction {
      * @return
      */
     public String exportChargeSetting() {
-        User user = (User) getSession().getAttribute("user");
-        int total = 0;
         List<WyBtsCharge> list = null;
         String path = FileRealPath.getPath();
         String templatePath = path + "template";
