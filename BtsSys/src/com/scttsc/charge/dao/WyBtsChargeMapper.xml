@@ -672,6 +672,9 @@
     </update>
     
     <delete id="deleteChargeSetting">
-    	delete from WY_BTS_CHARGE where INT_ID in (#{ids}) and COST_TYPE = #{costType}
+    	delete from WY_BTS_CHARGE where COST_TYPE = #{costType} and INT_ID in 
+    	<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+      	</foreach>
     </delete>
 </mapper>
