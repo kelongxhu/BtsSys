@@ -1,5 +1,20 @@
 package com.scttsc.charge.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import com.scttsc.business.util.DateConverter;
 import com.scttsc.charge.dao.SmgpDao;
 import com.scttsc.charge.dao.WyBtsChargeDao;
 import com.scttsc.charge.dao.WySmsLogDao;
@@ -8,16 +23,6 @@ import com.scttsc.charge.model.WyBtsCharge;
 import com.scttsc.charge.model.WySmsLog;
 import com.scttsc.charge.service.WyBtsChargeManager;
 import com.scttsc.common.util.DateUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by _think on 2014/11/10.
@@ -197,27 +202,28 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
         return wyBtsChargeDao.updateByMap(paramMap) + smgpDao.insert(smgp)+wySmsLogDao.insert(wySmsLog);
     }
 
-	public void doChargeSetting(WyBtsCharge wyBtsCharge) throws Exception {
-		try {
+	public void inserOrUpdateChargeSetting(WyBtsCharge wyBtsCharge) throws Exception {
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("intId", wyBtsCharge.getIntId());
 			param.put("costType", wyBtsCharge.getCostType());
 			List<WyBtsCharge> wyBtsChargeList = selectBtsChargeSettingListByMap(param);
+			wyBtsCharge.setInTime(new Date());
 			if(CollectionUtils.isEmpty(wyBtsChargeList)){
 				wyBtsChargeDao.insert(wyBtsCharge);
 			} else {
 				wyBtsChargeDao.updateByPrimaryKeySelective(wyBtsCharge);
 			}
-		} catch (Exception e) {
-            LOG.error(e.getMessage(), e);
-			throw new Exception(e);
-		}
 	}
 
 	public void deleteChargeSetting(String ids, int costType) throws Exception {
 		try {
 			Map<String, Object> param = new HashMap<String, Object>();
-			param.put("ids", ids);
+			List<BigDecimal> idList = new ArrayList<BigDecimal>();
+			String[] idsArr = ids.split(",");
+            for (String id : idsArr) {
+                idList.add(new BigDecimal(id));
+            }
+			param.put("ids", idList);
 			param.put("costType", costType);
 			wyBtsChargeDao.deleteChargeSetting(param);
 		} catch (Exception e) {
@@ -229,5 +235,19 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
 	public List<WyBtsCharge> selectBtsChargeSettingListByMap(
 			Map<String, Object> param) throws Exception {
 		return wyBtsChargeDao.selectBtsChargeSettingListByMap(param);
+	}
+
+	public void insertChargeSetting(List<Map<String, String>> chargeMapList)
+			throws Exception {
+		DateConverter d = new DateConverter();
+		String[] datePattern = {"yyyy-MM-dd", "yyyy-MM"};
+		d.setPatterns(datePattern);
+		ConvertUtils.register(d, Date.class);
+		for(Map<String, String> chargeMap : chargeMapList){
+			WyBtsCharge charge = new WyBtsCharge();
+			BeanUtils.populate(charge, chargeMap);
+			inserOrUpdateChargeSetting(charge);
+		}
+		
 	}
 }
