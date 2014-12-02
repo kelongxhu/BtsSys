@@ -3,6 +3,7 @@ package com.scttsc.charge.model;
 import com.scttsc.business.util.Constants;
 import com.scttsc.common.util.DateUtils;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -238,9 +239,9 @@ public class WyBtsChargeList {
 
     public String getProofFileName() {
         if (proofFile != null) {
-            int index = proofFile.lastIndexOf("/");
+            int index = proofFile.lastIndexOf(File.separator);
             if (index != -1) {
-                proofFileName = proofFile.substring(Constants.CHARGE_FILE.length());
+                proofFileName = proofFile.substring(index);
             } else {
                 proofFileName = proofFile;
             }
