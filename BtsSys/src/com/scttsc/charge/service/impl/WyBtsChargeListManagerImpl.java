@@ -1,8 +1,19 @@
 package com.scttsc.charge.service.impl;
 
-import com.scttsc.business.service.BbuManager;
-import com.scttsc.business.service.BtsManager;
-import com.scttsc.business.service.TunelManager;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.scttsc.business.util.DateConverter;
 import com.scttsc.charge.dao.WyBtsChargeDao;
 import com.scttsc.charge.dao.WyBtsChargeListDao;
@@ -11,15 +22,6 @@ import com.scttsc.charge.dto.PayStatistDto;
 import com.scttsc.charge.model.WyBtsCharge;
 import com.scttsc.charge.model.WyBtsChargeList;
 import com.scttsc.charge.service.WyBtsChargeListManager;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 /**
  * Created by _think on 2014/11/10.
@@ -32,12 +34,6 @@ public class WyBtsChargeListManagerImpl implements WyBtsChargeListManager {
     private WyBtsChargeListDao chargeListDao;
     @Autowired
     private WyBtsChargeDao wyBtsChargeDao;
-    @Autowired
-    private BtsManager btsManager;
-    @Autowired
-    private BbuManager bbuManager;
-    @Autowired
-    private TunelManager tunelManager;
 
     public int deleteByPrimaryKey(BigDecimal id) {
         return chargeListDao.deleteByPrimaryKey(id);
