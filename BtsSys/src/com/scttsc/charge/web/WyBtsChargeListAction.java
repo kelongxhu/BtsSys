@@ -1,5 +1,29 @@
 package com.scttsc.charge.web;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.scttsc.admin.model.City;
 import com.scttsc.admin.model.User;
 import com.scttsc.business.util.Constants;
@@ -11,28 +35,26 @@ import com.scttsc.charge.model.WyBtsCharge;
 import com.scttsc.charge.model.WyBtsChargeList;
 import com.scttsc.charge.service.WyBtsChargeListManager;
 import com.scttsc.charge.service.WyBtsChargeManager;
-import com.scttsc.common.util.*;
+import com.scttsc.common.util.Common;
+import com.scttsc.common.util.ConstantUtil;
+import com.scttsc.common.util.DateConvert;
+import com.scttsc.common.util.ExcelUtil;
+import com.scttsc.common.util.FileRealPath;
+import com.scttsc.common.util.StoreUtil;
+import com.scttsc.common.util.StringUtil;
 import com.scttsc.common.web.BaseAction;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.*;
 
 /**
  * Created by _think on 2014/11/10.
  */
 public class WyBtsChargeListAction extends BaseAction {
 
-    Logger LOG = Logger.getLogger(WyBtsChargeListAction.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	Logger LOG = Logger.getLogger(WyBtsChargeListAction.class);
 
     private String countryIds;
     private String btsName;
@@ -158,7 +180,7 @@ public class WyBtsChargeListAction extends BaseAction {
             String proofFile = chargeBill.getProofFile();
             if (!StringUtils.isEmpty(proofFile) && !proofFile.contains(Constants.CHARGE_FILE)) {
                 //新上傳文件，如果是更新则路径为/store_file/
-                String path = Constants.CHARGE_FILE + File.separator + chargeBill.getIntId();
+                String path = Constants.CHARGE_FILE + File.separator + "proof" + File.separator + chargeBill.getIntId();
                 String descPath = getRequest().getSession()
                         .getServletContext().getRealPath(path);
                 StoreUtil.copyFile(proofFile, descPath);
@@ -208,6 +230,7 @@ public class WyBtsChargeListAction extends BaseAction {
                 for (String id : idsArr) {
                     idList.add(new BigDecimal(id));
                 }
+                deleteAttachment(idList);
                 wyBtsChargeListManager.deleteByPrimaryKeys(idList);
                 jsonMap.put("result", 1);
             }
@@ -218,7 +241,22 @@ public class WyBtsChargeListAction extends BaseAction {
         return SUCCESS;
     }
 
-
+    private void deleteAttachment(List<BigDecimal> idList) throws Exception{
+    	for(BigDecimal id : idList){
+    		WyBtsChargeList wyBtsChargeList = wyBtsChargeListManager.selectByPrimaryKey(id);
+        	String path = getAttachmentPath(wyBtsChargeList.getIntId());
+        	path = path + File.separator + wyBtsChargeList.getProofFile();
+        	StoreUtil.deleteFile(path);
+    	}
+    }
+    
+    private String getAttachmentPath(BigDecimal intId) throws Exception{
+    	StringBuffer sb = new StringBuffer();
+    	String path = getRequest().getSession().getServletContext().getRealPath(Constants.CHARGE_FILE);
+    	sb.append(path).append(File.separator).append("proof").append(File.separator).append(intId);
+    	return sb.toString();
+    }
+    
     /**
      * pay detail list
      *

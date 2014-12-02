@@ -191,8 +191,9 @@ public class WyBtsChargeAction extends BaseAction {
     	HttpServletResponse resp = getResponse();
     	ServletOutputStream servletOutputStream = resp.getOutputStream();
         try {
+        	String fileType = getRequest().getParameter("fileType")==null?"contract":getRequest().getParameter("fileType").trim();
         	String attachmentName = new String(fileName.getBytes("ISO8859-1"), "UTF-8");
-        	String path = getAttachmentPath(intId) + File.separator + attachmentName;
+        	String path = getAttachmentPath(intId, fileType) + File.separator + attachmentName;
         	File file = new File(path);
         	InputStream fis = new BufferedInputStream(new FileInputStream(path));
         	byte[] buffer = new byte[fis.available()];
@@ -406,10 +407,11 @@ public class WyBtsChargeAction extends BaseAction {
      * @return
      * @throws Exception
      */
-    private String getAttachmentPath(BigDecimal intId) throws Exception{
+    private String getAttachmentPath(BigDecimal intId, String fileType) throws Exception{
     	StringBuffer sb = new StringBuffer();
     	String path = getRequest().getSession().getServletContext().getRealPath(Constants.CHARGE_FILE);
-    	sb.append(path).append(File.separator).append(intId);
+    	sb.append(path).append(File.separator).append(fileType)
+    				   .append(File.separator).append(intId);
     	return sb.toString();
     }
     
@@ -420,7 +422,7 @@ public class WyBtsChargeAction extends BaseAction {
      */
     private void deleteAttachment(String ids, int costType) throws Exception{
     	for(String id : ids.split(",")){
-        	String path = getAttachmentPath(new BigDecimal(id));
+        	String path = getAttachmentPath(new BigDecimal(id), "contract");
         	StoreUtil.deleteDir(path);
     	}
     }
@@ -433,7 +435,7 @@ public class WyBtsChargeAction extends BaseAction {
     	//将文件从临时目录copy到正式目录...copy 成功清除临时目录文件...
         String contractFile = wyBtsCharge.getContractFile();
         if (!StringUtils.isEmpty(contractFile)) {
-            String descPath = getAttachmentPath(intId);
+            String descPath = getAttachmentPath(intId, "contract");
             StoreUtil.copyFile(contractFile, descPath);
         }
     }
