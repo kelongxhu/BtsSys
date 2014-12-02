@@ -55,10 +55,10 @@
 		    var rows = gridObj.getCheckedRows();
             var count = rows.length;
             if (count == 0) {
-                $.ligerDialog.alert('请选择要录入的数据！');
+                $.ligerDialog.alert('请选择要下载的数据！');
                 return;
             } else if (count > 1) {
-                $.ligerDialog.alert('请选择一条录入！');
+                $.ligerDialog.alert('请选择一条下载！');
                 return;
             }
             var id,fileName;
@@ -67,7 +67,7 @@
                 fileName = this.proofFileName;
             });
             
-            var url = encodeURI("${ctx}/charge/downloadAttachment.action?intId=" + id + "&fileName=" + fileName);
+            var url = encodeURI("${ctx}/charge/downloadAttachment.action?intId=" + id + "&fileType=proof&fileName=" + fileName);
 			window.location.href = url;
         }
     </script>
