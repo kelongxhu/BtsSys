@@ -21,6 +21,11 @@
                     {display:'缴费方式',name:'payTypeStr',width :80,align:'center'} ,
                     {display:'缴费凭证',name:'proofFileName',width :300,align:'center'}
                 ],
+                toolbar: {
+		            items: [
+		                {text: '下载',click: downloadProof, icon: 'save'}
+		            ]
+		        },
                 usePager:false,
                 rownumbers:true,
                 showTitle : false,
@@ -44,6 +49,26 @@
         //返回
         function back() {
             javascript: history.go(-1);
+        }
+        
+        function downloadProof(){
+		    var rows = gridObj.getCheckedRows();
+            var count = rows.length;
+            if (count == 0) {
+                $.ligerDialog.alert('请选择要录入的数据！');
+                return;
+            } else if (count > 1) {
+                $.ligerDialog.alert('请选择一条录入！');
+                return;
+            }
+            var id,fileName;
+            $(rows).each(function() {
+                id = this.intId;
+                fileName = this.proofFileName;
+            });
+            
+            var url = encodeURI("${ctx}/charge/downloadAttachment.action?intId=" + id + "&fileName=" + fileName);
+			window.location.href = url;
         }
     </script>
 </head>

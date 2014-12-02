@@ -13,7 +13,8 @@
 </style>
 
 <script type="text/javascript">
-
+	var select = false;
+	var upload = false;
     function init(){
         var costType="${charge.costType}";
         $("#costType option[value='" + costType + "']").attr("selected", true);
@@ -104,7 +105,11 @@ $(function() {
 
 
 function add() {
-    $("#form1").submit();
+	if(select == true && upload == false){
+		alert("请上传文件");
+	}else{
+	    $("#form1").submit();
+	}
 }
 
 //返回
@@ -135,6 +140,7 @@ $(function() {
         },
         onSelect : function(file) {
             $("#proofFile").val(file.name);
+            select = true;
         },
         onUploadProgress: function(file,bytesUploaded,bytesTotal,totalBytesUploaded,totalBytesTotal){
             $('#msg').html('已上传:'+(totalBytesTotal/bytesTotal)*100);
@@ -145,6 +151,7 @@ $(function() {
             if(status==1){
                 $("#proofFile").val(data["fileDTO"].uuid);
                 $("#msg").html("上传成功!");
+                upload = true;
             }else{
                 $("#msg").html("上传失败!");
             }
