@@ -122,10 +122,10 @@ START WITH 1
 INCREMENT BY 1
 CACHE 20;
 
-insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(48,23,'·ÑÓÃÉèÖÃ','menu','charge/charge.action',73,0);
-insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(49,23,'·ÑÓÃ½É·Ñ','menu','charge/pay.action',74,0);
-insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(50,23,'½É·Ñ²éÑ¯','menu','charge/payQuery.action',75,0);
-insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(51,23,'½É·ÑÍ³¼Æ','menu','charge/payCount.action',77,0);
+insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(48,23,'è´¹ç”¨è®¾ç½®','menu','charge/charge.action',73,0);
+insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(49,23,'è´¹ç”¨ç¼´è´¹','menu','charge/pay.action',74,0);
+insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(50,23,'ç¼´è´¹æŸ¥è¯¢','menu','charge/payQuery.action',75,0);
+insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(51,23,'ç¼´è´¹ç»Ÿè®¡','menu','charge/payCount.action',77,0);
 
 
 
