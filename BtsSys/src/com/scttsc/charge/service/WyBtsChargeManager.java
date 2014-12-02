@@ -43,7 +43,7 @@ public interface WyBtsChargeManager {
      */
     public int updateByMap(Map<String,Object> param)throws Exception;
 
-    void doChargeSetting(WyBtsCharge wyBtsCharge)throws Exception;
+    void inserOrUpdateChargeSetting(WyBtsCharge wyBtsCharge)throws Exception;
     
     /**
      * 
@@ -60,5 +60,12 @@ public interface WyBtsChargeManager {
      * @throws Exception
      */
     List<WyBtsCharge> selectBtsChargeSettingListByMap(Map<String,Object> param)throws Exception;
+    
+    /**
+     * 批量插入费用设置数据
+     * @param chargeMapList
+     * @throws Exception
+     */
+    void insertChargeSetting(List<Map<String, String>> chargeMapList) throws Exception;
     
 }
