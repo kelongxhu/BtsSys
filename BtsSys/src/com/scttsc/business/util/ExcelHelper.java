@@ -176,7 +176,7 @@ public class ExcelHelper {
     	cols.put("remindTel", new Validity("提醒号码", true, Validity.STR, null));//不能为空
     	cols.put("money", new Validity("单价", true, Validity.STR, null));//不能为空
     	cols.put("bankAccount", new Validity("代扣银行账号", false, Validity.STR, null));//不能为空
-    	cols.put("balance", new Validity("当前账户余额", false, Validity.STR, null));//不能为空
+    	cols.put("balance", new Validity("当前账户余额", false, Validity.NUM, null));//不能为空
     	return cols;
     }
     
