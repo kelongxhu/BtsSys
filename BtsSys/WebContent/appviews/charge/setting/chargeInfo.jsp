@@ -198,7 +198,7 @@
 														备注：
 													</td>
 													<td colspan="3">
-			                							<textarea class="area150">${charge.remark}</textarea>
+														${charge.remark}
 													</td>		
 												</tr>																																																														
 											</c:when>
