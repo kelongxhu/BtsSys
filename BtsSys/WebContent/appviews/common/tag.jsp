@@ -13,6 +13,7 @@
  <link href="${ctx}/resources/ligerUI/1.1.9/skins/Gray/css/all.css" rel="stylesheet" type="text/css" /> 
  -->
 <script src="${ctx}/resources/ligerUI/1.1.9/js/core/base.js" type="text/javascript"></script>
+<script src="${ctx}/resources/ligerUI/1.1.9/js/plugins/ligerAccordion.js" type="text/javascript"></script>
 <script src="${ctx}/resources/ligerUI/1.1.9/js/plugins/ligerForm.js" type="text/javascript"></script>
 <script src="${ctx}/resources/ligerUI/1.1.9/js/plugins/ligerGrid.js" type="text/javascript"></script>
 <script src="${ctx}/resources/ligerUI/1.1.9/js/plugins/ligerResizable.js" type="text/javascript"></script>

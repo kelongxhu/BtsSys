@@ -19,18 +19,23 @@
                     {display:'底度',name:'baseDegree',width :80,align:'center'},
                     {display:'当月度数',name:'monthDegree',width :80,align:'center'} ,
                     {display:'缴费方式',name:'payTypeStr',width :80,align:'center'} ,
-                    {display:'缴费凭证',name:'proofFileName',width :300,align:'center'}
+                    {display:'缴费凭证',name:'proofFileName',width :300,align:'center',
+                        render : function(row,rowIndex) {
+                            var html = '<a href="#" onclick="downloadProof(' +rowIndex+ ')" title="点击下载">'+row.proofFileName+'</a>';
+                            return html;
+                        }
+                    }
                 ],
-                toolbar: {
-		            items: [
-		                {text: '下载',click: downloadProof, icon: 'save'}
-		            ]
-		        },
+//                toolbar: {
+//		            items: [
+//		                {text: '下载',click: downloadProof, icon: 'save'}
+//		            ]
+//		        },
                 usePager:false,
                 rownumbers:true,
                 showTitle : false,
                 url:'${ctx}/chargejson/payDetailList.action?intId=${charge.intId}&costType=${charge.costType}',
-                checkbox : true,
+                checkbox : false,
                 width: '98%',
                 height:'250'
             });
@@ -51,22 +56,10 @@
             javascript: history.go(-1);
         }
         
-        function downloadProof(){
-		    var rows = gridObj.getCheckedRows();
-            var count = rows.length;
-            if (count == 0) {
-                $.ligerDialog.alert('请选择要下载的数据！');
-                return;
-            } else if (count > 1) {
-                $.ligerDialog.alert('请选择一条下载！');
-                return;
-            }
-            var id,fileName;
-            $(rows).each(function() {
-                id = this.intId;
-                fileName = this.proofFileName;
-            });
-            
+        function downloadProof(rowid){
+            var row = gridObj.getRow(rowid);
+            var id=row.intId;
+            var fileName=row.proofFileName;
             var url = encodeURI("${ctx}/charge/downloadAttachment.action?intId=" + id + "&fileType=proof&fileName=" + fileName);
 			window.location.href = url;
         }

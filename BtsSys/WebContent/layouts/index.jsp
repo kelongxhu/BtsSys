@@ -4,58 +4,133 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>贵州基站健康档案管理系统</title>
-    <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
-    <%@ taglib uri="/struts-tags" prefix="s" %>
-    <c:set var="ctx" value="${pageContext.request.contextPath}"/>
     <link href="${ctx}/layouts/css/header.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/layouts/css/left.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/layouts/css/style.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/easyUI/themes/default/easyui.css">
+    <%@ include file="/appviews/common/tag.jsp" %>
 
-    <link href="${ctx}/resources/ligerUI/1.1.9/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
-    <link href="${ctx}/resources/ligerUI/1.1.9/skins/ligerui-icons.css" rel="stylesheet" type="text/css" />
-    <%----%>
-    <script type="text/javascript" src="${ctx}/resources/easyUI/jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/easyUI/jquery.easyui.min.js"></script>
-    <script src="${ctx}/resources/ligerUI/1.1.9/js/core/base.js" type="text/javascript"></script>
-    <script src="${ctx}/resources/ligerUI/1.1.9/js/plugins/ligerDrag.js" type="text/javascript"></script>
-    <script src="${ctx}/resources/ligerUI/1.1.9/js/plugins/ligerDialog.js" type="text/javascript"></script>
     <script type="text/javascript">
-        $(function() {
+
+        var tab = null;
+        var accordion = null;
+        var tree = null;
+        $(function ()
+        {
+            //布局
+            $("#layout1").ligerLayout({
+                leftWidth: 200,
+                height: '100%',
+                allowLeftResize: false,
+                heightDiff:-34,
+                space:4,
+                onHeightChanged: f_heightChanged
+            });
+
+            var height = $(".l-layout-center").height();
+
+            //Tab
+            $("#framecenter").ligerTab({
+                height:height,
+                onAfterSelectTabItem: function(tabId){
+                    if(tabId=="home")
+                        tab.reload(tabId);
+                },
+                onBeforeRemoveTabItem: function(tabId){
+//                    if(tabId == "topManagementTab")
+                    <%--$.post('${ctx}/lifeCycleMg/removeNetwork');--%>
+                }
+            });
+
+            //设置默认展开菜单
+//            $("#accordion1 div").each(function(i){
+//                if($(this).hasClass("l-scroll")){
+//                    if('生命周期管理' == this.title){
+//                        $(this).attr("lselected", true);
+//                    }
+//                }
+//            });
+
+            //面板
+            $("#accordion1").ligerAccordion({ height: height - 24, speed: null });
+
+            $(".l-link").hover(function ()
+            {
+                $(this).addClass("l-link-over");
+            }, function ()
+            {
+                $(this).removeClass("l-link-over");
+            });
+
+            //分别加载每个模块下的子菜单
+            var uls = $("#accordion1 ul");
+            uls.each(function(i){
+                var num =  Math.random();
+
+                var treeCombox;
+                //初始化地市
+                //初始化树控件
+                $.post("${ctx}/adminjson/loadMenuTree.action?pid=" + this.id+"&randomNum="+num, function(
+                        ajaxData, status) {
+                    var treeData=ajaxData.menuJson;
+                    var ulId=ajaxData.pid;
+//                    treeData = treeData.replace(/"children":\[\],/g, '');
+                    treeData=eval('('+treeData+')');
+                    $("#"+ulId).ligerTree({
+                        data:treeData,
+                        checkbox: false,
+                        slide: false,
+                        nodeWidth: 120,
+                        textFieldName: 'name',
+//                    attribute: ['text', 'url'],
+                        onSelect: function (node)
+                        {
+                            if (!node.data.url || node.data.url == "/" || node.data.url == "#") return;
+                            var tabid = $(node.target).attr("tabid");
+                            if (!tabid)
+                            {
+                                tabid = new Date().getTime();
+                                $(node.target).attr("tabid", tabid);
+                            }
+                            f_addTab(tabid, node.data.text, node.data.url);
+                        }
+                    });
+                });
+                tab = $("#framecenter").ligerGetTabManager();
+                accordion = $("#accordion1").ligerGetAccordionManager();
+                tree = $("#tree1").ligerGetTreeManager();
+            });
+
 
         });
-        function addTab(title, href) {
-            var tt = $('#main-center');
-            if (tt.tabs('exists', title)) {
-//                var tab =tt.tabs('select', title);
-                tt.tabs('close',title);
-            }
-            if (href) {
-                var content = '<iframe frameborder="0" scrolling="no"  src="' + href + '" style="width:100%;height:100%;"></iframe>';
-            } else {
-                var content = '未实现';
-            }
-            tt.tabs('add', {
-                title:title,
-                closable:true,
-                content:content
-            });
+        function f_heightChanged(options)
+        {
+            if (tab)
+                tab.addHeight(options.diff);
+            if (accordion && options.middleHeight - 24 > 0)
+                accordion.setHeight(options.middleHeight - 24);
         }
-        function modalWindow(url, width, height) {
-            var sURL = url;
-            var sFeatures = "dialogWidth:" + width + "px; dialogHeight:" + height + "px; "
-                    + "help:no; scroll:yes; center:yes; status:no;resizable:yes";
-            window.showModalDialog(sURL, window, sFeatures);
+        function f_addTab(tabid,text, url)
+        {
+            tab.addTabItem({ tabid : tabid,text: text, url: '${ctx}/' + url});
         }
-        function openModalWindow(url, width, height) {
-            var sFeatures = "toolbar=no, menubar=no, scrollbars=no, resizable=no, " + "location=no, status=no, titlebar=no, width=" + width + ", " + "height=" + height + ", top=100, left=100";
-            window.open(url, "main1", sFeatures);
-
+        function showHomeTab(){
+            var tabId = 'home';
+            if(tab.isTabItemExist(tabId))tab.selectTabItem(tabId);
+            else f_addTab(tabId, '首页', '${ctx}/layouts/dashbord.jsp');
         }
     </script>
+
+    <style type="text/css">
+        body,html{height:100%;}
+        body{ padding:0px; margin:0;overflow: hidden;}
+        #nav{ float:right; z-index:3; margin-top: 30px;}
+        .suv li{ background:url(${ctx}/images/top_sub_bg.jpg) repeat-x; font-weight:bold; float:right; width:90px; text-align:center; }
+        .suv li a{ color:#1585c0; text-decoration:none;  height:23px; display:block; padding-top:10px; background:url(${ctx}/images/sub_right_line.jpg) right bottom no-repeat;}
+        .suv li a:hover{ color:#006; }
+        #sub_left{ background:url(${ctx}/images/sub_left_pic.png) no-repeat; height:33px; width:37px; }
+    </style>
 </head>
-<body class="easyui-layout">
-<div region="north" border="false" style="height:69px;background:#B3DFDA;padding:0px">
+<body>
+<div style="height:69px;background:#B3DFDA;padding:0px">
     <div id="header">
         <div class="header_top">
             <div id="logo">
@@ -78,75 +153,26 @@
                 </ul>
             </div>
             <div style="position: absolute;top:5px;right:165px;">
-                <%--<ul>--%>
-                <%--<li style="margin-left:42px;float: left;">--%>
-                <%--<a onclick="#" style="display: block;text-decoration: none;color: #000000;outline: medium none;" href="#">--%>
-                <%--<span style="display: block;text-align:center;padding:44px 0 0 0px;width:48px;background-image: url('${ctx}/layouts/image/home.png');background-repeat: no-repeat;">--%>
-                <%--首页--%>
-                <%--</span>--%>
-                <%--</a>--%>
-                <%--</li>--%>
-
-                <%--<li style="margin-left:42px;float: left;">--%>
-                <%--<a style="display: block;text-decoration: none;color: #000000;outline: medium none;" href="#">--%>
-                <%--<span style="display: block;text-align:center;padding:44px 0 0 0px;width:48px;background-image: url('${ctx}/layouts/image/support.png');background-repeat: no-repeat;">--%>
-                <%--资源中心--%>
-                <%--</span>--%>
-                <%--</a>--%>
-                <%--</li>--%>
-
-                <%--<li style="margin-left:42px;float: left;">--%>
-                <%--<a style="display: block;text-decoration: none;color: #000000;outline: medium none;" href="#">--%>
-                <%--<span style="display: block;text-align:center;padding:44px 0 0 0px;width:48px;background-image: url('${ctx}/layouts/image/chart_up.png');background-repeat: no-repeat;">--%>
-                <%--我的任务--%>
-                <%--</span>--%>
-                <%--</a>--%>
-                <%--</li>--%>
-
-                <%--<li style="margin-left:42px;float: left;">--%>
-                <%--<a style="display: block;text-decoration: none;color: #000000;outline: medium none;" href="#">--%>
-                <%--<span style="display: block;text-align:center;padding:44px 0 0 0px;width:48px;background-image: url('${ctx}/layouts/image/database.png');background-repeat: no-repeat;">--%>
-                <%--知识库--%>
-                <%--</span>--%>
-                <%--</a>--%>
-                <%--</li>--%>
-                <%--</ul>--%>
             </div>
         </div>
     </div>
 </div>
-<div region="west" split="true" title="导航菜单" style="width:190px;padding:1px;overflow:hidden;">
-    <div class="easyui-accordion" fit="true" border="false">
+<div id="layout1">
+    <div position="left" title="系统功能菜单" id="accordion1">
         <c:forEach var="item" items="${authorityList}">
             <c:if test="${item.flag==0}">
-                <div title="${item.name}" style="padding:0px;overflow:auto;">
-                    <div class="menu">
-                        <ul>
-                            <c:forEach var="node" items="${item.children}">
-                                <c:choose>
-                                    <c:when test="${node.flag==0}">
-                                        <li><a onclick="addTab('${node.name}','${ctx}/${node.url}')" href="#"><img
-                                                src='${ctx}/layouts/image/tabs_rightarrow.png'/>${node.name}
-                                        </a></li>
-                                    </c:when>
-                                </c:choose>
-                            </c:forEach>
-                        </ul>
-                    </div>
+                <div id="menu_${item.id}" title="${item.name}" class="l-scroll">
+                    <ul id="${item.id}" style="margin-top:3px;"/>
                 </div>
             </c:if>
         </c:forEach>
     </div>
-</div>
-<div region="south" border="false" style="height:25px;background:#55B6F4;padding:5px;text-align:center;color: #fff;">
-    贵州基站健康档案管理系统
-</div>
-<div region="center">
-    <div id="main-center" class="easyui-tabs" fit="true" border="false">
-        <div title="首页" style="">
-            <iframe frameborder="0" style="width:100%;height:100%;" src="${ctx}/layouts/first.jsp">
+    <div position="center" id="framecenter">
+        <div tabid="home" title="首页" style="">
+            <iframe frameborder="0" style="width:100%;height:100%;" src="${ctx}/layouts/dashbord.jsp"/>
         </div>
     </div>
 </div>
+<div id="Foot">贵州基站健康档案管理系统 版权所有</div>
 </body>
 </html>
