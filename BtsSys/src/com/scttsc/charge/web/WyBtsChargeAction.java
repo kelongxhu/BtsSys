@@ -149,6 +149,9 @@ public class WyBtsChargeAction extends BaseAction {
 		
 		charge.setInUser(new BigDecimal(user.getIntId()));
 		charge.setAheadDay(aheadDay);
+		if(3 != charge.getCostType()){
+			charge.setPayType((short)1);
+		}
 	}
     
     public String deleteChargeSetting() throws Exception{
@@ -237,7 +240,8 @@ public class WyBtsChargeAction extends BaseAction {
         ServletOutputStream servletOutputStream = null;
         String path = FileRealPath.getPath();
         String templatePath = path + "template/" + (costType == 3? "btsPowerChargeTemplate.xls" : "btsChargeTemplate.xls");
-        String fileName = "基站费用待录入数据.xls";
+        String fileName = "基站费用待录入";
+        fileName = fileName + (costType == 1?"_房租.xls":costType == 2?"_物业.xls":"_电费.xls");
     	try {
     		Map<String, Object> paramMap = buildParamMap();
     		wyBtsCharges = wyBtsChargeManager.selectWyBtsChargeSettingByMap(paramMap, btsType);
@@ -323,9 +327,9 @@ public class WyBtsChargeAction extends BaseAction {
             List<String> errorList = new ArrayList<String>();
             // 从第二行开始取数
             List<Map<String, String>> chargeMapList = new ArrayList<Map<String,String>>();
-            for (int i = 2; i < rows; i++) {
+            for (int i = 1; i < rows; i++) {
                 row = sheet.getRow(i);
-            	Map<String, String> chargeMap = parseChargeMap(i-1, 9, row, errorList);
+            	Map<String, String> chargeMap = parseChargeMap(i+1, 9, row, errorList);
             	if(null != chargeMap){
         			//提醒天数
         			short aheadDay = (short)ConstantUtil.getInstance().getCons(GROUP_CODE, chargeMap.get("costType")).getCode();
