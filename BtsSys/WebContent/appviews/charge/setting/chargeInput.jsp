@@ -23,6 +23,7 @@
 			var upload = false;
 			//注册表单验证
 			$(function() {
+				/**
 				var combox = $("#payTypeVal").ligerComboBox({  
 			         data: [
 			             { text: '人工缴费', id: '1' },
@@ -35,14 +36,14 @@
 			         	if(data == '1'){
 			         		$("#accountInfo").hide();
 			         		$("#payCycle").html("缴费周期");
-			         		$("#payDay").html("缴费日期");
+			         		$("#payDay").html("缴费天");
 			         	}else if(data == '2'){
 			         		$("#accountInfo").show();
 			         		$("#payCycle").html("代扣周期");
-			         		$("#payDay").html("代扣日期");
+			         		$("#payDay").html("代扣天");
 			         	}
 					 }
-			     });
+			     });*/
 
 				if('${WyBtsCharge.payType}' == '1'){
 					$("#accountInfo").hide();
@@ -72,7 +73,10 @@
 			function add() {
 				if(select == true && upload == false){
 					alert('请上传附件');
-				}else{
+				}else if($("#charge_payDay").val()>28||$("#charge_payDay").val()<1){
+					alert('缴费天只能是1-28间的数');
+				}
+				else{
 					$("#form1").submit();
 				}
 			}
@@ -248,8 +252,14 @@
 											<span style="color: red;">*</span>缴费方式:
 										</td>
 										<td>
-											<input name="payTypeVal" id="payTypeVal" type="text" class="required"/>
-											<input name="wyBtsCharge.payType" id="payType" type="hidden" value="${WyBtsCharge.payType }"/>
+											<select name="wyBtsCharge.payType" class="input150">
+							                    <option value="">请选择</option>
+							                    <option value="1" <c:if test="${WyBtsCharge.payType == '1'}">selected="selected"</c:if>>人工缴费</option>
+							                    <option value="2" <c:if test="${WyBtsCharge.payType == '2'}">selected="selected"</c:if>>自动代扣</option>
+							                    
+							                </select>
+<!--											<input name="payTypeVal" id="payTypeVal" type="text" class="required"/>-->
+<!--											<input name="wyBtsCharge.payType" id="payType" type="hidden" value="${WyBtsCharge.payType }"/>-->
 										</td>
 									</tr>									
 									</c:if>	
@@ -275,10 +285,10 @@
 									</tr>
 									<tr>
 										<td>
-											<span style="color: red;">*</span><span id="payDay">缴费日期:</span> 
+											<span style="color: red;">*</span><span id="payDay">缴费天数:</span> 
 										</td>
 										<td>
-											<input name="wyBtsCharge.payDay" type="text" class="input150 required number" value="${WyBtsCharge.payDay }"/>
+											<input id="charge_payDay" name="wyBtsCharge.payDay" type="text" class="input150 required number" value="${WyBtsCharge.payDay }"/>
 										</td>									
 										<td>
 											<span style="color: red;">*</span>提醒人员:
@@ -346,7 +356,7 @@
 										</td>
 										<td>
 											<input name="wyBtsCharge.balance" type="text"
-												class="input150" value="${WyBtsCharge.balance }"/>
+												class="input150 required number" value="${WyBtsCharge.balance }"/>
 										</td>											
 									</tr>	
 									</c:if>
