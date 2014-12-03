@@ -420,11 +420,23 @@
                         and Bbu_Type in(${bbuType})
                     </if>
                 </where>
-
                 GROUP BY
                 <if test="sqlsb!=null">
                     ${sqlsb}
                 </if>
            )
        </select>
+
+       <!--按本地网统计bbu数量-->
+    <select id="selectBbuCountGroupByCity" resultType="hashmap">
+        select city_id,count(1) num from wy_bbu
+         <where>
+             delete_flag=0
+             and is_share=0
+             and bbu_type in(1,2)
+             <if test="manualFlag!=null">
+                 and manual_flag=#{manualFlag}
+             </if>
+         </where> group by city_id order by city_id
+    </select>
 </mapper>

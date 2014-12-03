@@ -245,6 +245,8 @@ public class WyBtsChargeList {
             } else {
                 proofFileName = proofFile;
             }
+        }else{
+            proofFileName="";
         }
         return proofFileName;
     }

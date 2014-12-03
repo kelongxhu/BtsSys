@@ -400,7 +400,21 @@
             </result>
     </action>
 
+    <!--按本地网统计各类型基站数量-->
 
+        <action name="statByCity" class="com.scttsc.business.web.DashBordAction"
+                method="statByCity">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="statNoManualByCity" class="com.scttsc.business.web.DashBordAction"
+                method="statNoManualByCity">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
 
 
     </package>

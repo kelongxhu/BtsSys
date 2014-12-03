@@ -769,6 +769,7 @@ public class WyBtsChargeListAction extends BaseAction {
             param.put("countryIds", user.getCountryIds());
         }
         if (!StringUtil.isEmpty(btsName)) {
+            btsName = Common.decodeURL(btsName).trim();
             param.put("btsName", btsName);
         }
         if (!StringUtil.isEmpty(bscName)) {

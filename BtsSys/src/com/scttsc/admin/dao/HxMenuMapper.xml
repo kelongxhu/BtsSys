@@ -33,7 +33,7 @@
             select DISTINCT a.pid from WY_ROLE_MENU t
             LEFT JOIN wy_menu a ON a.id=t.menu_id
             WHERE t.role_id IN(SELECT role_id FROM framework_security_user_role WHERE user_id=#{userId,jdbcType=DECIMAL}))
-            ORDER BY orderby
+            and PID=0 ORDER BY orderby
     </select>
 
     <select id="getChildByUserId" resultMap="result">

@@ -424,5 +424,20 @@
         </where>
     </select>
 
+    <!--按本地网统计cell数量-->
+    <select id="selectCellCountGroupByCity" resultType="hashmap">
+        select city_id,count(1) num from wy_cell
+         <where>
+             delete_flag=0
+             <if test="isIndoor!=null">
+                 and IS_INDOOR=#{isIndoor}
+             </if>
+             <if test="manualFlag!=null">
+                 and MANUAL_FLAG=#{manualFlag}
+             </if>
+         </where>
+        group by city_id order by city_id
+    </select>
+
 
 </mapper>

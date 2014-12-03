@@ -1,6 +1,7 @@
 package com.scttsc.business.dao;
 
 import com.scttsc.business.model.Cell;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -51,14 +52,24 @@ public interface CellDao {
 
     /**
      * 查询小区根据多个条件
+     *
      * @param map
      * @return
      * @throws Exception
      */
-    List<Cell> selectCellByMap(Map map)throws Exception;
+    List<Cell> selectCellByMap(Map map) throws Exception;
 
-    List<Map> selectCellGroupByColumns(Map map)throws Exception;
+    List<Map> selectCellGroupByColumns(Map map) throws Exception;
 
-    int countCellGroupByColumns(Map map)throws Exception;
+    int countCellGroupByColumns(Map map) throws Exception;
+
+    /**
+     * 按本地网统计小区
+     *
+     * @param isIndoor
+     * @return
+     * @throws Exception
+     */
+    List<Map> selectCellCountGroupByCity(@Param(value="isIndoor") String isIndoor,@Param(value="manualFlag") Integer manualFlag) throws Exception;
 
 }

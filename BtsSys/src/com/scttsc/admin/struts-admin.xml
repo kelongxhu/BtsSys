@@ -43,6 +43,12 @@
             <result name="success" type="json"/>
         </action>
 
+
+        <!--菜单树-->
+        <action name="loadMenuTree" class="com.scttsc.admin.web.HxMenuAction"
+                method="loadMenuTree">
+            <result name="success" type="json"/>
+        </action>
 	</package>
 
 	<package name="admin" namespace="/admin" extends="default">

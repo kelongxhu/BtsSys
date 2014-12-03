@@ -636,4 +636,16 @@
         </if>
         )
     </select>
+
+    <!--按本地网统计隧道站点数量-->
+    <select id="selectTunelCountGroupByCity" resultType="hashmap">
+        select city_id,count(1) num from wy_tunel
+        <where>
+            delete_flag=0
+            <if test="manualFlag!=null">
+                and manual_flag=#{manualFlag}
+            </if>
+        </where>
+         group by city_id order by city_id
+    </select>
 </mapper>
