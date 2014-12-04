@@ -153,6 +153,10 @@ public class WyBtsChargeAction extends BaseAction {
 		if(3 != charge.getCostType()){
 			charge.setPayType((short)1);
 		}
+		if(1 == charge.getPayType()){
+			charge.setBalance(new BigDecimal(0));
+			charge.setBankAccount("");
+		}
 	}
     
     public String deleteChargeSetting() throws Exception{
