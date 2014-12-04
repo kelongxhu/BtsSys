@@ -12,6 +12,8 @@
         $(function(){
             gridObj = $("#maingrid").ligerGrid({
                 columns: [
+                    {display:'站点名称',name:'btsName',width : 140,align:'center'},
+                    {display:'费用类型',name:'costTypeStr',width :60,align:'center'} ,
                     {display:'缴费金额',name:'money',width : 140,align:'center'},
                     {display:'缴费人员',name:'payUser',width : 80,align:'center'},
                     {display:'缴费时间',name:'payTimeStr',width : 80,align:'center'},
@@ -73,6 +75,7 @@
         <p class="main_title_p"><img src="${ctx}/layouts/image/ico_arrow.gif"></img>基站缴费信息</p>
     </div>
     <div class="content">
+        <!--
         <div>
         <table cellpadding="0" cellspacing="0" class="tab_1">
             <tr>
@@ -98,7 +101,7 @@
                 <td>${charge.costTypeStr}</td>
             </tr>
         </table>
-        </div>
+        </div>-->
         <div id="maingrid"></div>
         <div class="form-actions_2">
             <button class="btn" type="reset" onclick="back();">

@@ -80,7 +80,7 @@ function btsGrid(url) {
             {display:'本地网',name:'cityName',width : 60,align:'center'},
             {display:'区县',name:'countryName',width :60,align:'center'},
             {display:'所属BSC',name:'bscName',width :100,align:'center'} ,
-            {display:'BTSID',name:'btsId',width :60,align:'center',isSort:true} ,
+            {display:'BTSID',name:'btsId',width :60,align:'center'} ,
             {display:'费用类型',name:'costTypeStr',width :60,align:'center'} ,
             {display:'金额',name:'money',width : 60,align:'center'},
             {display:'是否超时',name:'isTimeoutStr',width : 60,align:'center'},
