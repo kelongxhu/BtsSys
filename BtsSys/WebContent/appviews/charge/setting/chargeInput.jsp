@@ -53,6 +53,22 @@
 							     
 			});
 		
+			function chgType(obj){
+				if(obj.value == '1'){
+	         		$("#accountInfo").hide();
+	         		$("#payCycle").html("缴费周期");
+	         		$("#payDay").html("缴费天");
+	         		//$("#_bankAccount").val('');
+	         		//$("#_balance").val('');
+	         	}else if(obj.value == '2'){
+	         		$("#accountInfo").show();
+	         		$("#payCycle").html("代扣周期");
+	         		$("#payDay").html("代扣天");
+	         		//$("#_bankAccount").val('${WyBtsCharge.bankAccount }');
+	         		//$("#_balance").val('${WyBtsCharge.balance }');
+	         	}
+			}
+		
 			$(function() {
 				var v = $("#form1").validate( {
 					ignore : "",
@@ -252,8 +268,7 @@
 											<span style="color: red;">*</span>缴费方式:
 										</td>
 										<td>
-											<select name="wyBtsCharge.payType" class="input150">
-							                    <option value="">请选择</option>
+											<select name="wyBtsCharge.payType" class="input150" onchange="chgType(this);">
 							                    <option value="1" <c:if test="${WyBtsCharge.payType == '1'}">selected="selected"</c:if>>人工缴费</option>
 							                    <option value="2" <c:if test="${WyBtsCharge.payType == '2'}">selected="selected"</c:if>>自动代扣</option>
 							                    
@@ -349,14 +364,14 @@
 										</td>
 										<td>
 											<input name="wyBtsCharge.bankAccount" type="text"
-												class="input150" value="${WyBtsCharge.bankAccount }"/>
+												class="input150" value="${WyBtsCharge.bankAccount }" id="_bankAccount"/>
 										</td>	
 										<td>
 											当前账户余额：
 										</td>
 										<td>
 											<input name="wyBtsCharge.balance" type="text"
-												class="input150 required number" value="${WyBtsCharge.balance }"/>
+												class="input150 required number" value="${WyBtsCharge.balance }" id="_balance"/>
 										</td>											
 									</tr>	
 									</c:if>
