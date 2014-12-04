@@ -1,4 +1,4 @@
-DROP TABLE WY_BTS_CHARGE;
+﻿DROP TABLE WY_BTS_CHARGE;
 CREATE TABLE WY_BTS_CHARGE (
    INT_ID               NUMBER         NOT NULL,
    BTS_TYPE             NUMBER(1)      NOT NULL,
@@ -10,14 +10,13 @@ CREATE TABLE WY_BTS_CHARGE (
    AHEAD_DAY           NUMBER(2),
    REMIND_USER         VARCHAR2(64),
    REMIND_TEL          VARCHAR2(64),
-   NEXT_REMIND_TIME    DATE,
    MONEY               NUMBER(20,2),
    CONTRACT_FILE       VARCHAR2(128),
    REMARK              VARCHAR2(1024),
    EACH_TEL            VARCHAR2(64),
    EACH_ACCOUNTNAME    VARCHAR2(64),
    EACH_BANKNUM        VARCHAR2(64),
-   PAY_TYPE            NUMBER(1),
+   PAY_TYPE            NUMBER(1) DEFAULT 0,
    BANK_ACCOUNT        VARCHAR2(64),
    BALANCE             NUMBER(20,2),
    LAST_PAY_TIME       DATE,
@@ -122,10 +121,31 @@ START WITH 1
 INCREMENT BY 1
 CACHE 20;
 
-insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(48,23,'费用设置','menu','charge/charge.action',73,0);
+
+create index charge_bts_type on wy_bts_charge(bts_type);
+create index charge_cost_type on wy_bts_charge(cost_type);
+create index charge_contract_endtime on wy_bts_charge(contract_endtime);
+create index charge_list_int_id on wy_bts_charge_list(int_id);
+create index charge_list_cost_type on wy_bts_charge_list(cost_type);
+create index charge_list_bts_id on wy_bts_charge_list(bts_id);
+create index charge_list_country on wy_bts_charge_list(country_id);
+create index charge_list_bsc_name on wy_bts_charge_list(bsc_name);
+create index charge_list_bts_type on wy_bts_charge_list(bts_type);
+
+insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(48,23,'费用设置','menu','charge/chargeSetting.action',73,0);
 insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(49,23,'费用缴费','menu','charge/pay.action',74,0);
 insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(50,23,'缴费查询','menu','charge/payQuery.action',75,0);
-insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(51,23,'缴费统计','menu','charge/payCount.action',77,0);
+insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(51,23,'缴费统计','menu','charge/payStat.action',77,0);
+
+
+insert into wy_cons (ID, CODE, NAME, GROUPCODE, ORDERBY, INTIME, REMARK, PID)
+values (273, 30, '1', 'CHARGE_REMIND_CYCLE', 1, null, '', null);
+
+insert into wy_cons (ID, CODE, NAME, GROUPCODE, ORDERBY, INTIME, REMARK, PID)
+values (274, 15, '2', 'CHARGE_REMIND_CYCLE', 2, null, '', null);
+
+insert into wy_cons (ID, CODE, NAME, GROUPCODE, ORDERBY, INTIME, REMARK, PID)
+values (275, 7, '3', 'CHARGE_REMIND_CYCLE', 3, null, '', null);
 
 
 
