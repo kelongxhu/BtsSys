@@ -34,9 +34,9 @@ $(function() {
     //数据类型
     var comBox1 = $("#typeIdVal").ligerComboBox({
         data: [
-            { text: '室内覆盖站点', id: '1' },
+            { text: '室外覆盖站点', id: '1' },
             { text: '纯BBU站点', id: '2' },
-            { text: '室外分布站点', id: '3' },
+            { text: '室内分布站点', id: '3' },
             { text: '隧道覆盖站点', id: '6' }
         ],
         width : 120,
@@ -76,7 +76,7 @@ $(function() {
 function btsGrid(url) {
     gridObj = $("#maingrid").ligerGrid({
         columns: [
-            {display:'室外覆盖站点名称',name:'btsName',width : 140,align:'center'},
+            {display:'站点名称',name:'btsName',width : 140,align:'center'},
             {display:'本地网',name:'cityName',width : 60,align:'center'},
             {display:'区县',name:'countryName',width :60,align:'center'},
             {display:'所属BSC',name:'bscName',width :100,align:'center'} ,
