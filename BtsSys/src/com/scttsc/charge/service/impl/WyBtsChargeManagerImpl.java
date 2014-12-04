@@ -143,14 +143,14 @@ public class WyBtsChargeManagerImpl implements WyBtsChargeManager {
 		try {
 			switch (btsType) {
 			case 1:
-				param.put("isInDoor", "是");
+				param.put("isInDoor", "否");
 				count = wyBtsChargeDao.selectWyBtsChargeSettingCountByMap(param);
 				break;
 			case 2:
 				count = wyBtsChargeDao.selectWyBbuChargeSettingCountByMap(param);
 				break;
 			case 3:
-				param.put("isInDoor", "否");
+				param.put("isInDoor", "是");
 				count = wyBtsChargeDao.selectWyBtsChargeSettingCountByMap(param);
 				break;
 			case 6:
