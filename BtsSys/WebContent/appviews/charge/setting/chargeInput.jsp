@@ -268,7 +268,7 @@
 											<span style="color: red;">*</span>缴费方式:
 										</td>
 										<td>
-											<select name="wyBtsCharge.payType" class="input150" onchange="chgType(this);">
+											<select name="wyBtsCharge.payType" class="input150 required" onchange="chgType(this);">
 							                    <option value="1" <c:if test="${WyBtsCharge.payType == '1'}">selected="selected"</c:if>>人工缴费</option>
 							                    <option value="2" <c:if test="${WyBtsCharge.payType == '2'}">selected="selected"</c:if>>自动代扣</option>
 							                    
