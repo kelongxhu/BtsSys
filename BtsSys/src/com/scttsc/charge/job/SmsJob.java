@@ -13,7 +13,6 @@ import java.util.*;
  * 发送短信定时Job
  * Created by _think on 2014/11/23.
  */
-@Service("smsJob")
 public class SmsJob {
     static Logger LOG = Logger.getLogger("jobLog");
     @Autowired
@@ -140,7 +139,7 @@ public class SmsJob {
     public void isSend(Date newNextPayTime, Date now, WyBtsCharge wyBtsCharge) {
         try {
             int aheadDay = wyBtsCharge.getAheadDay();
-            int isRemind = wyBtsCharge.getIsRemind();
+            int isRemind = wyBtsCharge.getIsRemind()==null?0:wyBtsCharge.getIsRemind();
             Date aheadTime = getRemindTime(newNextPayTime, aheadDay);//提醒时间
             int betweenRemindDay = DateUtils.daysBetween(aheadTime, now);
             //当前时间>=提醒时间，发送提醒短信

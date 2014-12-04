@@ -83,5 +83,5 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
-    <!--<import resource="classpath:jobQuartz.xml" />-->
+    <import resource="classpath:jobQuartz.xml" />
 </beans>

@@ -23,9 +23,12 @@
 		<!-- Triggers集成 -->
 		<property name="triggers">
 			<list>
+                <!--健康管理
 				<ref bean="cronTrigger1" />
 				<ref bean="cronTrigger2" />
                 <ref bean="cronTrigger3" />
+                -->
+                <ref bean="sendSmsJobTrigger3"/>
 			</list>
 		</property>
 		<!-- Quartz配置 -->
@@ -84,9 +87,24 @@
        		<!-- 同一任务在前一次执行未完成而Trigger时间又到时是否并发开始新的执行, 默认为true. -->
        		<property name="concurrent" value="false" />
        	</bean>
+
+
+    <bean id="sendSmsJobTrigger3" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="sendSmsJob" />
+        <property name="cronExpression" value="0 0 1 * * ?" />
+    </bean>
+
+       <!--缴费模块短信提醒-->
+    <bean id="sendSmsJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="sendJob" />
+        <property name="targetMethod" value="sendMsg" />
+        <!-- 同一任务在前一次执行未完成而Trigger时间又到时是否并发开始新的执行, 默认为true. -->
+        <property name="concurrent" value="false" />
+    </bean>
 	
 	<!-- 被Cron执行的普通Spring Bean -->
 	<bean id="infoJob" class="com.scttsc.healthy.job.info.InfoJob" />
     <bean id="inspectJob" class="com.scttsc.healthy.job.inspect.InspectJob" />
     <bean id="speciallyJob" class="com.scttsc.healthy.job.specially.SpeciallyJob" />
+    <bean id="sendJob" class="com.scttsc.charge.job.SmsJob"/>
 </beans>

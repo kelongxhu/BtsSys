@@ -483,7 +483,7 @@ public class WyBtsChargeListAction extends BaseAction {
                         errorList.add("第" + rowNum + "行:" + validity.getName() + "未找到对应数据。");
                         return null;
                     }
-                } else if ("countyId".equals(dataKey)) {
+                } else if ("countryId".equals(dataKey)) {
                     City city = ConstantUtil.getInstance().getCountry(cellValue);
                     if (city != null) {
                         map.put(dataKey, city.getId());
