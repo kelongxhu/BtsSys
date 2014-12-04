@@ -149,6 +149,7 @@ public class WyBtsChargeAction extends BaseAction {
 		
 		charge.setInUser(new BigDecimal(user.getIntId()));
 		charge.setAheadDay(aheadDay);
+		charge.setIsRemind(0);
 		if(3 != charge.getCostType()){
 			charge.setPayType((short)1);
 		}
@@ -337,7 +338,12 @@ public class WyBtsChargeAction extends BaseAction {
         				chargeMap.remove("balance");
         			}
         			chargeMap.put("aheadDay", aheadDay+"");
+        			chargeMap.put("isRemind", "0");
         			chargeMap.put("inUser", user.getIntId()+"");
+        			chargeMap.put("inUser", user.getIntId()+"");
+        			if(!"3".equals(chargeMap.get("costType"))){
+        				chargeMap.put("payType", "1");
+        			}
             		chargeMapList.add(chargeMap);
             	}
             }
