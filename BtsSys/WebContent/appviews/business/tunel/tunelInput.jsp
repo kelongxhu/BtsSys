@@ -36,7 +36,7 @@
 </style>
 
 <script type="text/javascript">
-
+    var countryCombox;
 //注册表单验证
 $(function() {
     //有无机房
@@ -87,10 +87,88 @@ $(function() {
         treeCombox3.selectValue('${tunelManual.roadId}');
     });
 
-    //建设年月
-    $("#builddate").ligerDateEditor({ label: '', format: "yyyy-MM", labelAlign: 'right',initValue: '${tunelManual.builddate}',width : 200});
+
+    countryCombox=$("#villageVal").ligerComboBox( {
+        data : null,
+        width : 200,
+        selectBoxWidth : 200,
+        selectBoxHeight : 200,
+        textField : 'village',
+        valueField : 'village',
+        valueFieldID : 'village'
+    });
+
+
+
+    if (!Array.prototype.indexOf)
+    {
+        Array.prototype.indexOf = function(elt /*, from*/)
+        {
+            var len = this.length >>> 0;
+            var from = Number(arguments[1]) || 0;
+            from = (from < 0)
+                    ? Math.ceil(from)
+                    : Math.floor(from);
+            if (from < 0)
+                from += len;
+            for (; from < len; from++)
+            {
+                if (from in this &&
+                        this[from] === elt)
+                    return from;
+            }
+            return -1;
+        };
+    }
+
+
 
 });
+
+
+
+    //初始化乡镇下拉框
+
+    var townURL = "${ctx}/schooljson/getTownList.action?countryId=${wyTunel.countryId}";
+    var townCombox;
+    $.getJSON(townURL,
+            function(data) {
+                townCombox = $("#townVal").ligerComboBox({
+                    data : data.Rows,
+                    width : 200,
+                    selectBoxWidth: 200,
+                    textField : 'TOWN',
+                    valueField : 'TOWN',
+                    valueFieldID:'town',
+                    onSelected:function(data){
+                        initCombox(data);
+                    }
+                });
+                if('${tunelManual.town}'!=''){
+                    townCombox.selectValue('${tunelManual.town}');
+                }
+                var village='${tunelManual.village}';
+                if(village!=''){
+                    countryCombox.selectValue(village);
+                }
+            }
+    );
+
+
+    //初始化乡镇库
+
+
+
+    //初始化乡镇库
+    function initCombox(town){
+        var url="${ctx}/schooljson/getVillageLib.action?countryId=${wyTunel.countryId}&town="+town;
+        url=encodeURI(url);
+        //初始化树控件
+        $.post(url, function(
+                data, status) {
+            liger.get("villageVal").setData(data.Rows);
+        });
+    }
 
 
 //隧道属性
@@ -146,7 +224,7 @@ $(function() {
                     });
                 },
                errorPlacement : function(error, element) {
-                   var arr=["propVal","covertypeVal","shareflagVal","mchroomflagVal","builddate"];
+                   var arr=["townVal","villageVal","propVal","covertypeVal","shareflagVal","mchroomflagVal","builddate"];
                    var id=element.attr("id");
                    var index=arr.indexOf(id);
                    if(index>-1){
@@ -200,7 +278,7 @@ $(function() {
 <form method="post" name="form1" id="form1" action="${ctx}/businessjson/addTunelManual.action">
     <table cellpadding="0" cellspacing="0" class="tab_1">
         <tr>
-            <td colspan="4"><span class="label label-success">站点基本信息</span></td>
+            <td colspan="4"><span class="label label-success">隧道小区基本信息</span></td>
         </tr>
         <tr>
             <td width="150px">站点名称：</td>
@@ -218,25 +296,17 @@ $(function() {
             <td width="300px">${wyTunel.country.cityName}</td>
         </tr>
         <tr>
-            <td>施主基站名称:</td>
-            <td>${wyTunel.btsName}</td>
-            <td>BTSID:</td>
-            <td>${wyTunel.btsId}</td>
-        </tr>
-        <tr>
-            <td>经度:</td>
-            <td>${wyTunel.longitude}</td>
-            <td>纬度:</td>
-            <td>${wyTunel.latitude}</td>
-        </tr>
-        <tr>
-            <td>站点分级:</td>
+            <td><span style="color: red;">*</span>乡镇:</td>
             <td>
-               ${wyTunel.serviceLevel}
+                <div style="float: left">
+                    <input id="townVal" type="text" class="required"/>
+                    <input name="tunelManual.town" id="town" type="hidden"/>
+                </div>
             </td>
-            <td>信源设备类型:</td>
+            <td>农村:</td>
             <td>
-               ${wyTunel.vendorBtstype}
+                <input id="villageVal" type="text"/>
+                <input name="tunelManual.village" id="village" type="hidden"/>
             </td>
         </tr>
         <tr>

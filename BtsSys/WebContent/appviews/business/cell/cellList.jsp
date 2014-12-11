@@ -51,15 +51,17 @@ $(function(){
     });
     gridObj=$("#maingrid").ligerGrid({
 			columns: [{display:'小区名称',name:'name',width : 200,align:'center'},
-			          {display:'本地网',name:'cityName',width : 80,align:'center'},
-			          {display:'区县',name:'country.cityName',width : 80,align:'center',
+			          {display:'本地网',name:'cityName',width : 70,align:'center'},
+			          {display:'区县',name:'country.cityName',width : 70,align:'center',
 			        	  render: function (row)
 			      	        {
 		      				 return row.country.cityName;
 			      	    	}},
+                      {display:'所属BSC名称',name:'bscName',width : 115,align:'center'},
+                      {display:'网管编号',name:'btsId',width : 55,align:'center'},
 			      	  {display:'是否室分',name:'isIndoor',width : 80,align:'center'},
-			       	  {display:'是否拉远',name:'isRru',width : 120,align:'center'},
-			       	  {display:'是否功分',name:'isGf',width : 100,align:'center',
+			       	  {display:'是否拉远',name:'isRru',width : 80,align:'center'},
+			       	  {display:'是否功分',name:'isGf',width : 80,align:'center',
 			       		 render: function (row){
 			       			if(row.isGf==0){
 		      					return "否";
@@ -67,6 +69,8 @@ $(function(){
 		      					return "是";
 				      		}
 			       		 }},
+                      {display:'PN',name:'pn',width : 60,align:'center'},
+                      {display:'CI',name:'ci',width : 60,align:'center'},
                       {display:'更新时间',name:'updatetimeStr',width : 120,align:'center'},
 			          {display:'手工标识',name:'manualFlag',width : 60,align:'center',
 			        	  render: function (row)
@@ -252,7 +256,7 @@ function f_onCheckAllRow(checked) {
 	  -->
 	<!-- 标题 end-->
 	<div class="content"> 
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr class="tr_inquires">
 		<td width="60px">
 				地区：

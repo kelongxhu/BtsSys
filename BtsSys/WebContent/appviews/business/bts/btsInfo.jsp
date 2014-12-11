@@ -49,13 +49,19 @@
 <div class="tab-pane active" id="tab1">
     <table class="table table-condensed">
         <tr>
-            <th rowspan="9" width="5%"><span class="label label-success">站点基本信息</span></th>
-            <th width="10%">室外覆盖站点名称:</th>
+            <th rowspan="10" width="5%"><span class="label label-success">站点基本信息</span></th>
+            <th width="10%">站点名称:</th>
             <td align="left" width="20%">${bts.name}</td>
             <th width="10%">本地网:</th>
             <td align="left" width="20%">${bts.city.cityName}</td>
             <th width="10%">区县:</th>
             <td align="left" width="20%">${bts.country.cityName}</td>
+        </tr>
+        <tr>
+            <th>乡镇:</th>
+            <td align="left">${btsManual.town}</td>
+            <th>农村:</th>
+            <td align="left">${btsManual.village}</td>
         </tr>
         <tr>
             <th>归属MSC:</th>

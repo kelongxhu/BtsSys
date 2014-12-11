@@ -58,6 +58,12 @@
 
         </tr>
         <tr>
+            <th>乡镇:</th>
+            <td align="left">${bbuManual.town}</td>
+            <th>农村:</th>
+            <td align="left">${bbuManual.village}</td>
+        </tr>
+        <tr>
             <th>经度</th>
             <td>${bbuManual.longitude}</td>
             <th>纬度</th>

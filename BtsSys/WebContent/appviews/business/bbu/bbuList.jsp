@@ -44,21 +44,23 @@ $(function(){
     $("#manualFlag").ligerComboBox({
         width: 100,
         selectBoxWidth: 120,
-//                isShowCheckBox: true,
-//                isMultiSelect: true,
         data: manaFlagData,
         valueFieldID: 'manualFlagVal'
     });
 	
     gridObj=$("#maingrid").ligerGrid({
 			columns: [{display:'纯BBU站点名称',name:'name',width : 150,align:'center'},
-			          {display:'本地网',name:'cityName',width : 60,align:'center'},
-			          {display:'区县',name:'country.cityName',width : 60,align:'center',
+			          {display:'本地网',name:'cityName',width : 55,align:'center'},
+			          {display:'区县',name:'country.cityName',width : 55,align:'center',
 			        	  render: function (row)
 			      	        {
-		      				 return row.country.cityName;
+                                if(row.country){
+                                    return row.country.cityName;
+                                }else{
+                                    return "";
+                                }
 			      	    	}},
-			      	  {display:'编号',name:'bbuNo',width : 40,align:'center'},
+			      	  {display:'编号',name:'bbuNo',width : 30,align:'center'},
                       {display:'施主基站名称',name:'btsName',width : 120,align:'center'},
 			       	  {display:'所属BSC名称',name:'bscName',width : 120,align:'center'},
 			       	  {display:'网管编号',name:'btsId',width : 60,align:'center'},
@@ -90,8 +92,8 @@ $(function(){
 			pageSizeOptions:[50,100],
 			url:'${ctx}/businessjson/bbuData.action',
 			checkbox : true,
-			width: '100%',
-			height:'100%',
+			width: '99.8%',
+			height:'99%',
 			onDblClickRow :bbuInfo,
             onCheckAllRow: f_onCheckAllRow
 		}); 

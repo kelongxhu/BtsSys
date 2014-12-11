@@ -90,7 +90,7 @@
                                 tabid = new Date().getTime();
                                 $(node.target).attr("tabid", tabid);
                             }
-                            f_addTab(tabid, node.data.text, node.data.url);
+                            f_addTab(tabid, node.data.name, node.data.url);
                         }
                     });
                 });
@@ -110,7 +110,13 @@
         }
         function f_addTab(tabid,text, url)
         {
+            var flag=tab.isTabItemExist(tabid);
+            if(flag){
+//                tab.reload(tabid);
+                tab.removeTabItem(tabid);
+            }
             tab.addTabItem({ tabid : tabid,text: text, url: '${ctx}/' + url});
+
         }
         function showHomeTab(){
             var tabId = 'home';

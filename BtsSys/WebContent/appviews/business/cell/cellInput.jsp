@@ -31,16 +31,16 @@ $(function(){
         treeData = eval('(' + treeData + ')');
         for (var i = 0; i <='${isGf-1}'; i++) {
             treeCombox = $("#airModelVal" + i).ligerComboBox({
-                width : 200,
-                selectBoxWidth : 200,
-                selectBoxWidth : 200,
+                width : 240,
+                selectBoxWidth : 240,
                 textField : 'text',
                 valueField : 'id',
                 valueFieldID : 'airModel' + i,
                 treeLeafOnly : true,
                 tree : {
                     data : treeData,
-                    checkbox:false
+                    checkbox:false,
+                    nodeWidth:240
                 }
             });
 
@@ -151,7 +151,8 @@ $(function(){
             });
 
     comBox5.selectValue('${cellManual.borderprovince}');
-	
+
+    /*
 	//初始化农村、乡镇库的树结构
 	var treeCombox2;
 	
@@ -186,7 +187,7 @@ $(function(){
    	    	}
 		});
 	 	
-	 	
+	 	*/
 	 	
 			//初始化道路、隧道的树结构
 			var treeCombox3;
@@ -341,32 +342,32 @@ function back(){
 	     	</tr>
 	     	<tr>
 	     		<th>功分编号</th>
-	     		<td>${cell.isGf}</td>
-	     		<th><span style="color: red;">*</span>室内分布数量</th>
-	     		<td><input name="cellManual.indoornum"  type="text" class="input150 required" value="${cellManual.indoornum}"/></td>
+	     		<td colspan="3">${cell.isGf}</td>
+
 	     	</tr>
 	     	<tr>
+                <th><span style="color: red;">*</span>室内分布数量</th>
+                <td><input name="cellManual.indoornum"  type="text" class="input150 required" value="${cellManual.indoornum}"/></td>
 	     		<th><span style="color: red;">*</span>多载频边界Border扇区</th>
 	     		<td>
 	     			<input name="cellManual.borderflag" type="text" class="input150 required" value="${cellManual.borderflag}"/>
 	     		</td>
-	     		<th><span style="color: red;">*</span>馈线长度</th>
-	     		<td>
-	     			<input name="cellManual.feederlength" id="feederlength3333" type="text" class="input150 required" value="${cellManual.feederlength}"/>
-	     		</td>
-	
 	     	</tr>
 	     	<tr>
+                <th><span style="color: red;">*</span>馈线长度</th>
+                <td>
+                    <input name="cellManual.feederlength" id="feederlength3333" type="text" class="input150 required" value="${cellManual.feederlength}"/>
+                </td>
 	     		<th><span style="color: red;">*</span>扇区覆盖区域类型</th>
 	     		<td>
 	     			<input name="coverareaVal" id="coverareaVal" type="text" class="required">
 	     			<input name="cellManual.coverarea" id="coverarea" type="hidden"/>
 	     		</td>
-	     		<td>农村、乡镇</td>
-	     		<td>
-	     			<input name="countryLibVal" id="countryLibVal" type="text">
-	     			<input name="cellManual.countryLib" id="countryLib" type="hidden"/>
-	     		</td>
+	     		<%--<td>农村、乡镇</td>--%>
+	     		<%--<td>--%>
+	     			<%--<input name="countryLibVal" id="countryLibVal" type="text">--%>
+	     			<%--<input name="cellManual.countryLib" id="countryLib" type="hidden"/>--%>
+	     		<%--</td>--%>
 	     	</tr>
 	     	
 	     	<tr>

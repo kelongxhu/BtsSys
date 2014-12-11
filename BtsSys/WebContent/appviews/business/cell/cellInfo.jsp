@@ -57,6 +57,12 @@
                         <td width="15%">${country.cityName}</td>
                     </tr>
                     <tr>
+                        <th>乡镇</th>
+                        <td>${btsManual.town}</td>
+                        <th>农村</th>
+                        <td>${btsManual.village}</td>
+                    </tr>
+                    <tr>
                         <th>扇区号</th>
                         <td>${ccell.cellid}</td>
                         <th>所属msc名称</th>

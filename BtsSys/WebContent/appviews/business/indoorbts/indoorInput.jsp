@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>室分手工数据</title>
     <%@ include file="/appviews/common/tag.jsp" %>
+    <script type="text/javascript" src="${ctx}/resources/My97DatePicker/WdatePicker.js"></script>
 
     <style type="text/css">
 
@@ -34,6 +35,8 @@
     </style>
 
     <script type="text/javascript">
+        var townCombox=null;
+        var countryCombox=null;
         $(function () {
             var pid = "";
 
@@ -42,16 +45,20 @@
                 var treeData = ajaxData.cityJson;
                 treeData = treeData.replace(/"children":\[\],/g, '');
                 treeData = eval('(' + treeData + ')');
-                treeCombox = $("#countyId").ligerComboBox({
+                treeCombox = $("#countryIdVal").ligerComboBox({
                     width:200,
                     selectBoxWidth:200,
                     selectBoxHeight:200,
                     textField:'text',
                     valueField:'id',
-                    valueFieldID:'indoorManual.countryId',
-                    treeLeafOnly:false,
+                    valueFieldID:'countryId',
+                    treeLeafOnly:true,
                     tree:{
-                        data:treeData
+                        data:treeData,
+                        checkbox:false
+                    },
+                    onSelected:function(data){
+                        if(data!='')initTownCombox(data);
                     }
                 });
                 if ('${indoorManual.countryId}' != "") {
@@ -60,33 +67,14 @@
                         treeCombox.setDisabled(true);
                     }
                 }
-            });
-
-            var treeCombox2;
-            $.post("${ctx}/schooljson/schooljson/initCityTree.action", function (ajaxData, status) {
-                var treeData = ajaxData.cityJson;
-                treeData = treeData.replace(/"children":\[\],/g, '');
-                treeData = eval('(' + treeData + ')');
-                treeCombox2 = $("#cityssId").ligerComboBox({
-                    width:200,
-                    selectBoxWidth:200,
-                    selectBoxHeight:200,
-                    textField:'text',
-                    valueField:'id',
-                    valueFieldID:'indoorManual.cityId',
-                    treeLeafOnly:false,
-                    tree:{
-                        data:treeData
-                    }
-                });
-                if ('${indoorManual.cityId}' != "") {
-                    treeCombox2.setValue('${indoorManual.cityId}');
-                    if ('${addFlag==0}') {
-                        treeCombox2.setDisabled(true);
-                    }
+                if('${indoorManual.town}'!=''){
+                    townCombox.selectValue('${indoorManual.town}');
+                }
+                var village='${indoorManual.village}';
+                if(village!=''){
+                    countryCombox.selectValue(village);
                 }
             });
-
 
             //初始化主设备安装位置
             var typeURL1 = "${ctx}/schooljson/schooljson/cons.action?groupCode=NATURE1";
@@ -167,7 +155,57 @@
             $("#constructionDate").ligerDateEditor({ label: '', format: "yyyy.MM", labelAlign: 'right',initValue: '${indoorManual.constructiondate}',width : 200});
 
 
+            townCombox=$("#town").ligerComboBox( {
+                data : null,
+                width : 200,
+                selectBoxWidth : 200,
+                selectBoxHeight : 200,
+                textField : 'TOWN',
+                valueField : 'TOWN',
+                valueFieldID : 'indoorManual.town',
+                onSelected:function(data){
+                    var countryId=$("#countryId").val();
+                    if(countryId==''){
+                        $.ligerDialog.alert('请选择区县！');
+                        return;
+                    }
+                    initVillageCombox(countryId,data);
+                }
+            });
+            //农村
+            countryCombox=$("#village").ligerComboBox( {
+                data : null,
+                width : 200,
+                selectBoxWidth : 200,
+                selectBoxHeight : 200,
+                textField : 'village',
+                valueField : 'village',
+                valueFieldID : 'indoorManual.village'
+            });
         })
+
+
+
+        function initTownCombox(countryId){
+            var url="${ctx}/schooljson/getTownList.action?countryId="+countryId;
+            url=encodeURI(url);
+            //初始化树控件
+            $.post(url, function(
+                    data, status) {
+                liger.get("town").setData(data.Rows);
+            });
+        }
+
+        //初始化乡镇库
+        function initVillageCombox(countryId,town){
+            var url="${ctx}/schooljson/getVillageLib.action?countryId="+countryId+"&town="+town;
+            url=encodeURI(url);
+            //初始化树控件
+            $.post(url, function(
+                    data, status) {
+                liger.get("village").setData(data.Rows);
+            });
+        }
     </script>
 </head>
 <body data-spy="scroll" data-target=".subnav" data-offset="50">
@@ -191,101 +229,106 @@
       action="${ctx}/businessjson/businessjson/addIndoorManual.action"
       method="post">
 <input type="hidden" id="intId" name="indoorManual.intId" value="${indoorManual.intId}">
-<input type="hidden" name="addFlag" value="${addFlag}">
+<input type="hidden" name="indoorManual.addFlag" value="${addFlag}">
 
 <table cellpadding="0" cellspacing="0" class="tab_1">
 <tr>
-    <td width="20%"><span style="color: red;">*</span>室内分布站点名称：</td>
+    <td width="20%"><span style="color: red;">*</span>室内分布小区名称：</td>
     <td width="30%"><input type="text" id="name" name="indoorManual.name"
                            value="${indoorManual.name}" ${addFlag==0?"readonly":''} class="input150 required"></td>
-    <td width="20%"><span style="color: red;">*</span>本地网：</td>
-    <td width="30%"><input type="text" id="cityssId" name="cityId"></td>
+    <td width="20%"><span style="color: red;">*</span>区县：</td>
+    <td width="30%">
+        <input type="text" id="countryIdVal" class="required">
+        <input type="hidden" id="countryId" name="indoorManual.countryId">
+    </td>
 </tr>
 <tr>
-    <td><span style="color: red;">*</span>所属区县：</td>
+    <td><span style="color: red;">*</span>乡镇：</td>
     <td>
-        <input type="text" id="countyId" name="countyId">
+        <input type="text" id="town" class="required">
     </td>
+    <td>
+        农村
+    </td>
+    <td>
+        <input type="text" id="village" class="required">
+    </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>经度：</td>
     <td>
         <input type="text" id="longitude" name="indoorManual.longitude"
                value="${indoorManual.longitude}" ${addFlag==0?"readonly":''} class="input150 required">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>纬度：</td>
     <td>
         <input type="text" id="latitude" name="indoorManual.latitude"
                value="${indoorManual.latitude}" ${addFlag==0?"readonly":''} class="input150 required">
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>信源设备类型：</td>
     <td>
         <input type="text" id="vendorBtstype" name="indoorManual.vendorBtstype"
                value="${indoorManual.vendorBtstype}" ${addFlag==0?"readonly":''} class="input150 required">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>对应基站所属BSC：</td>
     <td>
         <input type="text" id="bscName" name="indoorManual.bscName"
                value="${indoorManual.bscName}" ${addFlag==0?"readonly":''} class="input150 required">
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>对应基站名称：</td>
     <td>
         <input type="text" id="btsName" name="indoorManual.btsName"
                value="${indoorManual.btsName}" ${addFlag==0?"readonly":''} class="input150 required">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>小区序号：</td>
     <td>
         <input type="text" id="cellSeq" name="indoorManual.cellSeq"
                value="${indoorManual.cellSeq}" ${addFlag==0?"readonly":''} class="input150 required">
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>PN：</td>
     <td>
         <input type="text" id="pn" name="indoorManual.pn"
                value="${indoorManual.pn}" ${addFlag==0?"readonly":''} class="input150 required">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>CI：</td>
     <td>
         <input type="text" id="ci" name="indoorManual.ci"
                value="${indoorManual.ci}" ${addFlag==0?"readonly":''} class="input150 required"/>
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>站点性质一：</td>
     <td>
         <input type="text" id="prop1" name="indoorManual.prop1" class="required"/>
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>站点性质二：</td>
     <td>
         <input type="text" id="prop2" name="indoorManual.prop2"
                class="required">
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>站点分级：</td>
     <td>
         <input type="text" id="grade" name="indoorManual.grade" value="${indoorManual.grade}" class="input150 required">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>覆盖范围描述：</td>
     <td>
         <input type="text" id="coverage" name="indoorManual.coverage" value="${indoorManual.coverage}"
                class="input150 required"/>
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>楼宇数量：</td>
     <td>
         <input type="text" id="buildingNum" name="indoorManual.buildingnum" value="${indoorManual.buildingnum}"
                class="input150 required number">
-    </td>
-</tr>
-<tr>
-    <td><span style="color: red;">*</span>详细地址：</td>
-    <td>
-        <input type="text" id="address" name="indoorManual.address" value="${indoorManual.address}" class="input150 required">
     </td>
     <td><span style="color: red;">*</span>信源设备数量：</td>
     <td>
@@ -294,48 +337,54 @@
     </td>
 </tr>
 <tr>
+    <td><span style="color: red;">*</span>详细地址：</td>
+    <td>
+        <input type="text" id="address" name="indoorManual.address" value="${indoorManual.address}" class="input150 required">
+    </td>
     <td><span style="color: red;">*</span>信源有无监控：</td>
     <td>
         <select id="monitorflag" name="indoorManual.monitorflag" class="input150 required">
-                 <option value="有">有</option>
-                 <option value="无" selected>无</option>
-             </select>
+            <option value="有">有</option>
+            <option value="无" selected>无</option>
+        </select>
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>监控号码：</td>
     <td>
         <input type="text" id="monitorNumber" name="indoorManual.monitornumber" value="${indoorManual.monitornumber}"
                class="input150 required">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>信源设备安装位置：</td>
     <td>
         <input type="text" id="deviceAddress" name="indoorManual.deviceaddress" value="${indoorManual.deviceaddress}"
                class="input150 required">
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>直放站数量：</td>
     <td>
         <input type="text" id="repeaterNum" name="indoorManual.repeaternum" value="${indoorManual.repeaternum}"
                class="input150 required number">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>干放设备数量：</td>
     <td>
         <input type="text" id="dryNum" name="indoorManual.drynum" value="${indoorManual.drynum}" class="input150 required number">
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>分布系统共建共享情况：</td>
     <td>
         <input type="text" id="distributeDesc" name="indoorManual.distributedesc" value="${indoorManual.distributedesc}"
                class="input150 required">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>分布系统集成厂家：</td>
     <td>
         <input type="text" id="distributeFac" name="indoorManual.distributefac" value="${indoorManual.distributefac}"
                class="input150 required">
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>有无机房：</td>
     <td>
         <select id="motorflag" name="indoorManual.motorflag" class="input150 required">
@@ -343,31 +392,29 @@
                   <option value="无" selected>无</option>
               </select>
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>机房面积：</td>
     <td>
         <input type="text" id="motorArea" name="indoorManual.motorarea" value="${indoorManual.motorarea}"
                class="input150 required number">
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>机房产权：</td>
     <td>
         <input type="text" id="motorRight" name="indoorManual.motorright" value="${indoorManual.motorright}"
                class="input150 required">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>对应信源设备的电表安装位置：</td>
     <td>
         <input type="text" id="meterAddress" name="indoorManual.meteraddress" value="${indoorManual.meteraddress}"
                class="input150 required">
     </td>
-    <td><span style="color: red;">*</span>建设时间（年月）：</td>
-    <td>
-        <input type="text" id="constructionDate" name="indoorManual.constructiondate" class="required">
-    </td>
 </tr>
 <tr>
+    <td><span style="color: red;">*</span>建设时间（年月）：</td>
+    <td>
+        <input type="text" name="indoorManual.constructiondate" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy.MM'})" value="${indoorManual.constructiondate}"/>
+    </td>
     <td><span style="color: red;">*</span>是否有WLAN：</td>
     <td>
         <select id="wlanflag" name="indoorManual.wlanflag" class="input150 required">
@@ -375,6 +422,8 @@
             <option value="无" selected>无</option>
         </select>
     </td>
+</tr>
+<tr>
     <td><span style="color: red;">*</span>WLAN与C网是否共享分布系统：</td>
     <td>
         <select id="wlanshare" name="indoorManual.wlanshare" class="input150 required">
@@ -382,37 +431,39 @@
                    <option value="否" selected>否</option>
                </select>
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>WLAN覆盖范围描述：</td>
     <td>
         <input type="text" id="wlanCoverage" name="indoorManual.wlancoverage" value="${indoorManual.wlancoverage}"
                class="input150 required">
     </td>
+</tr>
+<tr>
+
     <td><span style="color: red;">*</span>业主联系人：</td>
     <td>
         <input type="text" id="ownerName" name="indoorManual.ownername" value="${indoorManual.ownername}"
                class="input150 required">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>业主联系电话：</td>
     <td>
         <input type="text" id="ownerPhone" name="indoorManual.ownerphone" value="${indoorManual.ownerphone}"
                class="input150 required">
     </td>
+</tr>
+<tr>
+
     <td><span style="color: red;">*</span>室分监控设备数量：</td>
     <td>
         <input type="text" id="monitorDeviceNum" name="indoorManual.monitordevicenum"
                value="${indoorManual.monitordevicenum}" class="input150 required number">
     </td>
-</tr>
-<tr>
     <td><span style="color: red;">*</span>室分监控设备ID：</td>
     <td>
         <input type="text" id="monitordeviceids" name="indoorManual.monitordeviceids"
                value="${indoorManual.monitordeviceids}" class="input150 required">
     </td>
+</tr>
+<tr>
     <td>备注：</td>
     <td>
         <input type="text" id="remark" name="indoorManual.remark" value="${indoorManual.remark}" class="input150">
@@ -445,8 +496,7 @@
                 </td>
                 <td width="20%"><span style="color: red;">*</span>本地网：</td>
                 <td width="30%">
-                     <input type="text" id="cityName" name="cityName"
-                                         readonly="readonly">
+                     <input type="text" id="cityName" readonly="readonly">
                 </td>
             </tr>
              <tr>
@@ -685,6 +735,7 @@ $(function () {
 
             if ('${indoorManual.cityId}' != "") {
                 cityName.setValue('${indoorManual.cityId}');
+                cityName.setDisabled(true);
             }
         }
     })
@@ -918,6 +969,7 @@ $("#tabs3").click(function () {
         }
         if ('${indoorManual.cityId}' != "") {
             cityName2.setValue('${indoorManual.cityId}');
+            cityName2.setDisabled(true);
         }
     }
 })

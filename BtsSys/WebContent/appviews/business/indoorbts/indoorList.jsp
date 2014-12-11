@@ -45,23 +45,21 @@
             $("#manualFlag").ligerComboBox({
                 width: 100,
                 selectBoxWidth: 120,
-//                isShowCheckBox: true,
-//                isMultiSelect: true,
                 data: manaFlagData,
                 valueFieldID: 'manualFlagVal'
             });
 
             gridObj = $("#maingrid").ligerGrid({
                 columns: [
-                    {display:'室内分布名称',name:'name',width : 200,align:'center'},
-                    {display:'本地网',name:'city.cityName',width : 80,align:'center',
+                    {display:'室内分布小区名称',name:'name',width : 300,align:'center'},
+                    {display:'本地网',name:'city.cityName',width : 55,align:'center',
                         render: function (row) {
                             if (row.city != null) {
                                 return row.city.cityName;
                             }
                         }
                     },
-                    {display:'区县',name:'country.cityName',width : 80,align:'center',
+                    {display:'区县',name:'country.cityName',width : 55,align:'center',
                         render: function (row) {
                             if (row.country != null) {
                                 return row.country.cityName;
@@ -69,9 +67,9 @@
                         }},
                     {display:'施主基站名称',name:'btsName',width : 200,align:'center'},
                     {display:'所属BSC名称',name:'bscName',width : 120,align:'center'},
-                    {display:'设备类型',name:'vendorBtstype',width : 80,align:'center'},
-                    {display:'直放设备数量',name:'repeaternum',width : 80,align:'center'},
-                    {display:'干放设备数量',name:'drynum',width : 80,align:'center'},
+                    {display:'设备类型',name:'vendorBtstype',width : 60,align:'center'},
+                    {display:'直放数量',name:'repeaternum',width : 60,align:'center'},
+                    {display:'干放数量',name:'drynum',width : 60,align:'center'},
                     {display:'手工标识',name:'manualFlag',width : 60,align:'center',
                         render: function (row) {
                             if (row.manualFlag == 0) {
@@ -92,8 +90,8 @@
                 },
                 url:'${ctx}/businessjson/indoorData.action',
                 checkbox : true,
-                width: '100%',
-                height:'100%',
+                width: '99.9%',
+                height:'99%',
                 onCheckAllRow: f_onCheckAllRow
             });
             $("#pageloading").hide();

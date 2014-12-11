@@ -6,7 +6,8 @@
 <title>BBU站点录入</title>
 <%@ include file="/appviews/common/tag.jsp"%>
 <script src="${ctx}/resources/uploadify/jquery.uploadify.js" type="text/javascript"></script>  
- <link rel="stylesheet" type="text/css" href="${ctx}/resources/uploadify/uploadify.css">  
+ <link rel="stylesheet" type="text/css" href="${ctx}/resources/uploadify/uploadify.css">
+<script type="text/javascript" src="${ctx}/resources/My97DatePicker/WdatePicker.js"></script>
     
     <style type="text/css">
 	 #msg {
@@ -37,7 +38,7 @@
 	</style>
 
 <script type="text/javascript">
-
+var countryCombox=null;
 //注册表单验证
 $(function(){
 	var comBox1=$("#sharFlagVal").ligerComboBox({  
@@ -50,7 +51,9 @@ $(function(){
          valueFieldID: 'sharFlag',
         onSelected: function (newvalue){
             if(newvalue=='否'){
-                comBox2.selectValue('无');
+                if(comBox2!=null){
+                    comBox2.selectValue('无');
+                }
             }
         }
      });  
@@ -119,11 +122,81 @@ $(function(){
 	 
 	comBox4.selectValue('${bbuManual.tranIsnode}');
 
+    countryCombox=$("#villageVal").ligerComboBox( {
+        data : null,
+        width : 200,
+        selectBoxWidth : 200,
+        selectBoxHeight : 200,
+        textField : 'village',
+        valueField : 'village',
+        valueFieldID : 'village'
+    });
 
-    $("#openTime").ligerDateEditor({ label: '', format: "yyyy.MM", labelAlign: 'right',initValue: '${bbuManual.openTime}',width : 200});
-    $("#cellUstime").ligerDateEditor({ label: '', format: "yyyy.MM", labelAlign: 'right',initValue: '${bbuManual.cellUstime}',width : 200});
-	 
+
+        if (!Array.prototype.indexOf)
+    {
+        Array.prototype.indexOf = function(elt /*, from*/)
+        {
+            var len = this.length >>> 0;
+            var from = Number(arguments[1]) || 0;
+            from = (from < 0)
+                    ? Math.ceil(from)
+                    : Math.floor(from);
+            if (from < 0)
+                from += len;
+            for (; from < len; from++)
+            {
+                if (from in this &&
+                        this[from] === elt)
+                    return from;
+            }
+            return -1;
+        };
+    }
 });
+
+
+
+//初始化乡镇下拉框
+
+var townURL = "${ctx}/schooljson/getTownList.action?countryId=${bbu.countyId}";
+var townCombox;
+$.getJSON(townURL,
+        function(data) {
+            townCombox = $("#townVal").ligerComboBox({
+                data : data.Rows,
+                width : 200,
+                selectBoxWidth: 200,
+                textField : 'TOWN',
+                valueField : 'TOWN',
+                valueFieldID:'town',
+                onSelected:function(data){
+                    initCombox(data);
+                }
+            });
+            if('${bbuManual.town}'!=''){
+                townCombox.selectValue('${bbuManual.town}');
+            }
+            var village='${bbuManual.village}';
+            if(village!=''){
+                countryCombox.selectValue(village);
+            }
+        }
+);
+
+
+//初始化乡镇库
+
+function initCombox(town){
+    var url="${ctx}/schooljson/getVillageLib.action?countryId=${bbu.countyId}&town="+town;
+    url=encodeURI(url);
+    //初始化树控件
+    $.post(url, function(
+            data, status) {
+        liger.get("villageVal").setData(data.Rows);
+    });
+}
+
 
 
 //初始化主设备安装位置
@@ -181,14 +254,23 @@ $(function() {
 								 window.location.href="${ctx}/business/bbu.action";
 							 });
 						},
-						errorPlacement : function(lable, element) {
-							//element.parent().ligerTip({ content: lable.html(), target: element[0] });
-							lable.appendTo(element.parent());
-						},
-						success : function(lable) {
-						//	lable.ligerHideTip();
-						//	lable.remove();
-						}
+                        errorPlacement : function(error, element) {
+                            var arr=["townVal","installPosVal","sharFlagVal","sharNameVal","tranNetprotectVal","tranIsnodeVal"];
+                            var id=element.prop("id");
+                            var index=arr.indexOf(id);
+                            if(index>-1){
+                                var parent = element.parent().parent().parent();
+                                var div = $("<div style='float: left;'></div>");
+                                div.append(error);
+                                div.insertAfter(parent);
+                            }else{
+                                error.appendTo(element.parent());
+                            }
+                        }
+//						success : function(lable) {
+//						//	lable.ligerHideTip();
+//						//	lable.remove();
+//						}
 					});
 });
 
@@ -289,10 +371,34 @@ function back(){
 				<tr>
 					<td>站网管编号:</td>
 					<td>${bbu.btsId}<input name="bbuManual.btsId" type="hidden" value="${bbu.btsId}"/></td>
-					<td><span style="color: red;">*</span>主设备安装位置:</td>
-					<td><input name="installPosVal" id="installPosVal" type="text" class="required"/>
-					<input name="bbuManual.installPosCode" id="installPos" type="hidden"/></td>
+                    <td width="150px">本地网:</td>
+                    <td width="300px">${bbu.city.cityName}</td>
 				</tr>
+            <tr>
+                <td>区县:</td>
+                <td>${bbu.country.cityName}</td>
+                <td><span style="color: red;">*</span>乡镇:</td>
+                <td>
+                    <div style="float: left">
+                        <input id="townVal" type="text" class="required"/>
+                        <input name="bbuManual.town" id="town" type="hidden"/>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>农村:</td>
+                <td>
+                    <input id="villageVal" type="text"/>
+                    <input name="bbuManual.village" id="village" type="hidden"/>
+                </td>
+                <td>主设备安装位置:</td>
+                <td>
+                    <div style="float: left">
+                    <input name="installPosVal" id="installPosVal" type="text"/>
+                    <input name="bbuManual.installPosCode" id="installPos" type="hidden"/>
+                   </div>
+                </td>
+            </tr>
             <tr>
                 <td><span style="color: red;">*</span>经度:</td>
                 <td>
@@ -306,21 +412,25 @@ function back(){
 				<tr>
 					<td><span style="color: red;">*</span>是否共建共享:</td>
 					<td>
+                        <div style="float: left">
 						<input name="sharFlagVal" id="sharFlagVal" type="text" class="required"/>
 						<input name="bbuManual.sharFlag" id="sharFlag" type="hidden"/>
+                        </div>
 					</td>
 					<td><span style="color: red;">*</span>共享方名称:</td>
 					<td>
+                        <div style="float: left">
 					<input name="sharNameVal" id="sharNameVal" type="text" class="required"/>
 					<input name="bbuManual.sharName" id="sharName" type="hidden"/>
+                       </div>
 					</td>				
 				</tr>
 				<tr>
 					<td><span style="color: red;">*</span>详细地址:</td>
 					<td><input name="bbuManual.address"  type="text" class="input150 required" value="${bbuManual.address}"/></td>
 					<td><span style="color: red;">*</span>基站开通年月:</td>
-					<td><input name="bbuManual.openTime" id="openTime" type="text" class="required"/>
-					<span style="color: red;font-size: 10px;"></span>
+					<td>
+                        <input type="text" name="bbuManual.openTime" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy.MM'})" value="${bbuManual.openTime}"/>
 					</td>
 				</tr>
 				<tr>
@@ -334,30 +444,34 @@ function back(){
 				</tr>
 				<tr>
 					<td><span style="color: red;">*</span>传输拓扑上游站点名称：</td>
-					<td><input name="bbuManual.tranUpsitename" type="text" class="input150 required" value="${bbuManual.tranUpsitename}"/></td>
+					<td>
+                        <input name="bbuManual.tranUpsitename" type="text" class="input150 required" value="${bbuManual.tranUpsitename}"/></td>
 					<td><span style="color: red;">*</span>传输拓扑下游站点名称:</td>
 					<td><input name="bbuManual.tranDownsitename" type="text" class="input150 required" value="${bbuManual.tranDownsitename}"/></td>
 				</tr>
 				<tr>
 					<td><span style="color: red;">*</span>是否在传输环网保护：</td>
 					<td>
+                        <div style="float: left">
 					<input name="tranNetprotectVal" id="tranNetprotectVal" type="text" class="required"/>
 					<input name="bbuManual.tranNetprotect" id="tranNetprotect" type="hidden"/>
+                       </div>
 					</td>
 					
 					
 					
 					<td><span style="color: red;">*</span>是否节点站:</td>
 					<td>
+                        <div style="float: left">
 						<input name="tranIsnodeVal" id="tranIsnodeVal" type="text" class="required"/>
 						<input name="bbuManual.tranIsnode" id="tranIsnode" type="hidden"/>
+                        </div>
 					</td>
 				</tr>
 				<tr>
 					<td><span style="color: red;">*</span>节点站下挂基站数量：</td>
 					<td>
 					<input name="bbuManual.tranSitenum" type="text" class="input150 required number" value="${bbuManual.tranSitenum}"/>
-					<span style="color: red;font-size: 10px;">(注：填整数)</span>
 					</td>
 				</tr>
 				<tr>
@@ -419,8 +533,8 @@ function back(){
 				</tr>
 				<tr>
 					<td>启用时间（年月）：</td>
-					<td><input name="bbuManual.cellUstime" type="text" id="cellUstime"/>
-                    <span style="color: red;font-size: 10px;"></span>
+					<td>
+                        <input type="text" name="bbuManual.cellUstime" class="Wdate input150" onFocus="WdatePicker({dateFmt: 'yyyy.MM'})" value="${bbuManual.cellUstime}"/>
                     </td>
 				</tr>
 				<tr>

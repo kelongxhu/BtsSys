@@ -43,34 +43,33 @@
             $("#types").blur();//避免下拉默认显示光标
 
             gridObj = $("#maingrid").ligerGrid({
-                columns: [
-                    {display:'隧道覆盖站点名称',name:'name',width : 140,align:'center'},
-                    {display:'本地网',name:'cityName',width : 80,align:'center',
-                    render:function(row){
-                        if(row.city){
-                            return row.city.cityName;
-                        }
-                    }},
-                    {display:'区县',name:'countryName',width : 80,align:'center',
-                    render:function(row){
-                        if(row.country){
+                columns: [{display:'小区名称',name:'name',width : 200,align:'center'},
+                    {display:'本地网',name:'cityName',width : 70,align:'center'},
+                    {display:'区县',name:'country.cityName',width : 70,align:'center',
+                        render: function (row)
+                        {
                             return row.country.cityName;
-                        }
-                    }},
-                    {display:'是否拉远',name:'isRru',width : 60,align:'center'},
-                    {display:'施主基站名称',name:'btsName',width : 120,align:'center'},
-                    {display:'所属BSC名称',name:'bscName',width : 120,align:'center'},
-                    {display:'网管编号',name:'btsId',width : 80,align:'center'},
-                    {display:'机房产权',name:'circuitroomOwnership',width : 60,align:'center'},
-                    {display:'传输产权',name:'transOwnership',width : 60,align:'center'},
-                    {display:'维护等级',name:'serviceLevel',width : 60,align:'center'},
-                    {display:'更新时间',name:'updateTimeStr',width : 60,align:'center'},
-                   // {display:'设备类型',name:'vendorBtstype',width : 60,align:'center'},
+                        }},
+                    {display:'所属BSC名称',name:'bscName',width : 115,align:'center'},
+                    {display:'网管编号',name:'btsId',width : 55,align:'center'},
+                    {display:'是否拉远',name:'isRru',width : 80,align:'center'},
+                    {display:'是否功分',name:'isGf',width : 80,align:'center',
+                        render: function (row){
+                            if(row.isGf==0){
+                                return "否";
+                            }else{
+                                return "是";
+                            }
+                        }},
+                    {display:'PN',name:'pn',width : 60,align:'center'},
+                    {display:'CI',name:'ci',width : 60,align:'center'},
+                    {display:'更新时间',name:'updatetimeStr',width : 120,align:'center'},
                     {display:'手工标识',name:'manualFlag',width : 60,align:'center',
-                        render: function (row) {
-                            if (row.manualFlag == 0) {
+                        render: function (row)
+                        {
+                            if(row.manualFlag==0){
                                 return "<span class='label label-important'>未录入</span>";
-                            } else {
+                            }else{
                                 return "<span class='label'>已录入</span>";
                             }
                         }}
@@ -88,10 +87,10 @@
                 showTitle : false,
                 pageSize : 50,
                 pageSizeOptions:[50,100],
-                url:'${ctx}/businessjson/tunelData.action',
+                url:'${ctx}/businessjson/tunelCellData.action',
                 checkbox : true,
-                width: '100%',
-                height:'100%',
+                width: '99.9%',
+                height:'99%',
                 onDblClickRow :tunelInfo,
                 onCheckAllRow: f_onCheckAllRow
             });
@@ -102,6 +101,8 @@
               $("#name").ligerTextBox({width : 200 });
               $("#bscName").ligerTextBox({width : 200 });
               $("#btsId").ligerTextBox({width : 200 });
+              $("#pn").ligerTextBox({width : 200 });
+              $("#ci").ligerTextBox({width : 200 });
         });
         //基站显示信息
         function tunelInfo(data) {
@@ -125,7 +126,6 @@
             });
             //收缩左菜单
             window.location.href = "${ctx}/business/tunelInput.action?intId=" + intId;
-           // parent.$('body').layout('collapse','west');
         }
 
         //编辑页面
@@ -201,7 +201,9 @@
             var name=$("#name").val();
             var bscName = $("#bscName").val();
             var btsId = $("#btsId").val();
-            var url = encodeURI("${ctx}/business/exportTunelInputData.action?countryIds=" + cityIds+"&name="+name+"&bscName="+bscName+"&btsId="+btsId+"&ids="+str+"&checkAllFlag="+checkAllFlag);
+            var pn=$("#pn").val();
+            var ci=$("#ci").val();
+            var url = encodeURI("${ctx}/business/exportTunelInputData.action?countryIds=" + cityIds+"&name="+name+"&bscName="+bscName+"&btsId="+btsId+"&pn="+pn+"&ci="+ci+"&ids="+str+"&checkAllFlag="+checkAllFlag);
             window.location.href = url;
         }
 
@@ -218,13 +220,13 @@
             var name=$("#name").val();
             var bscName = $("#bscName").val();
             var btsId = $("#btsId").val();
+            var pn=$("#pn").val();
+            var ci=$("#ci").val();
             var manualFlag=$("#manualFlagVal").val();
 
-            var url="${ctx}/businessjson/tunelData.action?countryIds="
-                                    + cityIds+"&name="+name+"&bscName="+bscName+"&btsId="+btsId+"&manualFlag="+manualFlag;
-
+            var url="${ctx}/businessjson/tunelCellData.action?countryIds="
+                                    + cityIds+"&name="+name+"&bscName="+bscName+"&btsId="+btsId+"&manualFlag="+manualFlag+"&pn="+pn+"&ci="+ci;
             url=encodeURI(url);
-
             gridObj.setOptions({
                 newPage : 1
             });
@@ -302,6 +304,16 @@
                 <td width="50px" align="left">btsid:</td>
                 <td>
                     <input type="text" id="btsId"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="50px" align="left">PN:</td>
+                <td>
+                    <input type="text" id="pn"/>
+                </td>
+                <td width="50px" align="left">CI:</td>
+                <td>
+                    <input type="text" id="ci"/>
                 </td>
             </tr>
         </table>

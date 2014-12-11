@@ -5,9 +5,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>物理站点录入</title>
 <%@ include file="/appviews/common/tag.jsp" %>
-<script type="text/javascript" src="${ctx}/resources/js/ajaxfileupload.js"></script>
 <script src="${ctx}/resources/uploadify/jquery.uploadify.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/uploadify/uploadify.css">
+<script type="text/javascript" src="${ctx}/resources/My97DatePicker/WdatePicker.js"></script>
 
 <style type="text/css">
     #msg {
@@ -39,7 +39,7 @@
 </style>
 
 <script type="text/javascript">
-
+var countryCombox=null;
 //注册表单验证
 $(function() {
     var comBox1 = $("#sharFlagVal").ligerComboBox({
@@ -52,7 +52,9 @@ $(function() {
         valueFieldID: 'sharFlag',
         onSelected: function (newvalue){
             if(newvalue=='否'){
-                comBox2.selectValue('无');
+                if(comBox2!=null){
+                    comBox2.selectValue('无');
+                }
             }
         }
     });
@@ -109,7 +111,7 @@ $(function() {
 
     //是否节点站
 
-    var comBox4 = $("#tranIsnodeVal").ligerComboBox({
+    var comBox5 = $("#tranIsnodeVal").ligerComboBox({
         data: [
             { text: '是', id: '是' },
             { text: '否', id: '否' }
@@ -119,14 +121,7 @@ $(function() {
         valueFieldID: 'tranIsnode'
     });
 
-    comBox4.selectValue('${btsManual.tranIsnode}');
-
-
-    $("#openTime").ligerDateEditor({ label: '', format: "yyyy.MM", labelAlign: 'right',initValue: '${btsManual.openTime}',width : 200});
-    $("#cellUstime").ligerDateEditor({ label: '', format: "yyyy.MM", labelAlign: 'right',initValue: '${btsManual.cellUstime}',width : 200});
-
-
-
+    comBox5.selectValue('${btsManual.tranIsnode}');
 
 
     //传输上游节点，弹出选择框
@@ -145,7 +140,85 @@ $(function() {
     });
 
 
+      countryCombox=$("#villageVal").ligerComboBox( {
+        data : null,
+        width : 200,
+        selectBoxWidth : 200,
+        selectBoxHeight : 200,
+        textField : 'village',
+        valueField : 'village',
+        valueFieldID : 'village'
+    });
+
+
+
+    if (!Array.prototype.indexOf)
+    {
+        Array.prototype.indexOf = function(elt /*, from*/)
+        {
+            var len = this.length >>> 0;
+            var from = Number(arguments[1]) || 0;
+            from = (from < 0)
+                    ? Math.ceil(from)
+                    : Math.floor(from);
+            if (from < 0)
+                from += len;
+            for (; from < len; from++)
+            {
+                if (from in this &&
+                        this[from] === elt)
+                    return from;
+            }
+            return -1;
+        };
+    }
+
+
+
 });
+
+//初始化乡镇下拉框
+
+var townURL = "${ctx}/schooljson/getTownList.action?countryId=${bts.countyId}";
+var townCombox;
+$.getJSON(townURL,
+        function(data) {
+            townCombox = $("#townVal").ligerComboBox({
+                data : data.Rows,
+                width : 200,
+                selectBoxWidth: 200,
+                textField : 'TOWN',
+                valueField : 'TOWN',
+                valueFieldID:'town',
+                onSelected:function(data){
+                    initCombox(data);
+                }
+            });
+            if('${btsManual.town}'!=''){
+                townCombox.selectValue('${btsManual.town}');
+            }
+            var village='${btsManual.village}';
+            if(village!=''){
+                countryCombox.selectValue(village);
+            }
+        }
+);
+
+
+//初始化乡镇库
+
+
+
+//初始化乡镇库
+function initCombox(town){
+    var url="${ctx}/schooljson/getVillageLib.action?countryId=${bts.countyId}&town="+town;
+    url=encodeURI(url);
+    //初始化树控件
+    $.post(url, function(
+            data, status) {
+        liger.get("villageVal").setData(data.Rows);
+    });
+}
 
 
 //初始化主设备安装位置
@@ -215,11 +288,20 @@ $(function() {
                         }
                         window.location.href = "${ctx}/business/bts.action";
                     });
+                },
+               errorPlacement : function(error, element) {
+                   var arr=["townVal","installPosVal","sharFlagVal","sharNameVal","tranUpsitenameVal","tranDownsitenameVal","tranNetprotectVal","tranIsnodeVal"];
+                   var id=element.prop("id");
+                   var index=arr.indexOf(id);
+                   if(index>-1){
+                       var parent = element.parent().parent().parent();
+                       var div = $("<div style='float: left;'></div>");
+                       div.append(error);
+                       div.insertAfter(parent);
+                   }else{
+                       error.appendTo(element.parent());
+                   }
                 }
-               // errorPlacement : function(lable, element) {
-                    //element.parent().ligerTip({ content: lable.html(), target: element[0] });
-                    //lable.appendTo(element.parent());
-                //},
                // success : function(lable) {
                  //   lable.ligerHideTip();
                  //   lable.remove();
@@ -235,55 +317,6 @@ function add() {
 //返回
 function back() {
     javascript: history.go(-1);
-}
-
-var upDialog;
-
-function up() {
-    upDialog = $.ligerDialog.open({ height : 150,width : 300,target: $("#forUploader"),title : '上传塔桅照片' });
-}
-
-
-function upImage() {
-    var fileName = document.getElementById("file").value;
-    if (fileName.length < 1) {
-        alert("上传图片不能为空!");
-        return;
-    }
-    var type = fileName.substring(fileName.lastIndexOf(".") + 1);
-    if (!(type == "jpg")) {
-        alert("请上传jpg类型图片!");
-        return;
-    }
-
-    $.ajaxFileUpload({
-        url:'${ctx}/schooljson/upImage.action',
-        secureuri:false,
-        fileElementId:'file',
-        dataType: 'text',
-        type: "post",
-        cache: false,
-        timeout: 5000,
-        success: function (data, status) {
-            if (data.indexOf("error") >= 0) {
-                alert("文件上传失败");
-            } else {
-                var mmsDo = eval("(" + data + ")");
-                var sc = mmsDo.result;
-                if (sc == "1") {
-                    address = mmsDo.address;
-                    alert("上传成功");
-                    $("#towerPic").val(address);
-                    upDialog.close();
-                } else {
-                    alert("上传失败");
-                }
-            }
-        },
-        error: function (data, status, e) {
-            alert(e);
-        }
-    });
 }
 
 $(function() {
@@ -440,20 +473,48 @@ function showDownDilog(){
         <tr>
             <td>站网管编号:</td>
             <td>${bts.btsId}<input name="btsManual.btsId" type="hidden" value="${bts.btsId}"/></td>
+            <td width="150px">本地网:</td>
+            <td width="300px">${bts.city.cityName}</td>
+        </tr>
+        <tr>
+            <td>区县:</td>
+            <td>${bts.country.cityName}</td>
+            <td><span style="color: red;">*</span>乡镇:</td>
+            <td>
+                <div style="float: left">
+                <input id="townVal" type="text" class="required"/>
+                <input name="btsManual.town" id="town" type="hidden"/>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>农村:</td>
+            <td>
+                <input id="villageVal" type="text"/>
+                <input name="btsManual.village" id="village" type="hidden"/>
+            </td>
             <td><span style="color: red;">*</span>主设备安装位置:</td>
-            <td><input name="installPosVal" id="installPosVal" type="text" class="required"/>
-                <input name="btsManual.installPos" id="installPos" type="hidden"/></td>
+            <td>
+                <div style="float: left">
+                <input name="installPosVal" id="installPosVal" type="text" class="required"/>
+                <input name="btsManual.installPos" id="installPos" type="hidden"/>
+                </div>
+            </td>
         </tr>
         <tr>
             <td><span style="color: red;">*</span>是否共建共享:</td>
             <td>
+                <div style="float: left">
                 <input name="sharFlagVal" id="sharFlagVal" type="text" class="required"/>
                 <input name="btsManual.sharFlag" id="sharFlag" type="hidden"/>
+                </div>
             </td>
             <td><span style="color: red;">*</span>共享方名称:</td>
             <td>
+                <div style="float: left">
                 <input name="sharNameVal" id="sharNameVal" type="text" class="required"/>
                 <input name="btsManual.sharName" id="sharName" type="hidden"/>
+                </div>
             </td>
         </tr>
         <tr>
@@ -461,9 +522,8 @@ function showDownDilog(){
             <td><input name="btsManual.address" type="text" class="input200 required" value="${btsManual.address}"/>
             </td>
             <td><span style="color: red;">*</span>基站开通年月:</td>
-            <td><input name="btsManual.openTime" id="openTime" type="text" class="required"
-                       value="${btsManual.openTime}"/>
-                <span style="color: red;font-size: 10px"></span>
+            <td>
+                <input type="text" name="btsManual.openTime" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy.MM'})" value="${btsManual.openTime}"/>
             </td>
         </tr>
         <tr>
@@ -479,31 +539,40 @@ function showDownDilog(){
         </tr>
         <tr>
             <td><span style="color: red;">*</span>传输拓扑上游站点名称：</td>
-            <td><input type="text" class="required"
+            <td>
+                <div style="float: left">
+                <input type="text" class="required"
                        value="${btsManual.tranUpsitenameStr}" id="tranUpsitenameVal"/>
                 <input name="btsManual.tranUpsitename" type="hidden"
                      value="${btsManual.tranUpsitename}" id="tranUpsitename"/>
+                </div>
             </td>
             <td><span style="color: red;">*</span>传输拓扑下游站点名称:</td>
             <td>
+              <div style="float: left">
             <input type="text" class="required"
                                    value="${btsManual.tranDownsitenameStr}" id="tranDownsitenameVal"/>
             <input name="btsManual.tranDownsitename" type="hidden"
                                  value="${btsManual.tranDownsitename}" id="tranDownsitename"/>
+              </div>
             </td>
         </tr>
         <tr>
             <td><span style="color: red;">*</span>是否在传输环网保护：</td>
             <td>
+                <div style="float: left">
                 <input name="tranNetprotectVal" id="tranNetprotectVal" type="text" class="required"/>
                 <input name="btsManual.tranNetprotect" id="tranNetprotect" type="hidden"/>
+                </div>
             </td>
 
 
             <td><span style="color: red;">*</span>是否节点站:</td>
             <td>
+                <div style="float: left">
                 <input name="tranIsnodeVal" id="tranIsnodeVal" type="text" class="required"/>
                 <input name="btsManual.tranIsnode" id="tranIsnode" type="hidden"/>
+                </div>
             </td>
         </tr>
         <tr>
@@ -581,7 +650,9 @@ function showDownDilog(){
         </tr>
         <tr>
             <td>启用时间（年月）：</td>
-            <td><input name="btsManual.cellUstime" type="text" id="cellUstime"/></td>
+            <td>
+                <input type="text" name="btsManual.cellUstime" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy.MM'})" value="${btsManual.cellUstime}"/>
+            </td>
         </tr>
         <tr>
             <th colspan="4"><span class="label label-success">塔桅类型</span></th>
