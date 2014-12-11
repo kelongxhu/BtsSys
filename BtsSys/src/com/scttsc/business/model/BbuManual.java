@@ -66,6 +66,9 @@ public class BbuManual extends Entity{
     private BigDecimal longitude;
     private BigDecimal latitude;
 
+    private String town;//乡镇
+    private String village;//农村
+
 
     private Cons mrStrutCons;//机房机构
 
@@ -1315,5 +1318,18 @@ public class BbuManual extends Entity{
 
     public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
+    }
+
+    public String getTown() {
+        return town;
+    }
+    public void setTown(String town) {
+        this.town = town;
+    }
+    public String getVillage() {
+        return village;
+    }
+    public void setVillage(String village) {
+        this.village = village;
     }
 }

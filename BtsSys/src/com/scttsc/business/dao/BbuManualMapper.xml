@@ -58,6 +58,8 @@
     <result column="UPDATEUSER" property="updateuser" jdbcType="DECIMAL" />
     <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL"/>
     <result column="LATITUDE" property="latitude" jdbcType="DECIMAL"/>
+    <result column="TOWN" property="town" jdbcType="VARCHAR" />
+    <result column="VILLAGE" property="village" jdbcType="VARCHAR" />
   </resultMap>
   
  
@@ -68,7 +70,7 @@
     SOUR_CAPA, BOX_MODEL, BOX_FAC, CELL_MODEL, CELL_FAC, CELL_CAPA, CELL_NUM, CELL_POWER, 
     CELL_DUAR, CELL_USTIME, AC_MODEL, AC_FAC, AC_NUM, DH_MODEL, DH_FAC, XF_MODEL, XF_FAC, 
     MR_STRUT, MR_LENGTH, MR_WIDTH, MR_HIGH, MR_OWNER, MR_PIC, WD_TYPE, WD_MODEL, WD_FAC, 
-    WD_GDS, OE_TYPE, OE_MODEL, OE_POWER, OE_FAC, REMARK, UPDATETIME, UPDATEUSER,LONGITUDE,LATITUDE
+    WD_GDS, OE_TYPE, OE_MODEL, OE_POWER, OE_FAC, REMARK, UPDATETIME, UPDATEUSER,LONGITUDE,LATITUDE,TOWN,VILLAGE
   </sql>
   
   
@@ -96,7 +98,7 @@
       MR_PIC, WD_TYPE, WD_MODEL, 
       WD_FAC, WD_GDS, OE_TYPE, 
       OE_MODEL, OE_POWER, OE_FAC, 
-      REMARK, UPDATETIME, UPDATEUSER,LONGITUDE,LATITUDE
+      REMARK, UPDATETIME, UPDATEUSER,LONGITUDE,LATITUDE,TOWN,VILLAGE
       )
     values (#{intId,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{bscName,jdbcType=VARCHAR}, 
       #{btsId,jdbcType=DECIMAL}, #{installPosCode,jdbcType=DECIMAL}, #{sharFlag,jdbcType=VARCHAR}, 
@@ -115,343 +117,11 @@
       #{mrPic,jdbcType=VARCHAR}, #{wdType,jdbcType=VARCHAR}, #{wdModel,jdbcType=VARCHAR}, 
       #{wdFac,jdbcType=VARCHAR}, #{wdGds,jdbcType=VARCHAR}, #{oeType,jdbcType=VARCHAR}, 
       #{oeModel,jdbcType=VARCHAR}, #{oePower,jdbcType=VARCHAR}, #{oeFac,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{updatetime,jdbcType=DATE}, #{updateuser,jdbcType=DECIMAL}, #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}
+      #{remark,jdbcType=VARCHAR}, #{updatetime,jdbcType=DATE}, #{updateuser,jdbcType=DECIMAL}, #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL},
+      #{town},#{village}
       )
   </insert>
-  
-  
-  <insert id="insertSelective">
-    insert into WY_BBU_MANUAL
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="intId != null" >
-        INT_ID,
-      </if>
-      <if test="name != null" >
-        NAME,
-      </if>
-      <if test="bscName != null" >
-        BSC_NAME,
-      </if>
-      <if test="btsId != null" >
-        BTS_ID,
-      </if>
-      <if test="installPosCode != null" >
-        INSTALL_POS_CODE,
-      </if>
-      <if test="sharFlag != null" >
-        SHAR_FLAG,
-      </if>
-      <if test="sharName != null" >
-        SHAR_NAME,
-      </if>
-      <if test="address != null" >
-        ADDRESS,
-      </if>
-      <if test="openTime != null" >
-        OPEN_TIME,
-      </if>
-      <if test="tranModel != null" >
-        TRAN_MODEL,
-      </if>
-      <if test="tranFac != null" >
-        TRAN_FAC,
-      </if>
-      <if test="tranUpsitename != null" >
-        TRAN_UPSITENAME,
-      </if>
-      <if test="tranDownsitename != null" >
-        TRAN_DOWNSITENAME,
-      </if>
-      <if test="tranNetprotect != null" >
-        TRAN_NETPROTECT,
-      </if>
-      <if test="tranIsnode != null" >
-        TRAN_ISNODE,
-      </if>
-      <if test="tranSitenum != null" >
-        TRAN_SITENUM,
-      </if>
-      <if test="sourModel != null" >
-        SOUR_MODEL,
-      </if>
-      <if test="sourFac != null" >
-        SOUR_FAC,
-      </if>
-      <if test="sourModuleModel != null" >
-        SOUR_MODULE_MODEL,
-      </if>
-      <if test="sourModuleNum != null" >
-        SOUR_MODULE_NUM,
-      </if>
-      <if test="sourCapa != null" >
-        SOUR_CAPA,
-      </if>
-      <if test="boxModel != null" >
-        BOX_MODEL,
-      </if>
-      <if test="boxFac != null" >
-        BOX_FAC,
-      </if>
-      <if test="cellModel != null" >
-        CELL_MODEL,
-      </if>
-      <if test="cellFac != null" >
-        CELL_FAC,
-      </if>
-      <if test="cellCapa != null" >
-        CELL_CAPA,
-      </if>
-      <if test="cellNum != null" >
-        CELL_NUM,
-      </if>
-      <if test="cellPower != null" >
-        CELL_POWER,
-      </if>
-      <if test="cellDuar != null" >
-        CELL_DUAR,
-      </if>
-      <if test="cellUstime != null" >
-        CELL_USTIME,
-      </if>
-      <if test="acModel != null" >
-        AC_MODEL,
-      </if>
-      <if test="acFac != null" >
-        AC_FAC,
-      </if>
-      <if test="acNum != null" >
-        AC_NUM,
-      </if>
-      <if test="dhModel != null" >
-        DH_MODEL,
-      </if>
-      <if test="dhFac != null" >
-        DH_FAC,
-      </if>
-      <if test="xfModel != null" >
-        XF_MODEL,
-      </if>
-      <if test="xfFac != null" >
-        XF_FAC,
-      </if>
-      <if test="mrStrut != null" >
-        MR_STRUT,
-      </if>
-      <if test="mrLength != null" >
-        MR_LENGTH,
-      </if>
-      <if test="mrWidth != null" >
-        MR_WIDTH,
-      </if>
-      <if test="mrHigh != null" >
-        MR_HIGH,
-      </if>
-      <if test="mrOwner != null" >
-        MR_OWNER,
-      </if>
-      <if test="mrPic != null" >
-        MR_PIC,
-      </if>
-      <if test="wdType != null" >
-        WD_TYPE,
-      </if>
-      <if test="wdModel != null" >
-        WD_MODEL,
-      </if>
-      <if test="wdFac != null" >
-        WD_FAC,
-      </if>
-      <if test="wdGds != null" >
-        WD_GDS,
-      </if>
-      <if test="oeType != null" >
-        OE_TYPE,
-      </if>
-      <if test="oeModel != null" >
-        OE_MODEL,
-      </if>
-      <if test="oePower != null" >
-        OE_POWER,
-      </if>
-      <if test="oeFac != null" >
-        OE_FAC,
-      </if>
-      <if test="remark != null" >
-        REMARK,
-      </if>
-      <if test="updatetime != null" >
-        UPDATETIME,
-      </if>
-      <if test="updateuser != null" >
-        UPDATEUSER,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="intId != null" >
-        #{intId,jdbcType=DECIMAL},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="bscName != null" >
-        #{bscName,jdbcType=VARCHAR},
-      </if>
-      <if test="btsId != null" >
-        #{btsId,jdbcType=DECIMAL},
-      </if>
-      <if test="installPosCode != null" >
-        #{installPosCode,jdbcType=DECIMAL},
-      </if>
-      <if test="sharFlag != null" >
-        #{sharFlag,jdbcType=VARCHAR},
-      </if>
-      <if test="sharName != null" >
-        #{sharName,jdbcType=VARCHAR},
-      </if>
-      <if test="address != null" >
-        #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="openTime != null" >
-        #{openTime,jdbcType=VARCHAR},
-      </if>
-      <if test="tranModel != null" >
-        #{tranModel,jdbcType=VARCHAR},
-      </if>
-      <if test="tranFac != null" >
-        #{tranFac,jdbcType=VARCHAR},
-      </if>
-      <if test="tranUpsitename != null" >
-        #{tranUpsitename,jdbcType=VARCHAR},
-      </if>
-      <if test="tranDownsitename != null" >
-        #{tranDownsitename,jdbcType=VARCHAR},
-      </if>
-      <if test="tranNetprotect != null" >
-        #{tranNetprotect,jdbcType=VARCHAR},
-      </if>
-      <if test="tranIsnode != null" >
-        #{tranIsnode,jdbcType=VARCHAR},
-      </if>
-      <if test="tranSitenum != null" >
-        #{tranSitenum,jdbcType=DECIMAL},
-      </if>
-      <if test="sourModel != null" >
-        #{sourModel,jdbcType=VARCHAR},
-      </if>
-      <if test="sourFac != null" >
-        #{sourFac,jdbcType=VARCHAR},
-      </if>
-      <if test="sourModuleModel != null" >
-        #{sourModuleModel,jdbcType=VARCHAR},
-      </if>
-      <if test="sourModuleNum != null" >
-        #{sourModuleNum,jdbcType=DECIMAL},
-      </if>
-      <if test="sourCapa != null" >
-        #{sourCapa,jdbcType=DECIMAL},
-      </if>
-      <if test="boxModel != null" >
-        #{boxModel,jdbcType=VARCHAR},
-      </if>
-      <if test="boxFac != null" >
-        #{boxFac,jdbcType=VARCHAR},
-      </if>
-      <if test="cellModel != null" >
-        #{cellModel,jdbcType=VARCHAR},
-      </if>
-      <if test="cellFac != null" >
-        #{cellFac,jdbcType=VARCHAR},
-      </if>
-      <if test="cellCapa != null" >
-        #{cellCapa,jdbcType=DECIMAL},
-      </if>
-      <if test="cellNum != null" >
-        #{cellNum,jdbcType=DECIMAL},
-      </if>
-      <if test="cellPower != null" >
-        #{cellPower,jdbcType=DECIMAL},
-      </if>
-      <if test="cellDuar != null" >
-        #{cellDuar,jdbcType=DECIMAL},
-      </if>
-      <if test="cellUstime != null" >
-        #{cellUstime,jdbcType=VARCHAR},
-      </if>
-      <if test="acModel != null" >
-        #{acModel,jdbcType=VARCHAR},
-      </if>
-      <if test="acFac != null" >
-        #{acFac,jdbcType=VARCHAR},
-      </if>
-      <if test="acNum != null" >
-        #{acNum,jdbcType=DECIMAL},
-      </if>
-      <if test="dhModel != null" >
-        #{dhModel,jdbcType=VARCHAR},
-      </if>
-      <if test="dhFac != null" >
-        #{dhFac,jdbcType=VARCHAR},
-      </if>
-      <if test="xfModel != null" >
-        #{xfModel,jdbcType=VARCHAR},
-      </if>
-      <if test="xfFac != null" >
-        #{xfFac,jdbcType=VARCHAR},
-      </if>
-      <if test="mrStrut != null" >
-        #{mrStrut,jdbcType=DECIMAL},
-      </if>
-      <if test="mrLength != null" >
-        #{mrLength,jdbcType=DECIMAL},
-      </if>
-      <if test="mrWidth != null" >
-        #{mrWidth,jdbcType=DECIMAL},
-      </if>
-      <if test="mrHigh != null" >
-        #{mrHigh,jdbcType=DECIMAL},
-      </if>
-      <if test="mrOwner != null" >
-        #{mrOwner,jdbcType=VARCHAR},
-      </if>
-      <if test="mrPic != null" >
-        #{mrPic,jdbcType=VARCHAR},
-      </if>
-      <if test="wdType != null" >
-        #{wdType,jdbcType=VARCHAR},
-      </if>
-      <if test="wdModel != null" >
-        #{wdModel,jdbcType=VARCHAR},
-      </if>
-      <if test="wdFac != null" >
-        #{wdFac,jdbcType=VARCHAR},
-      </if>
-      <if test="wdGds != null" >
-        #{wdGds,jdbcType=VARCHAR},
-      </if>
-      <if test="oeType != null" >
-        #{oeType,jdbcType=VARCHAR},
-      </if>
-      <if test="oeModel != null" >
-        #{oeModel,jdbcType=VARCHAR},
-      </if>
-      <if test="oePower != null" >
-        #{oePower,jdbcType=VARCHAR},
-      </if>
-      <if test="oeFac != null" >
-        #{oeFac,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="updatetime != null" >
-        #{updatetime,jdbcType=DATE},
-      </if>
-      <if test="updateuser != null" >
-        #{updateuser,jdbcType=DECIMAL},
-      </if>
-    </trim>
-  </insert>
-  
+
   <update id="update">
     update WY_BBU_MANUAL
     <set >
@@ -620,6 +290,12 @@
       <if test="latitude != null">
             LATITUDE = #{latitude,jdbcType=DECIMAL},
       </if>
+     <if test="town!=null">
+         TOWN=#{town},
+     </if>
+     <if test="village!=null">
+         VILLAGE=#{village}
+     </if>
     </set>
      <where>
     	INT_ID = #{intId,jdbcType=DECIMAL}

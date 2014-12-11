@@ -38,6 +38,7 @@ public class Bbu {
     
     //冗余
     private String cityName;//本地网名称
+    private City city;//本地网
     private City country;//区县
 
     private String deleteTimeStr;
@@ -696,4 +697,14 @@ public class Bbu {
     public void setUpdatetimeStr(String updatetimeStr) {
         this.updatetimeStr = updatetimeStr;
     }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+
 }

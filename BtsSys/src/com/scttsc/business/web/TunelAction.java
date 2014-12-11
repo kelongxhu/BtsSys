@@ -6,8 +6,10 @@ import com.scttsc.admin.service.CityManager;
 import com.scttsc.baselibs.model.Cons;
 import com.scttsc.baselibs.model.RoadLib;
 import com.scttsc.baselibs.service.RoadLibManager;
+import com.scttsc.business.model.Cell;
 import com.scttsc.business.model.WyTunel;
 import com.scttsc.business.model.WyTunelManual;
+import com.scttsc.business.service.CellManager;
 import com.scttsc.business.service.TunelManager;
 import com.scttsc.business.service.TunelManualManager;
 import com.scttsc.business.util.Constants;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -39,8 +42,10 @@ public class TunelAction extends BaseAction {
     private CityManager cityManager;
     @Autowired
     private RoadLibManager roadLibManager;
+    @Autowired
+    private CellManager cellManager;
 
-    WyTunel wyTunel;
+    Cell wyTunel;
     Long intId;
     WyTunelManual tunelManual;
 
@@ -71,6 +76,68 @@ public class TunelAction extends BaseAction {
      * @return
      */
     public String tunel(){
+        return SUCCESS;
+    }
+
+
+    public Map<String,Object> buildParamMap(){
+        User user = (User) this.getSession().getAttribute("user");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("deleteFlag", 0);
+        if (!Common.isEmpty(countryIds)) {
+            // 默认权限
+            map.put("countryIds", countryIds);
+        } else {
+            map.put("countryIds", user.getCountryIds());
+        }
+        //查询条件
+        map.put("isIndoor",Constants.CELL_TUNEL);
+        if (!Common.isEmpty(name)) {
+            name = Common.decodeURL(name).trim();
+            map.put("name", "%" + name + "%");
+        }
+        if (!Common.isEmpty(bscName)) {
+            bscName = Common.decodeURL(bscName).trim();
+            map.put("bscName", "%" + bscName + "%");
+        }
+        if (!Common.isEmpty(btsId)) {
+            map.put("btsId", btsId);
+        }
+        if (!Common.isEmpty(ci)) {
+            map.put("ci", ci);
+        }
+        if (!Common.isEmpty(pn)) {
+            map.put("pn", pn);
+        }
+        if(!Common.isEmpty(manualFlag)){
+            map.put("manualFlag",manualFlag);
+        }
+        return map;
+    }
+    /**
+     * 待录入隧道小区数据列表
+     *
+     * @return
+     */
+    public String tunelCellData() {
+        Map<String, Object> map =buildParamMap();
+        int total = 0;
+        List<Cell> list = null;
+        try {
+            total = cellManager.countByMap(map);
+            if (total < pagesize) {
+                page = 1;
+            }
+            map.put("start", (page - 1) * pagesize + 1);
+            map.put("pagesize", pagesize);
+            map.put("sortname", sortname);
+            map.put("sortorder", sortorder);
+            list = cellManager.selectByMap(map);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(),e);
+        }
+        setJsonMapRows(list);
+        setJsonMapTotal(total);
         return SUCCESS;
     }
 
@@ -133,15 +200,15 @@ public class TunelAction extends BaseAction {
      */
     public String tunelInput() {
         try {
-            wyTunel = tunelManager.selectByPrimaryKey(intId);
-            Long cityId=wyTunel.getCityId();
-            Long countryId=wyTunel.getCountyId();
+            wyTunel = cellManager.selectById(intId);
+            BigDecimal cityId=wyTunel.getCityId();
+            BigDecimal countryId=wyTunel.getCountryId();
             if(!Common.isEmpty(cityId)){
-                City city=cityManager.getById(cityId);
+                City city=cityManager.getById(cityId.longValue());
                 wyTunel.setCity(city);
             }
             if(!Common.isEmpty(countryId)){
-                City country=cityManager.getById(countryId);
+                City country=cityManager.getById(countryId.longValue());
                 wyTunel.setCountry(country);
             }
             tunelManual=tunelManualManager.selectByPrimaryKey(intId);
@@ -186,17 +253,17 @@ public class TunelAction extends BaseAction {
      */
     public String tunelInfo(){
         try {
-        wyTunel = tunelManager.selectByPrimaryKey(intId);
-        Long cityId=wyTunel.getCityId();
-        Long countryId=wyTunel.getCountyId();
-        if(!Common.isEmpty(cityId)){
-            City city=cityManager.getById(cityId);
-            wyTunel.setCity(city);
-        }
-        if(!Common.isEmpty(countryId)){
-            City country=cityManager.getById(countryId);
-            wyTunel.setCountry(country);
-        }
+            wyTunel = cellManager.selectById(intId);
+            BigDecimal cityId=wyTunel.getCityId();
+            BigDecimal countryId=wyTunel.getCountryId();
+            if(!Common.isEmpty(cityId)){
+                City city=cityManager.getById(cityId.longValue());
+                wyTunel.setCity(city);
+            }
+            if(!Common.isEmpty(countryId)){
+                City country=cityManager.getById(countryId.longValue());
+                wyTunel.setCountry(country);
+            }
         tunelManual=tunelManualManager.selectByPrimaryKey(intId);
             if(tunelManual!=null){
                 Cons propCons = ConstantUtil.getInstance().getConsByCode("TUNELPROP", tunelManual.getProp() + "");
@@ -657,11 +724,11 @@ public class TunelAction extends BaseAction {
         this.tunelManual = tunelManual;
     }
 
-    public WyTunel getWyTunel() {
+    public Cell getWyTunel() {
         return wyTunel;
     }
 
-    public void setWyTunel(WyTunel wyTunel) {
+    public void setWyTunel(Cell wyTunel) {
         this.wyTunel = wyTunel;
     }
 
@@ -703,5 +770,21 @@ public class TunelAction extends BaseAction {
 
     public void setFileContentType(String fileContentType) {
         this.fileContentType = fileContentType;
+    }
+
+    public Integer getPn() {
+        return pn;
+    }
+
+    public void setPn(Integer pn) {
+        this.pn = pn;
+    }
+
+    public Integer getCi() {
+        return ci;
+    }
+
+    public void setCi(Integer ci) {
+        this.ci = ci;
     }
 }

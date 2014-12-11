@@ -93,7 +93,7 @@
          <action name="index" class="com.scttsc.admin.web.HxMenuAction"
 			method="index">
 			<result name="success" type="dispatcher">
-				/layouts/index2.jsp
+				/layouts/index.jsp
 			</result>
 		</action>
 

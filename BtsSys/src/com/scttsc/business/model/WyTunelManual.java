@@ -61,6 +61,10 @@ public class WyTunelManual {
 
     private String builddateStr;
 
+    //增加
+    private String town;
+    private String village;
+
 
     //冗余
     private Cons propCons;
@@ -305,5 +309,21 @@ public class WyTunelManual {
 
     public void setRoadLib(RoadLib roadLib) {
         this.roadLib = roadLib;
+    }
+
+    public String getTown() {
+        return town;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
     }
 }

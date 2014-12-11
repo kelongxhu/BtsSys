@@ -19,6 +19,7 @@ import com.scttsc.common.util.FileRealPath;
 import com.scttsc.common.util.StringUtil;
 import com.scttsc.common.web.BaseAction;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ import java.util.*;
 
 @SuppressWarnings("serial")
 public class CellAction extends BaseAction {
+
+    Logger LOG=Logger.getLogger(CellAction.class);
 
     private CellManager cellManager;
 
@@ -113,6 +116,7 @@ public class CellAction extends BaseAction {
                 }
             }
             //查询条件
+            map.put("isIndoor","否");
             if (!Common.isEmpty(name)) {
                 name = Common.decodeURL(name).trim();
                 map.put("name", "%" + name + "%");
@@ -144,11 +148,10 @@ public class CellAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = cellManager.selectByMap(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
@@ -172,18 +175,18 @@ public class CellAction extends BaseAction {
                 editFlag = 0;// 增加
             } else {
                 //农村乡镇库
-                Map map = new HashMap();
-                map.put("cellId", intId);
-                map.put("libType", 2);
-                List<CellLib> countryLibs = cellManualManager.selectCellLibByMap(map);
-                String countryLib = "";
-                for (CellLib coutry : countryLibs) {
-                    countryLib += coutry.getLibId() + ";";
-                }
-                if (!Common.isEmpty(countryLib)) {
-                    countryLib = countryLib.substring(0, countryLib.length() - 1);
-                    cellManual.setCountryLib(countryLib);
-                }
+//                Map map = new HashMap();
+//                map.put("cellId", intId);
+//                map.put("libType", 2);
+//                List<CellLib> countryLibs = cellManualManager.selectCellLibByMap(map);
+//                String countryLib = "";
+//                for (CellLib coutry : countryLibs) {
+//                    countryLib += coutry.getLibId() + ";";
+//                }
+//                if (!Common.isEmpty(countryLib)) {
+//                    countryLib = countryLib.substring(0, countryLib.length() - 1);
+//                    cellManual.setCountryLib(countryLib);
+//                }
                 //覆盖道路库
                 String roadLib = "";
                 Map map2 = new HashMap();
@@ -233,7 +236,7 @@ public class CellAction extends BaseAction {
             }
             this.getRequest().setAttribute("isGf", isGf);
         } catch (Exception e) {
-            e.printStackTrace();
+           LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }
@@ -269,7 +272,7 @@ public class CellAction extends BaseAction {
             this.getRequest().setAttribute("cparCell", cparCell);
             addCoverInfo(cellManual);//处理覆盖信息
         } catch (Exception e) {
-            e.printStackTrace();
+           LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }

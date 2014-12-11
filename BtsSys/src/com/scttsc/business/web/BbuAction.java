@@ -14,6 +14,7 @@ import com.scttsc.business.util.Validity;
 import com.scttsc.common.util.*;
 import com.scttsc.common.web.BaseAction;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
@@ -24,6 +25,8 @@ import java.util.*;
 
 @SuppressWarnings("serial")
 public class BbuAction extends BaseAction {
+
+    Logger LOG=Logger.getLogger(BbuAction.class);
 
     private BbuManager bbuManager;
 
@@ -127,7 +130,7 @@ public class BbuAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = bbuManager.selectByExample(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -143,6 +146,10 @@ public class BbuAction extends BaseAction {
     public String bbuInput() {
         try {
             bbu = bbuManager.getById(intId);
+            City city = cityManager.getById(bbu.getCityId().longValue());
+            City country = cityManager.getById(bbu.getCountyId().longValue());
+            bbu.setCity(city);
+            bbu.setCountry(country);
             bbuManual = bbuManualManager.getById(intId);
             if (bbuManual != null) {
                 editFlag = 1;// 编辑页面
@@ -150,7 +157,7 @@ public class BbuAction extends BaseAction {
                 editFlag = 0;// 增加页面
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }
@@ -186,7 +193,7 @@ public class BbuAction extends BaseAction {
 
             this.getRequest().setAttribute("bbuNum", bbuNum + 1);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }
@@ -208,7 +215,7 @@ public class BbuAction extends BaseAction {
             }
             jsonMap.put("result", 1);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             jsonMap.put("result", 0);
         }
         return SUCCESS;

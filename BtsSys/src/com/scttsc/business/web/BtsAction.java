@@ -102,7 +102,8 @@ public class BtsAction extends BaseAction {
                 map.put("name", "%" + name + "%");
             }
             if (!Common.isEmpty(bscName)) {
-                bscName = Common.decodeURL(bscName).trim();
+
+
                 map.put("bscName", "%" + bscName + "%");
             }
             if (!Common.isEmpty(btsId)) {
@@ -142,6 +143,10 @@ public class BtsAction extends BaseAction {
     public String btsInput() {
         try {
             bts = btsManager.getById(intId);
+            City city = cityManager.getById(bts.getCityId().longValue());
+            City country = cityManager.getById(bts.getCountyId().longValue());
+            bts.setCity(city);
+            bts.setCountry(country);
             btsManual = btsManualManager.getById(intId);
             String tranUpsitename;
             String tranDownsitename;

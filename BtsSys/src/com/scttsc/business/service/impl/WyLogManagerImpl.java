@@ -63,7 +63,7 @@ public class WyLogManagerImpl implements WyLogManager {
             logobj = Constants.LOG_OBJ_2;
         } else if (obj instanceof IndoorManual) {
             IndoorManual newObj = (IndoorManual) obj;
-            IndoorManual oldObj = indoorManualDao.selectByPrimaryKey(newObj.getIntId());
+            IndoorManual oldObj = indoorManualDao.selectByPrimaryKey(new Long(newObj.getIntId()));
             if (oldObj != null) {
                 content = oldObj.compareEntity(newObj);
             }

@@ -75,8 +75,6 @@ public class IndoorAction extends BaseAction {
     Integer checkAllFlag;
 
     public String indoor() {
-        User user = (User) this.getSession().getAttribute("user");
-        this.getRequest().setAttribute("user", user);
         return SUCCESS;
     }
 
@@ -215,7 +213,6 @@ public class IndoorAction extends BaseAction {
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
@@ -233,35 +230,40 @@ public class IndoorAction extends BaseAction {
                 indoorManual = indoorManualManager.selectByPrimaryKey(intId);   //编辑
                 if (indoorManual == null) {
                     //增加
-                    Bts bts = btsManager.getById(intId);
-                    List<Ccell> list = cellManager.selectCcellByBtsId(Long.parseLong(bts.getIntId() + ""));
-                    Ccell ccell = null;
-                    if (list != null && list.size() > 0) {
-                        ccell = list.get(0);
+                    //室内分布小区
+                    indoorManual = new IndoorManual();
+                    Cell cell=cellManager.selectById(intId);
+                    //所属物理站点
+                    Bts bts = null;
+                    if(cell!=null){
+                        bts=btsManager.getById(cell.getWyBtsIntId());
+                        indoorManual.setIntId(intId.toString());
+                        indoorManual.setName(cell.getName());
+                        indoorManual.setCityId(cell.getCityId());
+                        indoorManual.setCountryId(cell.getCountryId());
+                        indoorManual.setCellSeq(new BigDecimal(cell.getCellId()));
+                        indoorManual.setPn(new BigDecimal(cell.getPn()));
+                        indoorManual.setCi(new BigDecimal(cell.getCi()));
+                        indoorManual.setBscName(cell.getBscName());
                     }
                     //初始化附带值
-                    indoorManual = new IndoorManual();
-                    indoorManual.setIntId(intId);
-                    indoorManual.setName(bts.getName());
-                    indoorManual.setCityId(bts.getCityId());
-                    indoorManual.setCountryId(bts.getCountyId());
-                    indoorManual.setLongitude(bts.getLongitude());
-                    indoorManual.setLatitude(bts.getLatitude());
-                    indoorManual.setVendorBtstype(bts.getVendorBtstype());
-                    indoorManual.setBscName(bts.getBscName());
-                    indoorManual.setBtsName(bts.getBtsName());
-                    indoorManual.setCellSeq(ccell.getAdjNum());
-                    indoorManual.setPn(ccell.getPn());
-                    indoorManual.setCi(ccell.getCi());
+                    if(bts!=null){
+                        indoorManual.setLongitude(bts.getLongitude());
+                        indoorManual.setLatitude(bts.getLatitude());
+                        indoorManual.setVendorBtstype(bts.getVendorBtstype());
+                        indoorManual.setBtsName(bts.getBtsName());
+                    }
                 } else {
                     //编辑
                 }
                 addFlag = 0;//关联增加
             } else {
+                indoorManual = new IndoorManual();
+                indoorManual.setName("无");
                 addFlag = 1;//手工增加
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
 
         if (indoorManual != null) {
@@ -275,7 +277,7 @@ public class IndoorAction extends BaseAction {
                         this.getRequest().setAttribute("prop1", cons.getCode());
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOG.error(e.getMessage(), e);
                 }
             }
 
@@ -289,7 +291,7 @@ public class IndoorAction extends BaseAction {
                         this.getRequest().setAttribute("prop2", cons.getCode());
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOG.error(e.getMessage(), e);
                 }
             }
         }
@@ -307,29 +309,31 @@ public class IndoorAction extends BaseAction {
         User user = (User) this.getSession().getAttribute("user");
         indoorManual.setUpdateuser(user.getIntId());
         indoorManual.setUpdatetime(new Date());
-        if (!Common.isEmpty(addFlag)) {
-            indoorManual.setAddFlag(addFlag);
-        }
-
         if ("1".equals(indoorManual.getWlanflag())) {
             indoorManual.setWlanflag("是");
         } else {
             indoorManual.setWlanflag("否");
         }
-        //手动增加自动生成intId
-        if (indoorManual.getIntId() == null && indoorManual.getAddFlag() == 1) {
-            StringBuffer s = new StringBuffer();
-            s.append(indoorManual.getName());
-            s.append(indoorManual.getBscName());
-            s.append(indoorManual.getBtsName());
-            int id = s.toString().hashCode();
-            indoorManual.setIntId(new Long(id));
-        }
         try {
-            IndoorManual indoorManual1 = indoorManualManager.selectByPrimaryKey(indoorManual.getIntId());
+            //处理本地网
+            //
+            City city=cityManager.getById(indoorManual.getCountryId().longValue());
+            if(city!=null){
+                indoorManual.setCityId(new BigDecimal(city.getParentId()));
+            }
+            //手动增加自动生成intId
+            if (Common.isEmpty(indoorManual.getIntId()) && indoorManual.getAddFlag() == 1) {
+                StringBuffer s = new StringBuffer();
+                s.append(indoorManual.getName());
+                s.append(indoorManual.getBscName());
+                s.append(indoorManual.getBtsName());
+                int id = s.toString().hashCode();
+                indoorManual.setIntId(id+"");
+            }
+            IndoorManual indoorManual1 = indoorManualManager.selectByPrimaryKey(new Long(indoorManual.getIntId()));
             if (indoorManual1 == null) {
                 //插入
-                indoorManualManager.insertSelective(indoorManual);
+                indoorManualManager.insert(indoorManual);
             } else {
                 //更新
                 indoorManualManager.updateByPrimaryKeySelective(indoorManual);
@@ -406,7 +410,7 @@ public class IndoorAction extends BaseAction {
                 int manualFlag = indoorManual1.getManualFlag().intValue();
                 if (manualFlag != 0) {
                     //补充已经手工填写的数据
-                    IndoorManual indoorManual2 = indoorManualManager.selectByPrimaryKey(indoorManual1.getIntId());
+                    IndoorManual indoorManual2 = indoorManualManager.selectByPrimaryKey(new Long(indoorManual1.getIntId()));
                     if (indoorManual2 != null) {
                         cList.add(StringUtil.null2String(indoorManual2.getProp1()));
                         cList.add(StringUtil.null2String(indoorManual2.getProp2()));
@@ -854,4 +858,6 @@ public class IndoorAction extends BaseAction {
     public void setManualFlag(Integer manualFlag) {
         this.manualFlag = manualFlag;
     }
+
+
 }

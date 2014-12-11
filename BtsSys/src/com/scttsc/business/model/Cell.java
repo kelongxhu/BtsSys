@@ -33,20 +33,11 @@ public class Cell {
     private Long relatedBts;
 
 
+    private City city;//本地网
     private City country;//区县
 
     //一对一关联C_CELL
     private Ccell ccell;
-
-
-    public City getCountry() {
-        return country;
-    }
-
-    public void setCountry(City country) {
-        this.country = country;
-    }
-
 
     private Date deletetime;
 
@@ -59,6 +50,24 @@ public class Cell {
     private String deleteText;
 
     private String updatetimeStr;
+
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public City getCountry() {
+        return country;
+    }
+
+    public void setCountry(City country) {
+        this.country = country;
+    }
+
 
     public Cons getCons() {
         return cons;

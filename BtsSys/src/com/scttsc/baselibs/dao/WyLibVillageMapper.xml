@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.baselibs.dao.WyLibVillageDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.baselibs.model.WyLibVillage" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
+    <result column="COUNTRY_ID" property="countryId" jdbcType="DECIMAL" />
+    <result column="TOWN" property="town" jdbcType="VARCHAR" />
+    <result column="VILLAGE" property="village" jdbcType="VARCHAR" />
+    <result column="VILLAGENAME" property="villageName" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL" />
+    <result column="LATITUDE" property="latitude" jdbcType="DECIMAL" />
+    <result column="cityname" property="cityName" jdbcType="VARCHAR" />
+    <result column="countryname" property="countryName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    u.ID, u.CITY_ID, u.COUNTRY_ID, u.TOWN, u.VILLAGE,u.VILLAGENAME, u.LONGITUDE, u.LATITUDE
+  </sql>
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select* from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List" />,a.name cityname,b.name countryname
+        from WY_LIB_VILLAGE u
+        left join wy_city a on a.id=u.CITY_ID
+        left join wy_city b on b.id=u.COUNTRY_ID
+        )m
+        <where>
+            <if test="countryIds!=null">
+                and COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="town!=null">
+                and TOWN =#{town}
+            </if>
+            <if test="village!=null">
+                and VILLAGE =#{village}
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="countByMap" resultType="int">
+        select count(1) from WY_LIB_VILLAGE
+        <where>
+            <if test="countryIds!=null">
+                and COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="town!=null">
+                and TOWN =#{town}
+            </if>
+            <if test="village!=null">
+                and VILLAGE =#{village}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectTownByCountryId" resultType="hashmap">
+        select DISTINCT town from wy_lib_village where country_id=#{countryId} order by town
+    </select>
+
+    <select id="selectByConds" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from WY_LIB_VILLAGE u
+        <where>
+            1=1
+            <if test="countryId!=null">
+                and u.COUNTRY_ID =#{countryId}
+            </if>
+            <if test="town!=null">
+                and u.TOWN=#{town}
+            </if>
+        </where>
+    </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from WY_LIB_VILLAGE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Long" >
+    delete from WY_LIB_VILLAGE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.scttsc.baselibs.model.WyLibVillage" >
+    <selectKey resultType="Long" keyProperty="id" order="BEFORE" >
+      select WY_LIB_village_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_LIB_VILLAGE (ID, CITY_ID, COUNTRY_ID,
+      TOWN, VILLAGE,VILLAGE_NAME, LONGITUDE,
+      LATITUDE)
+    values (#{id,jdbcType=DECIMAL}, #{cityId,jdbcType=DECIMAL}, #{countryId,jdbcType=DECIMAL},
+      #{town,jdbcType=VARCHAR}, #{village,jdbcType=VARCHAR},#{villageName}, #{longitude,jdbcType=DECIMAL},
+      #{latitude,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.baselibs.model.WyLibVillage" >
+    update WY_LIB_VILLAGE
+    <set >
+      <if test="cityId != null" >
+        CITY_ID = #{cityId,jdbcType=DECIMAL},
+      </if>
+      <if test="counrtyId != null" >
+          COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+      </if>
+      <if test="town != null" >
+        TOWN = #{town,jdbcType=VARCHAR},
+      </if>
+      <if test="village != null" >
+        VILLAGE = #{village,jdbcType=VARCHAR},
+      </if>
+        <if test="villageName != null" >
+        VILLAGENAME = #{villageName,jdbcType=VARCHAR},
+        </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

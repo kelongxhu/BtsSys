@@ -26,28 +26,28 @@
     </javaTypeResolver>
     
     <!-- 数据表对应的model 层  -->
-    <javaModelGenerator targetPackage="com.scttsc.charge.model" targetProject="E:\Workspaces_2013\BtsSys\src">
+    <javaModelGenerator targetPackage="com.scttsc.baselibs.model" targetProject="E:\Workspaces_2013\BtsSys\src">
       <property name="enableSubPackages" value="true" />
       <property name="trimStrings" value="true" />
     </javaModelGenerator>
     
     <!-- sql mapper 隐射配置文件 -->
-    <sqlMapGenerator targetPackage="com.scttsc.charge.dao"  targetProject="E:\Workspaces_2013\BtsSys\src">
+    <sqlMapGenerator targetPackage="com.scttsc.baselibs.dao"  targetProject="E:\Workspaces_2013\BtsSys\src">
       <property name="enableSubPackages" value="true" />
     </sqlMapGenerator>
     
     <!-- 在ibatis2 中是dao层，但在mybatis3中，其实就是mapper接口 -->
-    <javaClientGenerator type="XMLMAPPER" targetPackage="com.scttsc.charge.dao"  targetProject="E:\Workspaces_2013\BtsSys\src">
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.scttsc.baselibs.dao"  targetProject="E:\Workspaces_2013\BtsSys\src">
       <property name="enableSubPackages" value="true" />
     </javaClientGenerator>
     
     <!-- 要对那些数据表进行生成操作，必须要有一个.  domainObjectName="Menu"-->
-    <table tableName="WY_BTS_CHARGE_LIST" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="true"
+    <table tableName="WY_LIB_village" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="true"
                enableInsert="true" enableSelectByPrimaryKey="true" enableCountByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false">
-           <!--<generatedKey column="ID" sqlStatement="select WY_columnedit_interface_SEQ.nextval from dual"/>-->
-            <!--<columnOverride column="ID" javaType="Long"/>-->
+           <generatedKey column="ID" sqlStatement="select WY_LIB_village_SEQ.nextval from dual"/>
+           <columnOverride column="ID" javaType="Long"/>
     </table>
 
   </context>

@@ -82,11 +82,13 @@ public class BtsManual extends Entity {
     private Date updatetime;
     private Long updateuser;
 
+    private String town;//乡镇
+    private String village;//农村
+
 
     Cons installPosCons;  //主设备安装位置
     Cons towerTypeCons;//塔跪类型
     Cons mrStrutCons;//机房结构
-
 
 
     //冗余一个传输上游节点名称
@@ -592,11 +594,11 @@ public class BtsManual extends Entity {
     }
 
     public String getTranUpsitenameStr() {
-        tranUpsitenameStr= tranUpsitename;
+        tranUpsitenameStr = tranUpsitename;
         if (!Common.isEmpty(tranUpsitename)) {
             int index = tranUpsitename.indexOf("_");
             if (index != -1) {
-                String[] tranUpsitenameArr=tranUpsitename.split("_");
+                String[] tranUpsitenameArr = tranUpsitename.split("_");
                 if ("1".equals(tranUpsitenameArr[0]) || "2".equals(tranUpsitenameArr[0]) || "3".equals(tranUpsitenameArr[0])) {
                     tranUpsitenameStr = tranUpsitename.substring(index + 1);
                 }
@@ -610,13 +612,13 @@ public class BtsManual extends Entity {
     }
 
     public String getTranDownsitenameStr() {
-        tranDownsitenameStr=tranDownsitename;
+        tranDownsitenameStr = tranDownsitename;
         if (!Common.isEmpty(tranDownsitename)) {
             int index = tranDownsitename.indexOf("_");
             if (index != -1) {
-                String[] tranDownsitenameArr=tranDownsitename.split("_");
+                String[] tranDownsitenameArr = tranDownsitename.split("_");
                 if ("1".equals(tranDownsitenameArr[0]) || "2".equals(tranDownsitenameArr[0]) || "3".equals(tranDownsitenameArr[0])) {
-                     tranDownsitenameStr = tranDownsitename.substring(index + 1);
+                    tranDownsitenameStr = tranDownsitename.substring(index + 1);
                 }
             }
         }
@@ -629,6 +631,7 @@ public class BtsManual extends Entity {
 
     /**
      * 日志记录忽略字段
+     *
      * @return
      */
     public void setIgFields() {
@@ -643,5 +646,21 @@ public class BtsManual extends Entity {
     @Override
     public String compareEntity(Object object) {
         return super.compareEntity(object);
+    }
+
+    public String getTown() {
+        return town;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
     }
 }

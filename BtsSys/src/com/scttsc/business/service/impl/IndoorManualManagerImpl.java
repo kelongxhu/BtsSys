@@ -49,18 +49,13 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
         return indoorManualDao.deleteByPrimaryKey(intId);
     }
 
-
-    public int insert(IndoorManual record) {
-        return indoorManualDao.insert(record);
-    }
-
     /**
      * 插入室分手工数据
      *
      * @param record
      * @return
      */
-    public void insertSelective(IndoorManual record) throws Exception {
+    public void insert(IndoorManual record) throws Exception {
         if (0 == record.getAddFlag()) {
             //关联增加，将手工标识更新为1
             Map map = new HashMap();
@@ -68,15 +63,10 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
             map.put("manualFlag", 1);
             btsDao.updateByMap(map);
         }
-        indoorManualDao.insertSelective(record);
+        indoorManualDao.insert(record);
 
         //切入日志
         wyLogManager.insertLog(record);
-    }
-
-
-    public int insertSelectiveMap(Map record) {
-        return indoorManualDao.insertSelectiveMap(record);
     }
 
 
@@ -89,16 +79,6 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
         return indoorManualDao.selectByPrimaryKey(intId);
     }
 
-
-    public int updateByExampleSelective(IndoorManual record) {
-        return indoorManualDao.updateByExampleSelective(record);
-    }
-
-
-    public int updateByExample(IndoorManual record) {
-        return indoorManualDao.updateByExample(record);
-    }
-
     /**
      * 更新室分手工数据
      * @param record
@@ -107,11 +87,6 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
     public int updateByPrimaryKeySelective(IndoorManual record) throws Exception{
         wyLogManager.updateLog(record);
         return indoorManualDao.updateByPrimaryKeySelective(record);
-    }
-
-
-    public int updateByPrimaryKey(IndoorManual record) {
-        return indoorManualDao.updateByPrimaryKey(record);
     }
 
     /**
@@ -129,10 +104,10 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
         if (intId != null) {
             IndoorManual indoorManual=new IndoorManual();
             BeanUtils.populate(indoorManual, record);
-            IndoorManual obj = selectByPrimaryKey(indoorManual.getIntId());
+            IndoorManual obj = selectByPrimaryKey(new Long(indoorManual.getIntId()));
             if (obj == null) {
                 //插入
-                insertSelective(indoorManual);
+                insert(indoorManual);
             } else {
                 //覆盖更新
                 updateByPrimaryKeySelective(indoorManual);

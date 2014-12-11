@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class IndoorManual extends Entity {
 
-    private Long intId;
+    private String intId;
 
     private String name;
 
@@ -95,6 +95,11 @@ public class IndoorManual extends Entity {
 
     private Integer addFlag;
 
+    //增加字段
+    private String town;
+    private String village;
+
+
     City city;
     City country;
 
@@ -126,11 +131,11 @@ public class IndoorManual extends Entity {
         this.addFlag = addFlag;
     }
 
-    public Long getIntId() {
+    public String getIntId() {
         return intId;
     }
 
-    public void setIntId(Long intId) {
+    public void setIntId(String intId) {
         this.intId = intId;
     }
 
@@ -1023,5 +1028,21 @@ public class IndoorManual extends Entity {
 
     public void setManualFlag(BigDecimal manualFlag) {
         this.manualFlag = manualFlag;
+    }
+
+    public String getTown() {
+        return town;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
     }
 }

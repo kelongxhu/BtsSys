@@ -278,7 +278,24 @@
             </result>
         </action>
 
+        <!--乡镇农村库-->
+        <action name="villageData" class="com.scttsc.baselibs.web.VillageLibAction" method="villageData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
 
+        <action name="getTownList" class="com.scttsc.baselibs.web.VillageLibAction" method="getTownList">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="getVillageLib" class="com.scttsc.baselibs.web.VillageLibAction" method="getVillageLib">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
 
 
     </package>
@@ -461,6 +478,14 @@
         <action name="exportBlindData" class="com.scttsc.baselibs.web.BlindAction" method="exportBlindData">
         </action>
 
+        <!--乡镇农村库-->
+        <action name="village" class="com.scttsc.baselibs.web.VillageLibAction" method="village">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/village/villageList.jsp
+            </result>
+        </action>
+
+        <action name="exportVillageData" class="com.scttsc.baselibs.web.VillageLibAction" method="exportVillageData"/>
 
     </package>
 

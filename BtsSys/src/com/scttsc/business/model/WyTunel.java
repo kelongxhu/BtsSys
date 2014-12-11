@@ -55,6 +55,8 @@ public class WyTunel {
 
     private Integer redlineFlag;
 
+
+
     //冗余字段
 
     private String updateTimeStr;//更新時間
@@ -309,4 +311,5 @@ public class WyTunel {
     public void setDeleteTimeStr(String deleteTimeStr) {
         this.deleteTimeStr = deleteTimeStr;
     }
+
 }

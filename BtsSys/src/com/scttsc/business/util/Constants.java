@@ -37,4 +37,9 @@ public class Constants {
     public static String[] BTS_TYPE = {"室外覆盖站点", "纯BBU站点", "室内覆盖站点", "隧道覆盖站点"};
 
 
+    public static String CELL_NOT_INDOOR="否";
+    public static String CELL_INDOOR="是";
+    public static String CELL_TUNEL="隧";
+
+
 }

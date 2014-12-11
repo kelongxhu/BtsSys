@@ -12,21 +12,13 @@ public interface IndoorManualManager {
 
     int deleteByPrimaryKey(BigDecimal intId);
 
-    int insert(IndoorManual record);
-
-    void insertSelective(IndoorManual record)throws Exception;
+    public void insert(IndoorManual record) throws Exception;
 
     List<IndoorManual> selectByExample(IndoorManual example);
 
     IndoorManual selectByPrimaryKey(Long intId);
 
-    int updateByExampleSelective(IndoorManual record);
-
-    int updateByExample(IndoorManual record);
-
     int updateByPrimaryKeySelective(IndoorManual record)throws Exception;
-
-    int updateByPrimaryKey(IndoorManual record);
 
     public void importInsert(Map record) throws Exception;
 

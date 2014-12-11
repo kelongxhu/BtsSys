@@ -98,6 +98,9 @@
             <if test="intId!=null">
                 and int_id = #{intId,jdbcType=DECIMAL}
             </if>
+            <if test="isIndoor!=null">
+                and IS_INDOOR=#{isIndoor}
+            </if>
             <if test="name!=null">
                 and NAME like #{name,jdbcType=VARCHAR}
             </if>
@@ -192,6 +195,9 @@
             </if>
             <if test="cityId!=null">
                 and CITY_ID in(${cityId})
+            </if>
+            <if test="isIndoor!=null">
+                and IS_INDOOR=#{isIndoor}
             </if>
             <if test="name!=null">
                 and NAME like #{name,jdbcType=VARCHAR}

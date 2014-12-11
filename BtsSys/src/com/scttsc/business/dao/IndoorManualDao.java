@@ -14,45 +14,35 @@ public interface IndoorManualDao {
 
     int insert(IndoorManual record);
 
-    int insertSelective(IndoorManual record);
-
-    int insertSelectiveMap(Map record);
-
     List<IndoorManual> selectByExample(IndoorManual example);
 
     IndoorManual selectByPrimaryKey(Long intId);
 
-    int updateByExampleSelective(IndoorManual record);
-
-    int updateByExample(IndoorManual record);
-
     int updateByPrimaryKeySelective(IndoorManual record);
-
-    int updateByPrimaryKeySelectiveMap(Map record);
-
-    int updateByPrimaryKey(IndoorManual record);
 
     //室分查询
     List<IndoorManual> selectByMap(Object map) throws Exception;
 
     int countByMap(Object map) throws Exception;
 
-    List<Map> selectExportIndoorDataByMap(Object map)throws Exception;
+    List<Map> selectExportIndoorDataByMap(Object map) throws Exception;
 
     //通过条件查询室分数据
-    List<IndoorManual> selectByCons(Object map)throws Exception;
+    List<IndoorManual> selectByCons(Object map) throws Exception;
 
     //未录入直放站的室分手工数据
-    List<IndoorManual> selectByNoInputErect(Object map)throws Exception;
+    List<IndoorManual> selectByNoInputErect(Object map) throws Exception;
+
     //未录入干放站的室分手工数据
-    List<IndoorManual> selectByNoInputDry(Object map)throws Exception;
+    List<IndoorManual> selectByNoInputDry(Object map) throws Exception;
 
-    List<Map> selectIndoorDataGroupByCoulmns(Map map)throws Exception;
+    List<Map> selectIndoorDataGroupByCoulmns(Map map) throws Exception;
 
-    int countIndoorDataGroupByColumns(Map map)throws Exception;
+    int countIndoorDataGroupByColumns(Map map) throws Exception;
 
-    int updateByInterface(Map map)throws Exception;
+    int updateByInterface(Map map) throws Exception;
+
     //更新intID
-    int updateByIntID(Map map)throws Exception;
+    int updateByIntID(Map map) throws Exception;
 
 }

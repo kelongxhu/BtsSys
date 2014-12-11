@@ -11,8 +11,6 @@ public interface BbuManualDao {
 	int insert(BbuManual record) throws Exception;
 
 	int update(Object record) throws Exception;
-	
-	int insertSelective(Object map)throws Exception;
 
     int updateByInterface(Map record)throws Exception;
 

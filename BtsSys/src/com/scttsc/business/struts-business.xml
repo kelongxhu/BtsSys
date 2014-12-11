@@ -324,7 +324,14 @@
         </action>
 
 
-        <!--隧道錄入-->
+        <!--隧道小区錄入-->
+        <action name="tunelCellData" class="com.scttsc.business.web.TunelAction"
+                method="tunelCellData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
         <action name="tunelData" class="com.scttsc.business.web.TunelAction"
                 method="tunelData">
             <result name="success" type="json">
