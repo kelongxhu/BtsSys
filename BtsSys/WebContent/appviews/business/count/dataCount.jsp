@@ -6,8 +6,8 @@
 <%@ include file="/appviews/common/tag.jsp" %>
 <script type="text/javascript">
 var gridObj = null;
+var typeCombox2=null;
 $(function() {
-
     var treeCombox;
     //初始化地市
     //初始化树控件
@@ -16,7 +16,7 @@ $(function() {
         treeData = treeData.replace(/"children":\[\],/g, '');
         treeData = eval('(' + treeData + ')');
         treeCombox = $("#cityId").ligerComboBox({
-            width : 180,
+            width : 150,
             selectBoxWidth : 180,
             selectBoxHeight : 200,
             textField : 'text',
@@ -28,36 +28,38 @@ $(function() {
             }
         });
     });
-
     //数据类型
-    var comBox1 = $("#typeIdVal").ligerComboBox({
+    var typeCombox = $("#typeIdVal").ligerComboBox({
         data: [
-            { text: '室外覆盖站点', id: '1' },
-            { text: 'BBU设备', id: '2' },
-            { text: '室内分布站点', id: '3' },
-            { text: '小区', id: '4' },
-            {text:'纯BBU',id:'5'},
-            {text:'隧道覆盖站点',id:'6'}
+            { text: '物理站点', id: '1' },
+            { text: '小区', id: '2' }
         ],
-        width : 180,
+        width : 150,
         selectBoxWidth: 180,
         valueFieldID: 'typeId',
+        onSelected:function(value, text) {
+            initTypeCombox2(value);
+        }
+    });
+    //数据类型
+        typeCombox2 = $("#subTypeIdVal").ligerComboBox({
+        data:null,
+        width : 150,
+        selectBoxWidth: 180,
+        valueFieldID: 'subTypeId',
         onSelected:function(value, text) {
             $("#cnName").val("");
             $("#enName").val("");
             $("#ids").val("");
         }
     });
-    comBox1.selectValue('1');
-
+    typeCombox.selectValue('1');
     //统计字段
 
     $("#cnName").ligerComboBox({
         onBeforeOpen: selectColmns,
         width:200
     });
-
-
     $("#toptoolbar").ligerToolBar({
           items: [
               { text: '导出', click: exportData , icon:'add'}
@@ -65,21 +67,40 @@ $(function() {
       });
 
     toSearch();
-
-
 });
+   function initTypeCombox2(data){
+       var btsData= [
+           { text: '室外覆盖站点', id: '1' },
+           { text: 'BBU设备', id: '2' },
+           { text: '室内分布站点', id: '7' },
+           {text:'纯BBU',id:'5'},
+           {text:'隧道覆盖站点',id:'8'}
+       ];
+       var cellData= [
+           { text: '室外覆盖小区', id: '4' },
+           { text: '室内分布小区', id: '3' },
+           { text: '隧道覆盖小区', id: '6' }
+       ];
+       if(data==1){
+           liger.get("subTypeIdVal").setData(btsData);
+           typeCombox2.selectValue('1');
+       }else if(data==2) {
+           liger.get("subTypeIdVal").setData(cellData);
+           typeCombox2.selectValue('7');
+       }
+   }
    //选择统计字段
    function selectColmns(){
-      var typeId=$("#typeId").val();
+      var typeId=$("#subTypeId").val();
       if(typeId==5){
           typeId=2;
       }
-      var typeName=$("#typeIdVal").val();
+      var typeName=$("#subTypeIdVal").val();
       var title="选择"+typeName+"所需统计字段";
        var m=$.ligerDialog({
-			height : 500,
+			height : 520,
 			url : '${ctx}/business/selectColumns.action?typeId='+typeId,
-			width : 1080,
+			width : 1060,
 			name : 'columns',
 			title : title,
 			showMax:true,
@@ -123,8 +144,8 @@ $(function() {
               //checkbox : true,
               sortName: null,
               sortOrder: null,
-              width: '100%',
-              height:'99.9%'
+              width: '99.9%',
+              height:'99%'
           });
            gridObj.loadData();
           $("#pageloading").hide();
@@ -143,7 +164,7 @@ function exportData(){
 function toSearch() {
     var ids=$("#ids").val();
     var cityIds=$("#cityIdVal").val();
-    var typeId=$("#typeId").val();
+    var typeId=$("#subTypeId").val();
     var url="${ctx}/businessjson/countResult.action?ids="+ids+"&cityIds="+cityIds+"&typeId="+typeId;
     buildGrid(url);
 }
@@ -169,11 +190,18 @@ function toSearch() {
                     <input type="hidden" id="cityIdVal"/>
                 </td>
                 <td width="60px">
-                    数据类型：
+                    统计类型：
                 </td>
                 <td width="150px">
                     <input type="text" id="typeIdVal"/>
                     <input type="hidden" id="typeId"/>
+                </td>
+                <td width="60px">
+                    数据类型：
+                </td>
+                <td width="150px">
+                    <input type="text" id="subTypeIdVal"/>
+                    <input type="hidden" id="subTypeId"/>
                 </td>
 
                 <td width="60px">统计字段</td>
