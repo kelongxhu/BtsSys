@@ -180,50 +180,23 @@
         </where>
     </select>
 
-
-    <select id="selectAssoByMap" resultMap="BaseResultMap_2">
-      select <include refid="Base_Column_List_2"/> ,
-      <include refid="com.scttsc.business.dao.WyTunelManualDao.Base_Column_List_2"/> ,x.name cityname,y.name countryname from wy_tunel t
-      left join wy_tunel_manual tm
-      on t.int_id=tm.int_id
-      left join wy_city x
-      on t.city_id=x.id
-      left join wy_city y
-      on t.county_id=y.id
-        <where>
-            <if test="countryIds!=null">
-                and COUNTY_ID in(${countryIds})
-            </if>
-            <if test="name!=null">
-                and name like #{name}
-            </if>
-            <if test="bscName!=null">
-                and BSC_NAME like #{bscName}
-            </if>
-            <if test="btsId!=null">
-                and BTS_ID = #{btsId,jdbcType=DECIMAL}
-            </if>
-            <if test="deleteFlag!=null">
-                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
-            </if>
-            order by t.city_id,t.county_id
-        </where>
-    </select>
-
-
     <select id="selectByConds" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from WY_TUNEL u
         <where>
             1=1
+            <if test="countryId!=null">
+                and u.COUNTY_ID=#{countryId}
+            </if>
             <if test="name!=null">
-                and name=#{namejdbcType=VARCHAR}
+                and u.name=#{namejdbcType=VARCHAR}
             </if>
             <if test="deleteFlag!=null">
-                and delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+                and u.delete_flag = #{deleteFlag,jdbcType=DECIMAL}
             </if>
         </where>
+        order by u.BSC_NAME, u.BTS_ID
     </select>
 
 
@@ -537,7 +510,9 @@
     </update>
 
 
-    <!--自定义分组统计-->
+
+
+    <!--自定义隧道覆盖站点分组统计-->
 
     <select id="selectWyTunelGroupByColumns" resultType="hashmap" parameterType="map">
         select * from (select m.*,ROWNUM RN from
@@ -547,22 +522,102 @@
             ${sqlsb}
         </if>,count(1) num
         FROM
-        (SELECT <include refid="Base_Column_List"/>,
+        (SELECT <include refid="Base_Column_List"/>, e.name cityname,f.name countryname FROM wy_tunel u
+        LEFT JOIN wy_city e ON
+        u.city_id=e.id
+        LEFT JOIN wy_city f ON
+        u.county_id=f.id
+        WHERE u.delete_flag=0
+        )
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and city_id in(${cityIds})
+            </if>
+        </where>
+        GROUP BY
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>
+        <choose>
+            <when test="orderCondition != null">
+                order by ${orderCondition}
+            </when>
+            <otherwise>
+                order by NUM DESC
+            </otherwise>
+        </choose>
+        )m
+        <where>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="countWytunelGroupByColumns" resultType="int">
+        select count(1) from(
+        SELECT
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>,count(1) num
+        FROM
+        (SELECT <include refid="Base_Column_List"/>, e.name cityname,f.name countryname FROM wy_tunel u
+        LEFT JOIN wy_city e ON
+        u.city_id=e.id
+        LEFT JOIN wy_city f ON
+        u.county_id=f.id
+        WHERE u.delete_flag=0
+        )
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and city_id in(${cityIds})
+            </if>
+        </where>
+        GROUP BY
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>
+        )
+    </select>
+
+
+
+    <!--自定义隧道覆盖小区分组统计-->
+
+    <select id="selectWyTunelCellGroupByColumns" resultType="hashmap" parameterType="map">
+        select * from (select m.*,ROWNUM RN from
+        (
+        SELECT
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>,count(1) num
+        FROM
+        (SELECT u.INT_ID,u.CITY_ID,u.NAME,u.BSC_NAME,u.BTSID,u.PN,u.CI,u.IS_RRU,u.IS_GF,
         <include refid="com.scttsc.business.dao.WyTunelManualDao.Base_Column_List"/>,
-        e.name cityname,f.name countryname,o.NAME PROP_NAME,p.NAME SHAREFLAG_NAME,q.NAME ROAD_ID_NAME FROM wy_tunel u
+        e.name cityname,f.name countryname,o.NAME PROP_NAME,p.NAME SHAREFLAG_NAME,q.NAME ROAD_ID_NAME FROM wy_cell u
         LEFT JOIN wy_tunel_manual tm
         ON tm.int_id=u.int_id
         LEFT JOIN wy_city e ON
         u.city_id=e.id
         LEFT JOIN wy_city f ON
-        u.county_id=f.id
+        u.country_id=f.id
         LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TUNELPROP')o
         ON o.code=tm.PROP
         LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TUNEL_SHARE')p
         ON p.code=tm.SHAREFLAG
         LEFT JOIN(select ID,NAME from wy_lib_road where delete_flag=0)q
         ON q.ID=tm.ROAD_ID
-        WHERE u.delete_flag=0
+        WHERE u.delete_flag=0 and u.is_indoor='隧'
         )
         <where>
             1=1
@@ -599,29 +654,29 @@
 
 
 
-    <select id="countWytunelGroupByColumns" resultType="int">
+    <select id="countWytunelCellGroupByColumns" resultType="int">
         select count(1) from(
         SELECT
         <if test="sqlsb!=null">
             ${sqlsb}
         </if>,count(1) num
         FROM
-        (SELECT <include refid="Base_Column_List"/>,
+        (SELECT u.INT_ID,u.CITY_ID,u.NAME,u.BSC_NAME,u.BTSID,u.PN,u.CI,u.IS_RRU,u.IS_GF,
         <include refid="com.scttsc.business.dao.WyTunelManualDao.Base_Column_List"/>,
-        e.name cityname,f.name countryname,o.NAME PROP_NAME,p.NAME SHAREFLAG_NAME,q.NAME ROAD_ID_NAME FROM wy_tunel u
+        e.name cityname,f.name countryname,o.NAME PROP_NAME,p.NAME SHAREFLAG_NAME,q.NAME ROAD_ID_NAME FROM wy_cell u
         LEFT JOIN wy_tunel_manual tm
         ON tm.int_id=u.int_id
         LEFT JOIN wy_city e ON
         u.city_id=e.id
         LEFT JOIN wy_city f ON
-        u.county_id=f.id
+        u.country_id=f.id
         LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TUNELPROP')o
         ON o.code=tm.PROP
         LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='TUNEL_SHARE')p
         ON p.code=tm.SHAREFLAG
         LEFT JOIN(select ID,NAME from wy_lib_road where delete_flag=0)q
         ON q.ID=tm.ROAD_ID
-        WHERE u.delete_flag=0
+        WHERE u.delete_flag=0 and u.is_indoor='隧'
         )
         <where>
             1=1

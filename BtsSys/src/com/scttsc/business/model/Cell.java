@@ -36,6 +36,8 @@ public class Cell {
     private City city;//本地网
     private City country;//区县
 
+    private WyTunelManual wyTunelManual;//隧道小区手工数据
+
     //一对一关联C_CELL
     private Ccell ccell;
 
@@ -542,5 +544,14 @@ public class Cell {
 
     public void setUpdatetimeStr(String updatetimeStr) {
         this.updatetimeStr = updatetimeStr;
+    }
+
+
+    public WyTunelManual getWyTunelManual() {
+        return wyTunelManual;
+    }
+
+    public void setWyTunelManual(WyTunelManual wyTunelManual) {
+        this.wyTunelManual = wyTunelManual;
     }
 }

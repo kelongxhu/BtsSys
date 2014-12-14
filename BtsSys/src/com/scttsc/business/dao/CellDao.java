@@ -72,4 +72,6 @@ public interface CellDao {
      */
     List<Map> selectCellCountGroupByCity(@Param(value="isIndoor") String isIndoor,@Param(value="manualFlag") Integer manualFlag) throws Exception;
 
+    List<Cell> selectCellAssoTunelByMap(Map<String,Object> record)throws Exception;
+
 }

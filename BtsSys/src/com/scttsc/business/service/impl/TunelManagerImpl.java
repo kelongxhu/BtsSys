@@ -33,10 +33,6 @@ public class TunelManagerImpl implements TunelManager {
         return wyTunelDao.selectByPrimaryKey(intId);
     }
 
-    public List<WyTunel> selectAssoByMap(Map record) throws Exception {
-        return wyTunelDao.selectAssoByMap(record);
-    }
-
     public int updateByMap(Map record) throws Exception {
         return wyTunelDao.updateByMap(record);
     }
@@ -50,5 +46,26 @@ public class TunelManagerImpl implements TunelManager {
             return tunelList.get(0);
         }
         return null;
+    }
+
+
+    public List<WyTunel> selectByConds(Map record) throws Exception {
+        return wyTunelDao.selectByConds(record);
+    }
+
+    public List<Map> selectWyTunelGroupByColumns(Map record) throws Exception {
+        return wyTunelDao.selectWyTunelGroupByColumns(record);
+    }
+
+    public int countWytunelGroupByColumns(Map record) throws Exception {
+        return wyTunelDao.countWytunelGroupByColumns(record);
+    }
+
+    public List<Map> selectWyTunelCellGroupByColumns(Map record) throws Exception {
+        return wyTunelDao.selectWyTunelCellGroupByColumns(record);
+    }
+
+    public int countWytunelCellGroupByColumns(Map record) throws Exception {
+        return wyTunelDao.countWytunelCellGroupByColumns(record);
     }
 }

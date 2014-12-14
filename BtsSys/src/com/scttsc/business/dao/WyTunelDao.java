@@ -24,8 +24,6 @@ public interface WyTunelDao {
 
     int countByMap(Map record) throws Exception;
 
-    List<WyTunel> selectAssoByMap(Map record) throws Exception;
-
     List<WyTunel> selectByConds(Map record) throws Exception;
 
     int updateByMap(Map record) throws Exception;
@@ -33,6 +31,10 @@ public interface WyTunelDao {
     List<Map> selectWyTunelGroupByColumns(Map record) throws Exception;
 
     int countWytunelGroupByColumns(Map record) throws Exception;
+
+    List<Map> selectWyTunelCellGroupByColumns(Map record)throws Exception;
+
+    int countWytunelCellGroupByColumns(Map record)throws Exception;
 
     List<Map> selectTunelCountGroupByCity(@Param(value = "manualFlag") Integer manualFlag) throws Exception;
 }

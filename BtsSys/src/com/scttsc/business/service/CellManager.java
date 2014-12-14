@@ -64,6 +64,8 @@ public interface CellManager {
 
     int countCellGroupByColumns(Map map) throws Exception;
 
+    List<Cell> selectCellAssoTunelByMap(Map<String,Object> record)throws Exception;
+
 
 
 }

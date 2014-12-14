@@ -13,7 +13,11 @@ public interface TunelManager {
     List<WyTunel> selectByMap(Map record)throws Exception;
     int countByMap(Map record)throws Exception;
     WyTunel selectByPrimaryKey(Long intId);
-    List<WyTunel> selectAssoByMap(Map record)throws Exception;
     int updateByMap(Map record)throws Exception;
     WyTunel selectByName(String name)throws Exception;
+    List<WyTunel> selectByConds(Map record)throws Exception;
+    List<Map> selectWyTunelGroupByColumns(Map record) throws Exception;
+    int countWytunelGroupByColumns(Map record) throws Exception;
+    List<Map> selectWyTunelCellGroupByColumns(Map record)throws Exception;
+    int countWytunelCellGroupByColumns(Map record)throws Exception;
 }

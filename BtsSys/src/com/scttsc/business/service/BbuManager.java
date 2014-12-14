@@ -31,6 +31,8 @@ public interface BbuManager {
      */
     Bbu selectByName(String name)throws Exception;
 
+    List<Bbu> selectByMap(Object map) throws Exception;
+
 
 
 }

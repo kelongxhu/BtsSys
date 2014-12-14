@@ -102,8 +102,7 @@ public class BtsAction extends BaseAction {
                 map.put("name", "%" + name + "%");
             }
             if (!Common.isEmpty(bscName)) {
-
-
+                bscName = Common.decodeURL(bscName).trim();
                 map.put("bscName", "%" + bscName + "%");
             }
             if (!Common.isEmpty(btsId)) {
@@ -131,9 +130,61 @@ public class BtsAction extends BaseAction {
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
+
+    /**
+     * 室内分布站点
+     * @return
+     */
+    public String indoorBtsData() {
+        User user = (User) this.getSession().getAttribute("user");
+        Map<String, Object> map = new HashMap<String, Object>();
+        int total = 0;
+        List<Bts> list = null;
+        try {
+            if (!Common.isEmpty(countryIds)) {
+                //查询数据权限
+                map.put("countryIds", countryIds);
+            } else {
+                //默认数据权限，queryFlag=all,代表取消用户数据权限，显示全部
+                if (Common.isEmpty(queryFlag)) {
+                    map.put("countryIds", user.getCountryIds());
+                }
+            }
+            //查询条件
+            if (!Common.isEmpty(name)) {
+                name = Common.decodeURL(name).trim();
+                map.put("name", "%" + name + "%");
+            }
+            if (!Common.isEmpty(bscName)) {
+                bscName = Common.decodeURL(bscName).trim();
+                map.put("bscName", "%" + bscName + "%");
+            }
+            if (!Common.isEmpty(btsId)) {
+                btsId = Common.decodeURL(btsId).trim();
+                map.put("btsId", btsId);
+            }
+            //固定条件
+            map.put("isIndoor", "是");//物理站点
+            map.put("deleteFlag", 0);//在用
+            total = btsManager.countByConds(map);
+            if (total < pagesize) {
+                page = 1;
+            }
+            map.put("start", (page - 1) * pagesize + 1);
+            map.put("pagesize", pagesize);
+            map.put("sortname", sortname);
+            map.put("sortorder", sortorder);
+            list = btsManager.getByConds(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        setJsonMapRows(list);
+        setJsonMapTotal(total);
+        return SUCCESS;
+    }
+
 
     /**
      * 物理站点录入页面

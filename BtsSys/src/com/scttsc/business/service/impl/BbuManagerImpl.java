@@ -37,6 +37,9 @@ public class BbuManagerImpl implements BbuManager {
         return bbuDao.getById(id);
     }
 
+    public List<Bbu> selectByMap(Object map) throws Exception {
+        return bbuDao.selectByMap(map);
+    }
 
     public int updateByMap(Object record) {
         return bbuDao.updateByMap(record);

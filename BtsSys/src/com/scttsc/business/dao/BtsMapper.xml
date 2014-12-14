@@ -242,6 +242,7 @@
                 and u.NAME=#{wybtsName,jdbcType=VARCHAR}
             </if>
         </where>
+             order by u.BSC_NAME,u.BTS_ID
     </select>
 
 
@@ -494,6 +495,87 @@
           </if>
         )
     </select>
+
+
+    <!--自定义隧道覆盖站点分组统计-->
+
+    <select id="selectWyIndoorBtsGroupByColumns" resultType="hashmap" parameterType="map">
+        select * from (select m.*,ROWNUM RN from
+        (
+        SELECT
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>,count(1) num
+        FROM
+        (SELECT <include refid="Base_Column_List"/>, e.name cityname,f.name countryname FROM wy_bts u
+        LEFT JOIN wy_city e ON
+        u.city_id=e.id
+        LEFT JOIN wy_city f ON
+        u.county_id=f.id
+        WHERE u.delete_flag=0 and u.is_indoor='是'
+        )
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and city_id in(${cityIds})
+            </if>
+        </where>
+        GROUP BY
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>
+        <choose>
+            <when test="orderCondition != null">
+                order by ${orderCondition}
+            </when>
+            <otherwise>
+                order by NUM DESC
+            </otherwise>
+        </choose>
+        )m
+        <where>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="countWyIndoorBtsGroupByColumns" resultType="int">
+        select count(1) from(
+        SELECT
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>,count(1) num
+        FROM
+        (SELECT <include refid="Base_Column_List"/>, e.name cityname,f.name countryname FROM wy_bts u
+        LEFT JOIN wy_city e ON
+        u.city_id=e.id
+        LEFT JOIN wy_city f ON
+        u.county_id=f.id
+        WHERE u.delete_flag=0 and u.is_indoor='是'
+        )
+        <where>
+            1=1
+            <if test="cityIds!=null">
+                and city_id in(${cityIds})
+            </if>
+        </where>
+        GROUP BY
+        <if test="sqlsb!=null">
+            ${sqlsb}
+        </if>
+        )
+    </select>
+
+
 
     <select id="selectWyBtsByMap" resultType="hashmap">
         select int_id from wy_bts

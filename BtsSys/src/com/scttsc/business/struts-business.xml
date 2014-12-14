@@ -12,7 +12,13 @@
                 <param name="root">jsonMap</param>
             </result>
         </action>
-
+        <!--室内分布站点-->
+        <action name="indoorBtsData" class="com.scttsc.business.web.BtsAction"
+                method="indoorBtsData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
         <action name="abandonBtsData" class="com.scttsc.business.web.AbandonAction"
                 method="data">
             <result name="success" type="json">
@@ -423,6 +429,13 @@
             </result>
         </action>
 
+        <!--小区查询-->
+        <action name="cellQueryData" class="com.scttsc.business.web.CellQueryAction"
+                method="cellQueryData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
 
     </package>
 
@@ -764,8 +777,13 @@
                 /appviews/business/findback/mateCellData.jsp
             </result>
         </action>
-
-
+        <!--小区查询-->
+        <action name="cellQuery" class="com.scttsc.business.web.CellQueryAction"
+                method="cellQuery">
+            <result name="success" type="dispatcher">
+                /appviews/business/dataquery/cellQuery.jsp
+            </result>
+        </action>
 
     </package>
 

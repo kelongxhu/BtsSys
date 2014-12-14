@@ -43,10 +43,4 @@ public interface TunelManualManager {
 
 
     FindBackReponse findManualData(List<String> ids);
-
-    List<Map> selectWyTunelGroupByColumns(Map record)throws Exception;
-
-    int countWytunelGroupByColumns(Map record)throws Exception;
-
-
 }

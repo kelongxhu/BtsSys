@@ -20,9 +20,15 @@ public interface BtsDao {
 
     List<Map> selectExportDataByMap(Object map) throws Exception;
 
+    //统计室外覆盖站点
     List<Map> selectBtsGroupByColumns(Object record) throws Exception;
 
     int countBtsGroupByColumns(Object record) throws Exception;
+
+    //统计室分站点
+    List<Map> selectWyIndoorBtsGroupByColumns(Map<String,Object> param)throws Exception;
+
+    int countWyIndoorBtsGroupByColumns(Map<String,Object> param)throws Exception;
 
     List<Map> selectWyBtsByMap(Map map) throws Exception;
 

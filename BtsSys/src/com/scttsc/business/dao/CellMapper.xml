@@ -19,6 +19,39 @@
         <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
         <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL"/>
         <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR"/>
+        <result column="cityname" property="city.cityName" jdbcType="VARCHAR"/>
+        <result column="countryname" property="country.cityName" jdbcType="VARCHAR"/>
+        <result column="c_name" property="cons.name" jdbcType="VARCHAR"/>
+        <result column="BTSID" property="btsId" jdbcType="DECIMAL"/>
+        <result column="CELLID" property="cellId" jdbcType="DECIMAL"/>
+        <result column="BSC_NAME" property="bscName" jdbcType="VARCHAR"/>
+        <result column="CI" property="ci" jdbcType="DECIMAL"/>
+        <result column="PN" property="pn" jdbcType="DECIMAL"/>
+        <result column="LAC" property="lac" jdbcType="DECIMAL"/>
+        <result column="DO_CELL" property="doCell" jdbcType="DECIMAL"/>
+        <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL"/>
+    </resultMap>
+
+
+
+    <resultMap id="BaseResultMap_tunel" type="com.scttsc.business.model.Cell">
+        <result column="INT_ID" property="intId" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
+        <result column="COUNTRY_ID" property="countryId" jdbcType="DECIMAL"/>
+        <result column="IS_INDOOR" property="isIndoor" jdbcType="VARCHAR"/>
+        <result column="IS_RRU" property="isRru" jdbcType="VARCHAR"/>
+        <result column="IS_GF" property="isGf" jdbcType="VARCHAR"/>
+        <result column="IS_OR" property="isOr" jdbcType="DECIMAL"/>
+        <result column="IS_RR" property="isRr" jdbcType="DECIMAL"/>
+        <result column="IS_SR" property="isSr" jdbcType="DECIMAL"/>
+        <result column="WY_BTS_INT_ID" property="wyBtsIntId" jdbcType="DECIMAL"/>
+        <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL"/>
+        <result column="MANUAL_FLAG" property="manualFlag" jdbcType="DECIMAL"/>
+        <result column="DELETETIME" property="deletetime" jdbcType="DATE"/>
+        <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
+        <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL"/>
+        <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR"/>
         <result column="cityname" property="cityName" jdbcType="VARCHAR"/>
         <result column="countryname" property="country.cityName" jdbcType="VARCHAR"/>
         <result column="c_name" property="cons.name" jdbcType="VARCHAR"/>
@@ -30,11 +63,7 @@
         <result column="LAC" property="lac" jdbcType="DECIMAL"/>
         <result column="DO_CELL" property="doCell" jdbcType="DECIMAL"/>
         <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL"/>
-
-        <!--一对一的c_cell表
-        <association column="INT_ID" property="ccell" javaType="com.scttsc.business.model.Ccell"
-             select="com.scttsc.business.dao.CcellDao.selectById"/>
-        -->
+        <association column="INT_ID" property="wyTunelManual" resultMap="com.scttsc.business.dao.WyTunelManualDao.BaseResultMap_2"/>
     </resultMap>
 
 
@@ -369,15 +398,13 @@
                a.btsid,a.ci,a.pn,(case(a.do_cell) when 0 then '1X' when 1 then 'DO' when 2 then '1X+DO' end)
                do_cell,a.is_indoor,a.is_rru,a.is_gf,d.name
                WY_BTS_NAME,b.bts_name,d.longitude,d.latitude,c.celltype,b.capacity,b.pn_inc,b.numfa,b.numfa_do,
-               d.vendor_btstype,g.tower_type,g.tower_high,c.feederlength FROM wy_cell a
+               d.vendor_btstype,c.feederlength FROM wy_cell a
                LEFT JOIN c_cell b
                ON a.int_id=b.int_id
                LEFT JOIN wy_cell_manual c
                ON a.int_id=c.int_id
                LEFT JOIN wy_bts d
                ON a.WY_BTS_INT_ID=d.int_id
-               LEFT JOIN wy_bts_manual g
-               ON a.wy_bts_int_id=g.int_id
                LEFT JOIN wy_city e
                ON a.city_id=e.id
                LEFT JOIN wy_city f
@@ -444,6 +471,40 @@
          </where>
         group by city_id order by city_id
     </select>
+
+
+    <!--导出隧道小区-->
+
+    <select id="selectCellAssoTunelByMap" resultMap="BaseResultMap_tunel">
+        select <include refid="Base_Column_List1"/> ,
+        <include refid="com.scttsc.business.dao.WyTunelManualDao.Base_Column_List_2"/> ,x.name cityname,y.name countryname from wy_cell u
+        left join wy_tunel_manual tm
+        on u.int_id=tm.int_id
+        left join wy_city x
+        on u.city_id=x.id
+        left join wy_city y
+        on u.country_id=y.id
+        <where>
+            u.is_indoor='隧'
+            <if test="countryIds!=null">
+                and u.COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and u.name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and u.BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and u.BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="deleteFlag!=null">
+                and u.delete_flag = #{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            order by u.city_id,u.country_id
+        </where>
+    </select>
+
 
 
 </mapper>

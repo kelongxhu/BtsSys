@@ -10,6 +10,7 @@ import com.scttsc.common.util.Common;
 import com.scttsc.common.util.ExcelUtil;
 import com.scttsc.common.util.StringUtil;
 import com.scttsc.common.web.BaseAction;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +25,8 @@ import java.util.*;
  * Time: 上午10:37
  */
 public class TemplateAction extends BaseAction {
+    Logger LOG =Logger.getLogger(TemplateAction.class);
+
     private TemplateManager templateManager;
     private BtsManager btsManager;
     private BbuManager bbuManager;
@@ -88,11 +91,10 @@ public class TemplateAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = templateManager.selectByMap(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
@@ -120,7 +122,7 @@ public class TemplateAction extends BaseAction {
             }
             editFlag = (template == null ? 0 : 1);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }
@@ -154,7 +156,7 @@ public class TemplateAction extends BaseAction {
                 configs = templateManager.selectColumnsByConds(map);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(configs);
         return SUCCESS;
@@ -179,7 +181,7 @@ public class TemplateAction extends BaseAction {
             }
             templateList = templateManager.selectTemplateByMap(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(templateList);
         return SUCCESS;
@@ -203,7 +205,7 @@ public class TemplateAction extends BaseAction {
 
             jsonMap.put("result", 1);//操作成功
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             jsonMap.put("result", 0);//操作失败
         }
         return SUCCESS;
@@ -224,7 +226,7 @@ public class TemplateAction extends BaseAction {
             configList = templateManager.selectColumnsByConds(map);
             coulmnsExport(configList);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return null;
     }
@@ -261,8 +263,8 @@ public class TemplateAction extends BaseAction {
             switch (typeId.intValue()) {
                 case 1:
                     //bts
-                    fileName = "物理站点数据.xls";
-                    sheetName = "物理站点信息";
+                    fileName = "室外覆盖站点数据.xls";
+                    sheetName = "室外覆盖站点信息";
                     datas = setBtsData(configList);
                     break;
                 case 2:
@@ -271,13 +273,13 @@ public class TemplateAction extends BaseAction {
                     datas = setBbuData(configList);
                     break;
                 case 3:
-                    fileName = "室分数据.xls";
-                    sheetName = "室分站点信息";
+                    fileName = "室内分布小区数据.xls";
+                    sheetName = "室内分布小区信息";
                     datas = setIndoorData(configList);
                     break;
                 case 4:
-                    fileName = "小区信息.xls";
-                    sheetName = "小区信息";
+                    fileName = "室外覆盖小区信息.xls";
+                    sheetName = "室外覆盖小区信息";
                     datas = setCellData(configList);
                     break;
             }
@@ -327,7 +329,7 @@ public class TemplateAction extends BaseAction {
                 datas.add(cellObj);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return datas;
     }
@@ -366,7 +368,7 @@ public class TemplateAction extends BaseAction {
                 datas.add(cellObj);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return datas;
     }
@@ -466,7 +468,7 @@ public class TemplateAction extends BaseAction {
                 datas.add(cellObj);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return datas;
     }
@@ -517,7 +519,7 @@ public class TemplateAction extends BaseAction {
                 datas.add(cellObj);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return datas;
     }
@@ -572,7 +574,7 @@ public class TemplateAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
     }
 
@@ -593,7 +595,7 @@ public class TemplateAction extends BaseAction {
                 coulmnsExport(configList);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }
@@ -629,7 +631,7 @@ public class TemplateAction extends BaseAction {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         jsonMap.put("ids",sb1.toString());
         jsonMap.put("enName",sb2.toString());

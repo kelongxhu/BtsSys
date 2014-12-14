@@ -150,12 +150,4 @@ public class TunelManualManagerImpl implements TunelManualManager {
         }
         return reponse;
     }
-
-    public List<Map> selectWyTunelGroupByColumns(Map record) throws Exception {
-        return wyTunelDao.selectWyTunelGroupByColumns(record);
-    }
-
-    public int countWytunelGroupByColumns(Map record) throws Exception {
-        return wyTunelDao.countWytunelGroupByColumns(record);
-    }
 }

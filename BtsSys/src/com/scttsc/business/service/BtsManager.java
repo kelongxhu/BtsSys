@@ -27,6 +27,11 @@ public interface BtsManager {
 
     int countBtsGroupByColumns(Object record) throws Exception;
 
+    //按字段统计室分
+    List<Map> selectWyIndoorBtsGroupByColumns(Map<String,Object> param)throws Exception;
+
+    int countWyIndoorBtsGroupByColumns(Map<String,Object> param)throws Exception;
+
     List<Map> selectWyBtsByMap(Map map) throws Exception;
 
     /**

@@ -6,13 +6,17 @@ import com.scttsc.admin.service.CityManager;
 import com.scttsc.business.model.Bbu;
 import com.scttsc.business.model.Bts;
 import com.scttsc.business.model.Cell;
+import com.scttsc.business.model.WyTunel;
 import com.scttsc.business.service.BbuManager;
 import com.scttsc.business.service.BtsManager;
 import com.scttsc.business.service.CellManager;
+import com.scttsc.business.service.TunelManager;
+import com.scttsc.charge.util.StringUtil;
 import com.scttsc.common.util.Common;
 import com.scttsc.common.web.BaseAction;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -26,14 +30,16 @@ import java.util.Map;
  * 数据树展示
  */
 public class QueryAction extends BaseAction {
-
+    @Autowired
     private BtsManager btsManager;
-
+    @Autowired
     private CityManager cityManager;
-
+    @Autowired
     private BbuManager bbuManager;
-
+    @Autowired
     private CellManager cellManager;
+    @Autowired
+    private TunelManager tunelManager;
 
     private Long id;   //ID
 
@@ -87,29 +93,36 @@ public class QueryAction extends BaseAction {
                 //物理站点、纯BBU、室内分布站点
                 JSONObject oJson = new JSONObject();
                 oJson.put("id", 1);
-                oJson.put("text", "物理站点");
+                oJson.put("text", "室外覆盖站点");
                 oJson.put("treeLevel", treeLevel + 1);
                 oJson.put("isParent", true);
                 oJson.put("country", country);
                 JSONObject oJson2 = new JSONObject();
                 oJson2.put("id", 2);
-                oJson2.put("text", "纯BBU");
+                oJson2.put("text", "纯BBU站点");
                 oJson2.put("treeLevel", treeLevel + 1);
                 oJson2.put("isParent", true);
                 oJson2.put("country", country);
                 JSONObject oJson3 = new JSONObject();
                 oJson3.put("id", 3);
-                oJson3.put("text", "室内分布");
+                oJson3.put("text", "室内分布站点");
                 oJson3.put("treeLevel", treeLevel + 1);
                 oJson3.put("isParent", true);
                 oJson3.put("country", country);
+                JSONObject oJson4 = new JSONObject();
+                oJson4.put("id", 4);
+                oJson4.put("text", "隧道覆盖站点");
+                oJson4.put("treeLevel", treeLevel + 1);
+                oJson4.put("isParent", true);
+                oJson4.put("country", country);
                 arrayValue.put(oJson);
                 arrayValue.put(oJson2);
                 arrayValue.put(oJson3);
+                arrayValue.put(oJson4);
             } else if (treeLevel == 4) {
                 switch (id.intValue()) {
                     case 1:
-                        //物理站点
+                        //室外覆盖站点
                         Map siteSeach=new HashMap();
                         siteSeach.put("countryIds",country);
                         siteSeach.put("deleteFlag",0);//在用
@@ -118,7 +131,7 @@ public class QueryAction extends BaseAction {
                         for(Bts bts:btss){
                             JSONObject oJson=new JSONObject();
                             oJson.put("id",bts.getIntId());
-                            oJson.put("text",bts.getName());
+                            oJson.put("text",bts.getBscName()+"_"+bts.getBtsId()+"_"+bts.getName());
                             oJson.put("treeLevel",treeLevel+1);
                             oJson.put("isParent",true);
                             oJson.put("country",country);
@@ -137,15 +150,15 @@ public class QueryAction extends BaseAction {
                     case 2:
                         //纯BBU
                         Map seach = new HashMap();
-                        seach.put("countryIds", country); //区县
+                        seach.put("countryId", country); //区县
                         seach.put("isShare", 0);    //纯BBU
                         seach.put("bbuType", "1,2");
                         seach.put("deleteFlag", 0); //在用
-                        List<Bbu> bbus = bbuManager.selectBbuByConds(seach);
+                        List<Bbu> bbus = bbuManager.selectByMap(seach);
                         for (Bbu bbu : bbus) {
                             JSONObject oJson = new JSONObject();
                             oJson.put("id", bbu.getIntId());
-                            oJson.put("text", bbu.getName());
+                            oJson.put("text", bbu.getBscName()+"_"+bbu.getBtsId()+"_"+bbu.getName());
                             oJson.put("treeLevel", treeLevel + 1);
                             //oJson.put("isParent", true);
                             oJson.put("country", country);
@@ -171,9 +184,9 @@ public class QueryAction extends BaseAction {
                         for(Bts bts:indoors){
                             JSONObject oJson=new JSONObject();
                             oJson.put("id",bts.getIntId());
-                            oJson.put("text",bts.getName());
+                            oJson.put("text",bts.getBscName()+"_"+bts.getBtsId()+"_"+bts.getName());
                             oJson.put("treeLevel",treeLevel+1);
-                            oJson.put("isParent",false);
+                            oJson.put("isParent",true);
                             oJson.put("country",country);
                             oJson.put("type","indoor");
                             BigDecimal manulFlag=bts.getManualFlag();
@@ -187,10 +200,35 @@ public class QueryAction extends BaseAction {
                             arrayValue.put(oJson);
                         }
                         break;
+                    case 4:
+                        //隧道覆盖站点
+                        Map tunelSeach=new HashMap();
+                        tunelSeach.put("countryId",country);
+                        tunelSeach.put("deleteFlag",0);//在用
+                        List<WyTunel> wyTunels=tunelManager.selectByConds(tunelSeach);
+                        for(WyTunel wyTunel:wyTunels){
+                            JSONObject oJson=new JSONObject();
+                            oJson.put("id",wyTunel.getIntId());
+                            oJson.put("text",wyTunel.getBscName()+"_"+wyTunel.getBtsId()+"_"+wyTunel.getName());
+                            oJson.put("treeLevel",treeLevel+1);
+                            oJson.put("isParent",true);
+                            oJson.put("country",country);
+                            oJson.put("type","tunel");
+                            Integer manulFlag=wyTunel.getManualFlag();
+                            if(manulFlag!=null&&manulFlag.intValue()==0){
+                                //未填写手工数据
+                                oJson.put("font",font);
+                                oJson.put("iconSkin","btsFlag0");
+                            }else {
+                                oJson.put("iconSkin","btsFlag1");
+                            }
+                            arrayValue.put(oJson);
+                        }
+                        break;
                 }
             }else if(treeLevel == 5){
                 if(!Common.isEmpty(type)) {
-                    if("bts".equals(type)){
+                    if("bts".equals(type)||"indoor".equals(type)||"tunel".equals(type)){
                         //站点节点下展示小区
                         List<Cell> cells= cellManager.selectByBtsId(id);
                         for(Cell cell:cells){
@@ -228,15 +266,6 @@ public class QueryAction extends BaseAction {
         this.json = json;
     }
 
-    public void setBtsManager(BtsManager btsManager) {
-        this.btsManager = btsManager;
-    }
-
-    public void setCityManager(CityManager cityManager) {
-        this.cityManager = cityManager;
-    }
-
-
     public Long getId() {
         return id;
     }
@@ -261,10 +290,6 @@ public class QueryAction extends BaseAction {
         this.country = country;
     }
 
-    public void setBbuManager(BbuManager bbuManager) {
-        this.bbuManager = bbuManager;
-    }
-
     public String getType() {
         return type;
     }
@@ -277,7 +302,4 @@ public class QueryAction extends BaseAction {
         return cellManager;
     }
 
-    public void setCellManager(CellManager cellManager) {
-        this.cellManager = cellManager;
-    }
 }

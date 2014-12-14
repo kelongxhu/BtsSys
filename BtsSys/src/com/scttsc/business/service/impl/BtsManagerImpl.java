@@ -103,6 +103,15 @@ public class BtsManagerImpl implements BtsManager {
         return btsDao.countBtsGroupByColumns(record);
     }
 
+
+    public List<Map> selectWyIndoorBtsGroupByColumns(Map<String, Object> param) throws Exception {
+        return btsDao.selectWyIndoorBtsGroupByColumns(param);
+    }
+
+    public int countWyIndoorBtsGroupByColumns(Map<String, Object> param) throws Exception {
+        return btsDao.countWyIndoorBtsGroupByColumns(param);
+    }
+
     public List<MateEntry> findDelBtsData(List<Long> ids) throws Exception {
         List<MateEntry> mateEntries = new ArrayList<MateEntry>();
         for (Long delIntId : ids) {

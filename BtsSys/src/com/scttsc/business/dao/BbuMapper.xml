@@ -216,8 +216,11 @@
         from WY_BBU u
         <where>
             1=1
+            <if test="countryId!=null">
+                and u.COUNTY_ID=#{countryId}
+            </if>
             <if test="isShare!=null">
-                and IS_SHARE=#{isShare,jdbcType=DECIMAL}
+                and u.IS_SHARE=#{isShare,jdbcType=DECIMAL}
             </if>
             <if test="bbuType!=null">
                 and u.BBU_TYPE in (${bbuType})
@@ -232,6 +235,7 @@
                 and u.NAME=#{name}
             </if>
         </where>
+        order by u.BSC_NAME,u.BTS_ID
     </select>
 
 

@@ -426,10 +426,10 @@ public class TunelAction extends BaseAction {
         User user = (User) getSession().getAttribute("user");
         Map<String, Object> map = new HashMap<String, Object>();
         int total = 0;
-        List<WyTunel> list = null;
+        List<Cell> list = null;
         String path = FileRealPath.getPath();
-        String templatePath = path + "template" + "/tunelExportTemplate.xls";
-        String fileName = "隧道覆盖站点列表.xls";
+        String templatePath = path + "template" + "/tunelCellExportTemplate.xls";
+        String fileName = "隧道覆盖小区列表.xls";
         try {
             if (!Common.isEmpty(countryIds)) {
                 map.put("countryIds", countryIds);
@@ -455,7 +455,7 @@ public class TunelAction extends BaseAction {
                 map.put("pn", pn);
             }
             map.put("deleteFlag", 0);//在用
-            list = tunelManager.selectAssoByMap(map);
+            list = cellManager.selectCellAssoTunelByMap(map);
             POIFSFileSystem fis = new POIFSFileSystem(new FileInputStream(
                     templatePath));
             HSSFWorkbook demoWorkBook = ExcelUtil.getWorkbook(fis);// 得到工作薄
@@ -463,7 +463,7 @@ public class TunelAction extends BaseAction {
             HSSFSheet demoSheet = ExcelUtil.getSheet(demoWorkBook, 0);// 第一个工作sheet:工作指引
             // 创建整个Excel表 //根据查询条件从DB取出list，生成excel
             int rowIndex = 2;
-            for (WyTunel tunel : list) {
+            for (Cell tunel : list) {
                 List<String> cList = new ArrayList<String>();
                 cList.add(StringUtil.null2String(rowIndex));
                 cList.add(tunel.getName());
@@ -472,14 +472,9 @@ public class TunelAction extends BaseAction {
                 cList.add(city==null?"":city.getCityName());
                 cList.add(country==null?"":country.getCityName());
                 cList.add(tunel.getBscName());
-                cList.add(tunel.getBtsName());
                 cList.add(tunel.getBtsId()+"");
-                cList.add(tunel.getServiceLevel());
-                cList.add(tunel.getLatitude()+"");
-                cList.add(tunel.getLongitude()+"");
-                cList.add(tunel.getVendorBtstype());
-                cList.add(tunel.getCircuitroomOwnership());
-                cList.add(tunel.getTransOwnership());
+                cList.add(tunel.getPn()+"");
+                cList.add(tunel.getCi()+"");
                 WyTunelManual wyTunelManual=tunel.getWyTunelManual();
                 if(wyTunelManual!=null){
                     RoadLib roadLib=roadLibManager.getById(new Long(wyTunelManual.getRoadId()));

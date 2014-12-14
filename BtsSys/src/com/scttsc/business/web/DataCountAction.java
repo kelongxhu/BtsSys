@@ -44,6 +44,8 @@ public class DataCountAction extends BaseAction {
     private CellManager cellManager;
     @Autowired
     private TunelManualManager tunelManualManager;
+    @Autowired
+    private TunelManager tunelManager;
 
     /**
      * 统计页面
@@ -108,6 +110,7 @@ public class DataCountAction extends BaseAction {
             if (!Common.isEmpty(typeId)) {
                 switch (typeId.intValue()) {
                     case 1:
+                        //室外覆盖站点
                         total = btsManager.countBtsGroupByColumns(record);
                         if (total < pagesize) {
                             page = 1;
@@ -117,6 +120,7 @@ public class DataCountAction extends BaseAction {
                         list = btsManager.selectBtsGroupByColumns(record);
                         break;
                     case 2:
+                        //bbu站点
                         total = bbuManager.countBbuGroupByColumns(record);
                         if (total < pagesize) {
                             page = 1;
@@ -126,6 +130,7 @@ public class DataCountAction extends BaseAction {
                         list = bbuManager.selectBbuGroupByColumns(record);
                         break;
                     case 3:
+                        //室内分布小区
                         total = indoorManualManager.countIndoorDataGroupByColumns(record);
                         if (total < pagesize) {
                             page = 1;
@@ -135,6 +140,7 @@ public class DataCountAction extends BaseAction {
                         list = indoorManualManager.selectIndoorDataGroupByCoulmns(record);
                         break;
                     case 4:
+                        //室外覆盖小区
                         total = cellManager.countCellGroupByColumns(record);
                         if (total < pagesize) {
                             page = 1;
@@ -156,14 +162,35 @@ public class DataCountAction extends BaseAction {
                         list = bbuManager.selectBbuGroupByColumns(record);
                         break;
 
+                    //隧道覆盖小区
                     case 6:
-                        total = tunelManualManager.countWytunelGroupByColumns(record);
+                        total = tunelManager.countWytunelCellGroupByColumns(record);
                         if (total < pagesize) {
                             page = 1;
                         }
                         record.put("start", (page - 1) * pagesize + 1);
                         record.put("pagesize", pagesize);
-                        list = tunelManualManager.selectWyTunelGroupByColumns(record);
+                        list = tunelManager.selectWyTunelCellGroupByColumns(record);
+                        break;
+                    case 7:
+                        //室分站点
+                        total = btsManager.countWyIndoorBtsGroupByColumns(record);
+                        if (total < pagesize) {
+                            page = 1;
+                        }
+                        record.put("start", (page - 1) * pagesize + 1);
+                        record.put("pagesize", pagesize);
+                        list = btsManager.selectWyIndoorBtsGroupByColumns(record);
+                        break;
+                    case 8:
+                        //隧道站点
+                        total =tunelManager.countWytunelGroupByColumns(record);
+                        if (total < pagesize) {
+                            page = 1;
+                        }
+                        record.put("start", (page - 1) * pagesize + 1);
+                        record.put("pagesize", pagesize);
+                        list = tunelManager.selectWyTunelGroupByColumns(record);
                         break;
                     default:
                         break;
@@ -270,13 +297,13 @@ public class DataCountAction extends BaseAction {
                         break;
                     case 6:
                         fileName="隧道站点";
-                        total = tunelManualManager.countWytunelGroupByColumns(record);
+                        total = tunelManager.countWytunelGroupByColumns(record);
                         if (total < pagesize) {
                             page = 1;
                         }
                         record.put("start", 0);
                         record.put("pagesize", (total + 1));
-                        list = tunelManualManager.selectWyTunelGroupByColumns(record);
+                        list = tunelManager.selectWyTunelGroupByColumns(record);
                         break;
                     default:
                         break;

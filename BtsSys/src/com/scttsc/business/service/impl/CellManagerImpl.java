@@ -158,4 +158,8 @@ public class CellManagerImpl implements CellManager {
     public int countCellGroupByColumns(Map map) throws Exception {
         return cellDao.countCellGroupByColumns(map);
     }
+
+    public List<Cell> selectCellAssoTunelByMap(Map<String, Object> record) throws Exception {
+        return cellDao.selectCellAssoTunelByMap(record);
+    }
 }
