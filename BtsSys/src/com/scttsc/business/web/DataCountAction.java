@@ -258,31 +258,19 @@ public class DataCountAction extends BaseAction {
             if (!Common.isEmpty(typeId)) {
                 switch (typeId.intValue()) {
                     case 1:
-                        fileName = "物理站点";
-                        total = btsManager.countBtsGroupByColumns(record);
-                        record.put("start", 0);
-                        record.put("pagesize", (total + 1));
+                        fileName = "室外覆盖物理站点";
                         list = btsManager.selectBtsGroupByColumns(record);
                         break;
                     case 2:
                         fileName = "BBU";
-                        total = bbuManager.countBbuGroupByColumns(record);
-                        record.put("start", 0);
-                        record.put("pagesize", (total + 1));
                         list = bbuManager.selectBbuGroupByColumns(record);
                         break;
                     case 3:
-                        fileName = "室分";
-                        total = indoorManualManager.countIndoorDataGroupByColumns(record);
-                        record.put("start", 0);
-                        record.put("pagesize", (total + 1));
+                        fileName = "室内分布小区";
                         list = indoorManualManager.selectIndoorDataGroupByCoulmns(record);
                         break;
                     case 4:
-                        fileName = "小区";
-                        total = cellManager.countCellGroupByColumns(record);
-                        record.put("start", 0);
-                        record.put("pagesize", (total + 1));
+                        fileName = "室外覆盖小区";
                         list = cellManager.selectCellGroupByColumns(record);
                         break;
                     case 5:
@@ -290,26 +278,25 @@ public class DataCountAction extends BaseAction {
                         fileName="纯BBU";
                         record.put("isShare", 0);
                         record.put("bbuType", "1,2");
-                        total = bbuManager.countBbuGroupByColumns(record);
-                        record.put("start", 0);
-                        record.put("pagesize", (total + 1));
                         list = bbuManager.selectBbuGroupByColumns(record);
                         break;
                     case 6:
-                        fileName="隧道站点";
-                        total = tunelManager.countWytunelGroupByColumns(record);
-                        if (total < pagesize) {
-                            page = 1;
-                        }
-                        record.put("start", 0);
-                        record.put("pagesize", (total + 1));
+                        fileName="隧道覆盖小区";
+                        list = tunelManager.selectWyTunelGroupByColumns(record);
+                        break;
+                    case 7:
+                        fileName="室内分布站点";
+                        list = btsManager.selectWyIndoorBtsGroupByColumns(record);
+                        break;
+                    case 8:
+                        fileName="隧道覆盖站点";
                         list = tunelManager.selectWyTunelGroupByColumns(record);
                         break;
                     default:
                         break;
                 }
             }
-            fileName = fileName + "基础数据统计.xls";
+            fileName = fileName + "_基础数据统计.xls";
             HSSFWorkbook demoWorkBook = new HSSFWorkbook();
             ;// 得到工作薄
             HSSFCellStyle style = ExcelUtil.setStyle(demoWorkBook);
@@ -362,7 +349,7 @@ public class DataCountAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return null;
     }

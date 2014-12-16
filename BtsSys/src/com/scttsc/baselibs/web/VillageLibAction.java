@@ -1,6 +1,8 @@
 package com.scttsc.baselibs.web;
 
+import com.scttsc.admin.model.City;
 import com.scttsc.admin.model.User;
+import com.scttsc.admin.service.CityManager;
 import com.scttsc.baselibs.model.WyBlind;
 import com.scttsc.baselibs.model.WyLibVillage;
 import com.scttsc.baselibs.service.VillageLibManager;
@@ -28,6 +30,8 @@ public class VillageLibAction extends BaseAction {
     Logger LOG = Logger.getLogger(VillageLibAction.class);
     @Autowired
     private VillageLibManager villageLibManager;
+    @Autowired
+    private CityManager cityManager;
 
     private String countryIds;
 
@@ -36,6 +40,12 @@ public class VillageLibAction extends BaseAction {
     private String village;
 
     private Integer countryId;
+
+    private WyLibVillage wyLibVillage;
+
+    private Long id;
+
+
 
     public String village() {
         return SUCCESS;
@@ -118,6 +128,43 @@ public class VillageLibAction extends BaseAction {
         }
         return param;
     }
+
+
+    /**
+     * 编辑乡镇农村页面
+     * @return
+     */
+    public String editVillagePage(){
+        try {
+            wyLibVillage=villageLibManager.selectByPrimaryKey(id);
+            if(!Common.isEmpty(wyLibVillage)){
+                City city=cityManager.getById(wyLibVillage.getCityId().longValue());
+                wyLibVillage.setCity(city);
+                City country=cityManager.getById(wyLibVillage.getCountryId().longValue());
+                wyLibVillage.setCountry(country);
+            }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(),e);
+        }
+        return SUCCESS;
+    }
+    /**
+     * 编辑乡镇农村库
+     *
+     * @return
+     */
+    public String editVillage() {
+        try {
+            User user = (User) this.getSession().getAttribute("user");
+            villageLibManager.updateByPrimaryKeySelective(wyLibVillage);
+            jsonMap.put("result", 1);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(),e);
+            jsonMap.put("result", 0);
+        }
+        return SUCCESS;
+    }
+
 
 
     /**
@@ -212,5 +259,20 @@ public class VillageLibAction extends BaseAction {
 
     public void setCountryId(Integer countryId) {
         this.countryId = countryId;
+    }
+
+    public WyLibVillage getWyLibVillage() {
+        return wyLibVillage;
+    }
+    public void setWyLibVillage(WyLibVillage wyLibVillage) {
+        this.wyLibVillage = wyLibVillage;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

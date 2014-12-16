@@ -297,6 +297,12 @@
             </result>
         </action>
 
+        <action name="editVillage" class="com.scttsc.baselibs.web.VillageLibAction" method="editVillage">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
 
     </package>
 
@@ -482,6 +488,12 @@
         <action name="village" class="com.scttsc.baselibs.web.VillageLibAction" method="village">
             <result name="success" type="dispatcher">
                 /appviews/baselibs/village/villageList.jsp
+            </result>
+        </action>
+
+        <action name="editVillagePage" class="com.scttsc.baselibs.web.VillageLibAction" method="editVillagePage">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/village/villageEdit.jsp
             </result>
         </action>
 

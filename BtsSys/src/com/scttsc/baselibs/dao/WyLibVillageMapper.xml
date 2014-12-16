@@ -85,8 +85,8 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Long" >
     select 
     <include refid="Base_Column_List" />
-    from WY_LIB_VILLAGE
-    where ID = #{id,jdbcType=DECIMAL}
+    from WY_LIB_VILLAGE u
+    where u.ID = #{id,jdbcType=DECIMAL}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="Long" >
     delete from WY_LIB_VILLAGE
@@ -109,8 +109,8 @@
       <if test="cityId != null" >
         CITY_ID = #{cityId,jdbcType=DECIMAL},
       </if>
-      <if test="counrtyId != null" >
-          COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+      <if test="countryId != null" >
+        COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
       </if>
       <if test="town != null" >
         TOWN = #{town,jdbcType=VARCHAR},

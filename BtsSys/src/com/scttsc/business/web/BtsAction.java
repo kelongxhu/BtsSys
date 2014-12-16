@@ -9,10 +9,10 @@ import com.scttsc.business.model.*;
 import com.scttsc.business.service.*;
 import com.scttsc.business.util.ExcelHelper;
 import com.scttsc.business.util.Validity;
-import com.scttsc.clientinterface.service.InterfaceManager;
 import com.scttsc.common.util.*;
 import com.scttsc.common.web.BaseAction;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +25,7 @@ import java.util.*;
 
 @SuppressWarnings("serial")
 public class BtsAction extends BaseAction {
+    Logger LOG=Logger.getLogger(BtsAction.class);
     private BtsManager btsManager;
     private BtsManualManager btsManualManager;
     private CityManager cityManager;
@@ -126,7 +127,7 @@ public class BtsAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = btsManager.getByConds(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -178,7 +179,7 @@ public class BtsAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = btsManager.getByConds(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -207,7 +208,7 @@ public class BtsAction extends BaseAction {
                 editFlag = 0;// 增加页面
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }
@@ -259,7 +260,7 @@ public class BtsAction extends BaseAction {
                 btsManual.setMrStrutCons(mrStrutCons);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }
@@ -301,7 +302,7 @@ public class BtsAction extends BaseAction {
                 List<CellLib> cellLibs = cellManualManager.selectCellLibByMap(map1);
                 //校园库
                 List<SchoolLib> schoolLibs = new ArrayList<SchoolLib>();
-                List<VitoLib> vitoLibs = new ArrayList<VitoLib>();//农村库
+//                List<VitoLib> vitoLibs = new ArrayList<VitoLib>();//农村库
                 List<RoadLib> roadLibs = new ArrayList<RoadLib>();//道路库
                 List<TunnelLib> tunnelLibs = new ArrayList<TunnelLib>();//隧道库
                 List<SecneryLib> secneryLibs = new ArrayList<SecneryLib>();//风景库
@@ -312,11 +313,11 @@ public class BtsAction extends BaseAction {
                             SchoolLib schoolLib = schoolLibManager.getById(cellLib.getLibId().longValue());
                             schoolLibs.add(schoolLib);
                             break;
-                        case 2:
-                            //农村库
-                            VitoLib vitoLib = vitoLibManager.getById(cellLib.getLibId().longValue());
-                            vitoLibs.add(vitoLib);
-                            break;
+//                        case 2:
+//                            //农村库
+//                            VitoLib vitoLib = vitoLibManager.getById(cellLib.getLibId().longValue());
+//                            vitoLibs.add(vitoLib);
+//                            break;
                         case 3:
                             //道路库
                             RoadLib roadLib = roadLibManager.getById(cellLib.getLibId().longValue());
@@ -336,13 +337,13 @@ public class BtsAction extends BaseAction {
                     }
                 }
                 cellManual.setSchoolLibs(schoolLibs);
-                cellManual.setVitoLibs(vitoLibs);
+//                cellManual.setVitoLibs(vitoLibs);
                 cellManual.setRoadLibs(roadLibs);
                 cellManual.setSecneryLibs(secneryLibs);
                 cellManual.setTunnelLibs(tunnelLibs);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return cellManual;
     }
@@ -364,7 +365,7 @@ public class BtsAction extends BaseAction {
             }
             jsonMap.put("result", 1);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             jsonMap.put("result", 0);
         }
         return SUCCESS;
@@ -528,7 +529,7 @@ public class BtsAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return null;
     }
@@ -599,7 +600,7 @@ public class BtsAction extends BaseAction {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+             LOG.error(e.getMessage(),e);
             jsonMap.put("result", 0);
         }
         return SUCCESS;

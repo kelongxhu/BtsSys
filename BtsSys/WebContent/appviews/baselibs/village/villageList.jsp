@@ -31,6 +31,7 @@
             //toptoolbar
             $("#toptoolbar").ligerToolBar({
                 items: [
+                    { text: '编辑', click: edit , icon:'modify'},
                     { text: '导出', click: exportVillageData , icon:'add'}
                 ]
             });
@@ -77,7 +78,7 @@
             $(rows).each(function() {
                 id = this.id;
             });
-            window.location.href = "${ctx}/school/secneryEditPage.action?id=" + id;
+            window.location.href = "${ctx}/school/editVillagePage.action?id=" + id;
         }
         //删除操作
         function del() {

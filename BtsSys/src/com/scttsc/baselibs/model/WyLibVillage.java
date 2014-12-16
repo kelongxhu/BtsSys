@@ -1,5 +1,7 @@
 package com.scttsc.baselibs.model;
 
+import com.scttsc.admin.model.City;
+
 import java.math.BigDecimal;
 
 public class WyLibVillage {
@@ -22,6 +24,9 @@ public class WyLibVillage {
     private String cityName;
 
     private String countryName;
+
+    private City city;
+    private City country;
 
     public Long getId() {
         return id;
@@ -102,4 +107,22 @@ public class WyLibVillage {
     public void setVillageName(String villageName) {
         this.villageName = villageName;
     }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public City getCountry() {
+        return country;
+    }
+
+    public void setCountry(City country) {
+        this.country = country;
+    }
+
+
 }

@@ -44,7 +44,12 @@
 
             gridObj = $("#maingrid").ligerGrid({
                 columns: [{display:'小区名称',name:'name',width : 200,align:'center'},
-                    {display:'本地网',name:'cityName',width : 70,align:'center'},
+                    {display:'本地网',name:'cityName',width : 70,align:'center',
+                        render: function (row)
+                        {
+                            return row.city.cityName;
+                        }
+                    },
                     {display:'区县',name:'country.cityName',width : 70,align:'center',
                         render: function (row)
                         {

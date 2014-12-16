@@ -71,12 +71,15 @@
                         } else if (type == 'bbu') {
                             $("#infoFrame").attr("src", "${ctx}/business/bbuInfo.action?intId=" + intId);
                         }else if(type=='indoor'){
-                            $("#infoFrame").attr("src", "${ctx}/business/business/indoorDetail.action?intId=" + intId);
+                            <%--$("#infoFrame").attr("src", "${ctx}/business/business/indoorDetail.action?intId=" + intId);--%>
                         }
                     } else if (treeLevel == 6) {
                         if (type == 'cell') {
                             $("#infoFrame").attr("src", "${ctx}/business/cellInfo.action?intId=" + intId);
-                        }
+                        }else if(type =='indoorCell')
+                            $("#infoFrame").attr("src", "${ctx}/business/indoorDetail.action?intId=" + intId);
+                        else if(type =="tunelCell")
+                            $("#infoFrame").attr("src", "${ctx}/business/tunelInfo.action?intId=" + intId);
                     }
                 }  ,
                 onAsyncSuccess : function(event, treeId, treeNode, msg) {

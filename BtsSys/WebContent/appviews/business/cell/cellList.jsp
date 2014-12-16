@@ -51,17 +51,21 @@ $(function(){
     });
     gridObj=$("#maingrid").ligerGrid({
 			columns: [{display:'小区名称',name:'name',width : 200,align:'center'},
-			          {display:'本地网',name:'cityName',width : 70,align:'center'},
-			          {display:'区县',name:'country.cityName',width : 70,align:'center',
+			          {display:'本地网',name:'cityName',width : 55,align:'center',
+                        render: function (row)
+                      {
+                          return row.city.cityName;
+                      }},
+			          {display:'区县',name:'country.cityName',width : 55,align:'center',
 			        	  render: function (row)
 			      	        {
 		      				 return row.country.cityName;
 			      	    	}},
                       {display:'所属BSC名称',name:'bscName',width : 115,align:'center'},
-                      {display:'网管编号',name:'btsId',width : 55,align:'center'},
-			      	  {display:'是否室分',name:'isIndoor',width : 80,align:'center'},
-			       	  {display:'是否拉远',name:'isRru',width : 80,align:'center'},
-			       	  {display:'是否功分',name:'isGf',width : 80,align:'center',
+                      {display:'网管编号',name:'btsId',width : 60,align:'center'},
+			      	  {display:'是否室分',name:'isIndoor',width : 60,align:'center'},
+			       	  {display:'是否拉远',name:'isRru',width : 60,align:'center'},
+			       	  {display:'是否功分',name:'isGf',width : 60,align:'center',
 			       		 render: function (row){
 			       			if(row.isGf==0){
 		      					return "否";
@@ -88,8 +92,8 @@ $(function(){
 			pageSizeOptions:[50,100],
 			url:'${ctx}/businessjson/cellData.action',
 			checkbox : true,
-			width: '100%',
-			height:'100%',
+			width: '99.9%',
+			height:'99%',
 			onDblClickRow :cellInfo,
             onCheckAllRow: f_onCheckAllRow
 		}); 

@@ -139,7 +139,7 @@ public class CellManualManagerImpl implements CellManualManager {
         }
 
         //获取各个库Map
-        Map<String, VitoLib> vitoLibMap = libMap.get(Constants.VitoLib + "");
+//        Map<String, VitoLib> vitoLibMap = libMap.get(Constants.VitoLib + "");
         Map<String, RoadLib> roadLibMap = libMap.get(Constants.RoadLib + "");
         Map<String, TunnelLib> tunnelLibMap = libMap.get(Constants.TunnelLib + "");
         Map<String, SchoolLib> schoolLibMap = libMap.get(Constants.SchoolLib + "");
@@ -147,22 +147,22 @@ public class CellManualManagerImpl implements CellManualManager {
 
 
         //农村库
-        String countryLibs = cellManual.getCountryLib();
-        if (!Common.isEmpty(countryLibs)) {
-            String[] countryLibArray = countryLibs.split(";");
-            for (String countryLib : countryLibArray) {
-                VitoLib lib = vitoLibMap.get(countryLib);
-                if (lib != null) {
-                    CellLib cellLib = new CellLib();
-                    cellLib.setCellIntId(cellManual.getIntId());
-                    cellLib.setLibId(lib.getId().intValue());
-                    cellLib.setLibType(Constants.VitoLib);
-                    cellLibDao.insert(cellLib);
-                } else {
-                    throw new CustomizeException("填写的农村库未找到," + countryLib);
-                }
-            }
-        }
+//        String countryLibs = cellManual.getCountryLib();
+//        if (!Common.isEmpty(countryLibs)) {
+//            String[] countryLibArray = countryLibs.split(";");
+//            for (String countryLib : countryLibArray) {
+//                VitoLib lib = vitoLibMap.get(countryLib);
+//                if (lib != null) {
+//                    CellLib cellLib = new CellLib();
+//                    cellLib.setCellIntId(cellManual.getIntId());
+//                    cellLib.setLibId(lib.getId().intValue());
+//                    cellLib.setLibType(Constants.VitoLib);
+//                    cellLibDao.insert(cellLib);
+//                } else {
+//                    throw new CustomizeException("填写的农村库未找到," + countryLib);
+//                }
+//            }
+//        }
         //道路、隧道库
         String roadLib = cellManual.getRoadLib();
         if (!Common.isEmpty(roadLib)) {

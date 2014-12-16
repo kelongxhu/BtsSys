@@ -97,6 +97,8 @@ public class ExcelHelper {
         cols.put("name", new Validity("基站名称", true, 1, null)); // 不能为空
         cols.put("bscName", new Validity("所属BSC", true, 1, null));//不能为空
         cols.put("btsId", new Validity("基站网管编号", true, 2, null));//不能为空，数字
+        cols.put("town", new Validity("乡镇", true, 1, null));//不能为空，数字
+        cols.put("village", new Validity("农村", false, 1, null));//不能为空，数字
         cols.put("installPos", new Validity("主设备安装位置", true, 1, null));//不能为空，且要特殊处理
         cols.put("sharFlag", new Validity("是否共建共享", true, 1, new String[]{"是", "否"})); //不能为空，固定填值
         cols.put("sharName", new Validity("共享方名称", true, 1, new String[]{"移动", "联通", "其他", "无"}));//不能为空
@@ -209,6 +211,8 @@ public class ExcelHelper {
         cols.put("btsId", new Validity("基站网管编号", true, 2, null));//不能为空，数字
         cols.put("longitude", new Validity("经度", true, 2, null));//不能为空，数字
         cols.put("latitude", new Validity("纬度", true, 2, null));//不能为空，数字
+        cols.put("town", new Validity("乡镇", true, 1, null));//不能为空，数字
+        cols.put("village", new Validity("农村", false, 1, null));//不能为空，数字
         cols.put("sharFlag", new Validity("是否共建共享", true, 1, new String[]{"是", "否"})); //不能为空，固定填值
         cols.put("sharName", new Validity("共享方名称", true, 1, new String[]{"移动", "联通", "其他", "无"}));//不能为空
         cols.put("address", new Validity("详细地址", true, 1, null));//不能为空
@@ -277,6 +281,8 @@ public class ExcelHelper {
         cols.put("cellSeq", new Validity("小区序号", true, 2, null));
         cols.put("pn", new Validity("PN", true, 2, null));
         cols.put("ci", new Validity("CI", true, 2, null));
+        cols.put("town", new Validity("乡镇", true, 1, null));//不能为空，数字
+        cols.put("village", new Validity("农村", false, 1, null));//不能为空，数字
         cols.put("prop1", new Validity("站点性质一", true, 1, null));
         cols.put("prop2", new Validity("站点性质二", true, 1, null));
         cols.put("grade", new Validity("站点分级", true, 1, null));
@@ -373,7 +379,7 @@ public class ExcelHelper {
         cols.put("borderflag", new Validity("多载频边界Border扇区", true, 1, new String[]{"是", "否"}));    //多载频边界Border扇区
         cols.put("feederlength", new Validity("馈线长度", true, 2, null));  //馈线长度
         cols.put("coverarea", new Validity("扇区覆盖区域类型", true, 1, null)); //扇区覆盖区域类型
-        cols.put("countryLib", new Validity("农村、乡镇名称", false, 1, null));  //农村乡镇库
+//        cols.put("countryLib", new Validity("农村、乡镇名称", false, 1, null));  //农村乡镇库
         cols.put("coverroad", new Validity("扇区覆盖道路类型", false, 1, null)); //扇区覆盖道路类型
         cols.put("roadLib", new Validity("道路名称", false, 1, null));// 关联道路库或者隧道库
         cols.put("coverhot", new Validity("扇区覆盖热点类型", true, 1, null));  //扇区覆盖热点类型
@@ -446,6 +452,8 @@ public class ExcelHelper {
     public static Map<String, Validity> getTunelCoulmnMap() {
         Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
         cols.put("intId", new Validity("隧道标识", true, 1, null));
+        cols.put("town", new Validity("乡镇", true, 1, null));//不能为空，数字
+        cols.put("village", new Validity("农村", false, 1, null));//不能为空，数字
         cols.put("prop", new Validity("隧道性质" +
                 "", true, 1, null));
         cols.put("roadId", new Validity("所属道路", true, 1, null));

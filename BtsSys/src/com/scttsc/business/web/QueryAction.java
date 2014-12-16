@@ -229,6 +229,10 @@ public class QueryAction extends BaseAction {
             }else if(treeLevel == 5){
                 if(!Common.isEmpty(type)) {
                     if("bts".equals(type)||"indoor".equals(type)||"tunel".equals(type)){
+                        String cellType="";
+                        if("bts".equals(type))cellType="cell";
+                        else if("indoor".equals(type))cellType="indoorCell";
+                        else if("tunel".equals(type))cellType="tunelCell";
                         //站点节点下展示小区
                         List<Cell> cells= cellManager.selectByBtsId(id);
                         for(Cell cell:cells){
@@ -237,7 +241,7 @@ public class QueryAction extends BaseAction {
                             oJson.put("text",cell.getName());
                             oJson.put("treeLevel",treeLevel+1);
                             oJson.put("country",country);
-                            oJson.put("type","cell");
+                            oJson.put("type",cellType);
                             BigDecimal manulFlag=cell.getManualFlag();
                             if(manulFlag!=null&&manulFlag.intValue()==0){
                                 oJson.put("font",font);

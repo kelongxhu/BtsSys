@@ -17,4 +17,8 @@ public interface VillageLibManager {
 
     List<Map> selectTownByCountryId(Integer countryId) throws Exception;
 
+    WyLibVillage selectByPrimaryKey(Long id);
+
+    int updateByPrimaryKeySelective(WyLibVillage record);
+
 }

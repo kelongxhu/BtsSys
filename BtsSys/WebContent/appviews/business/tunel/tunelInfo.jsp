@@ -37,23 +37,22 @@
             <td align="left" width="20%">${wyTunel.country.cityName}</td>
         </tr>
         <tr>
-            <th>施主基站名称:</th>
-            <td align="left">${wyTunel.btsName}</td>
+            <th width="10%">乡镇:</th>
+            <td align="left" width="20%">${tunelManual.town}</td>
+            <th width="10%">农村:</th>
+            <td align="left" width="20%">${tunelManual.village}</td>
+        </tr>
+        <tr>
             <th>所属BSC:</th>
             <td align="left">${wyTunel.bscName}</td>
-       </tr>
-        <tr>
             <th>网管编号:</th>
             <td align="left">${wyTunel.btsId}</td>
-            <th>机房产权:</th>
-            <td align="left">${wyTunel.circuitroomOwnership}</td>
-        </tr>
+       </tr>
         <tr>
-            <th>传输产权 :</th>
-            <td align="left">${wyTunel.transOwnership}</td>
-            <th>维护等级:</th>
-            <td align="left">${wyTunel.serviceLevel}</td>
-        </tr>
+            <th>PN:</th>
+            <td align="left">${wyTunel.pn}</td>
+            <th>CI:</th>
+            <td align="left">${wyTunel.ci}</td>
         <tr>
             <th>隧道性质:</th>
             <td align="left">${tunelManual.propCons.name}</td>

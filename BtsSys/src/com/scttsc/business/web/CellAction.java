@@ -306,8 +306,8 @@ public class CellAction extends BaseAction {
                         break;
                     case 2:
                         //农村库
-                        VitoLib vitoLib = vitoLibManager.getById(cellLib.getLibId().longValue());
-                        vitoLibs.add(vitoLib);
+//                        VitoLib vitoLib = vitoLibManager.getById(cellLib.getLibId().longValue());
+//                        vitoLibs.add(vitoLib);
                         break;
                     case 3:
                         //道路库
@@ -333,7 +333,7 @@ public class CellAction extends BaseAction {
             cellManual.setSecneryLibs(secneryLibs);
             cellManual.setTunnelLibs(tunnelLibs);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
     }
 
@@ -382,7 +382,6 @@ public class CellAction extends BaseAction {
                 map.put("countryIds", user.getCountryIds());
             }
             map.put("deleteFlag", 0);// 再用
-
             if (checkAllFlag == null || checkAllFlag == 0) {
                 if (!Common.isEmpty(ids)) {
                     map.put("ids", ids); //
@@ -390,7 +389,6 @@ public class CellAction extends BaseAction {
                     map.put("manualFlag", 0);// 未录入的数据
                 }
             }
-
             //查询条件
             if (!Common.isEmpty(name)) {
                 name = Common.decodeURL(name).trim();
@@ -453,14 +451,14 @@ public class CellAction extends BaseAction {
                         cList.add(StringUtil.null2String(cellManual1.getCoverarea())); //扇区覆盖区域类型
 
                         //农村乡镇名称
-                        List<VitoLib> vitoLibs = cellManual1.getVitoLibs();
-                        StringBuilder vitoLibSb = new StringBuilder();
-                        if (vitoLibs != null) {
-                            for (VitoLib vitoLib : vitoLibs) {
-                                vitoLibSb.append(vitoLib.getName() + ";");
-                            }
-                        }
-                        cList.add(vitoLibSb.length() > 0 ? vitoLibSb.substring(0, vitoLibSb.length() - 1).toString() : "");//农村乡镇名称
+//                        List<VitoLib> vitoLibs = cellManual1.getVitoLibs();
+//                        StringBuilder vitoLibSb = new StringBuilder();
+//                        if (vitoLibs != null) {
+//                            for (VitoLib vitoLib : vitoLibs) {
+//                                vitoLibSb.append(vitoLib.getName() + ";");
+//                            }
+//                        }
+//                        cList.add(vitoLibSb.length() > 0 ? vitoLibSb.substring(0, vitoLibSb.length() - 1).toString() : "");//农村乡镇名称
                         cList.add(StringUtil.null2String(cellManual1.getCoverroad()));
 
                         //道路名称
@@ -529,7 +527,7 @@ public class CellAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return null;
     }
@@ -539,12 +537,12 @@ public class CellAction extends BaseAction {
         Map<String, Map> libMap = new HashMap<String, Map>();
         try {
             //农村库统一查询放内存，加快导入速度
-            List<VitoLib> vitoLibs = vitoLibManager.getByMap(null);
-            Map<String, VitoLib> vitoLibMap = new HashMap<String, VitoLib>();
-            for (VitoLib vitoLib : vitoLibs) {
-                vitoLibMap.put(vitoLib.getName(), vitoLib);
-            }
-            libMap.put(Constants.VitoLib + "", vitoLibMap);
+//            List<VitoLib> vitoLibs = vitoLibManager.getByMap(null);
+//            Map<String, VitoLib> vitoLibMap = new HashMap<String, VitoLib>();
+//            for (VitoLib vitoLib : vitoLibs) {
+//                vitoLibMap.put(vitoLib.getName(), vitoLib);
+//            }
+//            libMap.put(Constants.VitoLib + "", vitoLibMap);
             List<RoadLib> roadLibs = roadLibManager.loadAll();
             Map<String, RoadLib> roadLibMap = new HashMap<String, RoadLib>();
             for (RoadLib road : roadLibs) {
@@ -576,7 +574,7 @@ public class CellAction extends BaseAction {
             }
             libMap.put(Constants.AirLib + "", airLibMap);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return libMap;
     }
@@ -591,7 +589,6 @@ public class CellAction extends BaseAction {
         try {
 
             Map<String, Map> libMap = getLibMap();
-
             File desFile = new File(getRequest().getSession()
                     .getServletContext().getRealPath("/uploadFiles")
                     + "/" + this.fileFileName);
@@ -622,7 +619,7 @@ public class CellAction extends BaseAction {
             jsonMap.put("sucess", sucess);
             jsonMap.put("errorList", errorList);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             jsonMap.put("result", 0);
         }
         return SUCCESS;
@@ -661,7 +658,7 @@ public class CellAction extends BaseAction {
                 map.put("updateuser", user.getIntId());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             errorList.add("第" + rowNum + "行:" + "程序解析异常...");
             return null;
         }

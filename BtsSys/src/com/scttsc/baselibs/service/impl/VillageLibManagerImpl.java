@@ -32,4 +32,12 @@ public class VillageLibManagerImpl implements VillageLibManager {
     public List<Map> selectTownByCountryId(Integer countryId) throws Exception {
         return wyLibVillageDao.selectTownByCountryId(countryId);
     }
+
+    public WyLibVillage selectByPrimaryKey(Long id) {
+        return wyLibVillageDao.selectByPrimaryKey(id);
+    }
+
+    public int updateByPrimaryKeySelective(WyLibVillage record) {
+        return wyLibVillageDao.updateByPrimaryKeySelective(record);
+    }
 }

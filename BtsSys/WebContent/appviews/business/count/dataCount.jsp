@@ -86,7 +86,7 @@ $(function() {
            typeCombox2.selectValue('1');
        }else if(data==2) {
            liger.get("subTypeIdVal").setData(cellData);
-           typeCombox2.selectValue('7');
+           typeCombox2.selectValue('4');
        }
    }
    //选择统计字段
@@ -116,7 +116,7 @@ $(function() {
        var cnName=$("#cnName").val();
        var enName =$("#enName").val();
        var cityIds=$("#cityIdVal").val();
-       var typeId=$("#typeId").val();
+       var typeId=$("#subTypeId").val();
        if(cnName==''||enName==''){
            cnName="本地网,区县";
            enName="CITYNAME,COUNTRYNAME"
@@ -155,7 +155,7 @@ $(function() {
 function exportData(){
     var ids=$("#ids").val();
     var cityIds=$("#cityIdVal").val();
-    var typeId=$("#typeId").val();
+    var typeId=$("#subTypeId").val();
     var url="${ctx}/business/exportCountResult.action?cityIds="+cityIds+"&typeId="+typeId+"&ids="+ids;
     window.location.href = url;
 }
