@@ -75,7 +75,9 @@ create index wy_bbu_isshare_index on WY_BBU(IS_SHARE);
 create index wy_bbu_bbutype_index on WY_BBU(BBU_TYPE);
 
 --wy_cell
-
+wy_cell_lib
+create index wy_celllib_libid_index on WY_CELL_LIB(LIB_ID);
+create index wy_celllib_libtype_index on WY_CELL_LIB(LIB_TYPE);
 --wy_indoor_manual
 create index wy_indoor_cityid_index on wy_indoor_manual(city_id);
 create index wy_indoor_counrtyid_index on wy_indoor_manual(COUNTRY_ID);
