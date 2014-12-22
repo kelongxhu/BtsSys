@@ -44,13 +44,16 @@ alter table wy_tunel_manual add town varchar2(128);
 alter table wy_tunel_manual add village varchar2(128);
 
 --wy_columns_config的修改
-update wy_columns_config set cn_name ='室内分布小区名称' where id=144;
-delete wy_columns_config where id in(141,142);--删除小区的塔跪类型
-update wy_columns_config set cn_name='隧道覆盖小区名称' where id=228
-update wy_columns_config set 
-delete wy_columns_config where id in(233,234);
-
-
+Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,REMARK,ENABLE,ENEDIT,COMBOBOX) values (283,'乡镇','TOWN',1,16,'wy_bts_manual',0,1,0);
+Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,REMARK,ENABLE,ENEDIT,COMBOBOX) values (284,'农村','VILLAGE',1,16,'wy_bts_manual',0,1,0);
+Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,REMARK,ENABLE,ENEDIT,COMBOBOX) values (285,'乡镇','TOWN',2,106,'wy_bbu_manual',0,1,0);
+Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,REMARK,ENABLE,ENEDIT,COMBOBOX) values (286,'农村','VILLAGE',2,106,'wy_bbu_manual',0,1,0);
+Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,REMARK,ENABLE,ENEDIT,COMBOBOX) values (287,'乡镇','TOWN',3,311,'wy_indoor_manual',0,1,0);
+Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,REMARK,ENABLE,ENEDIT,COMBOBOX) values (288,'农村','VILLAGE',3,311,'wy_indoor_manual',0,1,0);
+Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,REMARK,ENABLE,ENEDIT,COMBOBOX) values (289,'乡镇','TOWN',4,203,'wy_bts_manual',0,1,0);
+Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,REMARK,ENABLE,ENEDIT,COMBOBOX) values (290,'农村','VILLAGE',4,203,'wy_bts_manual',0,1,0);
+Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,REMARK,ENABLE,ENEDIT,COMBOBOX) values (291,'乡镇','TOWN',6,13,'wy_tunel_manual',0,1,0);
+Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,REMARK,ENABLE,ENEDIT,COMBOBOX) values (292,'农村','VILLAGE',6,14,'wy_tunel_manual',0,1,0);
 --添加索引
 --wy_bts
 create index wy_bts_cityid_index on WY_BTS(city_id);
