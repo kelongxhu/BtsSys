@@ -327,7 +327,7 @@
         (case(b.usestatus) when 0 then '正式商用' when 1 then '开通未商用' when 2 then '未开通' END) usestatus,
         a.longitude,a.latitude,
         (case(b.do_bts) when 0 then '1X基站' when 1 then 'DO基站' end)
-        do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,
+        do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,c.town,c.village,
         c.install_pos_code,o.name
         install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
         c.tower_type,p.name tower_type_name,c.tower_high,c.mr_strut,q.name
@@ -387,7 +387,7 @@
         (case(b.usestatus) when 0 then '正式商用' when 1 then '开通未商用' when 2 then '未开通' END) usestatus,
         a.longitude,a.latitude,
         (case(b.do_bts) when 0 then '1X基站' when 1 then 'DO基站' end)
-        do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,
+        do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,c.town,c.village,
         c.install_pos_code,o.name
         install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
         c.tower_type,p.name tower_type_name,c.tower_high,c.mr_strut,q.name
@@ -457,7 +457,7 @@
           (case(b.usestatus) when 0 then '正式商用' when 1 then '开通未商用' when 2 then '未开通' END) usestatus,
           a.longitude,a.latitude,
           (case(b.do_bts) when 0 then '1X基站' when 1 then 'DO基站' end)
-          do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,
+          do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,c.town,c.village,
           c.install_pos_code,o.name
           install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
           c.tower_type,p.name tower_type_name,c.tower_high,c.mr_strut,q.name

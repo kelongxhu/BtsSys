@@ -20,4 +20,5 @@ public interface TunelManager {
     int countWytunelGroupByColumns(Map record) throws Exception;
     List<Map> selectWyTunelCellGroupByColumns(Map record)throws Exception;
     int countWytunelCellGroupByColumns(Map record)throws Exception;
+    List<Map> selectTunelBtsExportDataByMap(Map record)throws Exception;
 }

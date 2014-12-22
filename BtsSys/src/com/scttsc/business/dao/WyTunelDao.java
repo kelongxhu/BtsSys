@@ -28,6 +28,8 @@ public interface WyTunelDao {
 
     int updateByMap(Map record) throws Exception;
 
+    List<Map> selectTunelBtsExportDataByMap(Map record)throws Exception;
+
     List<Map> selectWyTunelGroupByColumns(Map record) throws Exception;
 
     int countWytunelGroupByColumns(Map record) throws Exception;

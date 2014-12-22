@@ -253,7 +253,6 @@ public class BbuAction extends BaseAction {
                 }
             }
 
-
             //查询条件
             if (!Common.isEmpty(name)) {
                 name = Common.decodeURL(name).trim();
@@ -291,6 +290,8 @@ public class BbuAction extends BaseAction {
                     if (bbuManual1 != null) {
                         cList.add(StringUtil.null2String(bbuManual1.getLongitude()));
                         cList.add(StringUtil.null2String(bbuManual1.getLatitude()));
+                        cList.add(StringUtil.null2String(bbuManual1.getTown()));
+                        cList.add(StringUtil.null2String(bbuManual1.getVillage()));
                         cList.add(StringUtil.null2String(bbuManual1.getSharFlag()));
                         cList.add(StringUtil.null2String(bbuManual1.getSharName()));//共享方名称
                         cList.add(StringUtil.null2String(bbuManual1.getAddress()));

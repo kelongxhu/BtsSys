@@ -197,7 +197,7 @@
 
     <select id="selectExportIndoorDataByMap" resultType="hashmap">
         SELECT u.*,e.name cityname,f.name countryname FROM(SELECT a.int_id,a.city_id,a.country_id
-        country_id,a.NAME,t.longitude,t.latitude,t.vendor_btstype,a.bsc_name,t.bts_name,a.cellid,a.pn,a.ci,b.prop1,b.prop2,b.grade,
+        country_id,a.NAME,t.longitude,t.latitude,t.vendor_btstype,a.bsc_name,t.bts_name,a.cellid,a.pn,a.ci,b.town,b.village,b.prop1,b.prop2,b.grade,
         b.repeaterNum,b.DRYNUM,b.COVERAGE,b.BUILDINGNUM,b.ADDRESS,b.DEVICENUM,b.MONITORFLAG,b.MONITORNUMBER,b.DEVICEADDRESS,b.DISTRIBUTEDESC,
         b.DISTRIBUTEFAC,b.MOTORFLAG,b.MOTORAREA,b.MOTORRIGHT,b.METERADDRESS,b.CONSTRUCTIONDATE,b.WLANFLAG,b.WLANSHARE,b.WLANCOVERAGE,b.OWNERNAME,
         b.OWNERPHONE,b.MONITORDEVICENUM,b.MONITORDEVICEIDS FROM wy_cell a
@@ -206,7 +206,7 @@
         WHERE a.is_indoor='是' AND a.delete_flag=0
         UNION
         SELECT
-        int_id,city_id,country_id,NAME,latitude,latitude,vendor_btstype,bsc_name,bts_name,cell_seq cellid,pn,ci,prop1,prop2,grade,
+        int_id,city_id,country_id,NAME,latitude,latitude,vendor_btstype,bsc_name,bts_name,cell_seq cellid,pn,ci,town,village,prop1,prop2,grade,
         repeaternum,drynum,COVERAGE,BUILDINGNUM,ADDRESS,DEVICENUM,MONITORFLAG,MONITORNUMBER,DEVICEADDRESS,DISTRIBUTEDESC,
         DISTRIBUTEFAC,MOTORFLAG,MOTORAREA,MOTORRIGHT,METERADDRESS,CONSTRUCTIONDATE,WLANFLAG,WLANSHARE,WLANCOVERAGE,OWNERNAME,
         OWNERPHONE,MONITORDEVICENUM,MONITORDEVICEIDS
@@ -248,11 +248,11 @@
                    ${sqlsb}
                </if>,count(1) num
                FROM
-        ( SELECT u.*,e.name cityname,f.name countryname FROM(SELECT a.int_id,a.city_id,a.county_id
-        country_id,a.NAME,a.longitude,a.latitude,a.vendor_btstype,a.bsc_name,a.bts_name,b.cell_seq,b.pn,b.ci,b.prop1,b.prop2,b.grade,
+        ( SELECT u.*,e.name cityname,f.name countryname FROM(SELECT a.int_id,a.city_id,a.country_id
+        country_id,b.NAME,b.longitude,b.latitude,b.vendor_btstype,b.bsc_name,b.bts_name,b.cell_seq,b.pn,b.ci,b.prop1,b.prop2,b.grade,
         b.repeaterNum,b.DRYNUM,b.COVERAGE,b.BUILDINGNUM,b.ADDRESS,b.DEVICENUM,b.MONITORFLAG,b.MONITORNUMBER,b.DEVICEADDRESS,b.DISTRIBUTEDESC,
         b.DISTRIBUTEFAC,b.MOTORFLAG,b.MOTORAREA,b.MOTORRIGHT,b.METERADDRESS,b.CONSTRUCTIONDATE,b.WLANFLAG,b.WLANSHARE,b.WLANCOVERAGE,b.OWNERNAME,
-        b.OWNERPHONE,b.MONITORDEVICENUM,b.MONITORDEVICEIDS FROM wy_bts a
+        b.OWNERPHONE,b.MONITORDEVICENUM,b.MONITORDEVICEIDS FROM wy_cell a
         LEFT JOIN WY_INDOOR_MANUAL b ON a.int_id=b.int_id WHERE a.is_indoor='是' AND a.delete_flag=0
         UNION
         SELECT
@@ -306,8 +306,8 @@
                           ${sqlsb}
                       </if>,count(1) num
                       FROM
-               ( SELECT u.*,e.name cityname,f.name countryname FROM(SELECT a.int_id,a.city_id,a.county_id
-               country_id,a.NAME,a.longitude,a.latitude,a.vendor_btstype,a.bsc_name,a.bts_name,b.cell_seq,b.pn,b.ci,b.prop1,b.prop2,b.grade,
+               ( SELECT u.*,e.name cityname,f.name countryname FROM(SELECT a.int_id,a.city_id,a.country_id
+               country_id,b.NAME,b.longitude,b.latitude,b.vendor_btstype,b.bsc_name,b.bts_name,b.cell_seq,b.pn,b.ci,b.prop1,b.prop2,b.grade,
                b.repeaterNum,b.DRYNUM,b.COVERAGE,b.BUILDINGNUM,b.ADDRESS,b.DEVICENUM,b.MONITORFLAG,b.MONITORNUMBER,b.DEVICEADDRESS,b.DISTRIBUTEDESC,
                b.DISTRIBUTEFAC,b.MOTORFLAG,b.MOTORAREA,b.MOTORRIGHT,b.METERADDRESS,b.CONSTRUCTIONDATE,b.WLANFLAG,b.WLANSHARE,b.WLANCOVERAGE,b.OWNERNAME,
                b.OWNERPHONE,b.MONITORDEVICENUM,b.MONITORDEVICEIDS FROM wy_bts a

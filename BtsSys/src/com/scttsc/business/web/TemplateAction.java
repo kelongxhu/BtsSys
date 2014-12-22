@@ -50,6 +50,8 @@ public class TemplateAction extends BaseAction {
 
     @Autowired
     private CellManualManager cellManualManager;//小区手工数据
+    @Autowired
+    private TunelManager tunelManager;
 
     private Integer enAble;
 
@@ -282,6 +284,12 @@ public class TemplateAction extends BaseAction {
                     sheetName = "室外覆盖小区信息";
                     datas = setCellData(configList);
                     break;
+                case 8:
+                    fileName="隧道覆盖站点信息.xls";
+                    sheetName = "隧道覆盖站点信息";
+                    datas = setTunelData(configList);
+                    break;
+
             }
             //根据表头、数据导出
             exportExcel(fileName, sheetName, headers, datas);
@@ -509,6 +517,54 @@ public class TemplateAction extends BaseAction {
                 map2.put("pn", pn);
             }
             dataList = indoorManualManager.selectExportIndoorDataByMap(map2);
+            for (Map data : dataList) {
+                List cellObj = new LinkedList();//定义存储1行的数据值
+                for (ColumnsConfig columnsConfig : configList) {
+                    //定义导出的字段
+                    Object obj = data.get(columnsConfig.getEnName());//获取值
+                    cellObj.add(obj);
+                }
+                datas.add(cellObj);
+            }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(),e);
+        }
+        return datas;
+    }
+
+
+
+
+    /**
+     * 组装隧道覆盖站点
+     *
+     * @param configList
+     * @return
+     */
+    public List setTunelData(List<ColumnsConfig> configList) {
+        User user = (User) this.getSession().getAttribute("user");
+        List<Map> dataList = null;
+        List datas = new LinkedList();
+        try {
+            //查询条件
+            Map map2 = new HashMap();
+            if (!Common.isEmpty(countryIds)) {
+                map2.put("countryIds", countryIds);
+            } else {
+                map2.put("countryIds", user.getCountryIds());
+            }
+            if (!Common.isEmpty(name)) {
+                name = Common.decodeURL(name).trim();
+                map2.put("name", "%" + name + "%");
+            }
+            if (!Common.isEmpty(bscName)) {
+                bscName = Common.decodeURL(bscName).trim();
+                map2.put("bscName", "%" + bscName + "%");
+            }
+            if (!Common.isEmpty(btsId)) {
+                map2.put("btsId", btsId);
+            }
+            dataList = tunelManager.selectTunelBtsExportDataByMap(map2);
             for (Map data : dataList) {
                 List cellObj = new LinkedList();//定义存储1行的数据值
                 for (ColumnsConfig columnsConfig : configList) {

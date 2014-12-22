@@ -276,7 +276,7 @@
     <select id="selectExportBbuDataByMap" resultType="hashmap">
         SELECT a.int_id,a.name,e.name cityname,f.name
         countryname,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,
-        a.circuitroom_ownership,a.trans_ownership,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
+        a.circuitroom_ownership,a.trans_ownership,c.town,c.village,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
         a.vendor_btstype,c.mr_strut,q.name mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
         c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
         C.Tran_Isnode,c.tran_sitenum,c.sour_model,c.sour_fac,c.sour_module_model,c.sour_module_num,c.sour_capa,
@@ -327,7 +327,7 @@
           FROM
           (SELECT a.int_id,a.name,e.name cityname,f.name
                   countryname,a.city_id,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,
-                  a.circuitroom_ownership,a.trans_ownership,a.Is_Share,a.Bbu_Type,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
+                  a.circuitroom_ownership,a.trans_ownership,a.Is_Share,a.Bbu_Type,c.town,c.village,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
                   a.vendor_btstype,c.mr_strut,q.name mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
                   c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
                   C.Tran_Isnode,c.tran_sitenum,c.sour_model,c.sour_fac,c.sour_module_model,c.sour_module_num,c.sour_capa,
@@ -394,7 +394,7 @@
                 FROM
                 (SELECT a.int_id,a.name,e.name cityname,f.name
                         countryname,a.city_id,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,
-                        a.circuitroom_ownership,a.trans_ownership,a.Is_Share,a.Bbu_Type,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
+                        a.circuitroom_ownership,a.trans_ownership,a.Is_Share,a.Bbu_Type,c.town,c.village,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
                         a.vendor_btstype,c.mr_strut,q.name mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
                         c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
                         C.Tran_Isnode,c.tran_sitenum,c.sour_model,c.sour_fac,c.sour_module_model,c.sour_module_num,c.sour_capa,

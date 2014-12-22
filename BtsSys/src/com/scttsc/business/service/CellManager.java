@@ -56,6 +56,9 @@ public interface CellManager {
 
     int countByTunnelLibCells(Object map) throws Exception;
 
+    //天线库
+    List<Map> selectCellAirLibByCellId(Long intId)throws Exception;
+
     //多个条件查询小区
 
     List<Cell> selectCellByMap(Map map)throws Exception;

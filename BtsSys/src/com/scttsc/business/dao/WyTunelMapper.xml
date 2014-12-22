@@ -511,6 +511,37 @@
 
 
 
+    <!--自定义隧道覆盖站点导出-->
+    <select id="selectTunelBtsExportDataByMap" resultType="hashmap">
+        SELECT <include refid="Base_Column_List"/>,e.name cityname,f.name countryname from wy_tunel u
+        LEFT JOIN wy_city e ON
+        u.city_id=e.id
+        LEFT JOIN wy_city f ON
+        u.COUNTY_ID=f.id
+        <where>
+            1=1 and u.delete_flag=0
+            <if test="countryIds!=null">
+                and u.COUNTY_ID in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and u.name like #{name}
+            </if>
+            <if test="bscName!=null">
+                and u.BSC_NAME like #{bscName}
+            </if>
+            <if test="btsId!=null">
+                and u.BTS_ID = #{btsId,jdbcType=DECIMAL}
+            </if>
+            <if test="intId!=null">
+                and u.int_id = #{intId,jdbcType=DECIMAL}
+            </if>
+        </where>
+        ORDER BY u.city_id,u.county_id ASC
+    </select>
+
+
+
+
 
     <!--自定义隧道覆盖站点分组统计-->
 

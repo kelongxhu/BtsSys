@@ -412,6 +412,8 @@ public class IndoorAction extends BaseAction {
                     //补充已经手工填写的数据
                     IndoorManual indoorManual2 = indoorManualManager.selectByPrimaryKey(new Long(indoorManual1.getIntId()));
                     if (indoorManual2 != null) {
+                        cList.add(StringUtil.null2String(indoorManual2.getTown()));
+                        cList.add(StringUtil.null2String(indoorManual2.getVillage()));
                         cList.add(StringUtil.null2String(indoorManual2.getProp1()));
                         cList.add(StringUtil.null2String(indoorManual2.getProp2()));
                         cList.add(StringUtil.null2String(indoorManual2.getGrade()));

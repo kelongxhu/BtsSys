@@ -1,9 +1,6 @@
 package com.scttsc.business.service.impl;
 
-import com.scttsc.business.dao.CcellDao;
-import com.scttsc.business.dao.CellDao;
-import com.scttsc.business.dao.CellLibDao;
-import com.scttsc.business.dao.CparCellDao;
+import com.scttsc.business.dao.*;
 import com.scttsc.business.model.Ccell;
 import com.scttsc.business.model.Cell;
 import com.scttsc.business.model.CparCell;
@@ -27,6 +24,9 @@ public class CellManagerImpl implements CellManager {
     private CparCellDao cparCellDao;
     @Autowired
     private CellLibDao cellLibDao;
+    @Autowired
+    private CellAirLibDao cellAirLibDao;
+
 
     public List<Cell> selectByMap(Object map) throws Exception {
         return cellDao.selectByMap(map);
@@ -161,5 +161,9 @@ public class CellManagerImpl implements CellManager {
 
     public List<Cell> selectCellAssoTunelByMap(Map<String, Object> record) throws Exception {
         return cellDao.selectCellAssoTunelByMap(record);
+    }
+
+    public List<Map> selectCellAirLibByCellId(Long intId) throws Exception {
+        return cellAirLibDao.selectCellAirLibByCellId(intId);
     }
 }

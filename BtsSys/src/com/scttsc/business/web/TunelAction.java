@@ -297,43 +297,20 @@ public class TunelAction extends BaseAction {
      */
     public String exportTunelInputData() {
         User user = (User) getSession().getAttribute("user");
-        Map<String, Object> map = new HashMap<String, Object>();
-        int total = 0;
-        List<WyTunel> list = null;
+        Map<String, Object> map =buildParamMap();
+        if (checkAllFlag == null || checkAllFlag == 0) {
+            if (!Common.isEmpty(ids)) {
+                map.put("ids", ids); //
+            } else {
+                map.put("manualFlag", 0);// 未录入的数据
+            }
+        }
+        List<Cell> list = null;
         String path = FileRealPath.getPath();
         String templatePath = path + "template" + "/tunelTemplate.xls";
-        String fileName = "隧道覆盖站点待录入数据.xls";
+        String fileName = "隧道覆盖小区待录入数据.xls";
         try {
-            if (!Common.isEmpty(countryIds)) {
-                map.put("countryIds", countryIds);
-            } else {
-                map.put("countryIds", user.getCountryIds());
-            }
-            if (checkAllFlag == null || checkAllFlag == 0) {
-                if (!Common.isEmpty(ids)) {
-                    map.put("ids", ids); //
-                } else {
-                    map.put("manualFlag", 0);// 未录入的数据
-                }
-            }
-
-            //查询条件
-            if (!Common.isEmpty(name)) {
-                name = Common.decodeURL(name).trim();
-                map.put("name", "%" + name + "%");
-            }
-            if (!Common.isEmpty(bscName)) {
-                bscName = Common.decodeURL(bscName).trim();
-                map.put("bscName", "%" + bscName + "%");
-            }
-            if (!Common.isEmpty(btsId)) {
-                map.put("btsId", btsId);
-            }
-            map.put("deleteFlag", 0);//在用
-            total = tunelManager.countByMap(map);
-            map.put("start", 0);
-            map.put("pagesize", (total + 1));
-            list = tunelManager.selectByMap(map);
+            list = cellManager.selectByMap(map);
             POIFSFileSystem fis = new POIFSFileSystem(new FileInputStream(
                     templatePath));
             HSSFWorkbook demoWorkBook = ExcelUtil.getWorkbook(fis);// 得到工作薄
@@ -342,19 +319,21 @@ public class TunelAction extends BaseAction {
             // 创建整个Excel表 //根据查询条件从DB取出list，生成excel
             int rowIndex = 2;
             WyTunelManual tunelManual=null;
-            for (WyTunel tunel : list) {
+            for (Cell cellObj : list) {
                 List<String> cList = new ArrayList<String>();
                 cList.add(StringUtil.null2String(rowIndex - 1));
-                cList.add(StringUtil.null2String(tunel.getIntId()));
-                cList.add(StringUtil.null2String(tunel.getName()));
-                cList.add(StringUtil.null2String(tunel.getCity().getCityName()));
-                cList.add(StringUtil.null2String(tunel.getCountry().getCityName()));
-                int manualFlag = tunel.getManualFlag();
+                cList.add(StringUtil.null2String(cellObj.getIntId()));
+                cList.add(StringUtil.null2String(cellObj.getName()));
+                cList.add(StringUtil.null2String(cellObj.getCity().getCityName()));
+                cList.add(StringUtil.null2String(cellObj.getCountry().getCityName()));
+                int manualFlag = cellObj.getManualFlag().intValue();
                 if (manualFlag == 1) {
                     //已录入
-                    tunelManual = tunelManualManager.selectByPrimaryKey(tunel.getIntId());
+                    tunelManual = tunelManualManager.selectByPrimaryKey(new Long(cellObj.getIntId()));
                     if (tunelManual != null) {
                         //设值
+                        cList.add(tunelManual.getTown());
+                        cList.add(tunelManual.getVillage());
                         RoadLib roadLib=roadLibManager.getById(new Long(tunelManual.getRoadId()));
                         tunelManual.setRoadLib(roadLib);
                         Cons propCons = ConstantUtil.getInstance().getConsByCode("TUNELPROP", tunelManual.getProp() + "");
@@ -412,14 +391,12 @@ public class TunelAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return null;
     }
-
-
     /**
-     * 隧道库导出
+     * 隧道覆盖小区列表导出
      * @return
      */
     public String tunelExport(){
@@ -645,7 +622,7 @@ public class TunelAction extends BaseAction {
                 map.put("inuser", user.getIntId());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             errorList.add("第" + rowNum + "行:" + "程序解析异常...");
             return null;
         }

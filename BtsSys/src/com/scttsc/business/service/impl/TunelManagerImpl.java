@@ -68,4 +68,8 @@ public class TunelManagerImpl implements TunelManager {
     public int countWytunelCellGroupByColumns(Map record) throws Exception {
         return wyTunelDao.countWytunelCellGroupByColumns(record);
     }
+
+    public List<Map> selectTunelBtsExportDataByMap(Map record) throws Exception {
+        return wyTunelDao.selectTunelBtsExportDataByMap(record);
+    }
 }

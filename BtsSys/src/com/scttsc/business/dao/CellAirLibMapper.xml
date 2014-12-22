@@ -41,8 +41,17 @@
     <select id="selectByCellId" resultMap="BaseResultMap">
            select
            <include refid="Base_Column_List"/>
-           from WY_CELL_AIRLIB where  CELL_INT_ID=#{cellId,jdbcType=DECIMAL}
+           from WY_CELL_AIRLIB where  CELL_INT_ID=#{intId,jdbcType=DECIMAL}
      </select>
+
+    <!--通过小区查看天线库信息-->
+
+    <select id="selectCellAirLibByCellId" resultType="hashmap">
+        select  u.CELL_INT_ID,u.AIR_ID,b.AIR_MODEL,u.AZIMUTH, u.HANGHIGH, u.ELECTRONDIP, u.ENGINEDIP, u.TOTALDIP
+        from WY_CELL_AIRLIB u
+        left join WY_LIB_AIR b on b.id=u.AIR_ID
+        where  u.CELL_INT_ID=#{intId,jdbcType=DECIMAL}
+    </select>
 
 
     <delete id="deleteByMap">

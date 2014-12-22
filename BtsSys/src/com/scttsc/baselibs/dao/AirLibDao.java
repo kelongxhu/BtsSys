@@ -1,6 +1,7 @@
 package com.scttsc.baselibs.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.scttsc.baselibs.model.AirLib;
 import com.scttsc.common.dao.MyBatisRepository;
@@ -21,4 +22,6 @@ public interface AirLibDao {
 	List<AirLib> selectAll(Object map)throws Exception;
 
     int deleteByDeleteFlag(Object map)throws Exception;
+
+    List<Map> selectCellAirLibByCellId(Long id)throws Exception;
 }

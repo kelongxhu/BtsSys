@@ -447,6 +447,8 @@ public class BtsAction extends BaseAction {
                     //已录入
                     btsManual = btsManualManager.getById(bts.getIntId().longValue());
                     if (btsManual != null) {
+                        cList.add(StringUtil.null2String(btsManual.getTown()));
+                        cList.add(StringUtil.null2String(btsManual.getVillage()));
                         Cons btsinstallCons = ConstantUtil.getInstance().getConsByCode("BTSINSTALL", btsManual.getInstallPos() + "");
                         cList.add(StringUtil.null2String(btsinstallCons == null ? "" : btsinstallCons.getName()));
                         cList.add(StringUtil.null2String(btsManual.getSharFlag()));

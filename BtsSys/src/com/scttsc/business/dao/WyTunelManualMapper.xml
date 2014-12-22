@@ -189,7 +189,7 @@
         INUSER = #{inuser,jdbcType=DECIMAL},
       </if>
      <if test="town!=null">
-        TOWN=#{town}
+        TOWN=#{town},
      </if>
      <if test="village">
         VILLAGE=#{village}

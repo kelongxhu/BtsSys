@@ -58,9 +58,9 @@ public class TunelManualManagerImpl implements TunelManualManager {
             d.setPatterns(datePattern);
             ConvertUtils.register(d, Date.class);
             BeanUtils.populate(wyTunelManual, record);
-            wyTunelManual.setIntime(new Date());
             WyTunelManual manualObj = selectByPrimaryKey(wyTunelManual.getIntId());
             if (manualObj == null) {
+                wyTunelManual.setIntime(new Date());
                 //插入
                 insert(wyTunelManual);
             } else {
@@ -150,4 +150,6 @@ public class TunelManualManagerImpl implements TunelManualManager {
         }
         return reponse;
     }
+
+
 }

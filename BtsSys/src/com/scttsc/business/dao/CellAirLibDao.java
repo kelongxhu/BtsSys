@@ -13,4 +13,6 @@ public interface CellAirLibDao {
     int deleteByMap(Object map)throws Exception;
 
     int updateByMap(Map record)throws Exception;
+
+    List<Map> selectCellAirLibByCellId(Long intId)throws Exception;
 }

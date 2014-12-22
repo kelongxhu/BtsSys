@@ -353,13 +353,18 @@ public class ClientAction extends BaseAction {
                     for (String columnsKey : columnsConfigMap.keySet()) {
                         ColumnsConfig config = columnsConfigMap.get(columnsKey);
                         Map rowData = new LinkedHashMap();
-                        if (config != null) {
-                            rowData.put("cnName", config.getCnName());
-                            rowData.put("enName", config.getEnName());
-                            rowData.put("enEdit", config.getEnedit());
-                            rowData.put("comboBox", config.getComBoBox());
+                        rowData.put("cnName", config.getCnName());
+                        rowData.put("enName", config.getEnName());
+                        rowData.put("enEdit", config.getEnedit());
+                        rowData.put("comboBox", config.getComBoBox());
+                        //如果是airLib则返回天线库信息
+                        if("AIRLIB".equals(config.getEnName())){
+                            Long cellId=StringUtil.null2Long0(cellData.get("INT_ID"));
+                            List<Map> airLib=cellManager.selectCellAirLibByCellId(cellId);
+                            rowData.put("rowData",airLib);
+                        }else{
+                            rowData.put("columnData", cellData.get(columnsKey));
                         }
-                        rowData.put("columnData", cellData.get(columnsKey));
                         data.add(rowData);
                     }
                     dataList.add(data);
