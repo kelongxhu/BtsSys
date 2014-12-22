@@ -34,9 +34,9 @@ $(function() {
     //数据类型
     var comBox1 = $("#typeIdVal").ligerComboBox({
         data: [
-            { text: '室内覆盖站点', id: '1' },
+            { text: '室外覆盖站点', id: '1' },
             { text: '纯BBU站点', id: '2' },
-            { text: '室外分布站点', id: '3' },
+            { text: '室内分布站点', id: '3' },
             { text: '小区', id: '4' },
             { text: '隧道覆盖站点', id: '6' }
         ],

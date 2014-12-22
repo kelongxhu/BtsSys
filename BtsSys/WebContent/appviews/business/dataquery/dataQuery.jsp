@@ -35,9 +35,9 @@ $(function() {
         data: [
             { text: '室外覆盖站点', id: '1' },
             { text: '纯BBU站点', id: '2' },
-            { text: '室内分布站点', id: '3' },
+            { text: '室内分布站点', id: '7' },
             { text: '传输节点', id: '5' },
-            { text: '隧道覆盖站点', id: '6' }
+            { text: '隧道覆盖站点', id: '8' }
         ],
         width : 200,
         selectBoxWidth: 200,
@@ -383,10 +383,8 @@ function columnConfigExport() {
     var ci = $("#ci").val();
     var pn = $("#pn").val();
     var url;
-    if(typeId == '5') url = encodeURI('${ctx}/business/transferExport?countryIds='+cityIds+'&name='+name)
-    else if(typeId=='6')
-        url=encodeURI('${ctx}/business/tunelExport?countryIds='+cityIds+'&name='+name);
-    else url = encodeURI("${ctx}/business/columnConfig.action?typeId=" + typeId+"&countryIds="+cityIds+"&name="+name+"&bscName="+bscName+"&btsId="+btsId+"&ci="+ci+"&pn="+pn);
+    if(typeId == '5') url = encodeURI('${ctx}/business/transferExport?countryIds='+cityIds+'&name='+name);
+    else url = encodeURI("${ctx}/business/columnConfig.action?typeId=" + typeId+"&countryIds="+cityIds+"&name="+name+"&bscName="+bscName+"&btsId="+btsId);
     window.location.href = url;
 }
 //直放站导出

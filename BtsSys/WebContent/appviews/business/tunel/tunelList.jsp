@@ -125,7 +125,7 @@
                 $.ligerDialog.alert('请选择一条录入！');
                 return;
             }
-            var id;
+            var intId;
             $(rows).each(function() {
                 intId = this.intId;
             });

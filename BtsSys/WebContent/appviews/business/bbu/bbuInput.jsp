@@ -68,7 +68,7 @@ $(function(){
          data: [
              { text: '移动', id: '移动' },
              { text: '联通',id:  '联通' },
-             { text: '其他', id: '其他' },
+             { text: '其它', id: '其它' },
              { text: '无', id: '无' }
          ], 
          width : 200,
