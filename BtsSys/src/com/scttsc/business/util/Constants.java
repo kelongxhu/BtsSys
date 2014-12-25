@@ -42,4 +42,7 @@ public class Constants {
     public static String CELL_TUNEL="隧";
 
 
+    public static String SPLIT_SYMBOL=",";
+
+
 }

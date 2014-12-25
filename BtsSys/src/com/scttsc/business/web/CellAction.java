@@ -194,7 +194,7 @@ public class CellAction extends BaseAction {
                 map2.put("libType", 3);
                 List<CellLib> roadLibs = cellManualManager.selectCellLibByMap(map2);
                 for (CellLib road : roadLibs) {
-                    roadLib += "-2_" + road.getLibId() + ";";
+                    roadLib += "-2_" + road.getLibId() + Constants.SPLIT_SYMBOL;
                 }
                 //隧道库
                 Map map3 = new HashMap();
@@ -202,7 +202,7 @@ public class CellAction extends BaseAction {
                 map3.put("libType", 6);
                 List<CellLib> tunnelLibs = cellManualManager.selectCellLibByMap(map3);
                 for (CellLib tunnel : tunnelLibs) {
-                    roadLib += "-3_" + tunnel.getLibId() + ";";
+                    roadLib += "-3_" + tunnel.getLibId() +  Constants.SPLIT_SYMBOL;
                 }
                 if (!Common.isEmpty(roadLib)) {
                     roadLib = roadLib.substring(0, roadLib.length() - 1);
@@ -215,7 +215,7 @@ public class CellAction extends BaseAction {
                 map4.put("libType", 1);
                 List<CellLib> schoolLibs = cellManualManager.selectCellLibByMap(map4);
                 for (CellLib school : schoolLibs) {
-                    hotLib += "-2_" + school.getLibId() + ";";
+                    hotLib += "-2_" + school.getLibId() +  Constants.SPLIT_SYMBOL;
                 }
                 //风景库
                 Map map5 = new HashMap();
@@ -223,7 +223,7 @@ public class CellAction extends BaseAction {
                 map5.put("libType", 5);
                 List<CellLib> secneryLibs = cellManualManager.selectCellLibByMap(map5);
                 for (CellLib secnery : secneryLibs) {
-                    hotLib += "-3_" + secnery.getLibId() + ";";
+                    hotLib += "-3_" + secnery.getLibId() +  Constants.SPLIT_SYMBOL;
                 }
                 if (!Common.isEmpty(hotLib)) {
                     hotLib = hotLib.substring(0, hotLib.length() - 1);

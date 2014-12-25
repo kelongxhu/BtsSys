@@ -233,7 +233,10 @@ public class BtsAction extends BaseAction {
                 map.put("deleteFlag", 0);//在用
                 List<Bbu> bbus = bbuManager.selectBbuByConds(map);
                 bts.setBbus(bbus);
-                //cons
+                //小区列表
+                List<Cell> cellList = cellManager.selectByBtsId(bts.getIntId().longValue());
+                bts.setCells(cellList);
+                //计算小区覆盖情况
                 //基站覆盖信息
                 CellManual cellManual = getBtsMinCell(bts.getIntId().longValue());
                 this.getRequest().setAttribute("cellManual", cellManual);
@@ -269,36 +272,13 @@ public class BtsAction extends BaseAction {
     private CellManual getBtsMinCell(Long wybtsId) {
         CellManual cellManual = null;
         try {
-            //计算小区覆盖情况
-            List<Cell> cellList = cellManager.selectByBtsId(wybtsId);
-            if (bts != null) {
-                bts.setCells(cellList);
-            }
-            Cell minCcell = null;
-            if (cellList != null) {
-                int cellId = 0;
-                int minCellId = 0;
-                for (int i = 0; i < cellList.size(); i++) {
-                    Cell cell = cellList.get(i);
-                    cellId = cell.getCellId();
-                    if (i == 0) {
-                        minCellId = cellId;
-                        minCcell = cell;
-                    } else {
-                        if (cellId < minCellId) {
-                            minCellId = cellId;
-                            minCcell = cell;
-                        }
-                    }
-                }
-            }
-            if (minCcell != null) {
+            cellManual=cellManualManager.getBtsMinCell(wybtsId);
+            if (cellManual != null) {
                 //以最小cellId显示基站覆盖信息
-                cellManual = cellManualManager.selectById(new Long(minCcell.getIntId()));//小区手工表
                 //覆盖信息
                 Map map1 = new HashMap();
                 //农村乡镇库
-                map1.put("cellId", minCcell.getIntId());
+                map1.put("cellId", cellManual.getIntId());
                 List<CellLib> cellLibs = cellManualManager.selectCellLibByMap(map1);
                 //校园库
                 List<SchoolLib> schoolLibs = new ArrayList<SchoolLib>();

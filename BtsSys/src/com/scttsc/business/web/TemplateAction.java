@@ -3,6 +3,7 @@ package com.scttsc.business.web;
 import com.scttsc.admin.model.User;
 import com.scttsc.baselibs.model.AirLib;
 import com.scttsc.business.model.CellAirLib;
+import com.scttsc.business.model.CellManual;
 import com.scttsc.business.model.ColumnsConfig;
 import com.scttsc.business.model.Template;
 import com.scttsc.business.service.*;
@@ -330,9 +331,15 @@ public class TemplateAction extends BaseAction {
                 List cellObj = new LinkedList();//定义存储1行的数据值
                 for (ColumnsConfig columnsConfig : configList) {
                     //定义导出的字段
-                    String columnName = columnsConfig.getEnName();
-                    Object obj = data.get(columnName);//获取值
-                    cellObj.add(obj);
+                    String enName = columnsConfig.getEnName();
+                    if("CELL_COVERAREA".equals(enName)){
+                        //扇区覆盖类型
+                        CellManual cellManual=cellManualManager.getBtsMinCell(StringUtil.null2Long0(data.get("INT_ID")));
+                        cellObj.add(cellManual==null?"":cellManual.getCoverarea());
+                    }else{
+                        Object obj = data.get(columnsConfig.getEnName());//获取值
+                        cellObj.add(obj);
+                    }
                 }
                 datas.add(cellObj);
             }
@@ -370,6 +377,7 @@ public class TemplateAction extends BaseAction {
                 List cellObj = new LinkedList();//定义存储1行的数据值
                 for (ColumnsConfig columnsConfig : configList) {
                     //定义导出的字段
+                    String enName=columnsConfig.getEnName();
                     Object obj = data.get(columnsConfig.getEnName());//获取值
                     cellObj.add(obj);
                 }

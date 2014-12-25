@@ -49,7 +49,6 @@
 
 <script type="text/javascript">
     $.ligerDefaults.ComboBox.split = ',';
-
 </script>
 
 

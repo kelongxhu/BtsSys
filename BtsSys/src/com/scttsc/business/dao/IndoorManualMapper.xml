@@ -169,6 +169,9 @@
             <if test="ids!=null">
                 and int_id in(${ids})
             </if>
+            <if test="manualFlag!=null">
+                and manual_flag=#{manualFlag,jdbcType=DECIMAL}
+            </if>
             <if test="cityId!=null">
                 and CITY_ID in(${cityId})
             </if>

@@ -134,8 +134,8 @@ public class DashBordManagerImpl implements DashBordManager {
             List<City> citys = cityDao.getByMap(param);
             List<Map> btsCitys = btsDao.selectBtsCountGroupByCity("否",0);//室外站点
             List<Map> bbuCitys = bbuDao.selectBbuCountGroupByCity(0);//bbu站点
-            List<Map> indoorCitys = btsDao.selectBtsCountGroupByCity("是",0);//室分小区
-            List<Map> tunelCitys = wyTunelDao.selectTunelCountGroupByCity(0);//隧道小区
+            List<Map> indoorCitys = cellDao.selectCellCountGroupByCity("是",0);//室分小区
+            List<Map> tunelCitys = cellDao.selectCellCountGroupByCity("隧",0);//隧道小区
             List<Map> outCellCitys = cellDao.selectCellCountGroupByCity("否",0);//室外
             List<Map> wrongNameCitys=wrongNameDao.selectWrongNameGroupByCity();//错误小区
             //组装数据

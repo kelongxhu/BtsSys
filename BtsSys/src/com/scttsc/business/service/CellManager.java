@@ -1,9 +1,6 @@
 package com.scttsc.business.service;
 
-import com.scttsc.business.model.Ccell;
-import com.scttsc.business.model.Cell;
-import com.scttsc.business.model.CparCell;
-import com.scttsc.business.model.MateEntry;
+import com.scttsc.business.model.*;
 
 import java.util.List;
 import java.util.Map;
@@ -68,7 +65,6 @@ public interface CellManager {
     int countCellGroupByColumns(Map map) throws Exception;
 
     List<Cell> selectCellAssoTunelByMap(Map<String,Object> record)throws Exception;
-
 
 
 }

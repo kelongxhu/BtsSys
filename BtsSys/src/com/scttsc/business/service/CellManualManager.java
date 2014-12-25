@@ -41,4 +41,12 @@ public interface CellManualManager {
     //找回小区数据
     FindBackReponse findManualData(List<String> ids);
 
+    /**
+     * 通过物理站点ID，获取CELL_ID的小区手工数据
+     * @param wybtsId
+     * @return
+     * @throws Exception
+     */
+    CellManual getBtsMinCell(Long wybtsId);
+
 }

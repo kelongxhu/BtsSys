@@ -33,7 +33,7 @@ $(function() {
         data: [
             { text: '室外覆盖小区', id: '否' },
             { text: '室内分布小区', id: '是' },
-            { text: '隧道覆盖小区', id: '隧' },
+            { text: '隧道覆盖小区', id: '隧' }
         ],
         width : 200,
         selectBoxWidth: 200,

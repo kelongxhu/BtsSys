@@ -350,18 +350,13 @@ public class CellManualManagerImpl implements CellManualManager {
         record = autoFullCellManual(record, ccell, cell);
         // 插入小区手工信息
         cellManualDao.insert(record);
-
         insertAirLib(record);
         insertCellLib(record);
-
         // 将手工标识置为1，表示手工录入成功
-
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("intId", record.getIntId());
         map.put("manualFlag", 1);
         cellDao.updateByMap(map);
-
-
         //切入日志，edit by 2013/8/2
         wyLogManager.insertLog(record);
 
@@ -382,7 +377,6 @@ public class CellManualManagerImpl implements CellManualManager {
         insertCellLib(record);
         cellAirLibDao.deleteByMap(map);  //删除小区天线信息
         insertAirLib(record);
-
     }
 
     /**
@@ -433,6 +427,7 @@ public class CellManualManagerImpl implements CellManualManager {
      */
     void insertCellLib(CellManual record) {
         // 插入小区覆盖农村、乡镇库
+        /*
         String countryLib = record.getCountryLib();
         if (!Common.isEmpty(countryLib)) {
             String[] strs = countryLib.split(";");
@@ -443,11 +438,11 @@ public class CellManualManagerImpl implements CellManualManager {
                 cellLib.setLibType(Constants.VitoLib);
                 cellLibDao.insert(cellLib);
             }
-        }
+        }*/
         // 插入道路、隧道(道路：0_道路ID;道路ID_隧道ID)
         String roadLib = record.getRoadLib();
         if (!Common.isEmpty(roadLib)) {
-            String[] strs = roadLib.split(";");
+            String[] strs = roadLib.split(Constants.SPLIT_SYMBOL);
             for (String str : strs) {
                 if (!Common.isEmpty(str)) {
                     String s[] = str.split("_");
@@ -470,7 +465,7 @@ public class CellManualManagerImpl implements CellManualManager {
         // 插入风景、校园库(风景：-2_风景ID,校园：-3_校园ID)
         String hotLib = record.getHotLib();
         if (!Common.isEmpty(hotLib)) {
-            String[] strs = hotLib.split(";");
+            String[] strs = hotLib.split(Constants.SPLIT_SYMBOL);
             for (String str : strs) {
                 if (!Common.isEmpty(str)) {
                     String s[] = str.split("_");
@@ -612,5 +607,38 @@ public class CellManualManagerImpl implements CellManualManager {
             LOG.error(e.getMessage(), e);
         }
         return reponse;
+    }
+
+    public CellManual getBtsMinCell(Long wybtsId) {
+        CellManual cellManual = null;
+        try {
+            //计算小区覆盖情况
+            List<Cell> cellList = cellDao.selectByBtsId(wybtsId);
+            Cell minCcell = null;
+            if (cellList != null) {
+                int cellId = 0;
+                int minCellId = 0;
+                for (int i = 0; i < cellList.size(); i++) {
+                    Cell cell = cellList.get(i);
+                    cellId = cell.getCellId();
+                    if (i == 0) {
+                        minCellId = cellId;
+                        minCcell = cell;
+                    } else {
+                        if (cellId < minCellId) {
+                            minCellId = cellId;
+                            minCcell = cell;
+                        }
+                    }
+                }
+            }
+            if (minCcell != null) {
+                //以最小cellId显示基站覆盖信息
+                cellManual = cellManualDao.selectById(new Long(minCcell.getIntId()));//小区手工表
+            }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(),e);
+        }
+        return cellManual;
     }
 }
