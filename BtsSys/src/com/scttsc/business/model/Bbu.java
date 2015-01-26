@@ -33,6 +33,9 @@ public class Bbu {
     private Date deletetime;
     private Date updatetime;
     private Cons cons;
+    private String highTrainFlag;//高铁标识
+    private Integer redLineFlag;//红线标识
+    private String redLineFlagStr;
 
     private int shareBbuCount;//共站BBU数量
     
@@ -706,5 +709,40 @@ public class Bbu {
         this.city = city;
     }
 
+    public String getHighTrainFlag() {
+        return highTrainFlag;
+    }
 
+    public void setHighTrainFlag(String highTrainFlag) {
+        this.highTrainFlag = highTrainFlag;
+    }
+
+    public Integer getRedLineFlag() {
+        return redLineFlag;
+    }
+
+    public void setRedLineFlag(Integer redLineFlag) {
+        this.redLineFlag = redLineFlag;
+    }
+
+    public String getRedLineFlagStr() {
+        if (redLineFlag == null) {
+            return "";
+        }
+        switch (redLineFlag) {
+            case 1:
+                redLineFlagStr = "红线内";
+                break;
+            case 2:
+                redLineFlagStr = "红线外";
+                break;
+            default:
+                break;
+        }
+        return redLineFlagStr;
+    }
+
+    public void setRedLineFlagStr(String redLineFlagStr) {
+        this.redLineFlagStr = redLineFlagStr;
+    }
 }

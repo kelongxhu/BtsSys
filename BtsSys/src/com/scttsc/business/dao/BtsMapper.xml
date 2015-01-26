@@ -28,6 +28,8 @@
 
         <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL"/>
         <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR"/>
+        <result column="HIGHTRAIN_FLAG" property="highTrainFlag" jdbcType="VARCHAR"/>
+        <result column="REDLINE_FLAG" property="redLineFlag" jdbcType="DECIMAL"/>
 
 
         <result column="cityname" property="cityName" jdbcType="VARCHAR"/>
@@ -39,7 +41,7 @@
     <sql id="Base_Column_List">
     u.INT_ID, u.NAME, u.LONGITUDE, u.LATITUDE, u.IS_INDOOR, u.IS_RRU, u.BTS_NAME, u.BSC_NAME, u.BTS_ID, 
     u.CIRCUITROOM_OWNERSHIP, u.TRANS_OWNERSHIP, u.VENDOR_BTSTYPE, u.CITY_ID, u.COUNTY_ID, u.RELATED_BTS, 
-    u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME, u.SERVICE_LEVEL,u.DELETE_RESONCODE,u.DELETE_TEXT
+    u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME, u.SERVICE_LEVEL,u.DELETE_RESONCODE,u.DELETE_TEXT,u.HIGHTRAIN_FLAG,u.REDLINE_FLAG
    </sql>
 
 
@@ -327,9 +329,9 @@
         (case(b.usestatus) when 0 then '正式商用' when 1 then '开通未商用' when 2 then '未开通' END) usestatus,
         a.longitude,a.latitude,
         (case(b.do_bts) when 0 then '1X基站' when 1 then 'DO基站' end)
-        do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,c.town,c.village,
-        c.install_pos_code,o.name
-        install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
+        do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,a.HIGHTRAIN_FLAG,
+        (case(a.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,c.town,c.village,
+        c.install_pos_code,o.name install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
         c.tower_type,p.name tower_type_name,c.tower_high,c.mr_strut,q.name
         mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
         c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
@@ -387,9 +389,9 @@
         (case(b.usestatus) when 0 then '正式商用' when 1 then '开通未商用' when 2 then '未开通' END) usestatus,
         a.longitude,a.latitude,
         (case(b.do_bts) when 0 then '1X基站' when 1 then 'DO基站' end)
-        do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,c.town,c.village,
-        c.install_pos_code,o.name
-        install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
+        do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,a.HIGHTRAIN_FLAG,
+        (case(a.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,c.town,c.village,
+        c.install_pos_code,o.name install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
         c.tower_type,p.name tower_type_name,c.tower_high,c.mr_strut,q.name
         mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
         c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
@@ -418,7 +420,6 @@
                 and city_id in(${cityIds})
             </if>
         </where>
-
         GROUP BY
         <if test="sqlsb!=null">
             ${sqlsb}
@@ -458,6 +459,7 @@
           a.longitude,a.latitude,
           (case(b.do_bts) when 0 then '1X基站' when 1 then 'DO基站' end)
           do_bts,a.is_rru,a.bts_name,a.service_level,a.circuitroom_ownership,a.trans_ownership,c.town,c.village,
+          a.HIGHTRAIN_FLAG,(case(a.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
           c.install_pos_code,o.name
           install_pos_code_name,c.shar_flag,c.shar_name,c.address,c.open_time,a.vendor_btstype,c.conf_1x,c.conf_do,
           c.tower_type,p.name tower_type_name,c.tower_high,c.mr_strut,q.name
@@ -574,8 +576,6 @@
         </if>
         )
     </select>
-
-
 
     <select id="selectWyBtsByMap" resultType="hashmap">
         select int_id from wy_bts

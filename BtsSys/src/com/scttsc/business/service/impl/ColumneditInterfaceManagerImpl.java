@@ -64,6 +64,7 @@ public class ColumneditInterfaceManagerImpl implements ColumneditInterfaceManage
         String[] idArr = ids.split(",");
         for (String id : idArr) {
             if (status == 1) {
+                //审核通过
                 wyColumneditInterfaceSucess(new Long(id));
             }
             //更改状态

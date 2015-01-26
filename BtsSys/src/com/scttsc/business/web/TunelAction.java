@@ -452,6 +452,8 @@ public class TunelAction extends BaseAction {
                 cList.add(tunel.getBtsId()+"");
                 cList.add(tunel.getPn()+"");
                 cList.add(tunel.getCi()+"");
+                cList.add(tunel.getHighTrainFlag());//高铁标识
+                cList.add(tunel.getRedLineFlagStr());//红外标识
                 WyTunelManual wyTunelManual=tunel.getWyTunelManual();
                 if(wyTunelManual!=null){
                     RoadLib roadLib=roadLibManager.getById(new Long(wyTunelManual.getRoadId()));
@@ -574,6 +576,8 @@ public class TunelAction extends BaseAction {
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Validity> coulmnMap = ExcelHelper.getTunelCoulmnMap();
         try {
+            Cell wyCell=null;
+            String townDb=null;
             int j = 0;
             int bj=0;
             for (String dataKey : coulmnMap.keySet()) {
@@ -594,7 +598,14 @@ public class TunelAction extends BaseAction {
                     errorList.add("第" + rowNum + "行:" + "校验失败," + validity.getMsg());
                     return null;
                 }
-                if ("prop".equals(dataKey) || "shareflag".equals(dataKey)) {
+                if("intId".equals(dataKey)){
+                    wyCell=cellManager.selectById(new Long(cellValue));
+                    if(wyCell==null){
+                        errorList.add("第"+rowNum+"行,校验失败，找不到对应隧道小区，"+cellValue);
+                        return null;
+                    }
+                    map.put(dataKey, cellValue);
+                }if ("prop".equals(dataKey) || "shareflag".equals(dataKey)) {
                     //隧道属性,共建共享
                     Map<String, String> groupCodeMap = ExcelHelper.getGroupCodeMap();
                     String groupCode = groupCodeMap.get(dataKey);
@@ -613,7 +624,32 @@ public class TunelAction extends BaseAction {
                         errorList.add("第" + rowNum + "行导入校验失败," + validity.getName() + ".填入未在道路库数据记录中,请核对:"+cellValue);
                         return null;
                     }
-                }else {
+                }else if ("town".equals(dataKey)) {
+                    //校验乡镇
+                    String townKey = wyCell.getCountryId() + "_" + cellValue;
+                    townDb = ConstantUtil.getInstance().getTown(townKey);
+                    if (townDb == null) {
+                        errorList.add("第" + rowNum + "行乡镇列校验失败。"+ cellValue + "未在乡镇库中，请核查。");
+                        return null;
+                    }
+                    map.put(dataKey, cellValue.replace(";", ","));
+                } else if("village".equals(dataKey)){
+                    //校验农村库
+                    if(!Common.isEmpty(cellValue)){
+                        String[] villageArr = cellValue.split(";");
+                        if (villageArr != null && villageArr.length > 0) {
+                            for (String village : villageArr) {
+                                String villageKey=wyCell.getCountryId()+"_"+townDb+"_"+village;
+                                String villageDb = ConstantUtil.getInstance().getVillage(villageKey);
+                                if (villageDb == null) {
+                                    errorList.add("第" + rowNum + "行农村列校验失失败，" + cellValue + "中，" + village + "未在乡镇库中，请核查。");
+                                    return null;
+                                }
+                            }
+                            map.put(dataKey, cellValue.replace(";", ","));
+                        }
+                    }
+                } else {
                     map.put(dataKey, cellValue);
                 }
                 j++;

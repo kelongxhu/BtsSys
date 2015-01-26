@@ -31,24 +31,26 @@
 
         <result column="cityname" property="cityName" jdbcType="VARCHAR"/>
         <result column="countryname" property="country.cityName" jdbcType="VARCHAR"/>
+        <result column="HIGHTRAIN_FLAG" property="highTrainFlag" jdbcType="VARCHAR"/>
+        <result column="REDLINE_FLAG" property="redLineFlag" jdbcType="DECIMAL"/>
 
 
         <result column="msc_name" property="mscName" jdbcType="VARCHAR"/>
         <result column="usestatus" property="useStatus" jdbcType="VARCHAR"/>
         <result column="do_bts" property="doBts" jdbcType="VARCHAR"/>
 
-        <association column="RELATED_BTS" property="cBts" javaType="com.scttsc.business.model.CBts"
-                     select="com.scttsc.business.dao.CBtsDao.selectById"/>
+        <!--<association column="RELATED_BTS" property="cBts" javaType="com.scttsc.business.model.CBts"-->
+                     <!--select="com.scttsc.business.dao.CBtsDao.selectById"/>-->
     </resultMap>
     <sql id="Base_Column_List">
     INT_ID, NAME, BBU_NO, LONGITUDE, LATITUDE, BTS_NAME, BSC_NAME, BTS_ID, CIRCUITROOM_OWNERSHIP, 
     TRANS_OWNERSHIP, VENDOR_BTSTYPE, CITY_ID, COUNTY_ID, RELATED_BTS, IS_SHARE, BBU_TYPE, 
-    RELATE_WYBTS, MANUAL_FLAG, DELETE_FLAG, DELETETIME, UPDATETIME,DELETE_RESONCODE,DELETE_TEXT
+    RELATE_WYBTS, MANUAL_FLAG, DELETE_FLAG, DELETETIME, UPDATETIME,DELETE_RESONCODE,DELETE_TEXT,HIGHTRAIN_FLAG,REDLINE_FLAG
   </sql>
     <sql id="Base_Column_List1">
     u.INT_ID, u.NAME, u.BBU_NO, u.LONGITUDE, u.LATITUDE, u.BTS_NAME, u.BSC_NAME, u.BTS_ID, u.CIRCUITROOM_OWNERSHIP,
     u.TRANS_OWNERSHIP, u.VENDOR_BTSTYPE, u.CITY_ID, u.COUNTY_ID, u.RELATED_BTS, u.IS_SHARE, u.BBU_TYPE,
-    u.RELATE_WYBTS, u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME,u.DELETE_RESONCODE,u.DELETE_TEXT
+    u.RELATE_WYBTS, u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME,u.DELETE_RESONCODE,u.DELETE_TEXT,u.HIGHTRAIN_FLAG,u.REDLINE_FLAG
   </sql>
 
 
@@ -244,9 +246,6 @@
     where INT_ID = #{id,jdbcType=DECIMAL}
   </delete>
 
-
-
-
     <update id="updateByMap">
         update WY_BBU
         <set>
@@ -275,7 +274,8 @@
     <!--导出所有字段查询-->
     <select id="selectExportBbuDataByMap" resultType="hashmap">
         SELECT a.int_id,a.name,e.name cityname,f.name
-        countryname,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,
+        countryname,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,a.HIGHTRAIN_FLAG,
+        (case(a.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
         a.circuitroom_ownership,a.trans_ownership,c.town,c.village,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
         a.vendor_btstype,c.mr_strut,q.name mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
         c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
@@ -326,7 +326,8 @@
           </if>,count(1) num
           FROM
           (SELECT a.int_id,a.name,e.name cityname,f.name
-                  countryname,a.city_id,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,
+                  countryname,a.city_id,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,a.HIGHTRAIN_FLAG,
+                  (case(a.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
                   a.circuitroom_ownership,a.trans_ownership,a.Is_Share,a.Bbu_Type,c.town,c.village,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
                   a.vendor_btstype,c.mr_strut,q.name mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
                   c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,
@@ -393,7 +394,8 @@
                 </if>,count(1) num
                 FROM
                 (SELECT a.int_id,a.name,e.name cityname,f.name
-                        countryname,a.city_id,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,
+                        countryname,a.city_id,b.msc_name,a.bsc_name,a.bts_id,b.usestatus,a.longitude,a.latitude,b.do_bts,a.bts_name,a.HIGHTRAIN_FLAG,
+                        (case(a.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
                         a.circuitroom_ownership,a.trans_ownership,a.Is_Share,a.Bbu_Type,c.town,c.village,c.install_pos_code,c.shar_flag,c.shar_name,c.address,c.open_time,
                         a.vendor_btstype,c.mr_strut,q.name mr_strut_name,c.mr_length,c.mr_width,c.mr_high,c.mr_owner,
                         c.wd_type,c.wd_model,c.wd_fac,c.wd_gds,c.tran_model,c.tran_fac,c.tran_upsitename,c.tran_downsitename,c.tran_netprotect,

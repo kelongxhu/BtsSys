@@ -2,6 +2,7 @@ package com.scttsc.business.service.impl;
 
 import com.scttsc.admin.dao.CityDao;
 import com.scttsc.business.dao.BtsDao;
+import com.scttsc.business.dao.CellDao;
 import com.scttsc.business.dao.IndoorManualDao;
 import com.scttsc.business.model.BbuManual;
 import com.scttsc.business.model.IndoorManual;
@@ -35,9 +36,10 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
 
     @Autowired
     private CityDao cityDao;
-
     @Autowired
     private WyLogManager wyLogManager;
+    @Autowired
+    private CellDao cellDao;
 
 
     public int countByExample(IndoorManual example) {
@@ -81,10 +83,11 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
 
     /**
      * 更新室分手工数据
+     *
      * @param record
      * @return
      */
-    public int updateByPrimaryKeySelective(IndoorManual record) throws Exception{
+    public int updateByPrimaryKeySelective(IndoorManual record) throws Exception {
         wyLogManager.updateLog(record);
         return indoorManualDao.updateByPrimaryKeySelective(record);
     }
@@ -102,7 +105,7 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
             record.put("addFlag", 0L);
         }
         if (intId != null) {
-            IndoorManual indoorManual=new IndoorManual();
+            IndoorManual indoorManual = new IndoorManual();
             BeanUtils.populate(indoorManual, record);
             IndoorManual obj = selectByPrimaryKey(new Long(indoorManual.getIntId()));
             if (obj == null) {
@@ -154,6 +157,7 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
 
     /**
      * 查询未录入直放站的手工数据
+     *
      * @return
      * @throws Exception
      */
@@ -163,6 +167,7 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
 
     /**
      * 查询未录入干放站的手工数据
+     *
      * @return
      * @throws Exception
      */
@@ -172,6 +177,7 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
 
     /**
      * 动态自定义统计字段统计
+     *
      * @param map
      * @return
      * @throws Exception
@@ -186,6 +192,7 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
 
     /**
      * 接口修改室分手工数据
+     *
      * @param map
      * @return
      * @throws Exception
@@ -205,9 +212,9 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
                 IndoorManual indoorManual = indoorManualDao.selectByPrimaryKey(new Long(pair[0]));//废弃数据的手工数据
                 //找回原则：废弃存在手工数据，当前再用不存在手工数据
                 if (indoorManual != null) {
-                    Long intId= new Long(pair[1]);//再用intId
-                    IndoorManual indoorManualNow=indoorManualDao.selectByPrimaryKey(intId);
-                    if(indoorManualNow!=null){
+                    Long intId = new Long(pair[1]);//再用intId
+                    IndoorManual indoorManualNow = indoorManualDao.selectByPrimaryKey(intId);
+                    if (indoorManualNow != null) {
                         indoorManualDao.deleteByPrimaryKey(new BigDecimal(pair[1]));
                     }
                     //将废弃数据手工数据关联到现在的数据INT_ID
@@ -220,12 +227,12 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
                     Map<String, Object> map2 = new HashMap<String, Object>();
                     map2.put("manualFlag", 1);
                     map2.put("intId", new Long(pair[1]));
-                    btsDao.updateByMap(map2);
+                    cellDao.updateByMap(map2);
                     //将废弃数据INT_ID状态更新未未录入
                     Map<String, Object> map3 = new HashMap<String, Object>();
                     map3.put("manualFlag", 0);
                     map3.put("intId", new Long(pair[0]));
-                    btsDao.updateByMap(map3);
+                    cellDao.updateByMap(map3);
                     sucess++;
                 }
             }

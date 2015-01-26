@@ -1,5 +1,6 @@
 package com.scttsc.business.service.impl;
 
+import com.scttsc.business.dao.CellDao;
 import com.scttsc.business.dao.WyTunelDao;
 import com.scttsc.business.dao.WyTunelManualDao;
 import com.scttsc.business.model.*;
@@ -30,6 +31,9 @@ public class TunelManualManagerImpl implements TunelManualManager {
 
     @Autowired
     private WyTunelDao wyTunelDao;
+
+    @Autowired
+    private CellDao cellDao;
 
     public WyTunelManual selectByPrimaryKey(Long intId) {
         return wyTunelManualDao.selectByPrimaryKey(intId);
@@ -129,15 +133,25 @@ public class TunelManualManagerImpl implements TunelManualManager {
                     wyTunelManualDao.updateByIntID(map);
                     //如果现在有数据，删除现在的，避免删除失败
                     //将现在的数据INT_ID状态更新为已录入
-                    WyTunel wyTunel=new WyTunel();
-                    wyTunel.setIntId(new Long(pair[1]));
-                    wyTunel.setManualFlag(1);
-                    wyTunelDao.updateByPrimaryKeySelective(wyTunel);
+                    //将现在的数据INT_ID状态更新为已录入
+                    Map map1 = new HashMap();
+                    map1.put("manualFlag", 1);
+                    map1.put("intId", intId);
+                    cellDao.updateByMap(map1);
                     //将废弃数据INT_ID状态更新未未录入
-                    WyTunel wyTunel2=new WyTunel();
-                    wyTunel.setIntId(new Long(pair[0]));
-                    wyTunel.setManualFlag(0);
-                    wyTunelDao.updateByPrimaryKeySelective(wyTunel2);
+                    Map map2 = new HashMap();
+                    map2.put("manualFlag", 0);
+                    map2.put("intId", new Long(pair[0]));
+                    cellDao.updateByMap(map2);
+//                    WyTunel wyTunel=new WyTunel();
+//                    wyTunel.setIntId(new Long(pair[1]));
+//                    wyTunel.setManualFlag(1);
+//                    wyTunelDao.updateByPrimaryKeySelective(wyTunel);
+//                    //将废弃数据INT_ID状态更新未未录入
+//                    WyTunel wyTunel2=new WyTunel();
+//                    wyTunel.setIntId(new Long(pair[0]));
+//                    wyTunel.setManualFlag(0);
+//                    wyTunelDao.updateByPrimaryKeySelective(wyTunel2);
                     sucess++;
                 }
             }

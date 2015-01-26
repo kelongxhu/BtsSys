@@ -30,6 +30,8 @@
         <result column="LAC" property="lac" jdbcType="DECIMAL"/>
         <result column="DO_CELL" property="doCell" jdbcType="DECIMAL"/>
         <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL"/>
+        <result column="HIGHTRAIN_FLAG" property="highTrainFlag" jdbcType="VARCHAR" />
+        <result column="REDLINE_FLAG" property="redLineFlag" jdbcType="DECIMAL" />
     </resultMap>
 
 
@@ -52,7 +54,7 @@
         <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
         <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL"/>
         <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR"/>
-        <result column="cityname" property="cityName" jdbcType="VARCHAR"/>
+        <result column="cityname" property="city.cityName" jdbcType="VARCHAR"/>
         <result column="countryname" property="country.cityName" jdbcType="VARCHAR"/>
         <result column="c_name" property="cons.name" jdbcType="VARCHAR"/>
         <result column="BTSID" property="btsId" jdbcType="DECIMAL"/>
@@ -63,6 +65,8 @@
         <result column="LAC" property="lac" jdbcType="DECIMAL"/>
         <result column="DO_CELL" property="doCell" jdbcType="DECIMAL"/>
         <result column="RELATED_BTS" property="relatedBts" jdbcType="DECIMAL"/>
+        <result column="HIGHTRAIN_FLAG" property="highTrainFlag" jdbcType="VARCHAR" />
+        <result column="REDLINE_FLAG" property="redLineFlag" jdbcType="DECIMAL" />
         <association column="INT_ID" property="wyTunelManual" resultMap="com.scttsc.business.dao.WyTunelManualDao.BaseResultMap_2"/>
     </resultMap>
 
@@ -71,12 +75,12 @@
 		INT_ID, NAME, CITY_ID, COUNTRY_ID, IS_INDOOR, IS_RRU, IS_GF, IS_OR, IS_RR,
 		IS_SR,
 		WY_BTS_INT_ID, DELETE_FLAG, MANUAL_FLAG, DELETETIME, UPDATETIME,DELETE_RESONCODE,DELETE_TEXT,
-		BTSID,CELLID,BSC_NAME,CI,PN,LAC,DO_CELL,RELATED_BTS
+		BTSID,CELLID,BSC_NAME,CI,PN,LAC,DO_CELL,RELATED_BTS,HIGHTRAIN_FLAG,REDLINE_FLAG
 	</sql>
     <sql id="Base_Column_List1">
 		u.INT_ID, u.NAME, u.CITY_ID, u.COUNTRY_ID, u.IS_INDOOR,u.IS_RRU, u.IS_GF, u.IS_OR, u.IS_RR,
 		u.IS_SR,u.WY_BTS_INT_ID, u.DELETE_FLAG, u.MANUAL_FLAG, u.DELETETIME, u.UPDATETIME,u.DELETE_RESONCODE,u.DELETE_TEXT,
-		u.BTSID,u.CELLID,u.BSC_NAME,u.CI,u.PN,u.LAC,u.DO_CELL,u.RELATED_BTS
+		u.BTSID,u.CELLID,u.BSC_NAME,u.CI,u.PN,u.LAC,u.DO_CELL,u.RELATED_BTS,u.HIGHTRAIN_FLAG,u.REDLINE_FLAG
 	</sql>
 
 
@@ -284,6 +288,7 @@
         SELECT a.int_id,a.name,e.name cityname,f.name countryname,a.CELLID,b.msc_name,a.bsc_name,
         a.btsid,a.ci,a.pn,(case(a.do_cell) when 0 then '1X' when 1 then 'DO' when 2 then '1X+DO' end) do_cell,a.is_indoor,a.is_rru,a.is_gf,d.name
         WY_BTS_NAME,b.bts_name,d.longitude,d.latitude,c.celltype,b.capacity,b.pn_inc,b.numfa,b.numfa_do,
+        a.HIGHTRAIN_FLAG,(case(a.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
         d.vendor_btstype,g.tower_type,g.tower_high,c.feederlength FROM wy_cell a
         LEFT JOIN c_cell b
         ON a.int_id=b.int_id
@@ -298,7 +303,7 @@
         LEFT JOIN wy_city f
         ON a.COUNTRY_ID=f.id
         <where>
-            1=1 AND a.delete_flag=0
+            1=1 AND a.delete_flag=0 AND a.IS_INDOOR='否'
             <if test="countryIds!=null">
                 and a.COUNTRY_ID in(${countryIds})
             </if>
@@ -333,10 +338,11 @@
             ${sqlsb}
         </if>,count(1) num
         FROM
-        (SELECT a.name, A.City_Id, A.Country_Id,e.name cityname,f.name countryname,a.CELLID,b.msc_name,a.bsc_name,
+        (SELECT a.name, A.City_Id, A.Country_Id,e.name cityname,f.name countryname,a.CELLID,b.msc_name,a.bsc_name,g.town,g.village,
         a.btsid,a.ci,a.pn,(case(a.do_cell) when 0 then '1X' when 1 then 'DO' when 2 then '1X+DO' end)
         do_cell,a.is_indoor,a.is_rru,a.is_gf,d.name
         WY_BTS_NAME,b.bts_name,d.longitude,d.latitude,c.celltype,b.capacity,b.pn_inc,b.numfa,b.numfa_do,
+        a.HIGHTRAIN_FLAG,(case(a.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
         d.vendor_btstype,g.tower_type,g.tower_high,c.feederlength FROM wy_cell a
         LEFT JOIN c_cell b
         ON a.int_id=b.int_id
@@ -351,7 +357,7 @@
         LEFT JOIN wy_city f
         ON a.COUNTRY_ID=f.id
         where
-        1=1 AND a.delete_flag=0
+        1=1 AND a.delete_flag=0 AND a.IS_INDOOR='否'
         )
         <where>
             1=1
@@ -398,6 +404,7 @@
                a.btsid,a.ci,a.pn,(case(a.do_cell) when 0 then '1X' when 1 then 'DO' when 2 then '1X+DO' end)
                do_cell,a.is_indoor,a.is_rru,a.is_gf,d.name
                WY_BTS_NAME,b.bts_name,d.longitude,d.latitude,c.celltype,b.capacity,b.pn_inc,b.numfa,b.numfa_do,
+               a.HIGHTRAIN_FLAG,(case(a.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
                d.vendor_btstype,c.feederlength FROM wy_cell a
                LEFT JOIN c_cell b
                ON a.int_id=b.int_id
@@ -410,7 +417,7 @@
                LEFT JOIN wy_city f
                ON a.COUNTRY_ID=f.id
                where
-               1=1 AND a.delete_flag=0
+               1=1 AND a.delete_flag=0 AND a.IS_INDOOR='否'
                )
                <where>
                    1=1

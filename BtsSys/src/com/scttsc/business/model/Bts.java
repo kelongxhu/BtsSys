@@ -30,10 +30,11 @@ public class Bts {
     private Date deletetime;
     private Date updatetime;
     private String serviceLevel;
-
     private Long deleteResoncode;
-
     private String deleteText;
+    private String highTrainFlag;//高铁标识
+    private Integer redLineFlag;//红线标识
+    private String redLineFlagStr;
 
 
     //冗余
@@ -43,7 +44,6 @@ public class Bts {
 
 
     private String deleteTimeStr;
-
     private String updateTimeStr;
 
 
@@ -546,7 +546,7 @@ public class Bts {
 
 
     public String getDeleteTimeStr() {
-         return deletetime==null?"": DateUtils.DateToStr(deletetime,"yyyy-MM-dd");
+        return deletetime == null ? "" : DateUtils.DateToStr(deletetime, "yyyy-MM-dd");
     }
 
     public void setDeleteTimeStr(String deleteTimeStr) {
@@ -563,10 +563,47 @@ public class Bts {
 
 
     public String getUpdateTimeStr() {
-        return updatetime==null?"": DateUtils.DateToStr(updatetime,"yyyy-MM-dd");
+        return updatetime == null ? "" : DateUtils.DateToStr(updatetime, "yyyy-MM-dd");
     }
 
     public void setUpdateTimeStr(String updateTimeStr) {
         this.updateTimeStr = updateTimeStr;
+    }
+
+    public String getHighTrainFlag() {
+        return highTrainFlag;
+    }
+
+    public void setHighTrainFlag(String highTrainFlag) {
+        this.highTrainFlag = highTrainFlag;
+    }
+
+    public Integer getRedLineFlag() {
+        return redLineFlag;
+    }
+
+    public void setRedLineFlag(Integer redLineFlag) {
+        this.redLineFlag = redLineFlag;
+    }
+
+    public String getRedLineFlagStr() {
+        if (redLineFlag == null) {
+            return "";
+        }
+        switch (redLineFlag) {
+            case 1:
+                redLineFlagStr = "红线内";
+                break;
+            case 2:
+                redLineFlagStr = "红线外";
+                break;
+            default:
+                break;
+        }
+        return redLineFlagStr;
+    }
+
+    public void setRedLineFlagStr(String redLineFlagStr) {
+        this.redLineFlagStr = redLineFlagStr;
     }
 }

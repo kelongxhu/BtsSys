@@ -24,8 +24,8 @@
     <result column="SERVICE_LEVEL" property="serviceLevel" jdbcType="VARCHAR" />
     <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL" />
     <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR" />
-    <result column="HIGHTRAIN_FLAG" property="hightrainFlag" jdbcType="VARCHAR" />
-    <result column="REDLINE_FLAG" property="redlineFlag" jdbcType="DECIMAL" />
+    <result column="HIGHTRAIN_FLAG" property="highTrainFlag" jdbcType="VARCHAR" />
+    <result column="REDLINE_FLAG" property="redLineFlag" jdbcType="DECIMAL" />
     <result column="cityname" property="city.cityName" jdbcType="VARCHAR" />
     <result column="countryname" property="country.cityName" jdbcType="VARCHAR" />
     <result column="c_name" property="reasonCons.name" jdbcType="VARCHAR"/>
@@ -54,8 +54,8 @@
         <result column="t_SERVICE_LEVEL" property="serviceLevel" jdbcType="VARCHAR" />
         <result column="t_DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL" />
         <result column="t_DELETE_TEXT" property="deleteText" jdbcType="VARCHAR" />
-        <result column="t_HIGHTRAIN_FLAG" property="hightrainFlag" jdbcType="VARCHAR" />
-        <result column="t_REDLINE_FLAG" property="redlineFlag" jdbcType="DECIMAL" />
+        <result column="t_HIGHTRAIN_FLAG" property="highTrainFlag" jdbcType="VARCHAR" />
+        <result column="t_REDLINE_FLAG" property="redLineFlag" jdbcType="DECIMAL" />
         <result column="cityname" property="city.cityName" jdbcType="VARCHAR" />
         <result column="countryname" property="country.cityName" jdbcType="VARCHAR" />
         <association column="t_INT_ID" property="wyTunelManual" resultMap="com.scttsc.business.dao.WyTunelManualDao.BaseResultMap_2"/>
@@ -513,7 +513,11 @@
 
     <!--自定义隧道覆盖站点导出-->
     <select id="selectTunelBtsExportDataByMap" resultType="hashmap">
-        SELECT <include refid="Base_Column_List"/>,e.name cityname,f.name countryname from wy_tunel u
+         SELECT u.INT_ID, u.NAME, u.LONGITUDE, u.LATITUDE, u.IS_TUNEL, u.IS_RRU, u.BTS_NAME, u.BSC_NAME, u.BTS_ID,
+        u.CIRCUITROOM_OWNERSHIP, u.TRANS_OWNERSHIP, u.VENDOR_BTSTYPE, u.CITY_ID, u.COUNTY_ID, u.RELATED_BTS,
+        u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME, u.SERVICE_LEVEL, u.DELETE_RESONCODE,
+        u.DELETE_TEXT, u.HIGHTRAIN_FLAG,(case(u.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
+        e.name cityname,f.name countryname from wy_tunel u
         LEFT JOIN wy_city e ON
         u.city_id=e.id
         LEFT JOIN wy_city f ON
@@ -553,7 +557,11 @@
             ${sqlsb}
         </if>,count(1) num
         FROM
-        (SELECT <include refid="Base_Column_List"/>, e.name cityname,f.name countryname FROM wy_tunel u
+        (SELECT u.INT_ID, u.NAME, u.LONGITUDE, u.LATITUDE, u.IS_TUNEL, u.IS_RRU, u.BTS_NAME, u.BSC_NAME, u.BTS_ID,
+        u.CIRCUITROOM_OWNERSHIP, u.TRANS_OWNERSHIP, u.VENDOR_BTSTYPE, u.CITY_ID, u.COUNTY_ID, u.RELATED_BTS,
+        u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME, u.SERVICE_LEVEL, u.DELETE_RESONCODE,
+        u.DELETE_TEXT, u.HIGHTRAIN_FLAG,(case(u.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
+        e.name cityname,f.name countryname FROM wy_tunel u
         LEFT JOIN wy_city e ON
         u.city_id=e.id
         LEFT JOIN wy_city f ON
@@ -601,7 +609,11 @@
             ${sqlsb}
         </if>,count(1) num
         FROM
-        (SELECT <include refid="Base_Column_List"/>, e.name cityname,f.name countryname FROM wy_tunel u
+        (SELECT u.INT_ID, u.NAME, u.LONGITUDE, u.LATITUDE, u.IS_TUNEL, u.IS_RRU, u.BTS_NAME, u.BSC_NAME, u.BTS_ID,
+        u.CIRCUITROOM_OWNERSHIP, u.TRANS_OWNERSHIP, u.VENDOR_BTSTYPE, u.CITY_ID, u.COUNTY_ID, u.RELATED_BTS,
+        u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.UPDATETIME, u.SERVICE_LEVEL, u.DELETE_RESONCODE,
+        u.DELETE_TEXT, u.HIGHTRAIN_FLAG,(case(u.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
+        e.name cityname,f.name countryname FROM wy_tunel u
         LEFT JOIN wy_city e ON
         u.city_id=e.id
         LEFT JOIN wy_city f ON
@@ -634,6 +646,7 @@
         </if>,count(1) num
         FROM
         (SELECT u.INT_ID,u.CITY_ID,u.NAME,u.BSC_NAME,u.BTSID,u.PN,u.CI,u.IS_RRU,u.IS_GF,
+        u.HIGHTRAIN_FLAG,(case(u.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
         <include refid="com.scttsc.business.dao.WyTunelManualDao.Base_Column_List"/>,
         e.name cityname,f.name countryname,o.NAME PROP_NAME,p.NAME SHAREFLAG_NAME,q.NAME ROAD_ID_NAME FROM wy_cell u
         LEFT JOIN wy_tunel_manual tm
@@ -693,6 +706,7 @@
         </if>,count(1) num
         FROM
         (SELECT u.INT_ID,u.CITY_ID,u.NAME,u.BSC_NAME,u.BTSID,u.PN,u.CI,u.IS_RRU,u.IS_GF,
+        u.HIGHTRAIN_FLAG,(case(u.REDLINE_FLAG) when 1 then '红线内' when 2 then '红线外' END) REDLINE_FLAG,
         <include refid="com.scttsc.business.dao.WyTunelManualDao.Base_Column_List"/>,
         e.name cityname,f.name countryname,o.NAME PROP_NAME,p.NAME SHAREFLAG_NAME,q.NAME ROAD_ID_NAME FROM wy_cell u
         LEFT JOIN wy_tunel_manual tm

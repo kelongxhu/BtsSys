@@ -56,8 +56,9 @@ public class ApplicationServerListener implements ServletContextListener {
             List<WySubcfg> subCfgs = ruleManager.selectSubCfgByMap(null);
             ConstantUtil.getInstance().putSubCfgs(subCfgs);
             LOG.info("初始化健康档案配置数据," + cons.size());
-        //  List<WyLibVillage> villageList=villageLibManager.selectByConds(new HashMap<String,Object>());
-        //  LOG.info("初始化乡镇农村库,"+villageList.size());
+            List<WyLibVillage> villageList=villageLibManager.selectByConds(new HashMap<String,Object>());
+            ConstantUtil.getInstance().putVillageLib(villageList);
+            LOG.info("初始化乡镇农村库,"+villageList.size());
             LOG.info("初始化数据完毕+++++++++++++.");
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);

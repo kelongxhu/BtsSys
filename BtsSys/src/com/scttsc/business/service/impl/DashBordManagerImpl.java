@@ -54,6 +54,7 @@ public class DashBordManagerImpl implements DashBordManager {
                 dataCityItemMap.put(city.getId() + "", cityItem);
             }
             //組裝室外覆蓋站點
+            int btsTotal=0;
             for (Map btsCity : btsCitys) {
                 String cityId = StringUtil.null2String(btsCity.get("CITY_ID"));
                 int btsCount = StringUtil.null2Integer0(btsCity.get("NUM"));
@@ -61,8 +62,10 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setOutBtsCount(btsCount);
                 }
+                btsTotal+=btsCount;
             }
             //组装bbu站点
+            int bbuTotal=0;
             for (Map bbuCity : bbuCitys) {
                 String cityId = StringUtil.null2String(bbuCity.get("CITY_ID"));
                 int bbuCount = StringUtil.null2Integer0(bbuCity.get("NUM"));
@@ -70,8 +73,10 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setBbuCount(bbuCount);
                 }
+                bbuTotal+=bbuCount;
             }
             //组装室分站点
+            int indoorTotal=0;
             for (Map indoor : indoorCitys) {
                 String cityId = StringUtil.null2String(indoor.get("CITY_ID"));
                 int indoorCount = StringUtil.null2Integer0(indoor.get("NUM"));
@@ -79,8 +84,10 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setIndoorBtsCount(indoorCount);
                 }
+                indoorTotal+=indoorCount;
             }
             //组装隧道站点
+            int tunelTotal=0;
             for (Map tunelCity : tunelCitys) {
                 String cityId = StringUtil.null2String(tunelCity.get("CITY_ID"));
                 int tunelCount = StringUtil.null2Integer0(tunelCity.get("NUM"));
@@ -88,8 +95,10 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setTunelCount(tunelCount);
                 }
+                tunelTotal+=tunelCount;
             }
             //组装室外小区
+            int cellTotal=0;
             for (Map cellCity : outCellCitys) {
                 String cityId = StringUtil.null2String(cellCity.get("CITY_ID"));
                 int cellCount = StringUtil.null2Integer0(cellCity.get("NUM"));
@@ -97,8 +106,10 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setOutCellCount(cellCount);
                 }
+                cellTotal+=cellCount;
             }
             //室内小区
+            int indoorCellTotal=0;
             for (Map cellCity : indoorCellCitys) {
                 String cityId = StringUtil.null2String(cellCity.get("CITY_ID"));
                 int cellCount = StringUtil.null2Integer0(cellCity.get("NUM"));
@@ -106,8 +117,10 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setIndoorCellCount(cellCount);
                 }
+                indoorCellTotal+=cellCount;
             }
             //隧道小区
+            int tunelCellTotal=0;
             for (Map cellCity : tunelCellCitys) {
                 String cityId = StringUtil.null2String(cellCity.get("CITY_ID"));
                 int cellCount = StringUtil.null2Integer0(cellCity.get("NUM"));
@@ -115,11 +128,23 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setTunelCellCount(cellCount);
                 }
+                tunelCellTotal+=cellCount;
             }
             //
             for (Map.Entry<String, DataCityItem> dataCityItemEntry : dataCityItemMap.entrySet()) {
                 cityItemList.add(dataCityItemEntry.getValue());
             }
+            //增加全省
+            DataCityItem allCity=new DataCityItem();
+            allCity.setCityName("全省");
+            allCity.setOutBtsCount(btsTotal);
+            allCity.setBbuCount(bbuTotal);
+            allCity.setTunelCount(tunelTotal);
+            allCity.setIndoorBtsCount(indoorTotal);
+            allCity.setOutCellCount(cellTotal);
+            allCity.setIndoorCellCount(indoorCellTotal);
+            allCity.setTunelCellCount(tunelCellTotal);
+            cityItemList.add(allCity);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
@@ -146,6 +171,7 @@ public class DashBordManagerImpl implements DashBordManager {
                 cityItem.setCityName(city.getCityName());
                 dataCityItemMap.put(city.getId() + "", cityItem);
             }
+            int btsTotal=0;
             //組裝室外覆蓋站點
             for (Map btsCity : btsCitys) {
                 String cityId = StringUtil.null2String(btsCity.get("CITY_ID"));
@@ -154,8 +180,10 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setOutBtsCount(btsCount);
                 }
+                btsTotal+=btsCount;
             }
             //组装bbu站点
+            int bbuTotal=0;
             for (Map bbuCity : bbuCitys) {
                 String cityId = StringUtil.null2String(bbuCity.get("CITY_ID"));
                 int bbuCount = StringUtil.null2Integer0(bbuCity.get("NUM"));
@@ -163,8 +191,10 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setBbuCount(bbuCount);
                 }
+                bbuTotal+=bbuCount;
             }
             //组装室分小区
+            int indoorCellTotal=0;
             for (Map indoor : indoorCitys) {
                 String cityId = StringUtil.null2String(indoor.get("CITY_ID"));
                 int indoorCount = StringUtil.null2Integer0(indoor.get("NUM"));
@@ -172,8 +202,10 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setIndoorCellCount(indoorCount);
                 }
+                indoorCellTotal+=indoorCount;
             }
             //组装隧道小区
+            int tunelCellTotal=0;
             for (Map tunelCity : tunelCitys) {
                 String cityId = StringUtil.null2String(tunelCity.get("CITY_ID"));
                 int tunelCount = StringUtil.null2Integer0(tunelCity.get("NUM"));
@@ -181,8 +213,10 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setTunelCellCount(tunelCount);
                 }
+                tunelCellTotal+=tunelCount;
             }
             //组装室外小区
+            int cellTotal=0;
             for (Map cellCity : outCellCitys) {
                 String cityId = StringUtil.null2String(cellCity.get("CITY_ID"));
                 int cellCount = StringUtil.null2Integer0(cellCity.get("NUM"));
@@ -190,9 +224,11 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setOutCellCount(cellCount);
                 }
+                cellTotal+=cellCount;
             }
 
             //组装错误小区
+            int wrongTotal=0;
             for(Map wrongNameCity:wrongNameCitys){
                 String cityId = StringUtil.null2String(wrongNameCity.get("CITY_ID"));
                 int wrongNameCount = StringUtil.null2Integer0(wrongNameCity.get("NUM"));
@@ -200,12 +236,23 @@ public class DashBordManagerImpl implements DashBordManager {
                 if (cityItem != null) {
                     cityItem.setWrongNameCount(wrongNameCount);
                 }
+                wrongTotal+=wrongNameCount;
             }
 
             //
             for (Map.Entry<String, DataCityItemNoManual> dataCityItemEntry : dataCityItemMap.entrySet()) {
                 cityItemList.add(dataCityItemEntry.getValue());
             }
+
+            DataCityItemNoManual allCity=new DataCityItemNoManual();
+            allCity.setCityName("全省");
+            allCity.setOutBtsCount(btsTotal);
+            allCity.setBbuCount(bbuTotal);
+            allCity.setIndoorCellCount(indoorCellTotal);
+            allCity.setOutCellCount(cellTotal);
+            allCity.setTunelCellCount(tunelCellTotal);
+            allCity.setWrongNameCount(wrongTotal);
+            cityItemList.add(allCity);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }

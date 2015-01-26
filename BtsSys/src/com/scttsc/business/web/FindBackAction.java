@@ -49,10 +49,9 @@ public class FindBackAction extends BaseAction {
     private String endTime;
 
     private Integer manualFlag;//是否已录入
-
     private Integer typeId;//基本库类型
-
     private String intIds;//数据intId集合
+    private String isIndoor;//是，否，隧
 
 
     public String findback() {
@@ -110,14 +109,17 @@ public class FindBackAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = btsManager.getByConds(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
         return SUCCESS;
     }
 
-
+    /**
+     * 删除的已录入的纯bbu数据
+     * @return
+     */
     public String bbuDataDel() {
         User user = (User) this.getSession().getAttribute("user");
         Map<String, Object> map = new HashMap<String, Object>();
@@ -246,6 +248,7 @@ public class FindBackAction extends BaseAction {
         int total = 0;
         List<Cell> list = null;
         try {
+
             map.put("deleteFlag", 1);
             map.put("manualFlag", 1);
             if (!Common.isEmpty(countryIds)) {
@@ -255,6 +258,10 @@ public class FindBackAction extends BaseAction {
                 // 默认数据权限
                 //用户权限树
                 map.put("countryIds", user.getCountryIds());
+            }
+            if(!Common.isEmpty(isIndoor)){
+                isIndoor = Common.decodeURL(isIndoor).trim();
+                map.put("isIndoor",isIndoor);
             }
             //查询条件
             if (!Common.isEmpty(name)) {
@@ -290,11 +297,10 @@ public class FindBackAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = cellManager.selectByMap(map);
         } catch (Exception e) {
-            e.printStackTrace();
+           LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
@@ -444,18 +450,23 @@ public class FindBackAction extends BaseAction {
         }
         switch (typeId) {
             case 1:
+                //室外覆盖站点
                 backReponse = btsManager.findManualData(ids);
                 break;
             case 2:
+                //纯bbu
                 backReponse=bbuManualManager.findManualData(ids);
                 break;
             case 3:
+                //室内分布小区
                 backReponse=indoorManualManager.findManualData(ids);
                 break;
             case 4:
+                //室外覆盖小区
                 backReponse=cellManualManager.findManualData(ids);
                 break;
             case 6:
+                //隧道覆盖小区
                 backReponse=tunelManualManager.findManualData(ids);
                 break;
             default:
@@ -552,5 +563,13 @@ public class FindBackAction extends BaseAction {
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+
+    public String getIsIndoor() {
+        return isIndoor;
+    }
+
+    public void setIsIndoor(String isIndoor) {
+        this.isIndoor = isIndoor;
     }
 }

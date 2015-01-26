@@ -423,6 +423,8 @@ public class BbuAction extends BaseAction {
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Validity> coulmnMap = ExcelHelper.getBbuCoulmnMap();
         try {
+            Bbu wyBbu=null;
+            String townDb=null;
             int j = 0;
             for (String dataKey : coulmnMap.keySet()) {
                 Validity validity = coulmnMap.get(dataKey);
@@ -437,7 +439,14 @@ public class BbuAction extends BaseAction {
                     errorList.add("第" + rowNum + "行:" + "校验失败," + validity.getMsg());
                     return null;
                 }
-                if ("mrStrut".equals(dataKey)) {
+                if("intId".equals(dataKey)){
+                  wyBbu=bbuManager.getById(new Long(cellValue));
+                  if(wyBbu==null){
+                      errorList.add("第"+rowNum+"行,找不到对应bbu站点信息，"+cellValue);
+                      return null;
+                  }
+                    map.put(dataKey, cellValue);
+                }else if ("mrStrut".equals(dataKey)) {
                     //机房结构
                     Map<String, String> groupCodeMap = ExcelHelper.getGroupCodeMap();
                     String groupCode = groupCodeMap.get(dataKey);
@@ -447,6 +456,30 @@ public class BbuAction extends BaseAction {
                     } else {
                         errorList.add("第" + rowNum + "行导入校验失败:" + validity.getName() + ":填入未在数据库配置选项中");
                         return null;
+                    }
+                }else if ("town".equals(dataKey)) {
+                    String townKey = wyBbu.getCountyId() + "_" + cellValue;
+                    townDb = ConstantUtil.getInstance().getTown(townKey);
+                    if (townDb == null) {
+                        errorList.add("第" + rowNum + "行乡镇列校验失败。" + cellValue + "未在乡镇库中，请核查。");
+                        return null;
+                    }
+                    map.put(dataKey, cellValue.replace(";", ","));
+                } else if("village".equals(dataKey)){
+                    //校验农村库
+                    if(!Common.isEmpty(cellValue)){
+                        String[] villageArr = cellValue.split(";");
+                        if (villageArr != null && villageArr.length > 0) {
+                            for (String village : villageArr) {
+                                String villageKey=wyBbu.getCountyId()+"_"+townDb+"_"+village;
+                                String villageDb = ConstantUtil.getInstance().getVillage(villageKey);
+                                if (villageDb == null) {
+                                    errorList.add("第" + rowNum + "行农村列校验失败，" + cellValue + "中，" + village + "未在乡镇库中，请核查。");
+                                    return null;
+                                }
+                            }
+                            map.put(dataKey, cellValue.replace(";", ","));
+                        }
                     }
                 } else {
                     map.put(dataKey, cellValue);
@@ -460,8 +493,8 @@ public class BbuAction extends BaseAction {
                 map.put("updateuser", user.getIntId());
             }
         } catch (Exception e) {
-            e.printStackTrace();
             errorList.add("第" + rowNum + "行:" + "程序解析异常...");
+            LOG.error(e.getMessage(),e);
             return null;
         }
         return map;

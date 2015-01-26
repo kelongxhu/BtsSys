@@ -38,6 +38,7 @@ public class IndoorAction extends BaseAction {
     private DryStationManager dryStationManager;
 
     IndoorManual indoorManual;
+    private Cell cell;//室内分布小区
 
     private Integer addFlag;//手工增加或者关联增加
 
@@ -83,38 +84,18 @@ public class IndoorAction extends BaseAction {
         if (intId != null) {
             map.put("intId", intId);
         }
-        Bts bts = null;
         try {
-            if (intId != null) {
-                List<Bts> list = btsManager.getByConds(map);
-                if (list != null && list.size() > 0) {
-                    bts = list.get(0);
-                }
+            cell = cellManager.selectById(intId);//wy_cell
+            if(cell!=null){
+                City city = cityManager.getById(cell.getCityId().longValue());
+                City country = cityManager.getById(cell.getCountryId().longValue());
+                cell.setCity(city);
+                cell.setCountry(country);
+                indoorManual = indoorManualManager.selectByPrimaryKey(new Long(cell.getIntId()));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+           LOG.error(e.getMessage(),e);
         }
-        Ccell ccell = null;
-        try {
-            if (bts != null) {
-                List<Ccell> list = cellManager.selectCcellByBtsId(Long.parseLong(bts.getIntId() + ""));
-                if (list != null && list.size() > 0) {
-                    ccell = list.get(0);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        IndoorManual indoorManual = null;
-        try {
-            if (bts != null) {
-                indoorManual = indoorManualManager.selectByPrimaryKey(bts.getIntId().longValue());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         if (indoorManual != null) {
             if (indoorManual.getProp1() != null) {
                 Map maps = new HashMap();
@@ -153,13 +134,6 @@ public class IndoorAction extends BaseAction {
 
         this.getRequest().setAttribute("erectStationList", erectStationList);
         this.getRequest().setAttribute("dryStationList", dryStationList);
-
-        this.getSession().setAttribute("bts", bts);
-
-        this.getRequest().setAttribute("ccell", ccell);
-        this.getRequest().setAttribute("bts", bts);
-        this.getRequest().setAttribute("indoorManual", indoorManual);
-
         return SUCCESS;
     }
 
@@ -706,6 +680,8 @@ public class IndoorAction extends BaseAction {
         Bts bts = null;
         try {
             int j = 0;
+            String countryId=null;
+            String townDb=null;
             for (String dataKey : coulmnMap.keySet()) {
                 Validity validity = coulmnMap.get(dataKey);
                 HSSFCell cell = row.getCell((short) (j + 1));//Excel
@@ -730,16 +706,41 @@ public class IndoorAction extends BaseAction {
                 } else if ("countryId".equals(dataKey)) {
                     City city = ConstantUtil.getInstance().getCountry(cellValue);
                     if (city != null) {
+                        countryId=city.getId()+"";
                         map.put(dataKey, city.getId());
                     } else {
                         errorList.add("第" + rowNum + "行:" + validity.getName() + "未找到对应数据。");
                         return null;
                     }
+                } else if ("town".equals(dataKey)) {
+                    //校验乡镇
+                    String townKey =countryId + "_" + cellValue;
+                    townDb = ConstantUtil.getInstance().getTown(townKey);
+                    if (townDb == null) {
+                        errorList.add("第" + rowNum + "行乡镇列校验失败。" + cellValue + "未在乡镇库中，请核查。");
+                        return null;
+                    }
+                    map.put(dataKey, cellValue.replace(";", ","));
+                } else if("village".equals(dataKey)){
+                    //校验农村库
+                    if(!Common.isEmpty(cellValue)){
+                        String[] villageArr = cellValue.split(";");
+                        if (villageArr != null && villageArr.length > 0) {
+                            for (String village : villageArr) {
+                                String villageKey= countryId+"_"+townDb+"_"+village;
+                                String villageDb = ConstantUtil.getInstance().getVillage(villageKey);
+                                if (villageDb == null) {
+                                    errorList.add("第" + rowNum + "行农村列校验失败，" + cellValue + "中，" + village + "未在乡镇库中，请核查。");
+                                    return null;
+                                }
+                            }
+                            map.put(dataKey, cellValue.replace(";", ","));
+                        }
+                    }
                 } else {
                     //其它
                     map.put(dataKey, cellValue);
                 }
-
                 j++;
             }
             map.put("updatetime", new Date());
@@ -859,6 +860,14 @@ public class IndoorAction extends BaseAction {
 
     public void setManualFlag(Integer manualFlag) {
         this.manualFlag = manualFlag;
+    }
+
+    public Cell getCell() {
+        return cell;
+    }
+
+    public void setCell(Cell cell) {
+        this.cell = cell;
     }
 
 

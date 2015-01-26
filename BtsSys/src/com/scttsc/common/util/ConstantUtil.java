@@ -3,6 +3,7 @@ package com.scttsc.common.util;
 import com.scttsc.admin.model.City;
 import com.scttsc.admin.model.CityTreeNode;
 import com.scttsc.baselibs.model.Cons;
+import com.scttsc.baselibs.model.WyLibVillage;
 import com.scttsc.common.model.TreeNodeHelper;
 import com.scttsc.healthy.model.WySubcfg;
 
@@ -24,8 +25,7 @@ public class ConstantUtil {
     public static Map<String, List<Cons>> consGroupMap = new HashMap<String, List<Cons>>();
 
     //初始化常量Map3,通过code找对应Cons
-    public static Map<String,Map<String,Cons>> consCodeMap=new HashMap<String,Map<String,Cons>>();
-
+    public static Map<String, Map<String, Cons>> consCodeMap = new HashMap<String, Map<String, Cons>>();
 
 
     //健康管理基础项（不是经常用，没必要存在内存呀。。）
@@ -34,6 +34,10 @@ public class ConstantUtil {
     public static Map<String, City> cityMap = new HashMap<String, City>();
     //存储区县，方便通过区县名称查找区县
     public static Map<String, City> countryMap = new HashMap<String, City>();
+
+    public static Map<String, String> townMap = new HashMap<String, String>();
+
+    public static Map<String, String> viliageMap = new HashMap<String, String>();
 
     private ConstantUtil() {
     }
@@ -150,25 +154,26 @@ public class ConstantUtil {
             objMap = new HashMap<String, Cons>();
             objMap.put(con.getName(), con);
             consMap.put(con.getGroupCode(), objMap);
-        }else{
+        } else {
             objMap.put(con.getName(), con);
         }
     }
 
     /**
      * 通过Cons的code获取CONS的存储结构
+     *
      * @param con
      */
     public void putGroupCodeConsMap(Cons con) {
-           Map<String, Cons> objMap = consCodeMap.get(con.getGroupCode());
-           if (objMap == null) {
-               objMap = new HashMap<String, Cons>();
-               objMap.put(con.getCode()+"", con);
-               consCodeMap.put(con.getGroupCode(), objMap);
-           } else{
-               objMap.put(con.getCode()+"", con);
-           }
-       }
+        Map<String, Cons> objMap = consCodeMap.get(con.getGroupCode());
+        if (objMap == null) {
+            objMap = new HashMap<String, Cons>();
+            objMap.put(con.getCode() + "", con);
+            consCodeMap.put(con.getGroupCode(), objMap);
+        } else {
+            objMap.put(con.getCode() + "", con);
+        }
+    }
 
     /**
      * 通过常量名称取的常量对象
@@ -187,19 +192,19 @@ public class ConstantUtil {
 
 
     /**
-        * 通过常量CODE获取常量对象
-        *
-        * @param name
-        * @return
-        */
-       public Cons getConsByCode(String groupCode, String code) {
-           Cons cons = null;
-           Map<String, Cons> map = consCodeMap.get(groupCode);
-           if (map != null) {
-               cons = map.get(code);
-           }
-           return cons;
-       }
+     * 通过常量CODE获取常量对象
+     *
+     * @param name
+     * @return
+     */
+    public Cons getConsByCode(String groupCode, String code) {
+        Cons cons = null;
+        Map<String, Cons> map = consCodeMap.get(groupCode);
+        if (map != null) {
+            cons = map.get(code);
+        }
+        return cons;
+    }
 
     public List<Cons> getConListByGroupCode(String groupCode) {
         return consGroupMap.get(groupCode);
@@ -240,6 +245,25 @@ public class ConstantUtil {
 
     public City getCountry(String name) {
         return countryMap.get(name);
+    }
+
+
+    public void putVillageLib(List<WyLibVillage> wyLibVillages) {
+        if (wyLibVillages == null) return;
+        for (WyLibVillage wyLibVillage : wyLibVillages) {
+            String townKey = wyLibVillage.getCountryId() + "_" + wyLibVillage.getTown();
+            String villiageKey = wyLibVillage.getCountryId() + "_" + wyLibVillage.getTown() + "_" + wyLibVillage.getVillage();
+            townMap.put(townKey, wyLibVillage.getTown());
+            viliageMap.put(villiageKey, wyLibVillage.getVillage());
+        }
+    }
+
+    public String getTown(String townKey){
+        return townMap.get(townKey);
+    }
+
+    public String getVillage(String villageKey){
+        return viliageMap.get(villageKey);
     }
 
 

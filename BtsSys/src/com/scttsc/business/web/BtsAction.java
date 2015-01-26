@@ -25,7 +25,7 @@ import java.util.*;
 
 @SuppressWarnings("serial")
 public class BtsAction extends BaseAction {
-    Logger LOG=Logger.getLogger(BtsAction.class);
+    Logger LOG = Logger.getLogger(BtsAction.class);
     private BtsManager btsManager;
     private BtsManualManager btsManualManager;
     private CityManager cityManager;
@@ -111,8 +111,8 @@ public class BtsAction extends BaseAction {
                 map.put("btsId", btsId);
             }
 
-            if(!Common.isEmpty(manualFlag)){
-                map.put("manualFlag",manualFlag);
+            if (!Common.isEmpty(manualFlag)) {
+                map.put("manualFlag", manualFlag);
             }
             //固定条件
             map.put("isIndoor", "否");//物理站点
@@ -127,7 +127,7 @@ public class BtsAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = btsManager.getByConds(map);
         } catch (Exception e) {
-            LOG.error(e.getMessage(),e);
+            LOG.error(e.getMessage(), e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -136,6 +136,7 @@ public class BtsAction extends BaseAction {
 
     /**
      * 室内分布站点
+     *
      * @return
      */
     public String indoorBtsData() {
@@ -179,7 +180,7 @@ public class BtsAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = btsManager.getByConds(map);
         } catch (Exception e) {
-            LOG.error(e.getMessage(),e);
+            LOG.error(e.getMessage(), e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -208,7 +209,7 @@ public class BtsAction extends BaseAction {
                 editFlag = 0;// 增加页面
             }
         } catch (Exception e) {
-            LOG.error(e.getMessage(),e);
+            LOG.error(e.getMessage(), e);
         }
         return SUCCESS;
     }
@@ -263,7 +264,7 @@ public class BtsAction extends BaseAction {
                 btsManual.setMrStrutCons(mrStrutCons);
             }
         } catch (Exception e) {
-            LOG.error(e.getMessage(),e);
+            LOG.error(e.getMessage(), e);
         }
         return SUCCESS;
     }
@@ -272,7 +273,7 @@ public class BtsAction extends BaseAction {
     private CellManual getBtsMinCell(Long wybtsId) {
         CellManual cellManual = null;
         try {
-            cellManual=cellManualManager.getBtsMinCell(wybtsId);
+            cellManual = cellManualManager.getBtsMinCell(wybtsId);
             if (cellManual != null) {
                 //以最小cellId显示基站覆盖信息
                 //覆盖信息
@@ -323,7 +324,7 @@ public class BtsAction extends BaseAction {
                 cellManual.setTunnelLibs(tunnelLibs);
             }
         } catch (Exception e) {
-            LOG.error(e.getMessage(),e);
+            LOG.error(e.getMessage(), e);
         }
         return cellManual;
     }
@@ -345,7 +346,7 @@ public class BtsAction extends BaseAction {
             }
             jsonMap.put("result", 1);
         } catch (Exception e) {
-            LOG.error(e.getMessage(),e);
+            LOG.error(e.getMessage(), e);
             jsonMap.put("result", 0);
         }
         return SUCCESS;
@@ -511,7 +512,7 @@ public class BtsAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (Exception e) {
-            LOG.error(e.getMessage(),e);
+            LOG.error(e.getMessage(), e);
         }
         return null;
     }
@@ -582,7 +583,7 @@ public class BtsAction extends BaseAction {
 
 
         } catch (Exception e) {
-             LOG.error(e.getMessage(),e);
+            LOG.error(e.getMessage(), e);
             jsonMap.put("result", 0);
         }
         return SUCCESS;
@@ -600,6 +601,8 @@ public class BtsAction extends BaseAction {
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Validity> coulmnMap = ExcelHelper.getBtsCoulmnMap();
         try {
+            Bts wyBts=null;
+            String townDb=null;
             int j = 0;
             for (String dataKey : coulmnMap.keySet()) {
                 Validity validity = coulmnMap.get(dataKey);
@@ -614,8 +617,14 @@ public class BtsAction extends BaseAction {
                     errorList.add("第" + rowNum + "行:" + "校验失败," + validity.getMsg());
                     return null;
                 }
-
-                if ("installPos".equals(dataKey) || "towerType".equals(dataKey) || "mrStrut".equals(dataKey)) {
+                if("name".equals(dataKey)){
+                    wyBts=btsMap.get(cellValue);
+                    if(wyBts==null){
+                        errorList.add("第"+rowNum+"行,物理站点名称校验失败，找不到对应物理站点，"+cellValue);
+                        return null;
+                    }
+                    map.put(dataKey, cellValue);
+                }else if ("installPos".equals(dataKey) || "towerType".equals(dataKey) || "mrStrut".equals(dataKey)) {
                     //安装位置，塔跪类型，机房结构
                     Map<String, String> groupCodeMap = ExcelHelper.getGroupCodeMap();
                     String groupCode = groupCodeMap.get(dataKey);
@@ -623,10 +632,10 @@ public class BtsAction extends BaseAction {
                     if (con != null) {
                         map.put(dataKey, con.getCode());
                     } else {
-                        errorList.add("第" + rowNum + "行导入校验失败:" + validity.getName() + ":填入未在数据库配置选项中,"+cellValue);
+                        errorList.add("第" + rowNum + "行导入校验失败:" + validity.getName() + ":填入未在数据库配置选项中," + cellValue);
                         return null;
                     }
-                } else if ("tranUpsitename".equals(dataKey)||"tranDownsitename".equals(dataKey)) {
+                } else if ("tranUpsitename".equals(dataKey) || "tranDownsitename".equals(dataKey)) {
                     Bts bts = btsMap.get(cellValue);
                     WyTransfernode wyTransfernode = transMap.get(cellValue);
                     Bbu bbu = bbuMap.get(cellValue);
@@ -639,7 +648,31 @@ public class BtsAction extends BaseAction {
                     if (bbu != null) {
                         map.put(dataKey, "3_" + bbu.getName());
                     }
-                }  else {
+                } else if ("town".equals(dataKey)) {
+                    String townKey = wyBts.getCountyId() + "_" + cellValue;
+                    townDb = ConstantUtil.getInstance().getTown(townKey);
+                    if (townDb == null) {
+                        errorList.add("第" + rowNum + "行乡镇列校验失败。" + cellValue + "未在乡镇库中，请核查。");
+                        return null;
+                    }
+                    map.put(dataKey, cellValue.replace(";", ","));
+                } else if("village".equals(dataKey)){
+                    //校验农村库,注意可以为空
+                    if(!Common.isEmpty(cellValue)){
+                        String[] villageArr = cellValue.split(";");
+                        if (villageArr != null && villageArr.length > 0) {
+                            for (String village : villageArr) {
+                                String villageKey=wyBts.getCountyId()+"_"+townDb+"_"+village;
+                                String villageDb = ConstantUtil.getInstance().getVillage(villageKey);
+                                if (villageDb == null) {
+                                    errorList.add("第" + rowNum + "行农村列校验失败，" + cellValue + "中，" + village + "未在乡镇库中，请核查。");
+                                    return null;
+                                }
+                            }
+                            map.put(dataKey, cellValue.replace(";", ","));
+                        }
+                    }
+                } else{
                     map.put(dataKey, cellValue);
                 }
                 j++;
