@@ -296,14 +296,14 @@ $(function() {
             <td width="300px">${wyTunel.country.cityName}</td>
         </tr>
         <tr>
-            <td><span style="color: red;">*</span>乡镇:</td>
+            <td><span style="color: red;">*</span>所属乡镇:</td>
             <td>
                 <div style="float: left">
                     <input id="townVal" type="text" class="required"/>
                     <input name="tunelManual.town" id="town" type="hidden"/>
                 </div>
             </td>
-            <td>农村:</td>
+            <td>覆盖农村:</td>
             <td>
                 <input id="villageVal" type="text"/>
                 <input name="tunelManual.village" id="village" type="hidden"/>

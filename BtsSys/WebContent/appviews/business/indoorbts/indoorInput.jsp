@@ -243,12 +243,12 @@
     </td>
 </tr>
 <tr>
-    <td><span style="color: red;">*</span>乡镇：</td>
+    <td><span style="color: red;">*</span>所属乡镇：</td>
     <td>
         <input type="text" id="town" class="required">
     </td>
     <td>
-        农村
+        覆盖农村
     </td>
     <td>
         <input type="text" id="village" class="required">

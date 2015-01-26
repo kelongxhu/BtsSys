@@ -103,9 +103,10 @@
         });
 
         function showDetail(rowdata) {
-            var url = "${ctx}/business/business/indoorDetail.action";
+            var url = "business/indoorDetail.action";
             if (rowdata && rowdata.intId)url += "?intId=" + rowdata.intId;
-            window.location.href = url;
+//            window.location.href = url;
+            parent.f_addTab('室内分布小区详情','室内分布小区详情',url);
         }
 
         //添加页面

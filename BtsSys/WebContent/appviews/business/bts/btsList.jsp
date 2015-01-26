@@ -68,6 +68,8 @@
                     {display:'机房产权',name:'circuitroomOwnership',width : 55,align:'center'},
                     {display:'传输产权',name:'transOwnership',width : 55,align:'center'},
                     {display:'维护等级',name:'serviceLevel',width : 55,align:'center'},
+                    {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
+                    {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'},
                     {display:'更新时间',name:'updateTimeStr',width : 80,align:'center'},
                    // {display:'设备类型',name:'vendorBtstype',width : 60,align:'center'},
                     {display:'手工标识',name:'manualFlag',width : 60,align:'center',
@@ -109,7 +111,9 @@
         });
         //基站显示信息
         function btsInfo(data) {
-            window.location.href = "${ctx}/business/btsInfo.action?intId=" + data.intId;
+            var url="business/btsInfo.action?intId=" + data.intId;
+//            window.location.href = url;
+            parent.f_addTab('室外覆盖站点详情','室外覆盖站点详情',url);
         }
 
 
@@ -129,7 +133,8 @@
                 intId = this.intId;
             });
             //收缩左菜单
-            window.location.href = "${ctx}/business/btsInput.action?intId=" + intId;
+            var url="${ctx}/business/btsInput.action?intId=" + intId;
+            window.location.href = url;
            // parent.$('body').layout('collapse','west');
         }
 

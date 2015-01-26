@@ -36,9 +36,9 @@ $(function() {
         data: [
             { text: '室外覆盖站点', id: '1' },
             { text: '纯BBU站点', id: '2' },
-            { text: '室内分布站点', id: '3' },
-            { text: '小区', id: '4' },
-            { text: '隧道覆盖站点', id: '6' }
+            { text: '室外覆盖小区', id: '4' },
+            { text: '室内分布小区', id: '3' },
+            { text: '隧道覆盖小区', id: '6' }
         ],
         width : 120,
         selectBoxWidth: 150,
@@ -223,11 +223,16 @@ function cellGrid(url) {
     gridObj = $("#maingrid").ligerGrid({
         columns: [
             {display:'小区名称',name:'name',width : 200,align:'center'},
-            {display:'本地网',name:'cityName',width : 80,align:'center'},
+            {display:'本地网',name:'cityName',width : 80,align:'center',
+                render:function(row){
+                    return row.city.cityName;
+                }
+            },
             {display:'区县',name:'country.cityName',width : 80,align:'center',
                 render: function (row) {
                     return row.country.cityName;
                 }},
+            {display:'室分',name:'isIndoor',width : 60,align:'center'},
             {display:'扇区号',name:'cellId',width : 60,align:'center'},
             {display:'所属BSC名称',name:'bscName',width : 120,align:'center'},
             {display:'网管编号',name:'btsId',width : 80,align:'center'},
@@ -279,11 +284,11 @@ function cellGrid(url) {
 
 
 
-function tunelGrid(params){
+function tunelGrid(url,params){
     toolBar1();
     gridObj = $("#maingrid").ligerGrid({
         rownumbers: true,
-        url: '${ctx}/businessjson/tunelDataDel.action',
+        url: url,
         parms: params,
         showTitle : false,
         checkbox: true,
@@ -354,14 +359,17 @@ function toSearch() {
         url = encodeURI("${ctx}/businessjson/bbuDataDel.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId+"&startTime="+startTime+"&endTime="+endTime);
         bbuGrid(url);
     } else if (typeId == 3) {
-        url = encodeURI("${ctx}/businessjson/indoorDataDel.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&ci=" + ci + "&pn=" + pn+"&startTime="+startTime+"&endTime="+endTime);
-        indoorGrid(url);
+        //室内分布小区
+        url = encodeURI("${ctx}/businessjson/cellDataDel.action?isIndoor=是&countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&ci=" + ci + "&pn=" + pn+"&startTime="+startTime+"&endTime="+endTime);
+        cellGrid(url);
     } else if (typeId == 4) {
-        url = encodeURI("${ctx}/businessjson/cellDataDel.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn+"&startTime="+startTime+"&endTime="+endTime);
+        //室外覆盖小区
+        url = encodeURI("${ctx}/businessjson/cellDataDel.action?isIndoor=否&countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn+"&startTime="+startTime+"&endTime="+endTime);
         cellGrid(url);
     } else if(typeId==6){
-        var params = {countryIds: cityIds, name: name,bscName:bscName,btsId:btsId,startTime:startTime,endTime:endTime};
-        tunelGrid(params);
+        //隧道覆盖小区
+        url = encodeURI("${ctx}/businessjson/cellDataDel.action?isIndoor=隧&countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&ci=" + ci + "&pn=" + pn+"&startTime="+startTime+"&endTime="+endTime);
+        cellGrid(url);
     } else{
         //默认查询物理站点
         url = encodeURI("${ctx}/businessjson/btsDataDel.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId+"&startTime="+startTime+"&endTime="+endTime);
@@ -422,7 +430,7 @@ function mateData() {
         intIds+=this.intId+",";
     });
    var url="";
-   if(typeId==4){
+   if(typeId==4||typeId==3||typeId==6){
      if(j>1){
          $.ligerDialog.alert('请选择一条废弃小区数据找回！');
          return;
@@ -434,8 +442,8 @@ function mateData() {
     $.ligerDialog.open({
         url : url,
         name:"findDialog",
-        height : 540,
-        width : 1100,
+        height : 500,
+        width : 1050,
         showMax:true,
         showToggle: true,
 //        showMin: true,

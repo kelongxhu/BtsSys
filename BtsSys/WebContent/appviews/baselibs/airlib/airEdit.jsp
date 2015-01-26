@@ -154,7 +154,7 @@ $(function(){
             <tr>
                 <th width="150px"><span style="color: red;">*</span>天线型号:</th>
                 <td width="300px">
-					<input name="airLib.airModel" id="airModel" type="text" class="required" value="${airLib.airModel}"/>
+					<input name="airLib.airModel" id="airModel" type="text" class="required" value="${airLib.airModel}" readonly/>
 					<input name="airLib.id" type="hidden" id="id" value="${airLib.id}"/>
 				</td>
 				<th width="150px"><span style="color: red;">*</span>天线厂家:</th>

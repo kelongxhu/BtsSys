@@ -75,6 +75,8 @@ $(function(){
 			        		}	  
 			           }},
 			          {display:'设备类型',name:'vendorBtstype',width : 60,align:'center'},
+                      {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
+                      {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'},
                       {display:'更新时间',name:'updatetimeStr',width : 80,align:'center'},
 			          {display:'手工标识',name:'manualFlag',width : 60,align:'center',
 			        	  render: function (row)
@@ -108,7 +110,9 @@ $(function(){
  	
  	//BBU信息显示界面
  	function bbuInfo(data){
- 		window.location.href="${ctx}/business/bbuInfo.action?intId="+data.intId;
+        <%--window.location.href="${ctx}/business/bbuInfo.action?intId="+data.intId;--%>
+        var url="business/bbuInfo.action?intId="+data.intId;
+        parent.f_addTab('纯BBU站点详情','纯BBU站点详情',url);
  	}
  
  

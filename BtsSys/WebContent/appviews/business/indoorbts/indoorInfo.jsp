@@ -24,11 +24,11 @@
                 <div class="controls row-fluid">
                     <span class="span4 form-horizontal">
                           <div class="control-group">
-                              <label class="control-label">室内分布站点名称：</label>
+                              <label class="control-label">室内分布小区名称：</label>
 
                               <div class="controls">
                                   <select id="cons">
-                                      <input type="text" id="name" name="name" value="${bts.name}">
+                                      <input type="text" id="name" name="name" value="${cell.name}">
                                   </select>
                               </div>
                           </div>
@@ -38,16 +38,16 @@
                               <label class="control-label">本地网:</label>
 
                               <div class="controls">
-                                  <input type="text" id="cityName" name="cityName" value="${bts.cityName}">
+                                  <input type="text" id="cityName" name="cityName" value="${cell.city.cityName}">
                               </div>
                           </div>
                     </span>
                     <span class="span4 form-horizontal">
                           <div class="control-group">
-                              <label class="control-label">所属区县:</label>
+                              <label class="control-label">区县:</label>
 
                               <div class="controls">
-                                  <input type="text" id="countyName" name="countyName" value="${bts.country.cityName}">
+                                  <input type="text" id="countyName" name="countyName" value="${cell.country.cityName}">
                               </div>
                           </div>
                     </span>

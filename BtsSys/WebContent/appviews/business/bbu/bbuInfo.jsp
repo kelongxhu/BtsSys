@@ -86,13 +86,18 @@
             <td>${bbu.transOwnership }</td>
             <th>详细地址</th>
             <td colspan="3">${bbuManual.address}</td>
-
         </tr>
         <tr>
             <th>基站开通年月</th>
-            <td>${bbuManual.openTime }</td>
+            <td>${bbuManual.openTime}</td>
+            <th>高铁覆盖</th>
+            <td>${bbu.highTrainFlag}</td>
+            <th>红线内外</th>
+            <td>${bbu.redLineFlagStr}</td>
+        </tr>
+        <tr>
             <th>备注</th>
-            <td colspan="3">${ bbuManual.remark}</td>
+            <td colspan="5">${ bbuManual.remark}</td>
         </tr>
     </table>
     <table class="table table-condensed">

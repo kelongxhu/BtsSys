@@ -82,32 +82,42 @@
                 <td colspan="7">室分录入信息</td>
             </tr>
             <tr>
-                <th>室内分布站点名称：</th>
-                <td>${bts.name}</td>
+                <th>室内分布小区名称：</th>
+                <td>${cell.name}</td>
                 <th>本地网：</th>
-                <td>${bts.cityName}</td>
+                <td>${cell.city.cityName}</td>
                 <th>区县：</th>
-                <td>${bts.country.cityName}</td>
+                <td>${cell.country.cityName}</td>
             </tr>
             <tr>
-                <th>纬度：</th>
-                <td>${bts.latitude}</td>
-                <th>信源设备类型：</th>
-                <td>${bts.vendorBtstype}</td>
-                <th>对应基站所属BSC：</th>
-                <td>${bts.bscName}</td>
-            </tr>
-            <tr>
-                <th>对应基站名称：</th>
-                <td>${bts.btsName}</td>
+                <th>所属BSC：</th>
+                <td>${cell.bscName}</td>
+                <th>BTSID：</th>
+                <td>${cell.btsId}</td>
                 <th>小区序号：</th>
-                <td>${ccell.adjNum}</td>
-                <th>PN：</th>
-                <td>${ccell.pn}</td>
+                <td>${cell.doCell}</td>
             </tr>
             <tr>
+                <th>PN：</th>
+                <td>${cell.pn}</td>
                 <th>CI：</th>
-                <td>${ccell.ci}</td>
+                <td>${cell.ci}</td>
+                <th>信源设备类型：</th>
+                <td>${indoorManual.vendorBtstype}</td>
+            </tr>
+            <tr>
+                <th>所属乡镇：</th>
+                <td>${indoorManual.town}</td>
+                <th>覆盖农村：</th>
+                <td colspan="3">${indoorManual.village}</td>
+            </tr>
+            <tr>
+                <th>经度：</th>
+                <td>${indoorManual.latitude}</td>
+                <th>纬度：</th>
+                <td>${indoorManual.latitude}</td>
+            </tr>
+            <tr>
                 <th>站点性质一：</th>
                 <td>${indoorManual.prop1}</td>
                 <th>站点性质二：</th>

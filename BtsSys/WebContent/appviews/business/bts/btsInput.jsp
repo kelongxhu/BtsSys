@@ -479,7 +479,7 @@ function showDownDilog(){
         <tr>
             <td>区县:</td>
             <td>${bts.country.cityName}</td>
-            <td><span style="color: red;">*</span>乡镇:</td>
+            <td><span style="color: red;">*</span>所属乡镇:</td>
             <td>
                 <div style="float: left">
                 <input id="townVal" type="text" class="required"/>
@@ -488,7 +488,7 @@ function showDownDilog(){
             </td>
         </tr>
         <tr>
-            <td>农村:</td>
+            <td>覆盖农村:</td>
             <td>
                 <input id="villageVal" type="text"/>
                 <input name="btsManual.village" id="village" type="hidden"/>

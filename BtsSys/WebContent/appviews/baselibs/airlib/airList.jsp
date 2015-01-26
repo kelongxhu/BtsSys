@@ -12,8 +12,8 @@ $(function(){
     $("#toptoolbar").ligerToolBar({ 
 		items: [
 	             { text: '增加', click: add , icon:'add'},
-	             { text: '编辑', click: edit , icon:'modify'},
-	             { text: '删除', click: del , icon:'delete'}
+	             { text: '编辑', click: edit , icon:'modify'}
+	            // { text: '删除', click: del , icon:'delete'}
 	           ]
 	});
 	

@@ -106,13 +106,16 @@
                 return;
             }
             var ids="";
+            var names="";
             var flag = false;
             var jwFlag=false;
             var columnArr=["LONGITUDE","LATITUDE"];
             $(rows).each(function () {
-                ids += this.id + ",";
                 if (this.status != 0) {
+                    names+=this.name+",";
                     flag = true;
+                }else{
+                    ids += this.id + ",";
                 }
                 var type=this.type;
                 var column=this.encolumnname;
@@ -121,8 +124,8 @@
                        jwFlag=true;
                 }
             });
-            if (flag) {
-                $.ligerDialog.alert('选择数据已经审核,请核查!');
+            if (flag&&ids.length==0) {
+                $.ligerDialog.alert(names+'已经审核,请核查!');
                 return;
             }
             if(jwFlag){
@@ -134,7 +137,7 @@
                 status :1
             }
         $.getJSON('${ctx}/businessjson/editApply.action', params, function (json) {
-            alert(json["result"]);
+            $.ligerDialog.alert(json["result"]);
             gridObj.loadData();
         });
         }
@@ -147,16 +150,21 @@
                        return;
                    }
                    var ids="";
+                   var names="";
+                   var count=0;
                    var flag=false;
                    $(rows).each(function () {
-                       ids += this.id+",";
                        if (this.status != 0) {
-                          flag=true;
+                           names+=this.name+",";
+                           flag=true;
+                       }else{
+                           count++;
+                           ids += this.id+",";
                        }
                    });
 
-                  if(flag){
-                      $.ligerDialog.alert('选择数据已经审核,请核查!');
+                  if(flag&&ids.length==0){
+                      $.ligerDialog.alert(names+'已经审核,请核查!');
                       return;
                   }
 
@@ -165,7 +173,7 @@
                        status :99
                     }
                $.getJSON('${ctx}/businessjson/editApply.action', params, function (json) {
-                   alert(json["result"]);
+                   $.ligerDialog.alert(json["result"]);
                    gridObj.loadData();
                });
                }

@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>隧道覆盖站点显示信息</title>
+    <title>隧道覆盖小区显示信息</title>
     <%@ include file="/appviews/common/tag.jsp" %>
     <link href="${ctx}/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript">
@@ -19,13 +19,13 @@
 <!-- 标题 end-->
 <div class="main_title_2">
     <span class="main_title_p">
-        <img src="${ctx}/layouts/image/ico_arrow.gif"/> 隧道覆盖站点显示信息
+        <img src="${ctx}/layouts/image/ico_arrow.gif"/> 隧道覆盖小区信息
     </span>
 </div>
 <div class="content">
     <table class="table table-condensed">
         <tr>
-            <th width="10%">室外覆盖站点名称:</th>
+            <th width="10%">隧道小区名称:</th>
             <td align="left" width="20%">${wyTunel.name}</td>
             <th>是否拉远:</th>
             <td align="left">${wyTunel.isRru}</td>
@@ -37,9 +37,9 @@
             <td align="left" width="20%">${wyTunel.country.cityName}</td>
         </tr>
         <tr>
-            <th width="10%">乡镇:</th>
+            <th width="10%">所属乡镇:</th>
             <td align="left" width="20%">${tunelManual.town}</td>
-            <th width="10%">农村:</th>
+            <th width="10%">覆盖农村:</th>
             <td align="left" width="20%">${tunelManual.village}</td>
         </tr>
         <tr>
@@ -53,6 +53,12 @@
             <td align="left">${wyTunel.pn}</td>
             <th>CI:</th>
             <td align="left">${wyTunel.ci}</td>
+        <tr>
+        <tr>
+            <th>高铁覆盖:</th>
+            <td align="left">${wyTunel.highTrainFlag}</td>
+            <th>红线内外:</th>
+            <td align="left">${wyTunel.redLineFlagStr}</td>
         <tr>
             <th>隧道性质:</th>
             <td align="left">${tunelManual.propCons.name}</td>

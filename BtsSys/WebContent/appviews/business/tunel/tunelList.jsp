@@ -68,6 +68,8 @@
                         }},
                     {display:'PN',name:'pn',width : 60,align:'center'},
                     {display:'CI',name:'ci',width : 60,align:'center'},
+                    {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
+                    {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'},
                     {display:'更新时间',name:'updatetimeStr',width : 120,align:'center'},
                     {display:'手工标识',name:'manualFlag',width : 60,align:'center',
                         render: function (row)
@@ -111,7 +113,8 @@
         });
         //基站显示信息
         function tunelInfo(data) {
-            window.location.href = "${ctx}/business/tunelInfo.action?intId=" + data.intId;
+            var url= "business/tunelInfo.action?intId=" + data.intId;
+            parent.f_addTab('隧道覆盖小区详情','隧道覆盖小区详情',url);
         }
 
         //添加页面

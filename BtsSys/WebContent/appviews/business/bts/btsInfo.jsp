@@ -49,18 +49,18 @@
 <div class="tab-pane active" id="tab1">
     <table class="table table-condensed">
         <tr>
-            <th rowspan="10" width="5%"><span class="label label-success">站点基本信息</span></th>
-            <th width="10%">站点名称:</th>
+            <th rowspan="11" width="5%"><span class="label label-success">站点基本信息</span></th>
+            <th width="12%">站点名称:</th>
             <td align="left" width="20%">${bts.name}</td>
-            <th width="10%">本地网:</th>
+            <th width="12%">本地网:</th>
             <td align="left" width="20%">${bts.city.cityName}</td>
-            <th width="10%">区县:</th>
+            <th width="12%">区县:</th>
             <td align="left" width="20%">${bts.country.cityName}</td>
         </tr>
         <tr>
-            <th>乡镇:</th>
+            <th>所属乡镇:</th>
             <td align="left">${btsManual.town}</td>
-            <th>农村:</th>
+            <th>覆盖农村:</th>
             <td align="left">${btsManual.village}</td>
         </tr>
         <tr>
@@ -126,6 +126,12 @@
             <td align="left">${bts.circuitroomOwnership}</td>
             <th>传输产权:</th>
             <td align="left">${bts.transOwnership}</td>
+        </tr>
+        <tr>
+            <th>高铁覆盖:</th>
+            <td align="left">${bts.highTrainFlag}</td>
+            <th>红线内外:</th>
+            <td align="left">${bts.redLineFlagStr}</td>
         </tr>
         <tr>
             <th>共建共享:</th>
@@ -408,12 +414,12 @@
 
 </div>
 
-<div class="form-actions_2">
-    <button class="btn" type="reset" onclick="back();">
-        <i class="icon-repeat"></i>
-        返回
-    </button>
-</div>
+<%--<div class="form-actions_2">--%>
+    <%--<button class="btn" type="reset" onclick="back();">--%>
+        <%--<i class="icon-repeat"></i>--%>
+        <%--返回--%>
+    <%--</button>--%>
+<%--</div>--%>
 
 </div>
 

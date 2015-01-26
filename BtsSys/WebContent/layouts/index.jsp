@@ -4,9 +4,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>贵州基站健康档案管理系统</title>
+    <%@ include file="/appviews/common/tag.jsp" %>
     <link href="${ctx}/layouts/css/header.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/layouts/css/left.css" rel="stylesheet" type="text/css"/>
-    <%@ include file="/appviews/common/tag.jsp" %>
+
 
     <script type="text/javascript">
 

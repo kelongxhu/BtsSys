@@ -76,8 +76,6 @@ function toolBar2(){
        );
 }
 
-
-
 function btsGrid(url) {
     gridObj = $("#maingrid").ligerGrid({
         columns: [
@@ -95,6 +93,8 @@ function btsGrid(url) {
             {display:'是否拉远',name:'isRru',width : 60,align:'center'},
             {display:'施主基站名称',name:'btsName',width : 100,align:'center'},
             {display:'设备类型',name:'vendorBtstype',width : 60,align:'center'},
+            {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
+            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'},
             {display:'手工标识',name:'manualFlag',width : 60,align:'center',
                 render: function (row) {
                     if (row.manualFlag == 0) {
@@ -137,6 +137,8 @@ function bbuGrid(url) {
             {display:'共站BBU数量',name:'shareBbuCount',width : 80,align:'center'},
             {display:'机房产权',name:'circuitroomOwnership',width : 60,align:'center'},
             {display:'传输产权',name:'transOwnership',width : 60,align:'center'},
+            {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
+            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'},
             {display:'手工标识',name:'manualFlag',width : 60,align:'center',
                 render: function (row) {
                     if (row.manualFlag == 0) {
@@ -242,7 +244,8 @@ function tunelGrid(url){
         url:url,
         onDblClickRow : function (data, rowindex, rowobj)
          {
-         window.location.href ="";
+             return;
+//         window.location.href ="";
          },
         showTitle : false,
         checkbox: true,
@@ -270,7 +273,9 @@ function tunelGrid(url){
             {display:'网管编号',name:'btsId',width : 80,align:'center'},
             {display:'机房产权',name:'circuitroomOwnership',width : 60,align:'center'},
             {display:'传输产权',name:'transOwnership',width : 60,align:'center'},
-            {display:'维护等级',name:'serviceLevel',width : 60,align:'center'}
+            {display:'维护等级',name:'serviceLevel',width : 60,align:'center'},
+            {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
+            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'}
         ]
     });
     $("#pageloading").hide();
@@ -297,13 +302,13 @@ function toSearch() {
     } else if (typeId == 2) {
         url = encodeURI("${ctx}/businessjson/bbuData.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId);
         bbuGrid(url);
-    } else if (typeId == 3) {
+    } else if (typeId == 7) {
         url = encodeURI("${ctx}/businessjson/indoorBtsData.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName+ "&btsId=" + btsId);
         indoorGrid(url);
     } else if (typeId == 5) {
         var url= encodeURI("${ctx}/businessjson/queryTransferList?countryIds"+cityIds+"&name="+name);
         transferGrid(url);
-    } else if(typeId==6){
+    } else if(typeId==8){
         var url= encodeURI("${ctx}/businessjson/tunelData.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName+ "&btsId=" + btsId);
         tunelGrid(url);
     } else{
@@ -332,22 +337,26 @@ function toggle(targetid) {
 
 //基站显示信息
 function btsInfo(data) {
-    window.location.href = "${ctx}/business/btsInfo.action?intId=" + data.intId;
+    <%--window.location.href = "${ctx}/business/btsInfo.action?intId=" + data.intId;--%>
+    var url="business/btsInfo.action?intId=" + data.intId;
+    parent.f_addTab('室外覆盖站点详情','室外覆盖站点详情',url);
 }
 //BBU信息显示界面
 function bbuInfo(data) {
-    window.location.href = "${ctx}/business/bbuInfo.action?intId=" + data.intId;
+    <%--window.location.href = "${ctx}/business/bbuInfo.action?intId=" + data.intId;--%>
+    var url="business/bbuInfo.action?intId=" + data.intId;
+    parent.f_addTab('纯BBU站点详情','纯BBU站点详情',url);
 }
 
 //indoorinfo显示界面
 function indoorInfo(data) {
     <%--window.location.href = "${ctx}/business/business/indoorDetail.action?intId=" + data.intId;--%>
-    alert('xxx');
-    return;
+//    alert('xxx');
+//    return;
 }
 //transferinfo显示页面
 function transferInfo(data){
-    window.location.href="${ctx}/business/showTransferDetail.action?transferId="+data.id;
+    <%--window.location.href="${ctx}/business/showTransferDetail.action?transferId="+data.id;--%>
 }
 
 function columnConfig() {

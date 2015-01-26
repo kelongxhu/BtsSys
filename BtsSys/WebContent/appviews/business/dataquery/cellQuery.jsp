@@ -118,6 +118,8 @@ function cellGrid(url) {
                         return "是";
                     }
                 }},
+            {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
+            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'},
             {display:'手工标识',name:'manualFlag',width : 55,align:'center',
                 render: function (row) {
                     if (row.manualFlag == 0) {
@@ -216,6 +218,18 @@ function toSearch() {
 }
 
 
+//小区信息显示界面
+function cellInfo(data) {
+    var indoor=data.isIndoor;
+    if(indoor=='否'){
+        var url = "business/cellInfo.action?intId=" + data.intId;
+        parent.f_addTab('室外覆盖小区详情','室外覆盖小区详情',url);
+    }else if(indoor=='隧'){
+        var url =  "business/tunelInfo.action?intId=" + data.intId;
+        parent.f_addTab('隧道覆盖小区详情','室外覆盖小区详情',url);
+    }
+}
+
 //高级检索
 function toggle(targetid) {
     if (document.getElementById) {
@@ -231,14 +245,9 @@ function toggle(targetid) {
         }
     }
 }
-
 //基站显示信息
 function btsInfo(data) {
     window.location.href = "${ctx}/business/btsInfo.action?intId=" + data.intId;
-}
-//小区信息显示界面
-function cellInfo(data) {
-    window.location.href = "${ctx}/business/cellInfo.action?intId=" + data.intId;
 }
 //BBU信息显示界面
 function bbuInfo(data) {
@@ -247,7 +256,8 @@ function bbuInfo(data) {
 
 //indoorinfo显示界面
 function indoorInfo(data) {
-    window.location.href = "${ctx}/business/business/indoorDetail.action?intId=" + data.intId;
+    var url = "business/indoorDetail.action?intId=" + data.intId;
+    parent.f_addTab('室内分布小区详情','室内分布小区详情',url);
 }
 
 //transferinfo显示页面

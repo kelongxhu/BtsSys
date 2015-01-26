@@ -63,6 +63,12 @@
                         <td>${btsManual.village}</td>
                     </tr>
                     <tr>
+                        <th>高铁覆盖:</th>
+                        <td align="left">${cell.highTrainFlag}</td>
+                        <th>红线内外:</th>
+                        <td align="left">${cell.redLineFlagStr}</td>
+                    <tr>
+                    <tr>
                         <th>扇区号</th>
                         <td>${ccell.cellid}</td>
                         <th>所属msc名称</th>
