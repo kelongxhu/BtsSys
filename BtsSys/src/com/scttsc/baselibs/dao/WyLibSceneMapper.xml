@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scttsc.baselibs.dao.WyLibSceneDao" >
+  <resultMap id="BaseResultMap" type="com.scttsc.baselibs.model.WyLibScene" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
+    <result column="COUNTRY_ID" property="countryId" jdbcType="DECIMAL" />
+    <result column="SCENE_TYPE" property="sceneType" jdbcType="DECIMAL" />
+    <result column="SCENE_LEVEL" property="sceneLevel" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="DECIMAL" />
+    <result column="LATITUDE" property="latitude" jdbcType="DECIMAL" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="IN_TIME" property="inTime" jdbcType="DATE" />
+    <result column="IN_USER" property="inUser" jdbcType="DECIMAL" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE" />
+    <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL" />
+    <result column="sceneTypeName" property="sceneTypeName" jdbcType="VARCHAR" />
+    <result column="sceneLevelName" property="sceneLevelName" jdbcType="VARCHAR" />
+    <result column="cityname" property="city.cityName" jdbcType="VARCHAR" />
+    <result column="countryname" property="country.cityName" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    u.ID, u.CITY_ID, u.COUNTRY_ID, u.SCENE_TYPE, u.SCENE_LEVEL, u.NAME, u.LONGITUDE, u.LATITUDE, u.REMARK,
+    u.IN_TIME, u.IN_USER, u.UPDATE_TIME,u.DELETE_FLAG
+  </sql>
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select* from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List" />,a.name cityname,b.name countryname,c.name sceneTypeName,d.name sceneLevelName
+        from WY_LIB_SCENE u
+        left join wy_city a on a.id=u.CITY_ID
+        left join wy_city b on b.id=u.COUNTRY_ID
+        left join (SELECT CODE,NAME FROM wy_cons WHERE groupcode='SCENE_TYPE')c
+        on u.SCENE_TYPE=c.code
+        left join (SELECT CODE,NAME,PID FROM wy_cons WHERE groupcode='SCENE_LEVEL')d
+        on u.SCENE_LEVEL=d.code and d.PID=u.SCENE_TYPE
+        )m
+        <where>
+            1=1 and DELETE_FLAG=0
+            <if test="cityIds!=null">
+                and CITY_ID in(${cityIds})
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="countByMap" resultType="int">
+        select count(1) from
+        (select
+        <include refid="Base_Column_List" />
+        from WY_LIB_SCENE u)
+        <where>
+            1=1 and DELETE_FLAG=0
+            <if test="cityIds!=null">
+                and CITY_ID in(${cityIds})
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from WY_LIB_SCENE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Long" >
+    delete from WY_LIB_SCENE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+
+    <delete id="deleteByPrimaryKeys">
+       update WY_LIB_SCENE set DELETE_FLAG=1
+        where ID in(${ids})
+    </delete>
+
+  <insert id="insert" parameterType="com.scttsc.baselibs.model.WyLibScene" >
+    <selectKey resultType="Long" keyProperty="id" order="BEFORE" >
+      select WY_LIB_SCENE_SEQ.nextval from dual
+    </selectKey>
+    insert into WY_LIB_SCENE (ID, CITY_ID, COUNTRY_ID, 
+      SCENE_TYPE, SCENE_LEVEL, NAME, 
+      LONGITUDE, LATITUDE, REMARK, 
+      IN_TIME, IN_USER, UPDATE_TIME
+      )
+    values (#{id,jdbcType=DECIMAL}, #{cityId,jdbcType=DECIMAL}, #{countryId,jdbcType=DECIMAL}, 
+      #{sceneType,jdbcType=DECIMAL}, #{sceneLevel,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{inTime,jdbcType=DATE}, #{inUser,jdbcType=DECIMAL}, #{updateTime,jdbcType=DATE}
+      )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.baselibs.model.WyLibScene" >
+    update WY_LIB_SCENE
+    <set >
+      <if test="cityId != null" >
+        CITY_ID = #{cityId,jdbcType=DECIMAL},
+      </if>
+      <if test="countryId != null" >
+        COUNTRY_ID = #{countryId,jdbcType=DECIMAL},
+      </if>
+      <if test="sceneType != null" >
+        SCENE_TYPE = #{sceneType,jdbcType=DECIMAL},
+      </if>
+      <if test="sceneLevel != null" >
+        SCENE_LEVEL = #{sceneLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="inTime != null" >
+        IN_TIME = #{inTime,jdbcType=DATE},
+      </if>
+      <if test="inUser != null" >
+        IN_USER = #{inUser,jdbcType=DECIMAL},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=DATE},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -49,6 +49,13 @@
                 method="loadMenuTree">
             <result name="success" type="json"/>
         </action>
+        <!--区县列表-->
+        <action name="getCountrys" class="com.scttsc.admin.web.CityAction"
+                method="getCountrys">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
 	</package>
 
 	<package name="admin" namespace="/admin" extends="default">

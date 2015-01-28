@@ -303,6 +303,20 @@
             </result>
         </action>
 
+        <!--场景库-->
+        <action name="sceneLibData" class="com.scttsc.baselibs.web.SceneLibAction" method="sceneLibData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="addSceneLib" class="com.scttsc.baselibs.web.SceneLibAction" method="addSceneLib">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+
 
     </package>
 
@@ -498,6 +512,21 @@
         </action>
 
         <action name="exportVillageData" class="com.scttsc.baselibs.web.VillageLibAction" method="exportVillageData"/>
+
+
+        <!--场景库-->
+        <action name="sceneLib" class="com.scttsc.baselibs.web.SceneLibAction"
+                method="sceneLib">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/scenelib/sceneList.jsp
+            </result>
+        </action>
+        <action name="pageSceneLibAdd" class="com.scttsc.baselibs.web.SceneLibAction"
+                method="pageSceneLibAdd">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/scenelib/sceneLibAdd.jsp
+            </result>
+        </action>
 
     </package>
 
