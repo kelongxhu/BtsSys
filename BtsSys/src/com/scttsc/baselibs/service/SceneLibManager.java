@@ -15,11 +15,20 @@ public interface SceneLibManager {
 
     int deleteByPrimaryKey(Long id);
 
-    int deleteByPrimaryKeys(Map<String,Object> param)throws Exception;
+    int deleteByPrimaryKeys(Map<String, Object> param) throws Exception;
 
     int insert(WyLibScene record);
 
     WyLibScene selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(WyLibScene record);
+
+    List<WyLibScene> selectByPrimaryKeys(String ids);
+
+    /**
+     * 批量导入场景库
+     * @param data
+     * @return
+     */
+    int importInsert(List<Map<String, Object>> data);
 }

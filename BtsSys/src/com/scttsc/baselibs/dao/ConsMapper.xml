@@ -25,6 +25,9 @@
             <if test="pId!=null">
                 and pid=#{pId,jdbcType=VARCHAR}
             </if>
+            <if test="code!=null">
+                and code=#{code,jdbcType=DECIMAL}
+            </if>
             <if test="name!=null">
                 and name=#{name,jdbcType=VARCHAR}
             </if>
@@ -47,6 +50,9 @@
 			<if test="code!=null">
 				and code=#{code,jdbcType=DECIMAL}			
 			</if>
+            <if test="pId!=null">
+                and pid=#{pId,jdbcType=VARCHAR}
+            </if>
             <if test="name!=null">
                 and name=#{name,jdbcType=VARCHAR}
             </if>

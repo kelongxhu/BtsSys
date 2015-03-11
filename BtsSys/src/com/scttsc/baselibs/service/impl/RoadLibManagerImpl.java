@@ -20,7 +20,7 @@ public class RoadLibManagerImpl implements RoadLibManager {
 	}
 
 	public int update(RoadLib roadLib) throws Exception {
-		return roadLibDao.update(roadLib);
+		return roadLibDao.updateByPrimaryKeySelective(roadLib);
 	}
 
 	public int delete(Object map) throws Exception {

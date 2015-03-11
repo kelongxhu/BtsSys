@@ -12,7 +12,7 @@
             var treeCombox;
             //初始化地市
             //初始化树控件
-            $.post("${ctx}/schooljson/initCountryTree.action", function(ajaxData, status) {
+            $.post("${ctx}/schooljson/initCityTree.action", function(ajaxData, status) {
                 var treeData = ajaxData.cityJson;
                 treeData = treeData.replace(/"children":\[\],/g, '');
                 treeData = eval('(' + treeData + ')');
@@ -35,7 +35,10 @@
                 items: [
                     { text: '增加', click: add , icon:'add'},
                     { text: '编辑', click: edit , icon:'modify'},
-                    { text: '删除', click: del , icon:'delete'}
+                    { text: '删除', click: del , icon:'delete'},
+                    { text: '导出模板', click: exportSceneLibTemplate , icon:'logout'} ,
+                    { text: '导入', click: importScenePage , icon:'save'},
+                    { text: '导出', click: importData , icon:'save'}
                 ]
             });
 
@@ -43,17 +46,21 @@
                 columns: [
                     {display:'本地网',name:'city.cityName',width : 60,align:'center',
                         render: function (row) {
-                            return row.city.cityName;
+                            if(row.city!=null){
+                                return row.city.cityName;
+                            }
                         }},
                     {display:'区县',name:'country.cityName',width : 60,align:'center',
                         render: function (row) {
-                            return row.country.cityName;
+                            if(row.country!=null){
+                                return row.country.cityName;
+                            }
                         }},
                     {display:'场景类型',name:'sceneTypeName',width : 120,align:'center'},
                     {display:'场景级别',name:'sceneLevelName',width : 120,align:'center'},
-                    {display:'场景名称',name:'name',width : 120,align:'center'},
-                    {display:'经度',name:'longitude',width :120,align:'center'} ,
-                    {display:'纬度',name:'latitude',width : 120,align:'center'}
+                    {display:'场景名称',name:'name',width : 300,align:'center'},
+                    {display:'经度',name:'longitude',width :100,align:'center'} ,
+                    {display:'纬度',name:'latitude',width : 100,align:'center'}
                 ],
                 rownumbers:true,
                 showTitle : false,
@@ -93,7 +100,7 @@
             $(rows).each(function() {
                 id = this.id;
             });
-            window.location.href = "${ctx}/school/secneryEditPage.action?id=" + id;
+            window.location.href = "${ctx}/school/pageSceneLibAdd.action?id=" + id;
         }
         //删除操作
         function del() {
@@ -113,7 +120,7 @@
                 var params = {
                     ids : str
                 };
-                $.getJSON('${ctx}/schooljson/delSecneryLib.action', params, function(json) {
+                $.getJSON('${ctx}/schooljson/delSceneLibs.action', params, function(json) {
                     if (json.result == 1) {
                         alert('删除成功!');
                     } else {
@@ -129,16 +136,28 @@
         //查询
         function toSearch() {
             //处理地区
-            var countryIds = $("#cityIdVal").val().replace(/;/g, ',');
+            var cityIds = $("#cityIdVal").val().replace(/;/g, ',');
 
             gridObj.setOptions({
                 newPage : 1
             });
             gridObj.setOptions({
-                url : encodeURI("${ctx}/schooljson/secneryLibData.action?countryIds="
-                        + countryIds)
+                url : encodeURI("${ctx}/schooljson/sceneLibData.action?cityIds="
+                        + cityIds)
             });
             gridObj.loadData(); //加载数据
+        }
+
+        function exportSceneLibTemplate(){
+            window.location.href = "${ctx}/school/exportSceneLibTemplate.action";
+        }
+        //导入数据
+        function importScenePage() {
+            window.location.href = "${ctx}/school/importScenePage.action";
+        }
+
+        function importData(){
+
         }
     </script>
 </head>
@@ -153,7 +172,7 @@
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr class="tr_inquires">
                 <td width="60px">
-                    地区：
+                    本地网：
                 </td>
                 <td width="150px">
                     <input type="text" id="cityId"/>

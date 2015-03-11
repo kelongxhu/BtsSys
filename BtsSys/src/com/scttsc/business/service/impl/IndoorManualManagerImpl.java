@@ -3,14 +3,18 @@ package com.scttsc.business.service.impl;
 import com.scttsc.admin.dao.CityDao;
 import com.scttsc.business.dao.BtsDao;
 import com.scttsc.business.dao.CellDao;
+import com.scttsc.business.dao.CellLibDao;
 import com.scttsc.business.dao.IndoorManualDao;
 import com.scttsc.business.model.BbuManual;
+import com.scttsc.business.model.CellLib;
 import com.scttsc.business.model.IndoorManual;
 import com.scttsc.business.service.IndoorManualManager;
 import com.scttsc.business.service.WyLogManager;
+import com.scttsc.business.util.Constants;
 import com.scttsc.business.vo.FindBackReponse;
 import com.scttsc.common.util.StringUtil;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +34,9 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
 
     @Autowired
     private IndoorManualDao indoorManualDao;
+
+    @Autowired
+    private CellLibDao cellLibDao;
 
     @Autowired
     private BtsDao btsDao;
@@ -66,9 +73,28 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
             btsDao.updateByMap(map);
         }
         indoorManualDao.insert(record);
+        //插入关联场景库
+        String sceneLibs = record.getSceneLibs();
 
+        insertSceneLib(sceneLibs,record.getIntId());
         //切入日志
         wyLogManager.insertLog(record);
+    }
+
+    private void insertSceneLib(String sceneLibs,String intId) {
+        if (StringUtils.isEmpty(sceneLibs)) {
+            return;
+        }
+        String[] sceneLibArr = sceneLibs.split(",");
+        if (sceneLibArr != null) {
+            for (String sceneLib : sceneLibArr) {
+                CellLib cellLib = new CellLib();
+                cellLib.setCellIntId(intId);
+                cellLib.setLibId(StringUtil.null2Integer0(sceneLib));
+                cellLib.setLibType(Constants.SceneLib);
+                cellLibDao.insert(cellLib);
+            }
+        }
     }
 
 
@@ -88,6 +114,12 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
      * @return
      */
     public int updateByPrimaryKeySelective(IndoorManual record) throws Exception {
+        //刪除关联场景库，从新新增
+        Map map = new HashMap();
+        map.put("cellId", record.getIntId());// 删除小区所有覆盖库信息
+        map.put("libType",Constants.SceneLib);
+        cellLibDao.deleteByMap(map);
+        insertSceneLib(record.getSceneLibs(),record.getIntId());
         wyLogManager.updateLog(record);
         return indoorManualDao.updateByPrimaryKeySelective(record);
     }

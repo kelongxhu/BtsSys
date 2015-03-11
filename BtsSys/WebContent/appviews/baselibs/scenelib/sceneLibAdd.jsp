@@ -7,14 +7,14 @@
 <%@ include file="/appviews/common/tag.jsp"%>
 
 <script type="text/javascript">
-$(function(){
-	
-	 var treeCombox;
-     var countryCombox;
-     var sceneLevelCombox;
+    var treeCombox;
+    var countryCombox;
+    var sceneLevelCombox;
+    $(function(){
+
 		//初始化地市
 	 	//初始化树控件
-	$.post("${ctx}/schooljson/initAllCityTree.action", function(
+	$.post("${ctx}/schooljson/initCityTree.action", function(
 				ajaxData, status) {
 			var treeData=ajaxData.cityJson;
 			treeData = treeData.replace(/"children":\[\],/g, '');
@@ -35,7 +35,12 @@ $(function(){
                     initCountryCombox(data);
                 }
 			});
-			//treeCombox.initComboBox(treeData,'localNetsVal');
+             if('${wyLibScene.cityId}'!=''){
+                 treeCombox.selectValue('${wyLibScene.cityId}');
+             }
+             if('${wyLibScene.countryId}'!=''){
+                 countryCombox.selectValue('${wyLibScene.countryId}');
+             }
 	});
     //初始化country Combox
     //初始化乡镇库
@@ -82,6 +87,12 @@ $(function(){
                     initSceneLevel(data);
                 }
 			});
+            if('${wyLibScene.sceneType}'!=''){
+                sl1.selectValue('${wyLibScene.sceneType}');
+            }
+            if('${wyLibScene.sceneLevel}'!=''){
+                sceneLevelCombox.selectValue('${wyLibScene.sceneLevel}');
+            }
 		}
 	);
 
@@ -152,7 +163,14 @@ $(function(){
 	<div id="main_2">
 	<!-- 标题 end-->
 	<div class="main_title_2">
-              <p class="main_title_p"><img src="${ctx}/layouts/image/ico_arrow.gif"></img>增加场景库信息</p>
+              <p class="main_title_p"><img src="${ctx}/layouts/image/ico_arrow.gif"></img>
+                  <c:if test="${empty wyLibScene.id}">
+                      增加场景库信息
+                  </c:if>
+                  <c:if test="${!empty wyLibScene.id}">
+                      编辑场景库信息
+                  </c:if>
+              </p>
 	</div>
 	<div class="content">
 	<form method="post" name="form1" id="form1" action="${ctx}/schooljson/addSceneLib.action">
@@ -160,6 +178,7 @@ $(function(){
             <tr>
                 <th width="150px"><span style="color: red;">*</span>本地网:</th>
                 <td width="300px">
+                    <input name="wyLibScene.id"  type="hidden" value="${wyLibScene.id}"/>
 					<input name="cityIdVal" id="cityIdVal" type="text" class="required"/>
 					<input name="wyLibScene.cityId" id="cityId" type="hidden"/>
 				</td>
@@ -184,17 +203,17 @@ $(function(){
             <tr>
            		<th><span style="color: red;">*</span>场景名称：</th>
 				<td colspan="3">
-					<input name="wyLibScene.name" id="name" type="text" class="required"/>
+					<input name="wyLibScene.name" id="name" type="text" class="required" value="${wyLibScene.name}"/>
 				</td>
             </tr>
 			<tr>
 				<th>经度:</th>
                 <td>
-					<input name="wyLibScene.longitude" type="text" id="longitude" class="{number:true}"/>
+					<input name="wyLibScene.longitude" type="text" id="longitude" class="{number:true}" value="${wyLibScene.longitude}"/>
 				</td>
                 <th>纬度:</th>
                 <td>
-                    <input name="wyLibScene.latitude" type="text" id="latitude" class="{number:true}" />
+                    <input name="wyLibScene.latitude" type="text" id="latitude" class="{number:true}" value="${wyLibScene.latitude}"/>
                 </td>
 			</tr>
 			<tr>
@@ -203,7 +222,7 @@ $(function(){
 			 <tr>
 				<th>备注：</th>
 				<td colspan="3">
-					<textarea name="wyLibScene.remark"  id="remark"></textarea>
+					<textarea name="wyLibScene.remark"  id="remark">${wyLibScene.remark}</textarea>
 				</td>
             </tr>
             <tr>

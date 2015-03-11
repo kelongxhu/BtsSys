@@ -14,6 +14,7 @@ import com.scttsc.common.model.TreeNode;
 import com.scttsc.common.util.Common;
 import com.scttsc.common.web.BaseAction;
 import net.sf.json.JSONArray;
+import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,6 +24,8 @@ import java.util.Map;
 
 @SuppressWarnings("serial")
 public class RoadLibAction extends BaseAction {
+
+    Logger LOG = Logger.getLogger(RoadLibAction.class);
 
     private RoadLibManager roadLibManager;
 
@@ -66,6 +69,9 @@ public class RoadLibAction extends BaseAction {
             if (!Common.isEmpty(roadProps)) {
                 map.put("roadProps", roadProps);
             }
+            if(!Common.isEmpty(cityId)){
+                map.put("cityId",cityId);
+            }
             total = roadLibManager.countByConds(map);
             if (total < pagesize) {
                 page = 1;
@@ -76,11 +82,10 @@ public class RoadLibAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = roadLibManager.getByConds(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
@@ -92,11 +97,17 @@ public class RoadLibAction extends BaseAction {
     public String addRoadLib() {
         try {
             User user = (User) this.getSession().getAttribute("user");
-            roadLib.setUpdatetime(new Date());
-            roadLibManager.insert(roadLib);
+            if (roadLib.getId() == null) {
+                roadLib.setIntime(new Date());
+                roadLib.setDeleteFlag(0);
+                roadLibManager.insert(roadLib);
+            } else {
+                roadLib.setUpdatetime(new Date());
+                roadLibManager.update(roadLib);
+            }
             jsonMap.put("result", 1);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
             jsonMap.put("result", 0);
         }
         return SUCCESS;
@@ -105,22 +116,15 @@ public class RoadLibAction extends BaseAction {
     public String roadInfo() {
         try {
             roadLib = roadLibManager.getById(id);
-            City city=cityManager.getById(roadLib.getCityId().longValue());
+            City city = cityManager.getById(roadLib.getCityId().longValue());
             Map map = new HashMap();
             map.put("groupCode", "ROADPROP");
             map.put("code", roadLib.getRoadProp());
             Cons roadPropCons = consManager.getByMap(map);
-            //覆盖方式
-            Map map2 = new HashMap();
-            map2.put("groupCode", "COVERTYPE");
-            map2.put("code", roadLib.getCovertype());
-            Cons coverTypeCons = consManager.getByMap(map2);
-            this.getRequest().setAttribute("city",city);
-            this.getRequest().setAttribute("roadPropCons",roadPropCons);
-            this.getRequest().setAttribute("coverTypeCons",coverTypeCons);
-
+            this.getRequest().setAttribute("city", city);
+            this.getRequest().setAttribute("roadPropCons", roadPropCons);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
         return SUCCESS;
     }
@@ -130,28 +134,11 @@ public class RoadLibAction extends BaseAction {
      *
      * @return
      */
-    public String editRoadLibPage() {
+    public String addRoadLibPage() {
         try {
             roadLib = roadLibManager.getById(id);
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return SUCCESS;
-    }
-
-    /**
-     * 编辑道路库信息
-     *
-     * @return
-     */
-    public String editRoadLib() {
-        try {
-            roadLib.setUpdatetime(new Date());
-            roadLibManager.update(roadLib);
-            jsonMap.put("result", 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            jsonMap.put("result", 0);
+            LOG.error(e.getMessage(), e);
         }
         return SUCCESS;
     }
@@ -170,7 +157,7 @@ public class RoadLibAction extends BaseAction {
             roadLibManager.deleteByDeleteFlag(map);
             jsonMap.put("result", 1);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
             jsonMap.put("result", 0);
         }
         return SUCCESS;
@@ -189,7 +176,7 @@ public class RoadLibAction extends BaseAction {
             JSONArray jsonObject = JSONArray.fromObject(root);
             roadJson = jsonObject.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
         return SUCCESS;
     }
@@ -210,7 +197,7 @@ public class RoadLibAction extends BaseAction {
             JSONArray jsonObject = JSONArray.fromObject(root);
             roadJson = jsonObject.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
         return SUCCESS;
     }

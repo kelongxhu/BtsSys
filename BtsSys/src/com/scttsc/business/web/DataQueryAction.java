@@ -46,6 +46,7 @@ public class DataQueryAction extends BaseAction {
     private String btsId;
     private Integer ci;
     private Integer pn;
+    private String libName;//信息库名称
 
 
     private Integer typeId;//基本库类型
@@ -104,7 +105,6 @@ public class DataQueryAction extends BaseAction {
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
@@ -162,12 +162,11 @@ public class DataQueryAction extends BaseAction {
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
     /**
-     * 风景库覆盖查询
+     * 场景库覆盖查询
      *
      * @return
      */
@@ -180,6 +179,10 @@ public class DataQueryAction extends BaseAction {
                 map.put("countryIds", countryIds);
             }
             //查询条件
+            if (!Common.isEmpty(libName)) {
+                libName = Common.decodeURL(libName).trim();
+                map.put("libName", "%" + libName + "%");
+            }
             if (!Common.isEmpty(name)) {
                 name = Common.decodeURL(name).trim();
                 map.put("name", "%" + name + "%");
@@ -211,7 +214,6 @@ public class DataQueryAction extends BaseAction {
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
@@ -261,7 +263,6 @@ public class DataQueryAction extends BaseAction {
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
@@ -279,6 +280,10 @@ public class DataQueryAction extends BaseAction {
                 map.put("countryIds", countryIds);
             }
             //查询条件
+            if (!Common.isEmpty(libName)) {
+                libName = Common.decodeURL(libName).trim();
+                map.put("libName", "%" + libName + "%");
+            }
             if (!Common.isEmpty(name)) {
                 name = Common.decodeURL(name).trim();
                 map.put("name", "%" + name + "%");
@@ -310,7 +315,6 @@ public class DataQueryAction extends BaseAction {
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
@@ -328,6 +332,10 @@ public class DataQueryAction extends BaseAction {
                 map.put("countryIds", countryIds);
             }
             //查询条件
+            if (!Common.isEmpty(libName)) {
+                libName = Common.decodeURL(libName).trim();
+                map.put("libName", "%" + libName + "%");
+            }
             if (!Common.isEmpty(name)) {
                 name = Common.decodeURL(name).trim();
                 map.put("name", "%" + name + "%");
@@ -359,27 +367,20 @@ public class DataQueryAction extends BaseAction {
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
-        jsonMap.put("page", page);
         return SUCCESS;
     }
 
     public String libExport() {
         if (!Common.isEmpty(typeId)) {
             switch (typeId.intValue()) {
-                case 1:
-                    exportSchoolLib();
-                    break;
-                case 5:
-                    exportsecneryLib();
-                    break;
-                case 2:
-                    exportvitoLib();
-                    break;
                 case 3:
                     exportroadLib();
                     break;
                 case 6:
                     exporttunnelLib();
+                    break;
+                case 7:
+                    exportSenceLib();
                     break;
                 default:
                     break;
@@ -533,22 +534,26 @@ public class DataQueryAction extends BaseAction {
     }
 
     /**
-     * 风景库覆盖小区
+     * 场景库小区
      *
      * @return
      */
-    public String exportsecneryLib() {
+    public String exportSenceLib() {
         Map<String, Object> map = new HashMap<String, Object>();
         int total = 0;
         List<Map> list = null;
         String path = FileRealPath.getPath();
         String templatePath = path + "template" + "/secneryLibTemplate.xls";
-        String fileName = "风景库覆盖小区列表.xls";
+        String fileName = "场景库覆盖小区列表.xls";
         try {
             if (!Common.isEmpty(countryIds)) {
                 map.put("countryIds", countryIds);
             }
             //查询条件
+            if (!Common.isEmpty(libName)) {
+                libName = Common.decodeURL(libName).trim();
+                map.put("libName", "%" + libName + "%");
+            }
             if (!Common.isEmpty(name)) {
                 name = Common.decodeURL(name).trim();
                 map.put("name", "%" + name + "%");
@@ -566,9 +571,6 @@ public class DataQueryAction extends BaseAction {
             if (!Common.isEmpty(pn)) {
                 map.put("pn", pn);
             }
-            total = cellManager.countBySecneryLibCells(map);
-            map.put("start", 0);
-            map.put("pagesize", (total + 1));
             list = cellManager.selectSecneryLibCells(map);
             POIFSFileSystem fis = new POIFSFileSystem(new FileInputStream(
                     templatePath));
@@ -583,9 +585,6 @@ public class DataQueryAction extends BaseAction {
                 cList.add(StringUtil.null2String(m.get("CITYNAME")));
                 cList.add(StringUtil.null2String(m.get("COUNTRYNAME")));
                 cList.add(StringUtil.null2String(m.get("LIBNAME")));
-                cList.add(StringUtil.null2String(m.get("SCE_LEVEL")));
-                cList.add(StringUtil.null2String(m.get("LONGITUDE")));
-                cList.add(StringUtil.null2String(m.get("LATITUDE")));
                 cList.add(StringUtil.null2String(m.get("CELLNAME")));
                 cList.add(StringUtil.null2String(m.get("BSC_NAME")));
                 cList.add(StringUtil.null2String(m.get("CI")));
@@ -597,22 +596,7 @@ public class DataQueryAction extends BaseAction {
                     // 创建第i个单元格
                     HSSFCell cell = row.createCell((short) j);
                     cell.setCellStyle(style);
-                    switch (j) {
-                        case 4:
-                            //景区级别
-                            Map a = new HashMap();
-                            a.put("groupCode", "SECNERYTYPE");
-                            a.put("code", cList.get(j));
-                            Cons cons = consManager.getByMap(a);
-                            if (cons != null) {
-                                cell.setCellValue(cons.getName());
-                            }
-                            break;
-                        default:
-                            cell.setCellValue(cList.get(j));
-                            break;
-
-                    }
+                    cell.setCellValue(cList.get(j));
                 }
                 rowIndex++;
             }
@@ -637,6 +621,7 @@ public class DataQueryAction extends BaseAction {
         }
         return null;
     }
+
 
     /**
      * 导出农村库覆盖
@@ -758,6 +743,10 @@ public class DataQueryAction extends BaseAction {
                 map.put("countryIds", countryIds);
             }
             //查询条件
+            if (!Common.isEmpty(libName)) {
+                libName = Common.decodeURL(libName).trim();
+                map.put("libName", "%" + libName + "%");
+            }
             if (!Common.isEmpty(name)) {
                 name = Common.decodeURL(name).trim();
                 map.put("name", "%" + name + "%");
@@ -775,9 +764,6 @@ public class DataQueryAction extends BaseAction {
             if (!Common.isEmpty(pn)) {
                 map.put("pn", pn);
             }
-            total = cellManager.countByRoadLibCells(map);
-            map.put("start", 0);
-            map.put("pagesize", (total + 1));
             list = cellManager.selectRoadLibCells(map);
             POIFSFileSystem fis = new POIFSFileSystem(new FileInputStream(
                     templatePath));
@@ -792,22 +778,10 @@ public class DataQueryAction extends BaseAction {
                 cList.add(StringUtil.null2String(m.get("CITYNAME")));
                 cList.add(StringUtil.null2String(m.get("LIBNAME")));
                 cList.add(StringUtil.null2String(m.get("ROAD_PROP")));
-                cList.add(StringUtil.null2String(m.get("SPEED")));
-                cList.add(StringUtil.null2String(m.get("LINE_MILE")));
-                cList.add(StringUtil.null2String(m.get("TUNNEL_MILE")));
-                cList.add(StringUtil.null2String(m.get("PLAIN_MILE")));
-                cList.add(StringUtil.null2String(m.get("MOUNTAIN_MILE")));
-                cList.add(StringUtil.null2String(m.get("STATION_NUM")));
-                cList.add(StringUtil.null2String(m.get("COVERTYPE")));
-                cList.add(StringUtil.null2String(m.get("COVER_MILE_1X")));
-                cList.add(StringUtil.null2String(m.get("COVER_RATE_1X")));
-                cList.add(StringUtil.null2String(m.get("DROPCALL_MILE")));
-                cList.add(StringUtil.null2String(m.get("COVER_MILE_DO")));
-                cList.add(StringUtil.null2String(m.get("COVER_RATE_DO")));
-                cList.add(StringUtil.null2String(m.get("DOWN_TP_RATE")));
-                cList.add(StringUtil.null2String(m.get("DOWN_TPGOOD_RATE")));
-                cList.add(StringUtil.null2String(m.get("COVER_STATION_NUM")));
-                cList.add(StringUtil.null2String(m.get("COVER_STATION_RATE")));
+                cList.add(StringUtil.null2String(m.get("ROAD_NO")));
+                cList.add(StringUtil.null2String(m.get("DOMESTIC_START")));
+                cList.add(StringUtil.null2String(m.get("DOMESTIC_END")));
+                cList.add(StringUtil.null2String(m.get("MILEAGE")));
                 cList.add(StringUtil.null2String(m.get("CELLNAME")));
                 cList.add(StringUtil.null2String(m.get("BSC_NAME")));
                 cList.add(StringUtil.null2String(m.get("CI")));
@@ -872,6 +846,10 @@ public class DataQueryAction extends BaseAction {
                 map.put("countryIds", countryIds);
             }
             //查询条件
+            if (!Common.isEmpty(libName)) {
+                libName = Common.decodeURL(libName).trim();
+                map.put("libName", "%" + libName + "%");
+            }
             if (!Common.isEmpty(name)) {
                 name = Common.decodeURL(name).trim();
                 map.put("name", "%" + name + "%");
@@ -889,9 +867,6 @@ public class DataQueryAction extends BaseAction {
             if (!Common.isEmpty(pn)) {
                 map.put("pn", pn);
             }
-            total = cellManager.countByTunnelLibCells(map);
-            map.put("start", 0);
-            map.put("pagesize", (total + 1));
             list = cellManager.selectTunnelLibCells(map);
             POIFSFileSystem fis = new POIFSFileSystem(new FileInputStream(
                     templatePath));
@@ -1042,5 +1017,13 @@ public class DataQueryAction extends BaseAction {
 
     public void setRoadLibManager(RoadLibManager roadLibManager) {
         this.roadLibManager = roadLibManager;
+    }
+
+    public String getLibName() {
+        return libName;
+    }
+
+    public void setLibName(String libName) {
+        this.libName = libName;
     }
 }

@@ -43,6 +43,12 @@
             <if test="cityIds!=null">
                 and CITY_ID in(${cityIds})
             </if>
+            <if test="sceneTypes!=null">
+                and SCENE_TYPE in(${sceneTypes})
+            </if>
+            <if test="name!=null">
+                and NAME like '%${name}%'
+            </if>
             <if test="start!=null">
                 and RowNum &lt; (#{start} + #{pagesize})
             </if>
@@ -68,11 +74,18 @@
         </where>
     </select>
 
+    <select id="selectByPrimaryKeys" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from WY_LIB_SCENE u
+        where u.ID in (${ids})
+    </select>
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Long" >
     select 
     <include refid="Base_Column_List" />
-    from WY_LIB_SCENE
-    where ID = #{id,jdbcType=DECIMAL}
+    from WY_LIB_SCENE u
+    where u.ID = #{id,jdbcType=DECIMAL}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="Long" >
     delete from WY_LIB_SCENE
@@ -91,12 +104,12 @@
     insert into WY_LIB_SCENE (ID, CITY_ID, COUNTRY_ID, 
       SCENE_TYPE, SCENE_LEVEL, NAME, 
       LONGITUDE, LATITUDE, REMARK, 
-      IN_TIME, IN_USER, UPDATE_TIME
+      IN_TIME, IN_USER, UPDATE_TIME,DELETE_FLAG
       )
     values (#{id,jdbcType=DECIMAL}, #{cityId,jdbcType=DECIMAL}, #{countryId,jdbcType=DECIMAL}, 
       #{sceneType,jdbcType=DECIMAL}, #{sceneLevel,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, 
       #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
-      #{inTime,jdbcType=DATE}, #{inUser,jdbcType=DECIMAL}, #{updateTime,jdbcType=DATE}
+      #{inTime,jdbcType=DATE}, #{inUser,jdbcType=DECIMAL}, #{updateTime,jdbcType=DATE},#{deleteFlag,jdbcType=DECIMAL}
       )
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.baselibs.model.WyLibScene" >

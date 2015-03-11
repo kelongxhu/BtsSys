@@ -4,9 +4,12 @@ import com.scttsc.admin.model.City;
 import com.scttsc.admin.model.User;
 import com.scttsc.admin.service.CityManager;
 import com.scttsc.baselibs.model.Cons;
+import com.scttsc.baselibs.model.WyLibScene;
+import com.scttsc.baselibs.service.SceneLibManager;
 import com.scttsc.baselibs.service.impl.ConsManagerImpl;
 import com.scttsc.business.model.*;
 import com.scttsc.business.service.*;
+import com.scttsc.business.util.Constants;
 import com.scttsc.business.util.ExcelHelper;
 import com.scttsc.business.util.Validity;
 import com.scttsc.common.util.*;
@@ -36,6 +39,10 @@ public class IndoorAction extends BaseAction {
     private IndoorManualManager indoorManualManager;
     @Autowired
     private DryStationManager dryStationManager;
+    @Autowired
+    private CellManualManager cellManualManager;
+    @Autowired
+    private SceneLibManager sceneLibManager;
 
     IndoorManual indoorManual;
     private Cell cell;//室内分布小区
@@ -229,6 +236,33 @@ public class IndoorAction extends BaseAction {
                     }
                 } else {
                     //编辑
+                    //是否关联场景库
+                    Map map1 = new HashMap();
+                    //农村乡镇库
+                    map1.put("cellId", indoorManual.getIntId());
+                    map1.put("libType", Constants.SceneLib);
+                    List<CellLib> cellLibs = cellManualManager.selectCellLibByMap(map1);
+                    StringBuilder sb=new StringBuilder();
+                    if(cellLibs!=null){
+                        for(CellLib cellLib:cellLibs){
+                            sb.append(cellLib.getLibId()+",");
+                        }
+                    }
+                    if(sb.length()>0){
+                        sb=sb.delete(sb.length()-1,sb.length());
+                    }
+                    indoorManual.setSceneLibs(sb.toString());
+                    List<WyLibScene> libScenes=sceneLibManager.selectByPrimaryKeys(sb.toString());
+                    StringBuilder libNames=new StringBuilder();
+                    if(libScenes!=null){
+                        for(WyLibScene libScene:libScenes){
+                             libNames.append(libScene.getName()+",");
+                        }
+                    }
+                    if(libNames.length()>0){
+                        libNames=libNames.delete(libNames.length()-1,libNames.length());
+                    }
+                    indoorManual.setSceneLibNames(libNames.toString());
                 }
                 addFlag = 0;//关联增加
             } else {

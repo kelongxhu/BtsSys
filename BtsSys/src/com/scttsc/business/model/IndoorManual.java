@@ -104,6 +104,10 @@ public class IndoorManual extends Entity {
     City country;
 
 
+    private String sceneLibs;//关联的场景库
+    private String sceneLibNames;
+
+
     @Override
     public void setIgFields() {
         this.igFields.add("updatetime");
@@ -1044,5 +1048,21 @@ public class IndoorManual extends Entity {
 
     public void setVillage(String village) {
         this.village = village;
+    }
+
+    public String getSceneLibs() {
+        return sceneLibs;
+    }
+
+    public void setSceneLibs(String sceneLibs) {
+        this.sceneLibs = sceneLibs;
+    }
+
+    public String getSceneLibNames() {
+        return sceneLibNames;
+    }
+
+    public void setSceneLibNames(String sceneLibNames) {
+        this.sceneLibNames = sceneLibNames;
     }
 }

@@ -33,7 +33,7 @@ public interface CellManager {
 
     int countBySchoolLibCells(Object map) throws Exception;
 
-    //风景库覆盖
+    //场景库覆盖
     List<Map> selectSecneryLibCells(Object map) throws Exception;
 
     int countBySecneryLibCells(Object map) throws Exception;

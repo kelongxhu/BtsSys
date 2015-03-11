@@ -49,19 +49,19 @@
     </delete>
 
 
-      <sql id="SCHOOL_Column_List">
+     <sql id="SCHOOL_Column_List">
 		a.ADDRESS, a.SCHOOL_LEVEL, a.SCHOOL_TYPE,a.COVERAGE_TYPE,a.STRUCTURAL_TYPE,a.WIFI_TYPE,a.C_USERS,a.DO_USERS,
 		a.C_USERS_PLAN,a.DO_USERS_PLAN,a.MEAL_TYPE,a.BUSINESS_TYPE
-	  </sql>
+	 </sql>
      <sql id="SCENERY_Column_List">
-		a.SCE_LEVEL, a.LONGITUDE,a.LATITUDE
+		a.SCENE_TYPE,a.SCENE_LEVEL, a.LONGITUDE,a.LATITUDE
 	  </sql>
      <sql id="VITO_Column_List">
 		a.GPS_LONG, a.GPS_LAT,a.CMDA1X_COVGRATE,a.MOBGSM_COVGRATE,a.COVG_DIF_COVGRATE,a.UNICGSM_COVGRATE,a.EVDO_COVGRATE,a.CDMA1X_MOS,a.MOBGSM_MOS,a.UNICGSM_MOS
 	 </sql>
     <sql id="ROAD_Column_List">
-		a.ROAD_PROP, a.SPEED,a.LINE_MILE,a.TUNNEL_MILE,a.PLAIN_MILE,a.MOUNTAIN_MILE,a.STATION_NUM,a.COVERTYPE,a.COVER_MILE_1X,a.COVER_RATE_1X,a.DROPCALL_MILE,
-		a.COVER_MILE_DO,a.COVER_RATE_DO,a.DOWN_TP_RATE,a.DOWN_TPGOOD_RATE,a.COVER_STATION_NUM,a.COVER_STATION_RATE
+		a.ROAD_PROP,a.ROAD_NO, a.NAME, a.DOMESTIC_START, a.DOMESTIC_END, a.MILEAGE,a.OPEN_STATUS,a.IN_TIME,a.IN_USER,a.UPDATE_TIME,
+     a.REMARK,a.DELETE_FLAG
 	 </sql>
     <sql id="TUNNEL_Column_List">
 		a.ROAD_ID, a.LENGTH,a.DIRECTION,a.LONGITUDE,a.LATITUDE,a.HEIGHT,a.COVGTYPE,a.INSTALLADRESS,a.RIGHTS,a.TOGBS,a.TOGNAME,
@@ -142,11 +142,11 @@
         </where>
     </select>
 
-      <!--风景库覆盖-->
+      <!--场景库覆盖-->
       <select id="selectSecneryLibCells" resultType="hashmap">
         select * from (select m.*,ROWNUM RN from
-        (SELECT a.id,a.sce_name libname,a.city_id,a.country_id,c.name cityname,d.name countryname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="SCENERY_Column_List"/>
-        FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_scenery q WHERE w.lib_type=5 and q.id=w.lib_id)a
+        (SELECT a.id,a.name libname,a.city_id,a.country_id,c.name cityname,d.name countryname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="SCENERY_Column_List"/>
+        FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_scene q WHERE w.lib_type=7 and q.id=w.lib_id)a
         LEFT JOIN wy_cell b
         ON b.int_id=a.cell_int_id
         LEFT JOIN wy_city c
@@ -189,8 +189,8 @@
 
     <select id="countBySecneryLibCells" resultType="int">
         select count(1) from (
-        SELECT a.id,a.sce_name libname,a.city_id,a.country_id,c.name cityname,d.name countryname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="SCENERY_Column_List"/>
-        FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_scenery q WHERE w.lib_type=5 and q.id=w.lib_id)a
+        SELECT a.id,a.name libname,a.city_id,a.country_id,c.name cityname,d.name countryname,b.name cellname,b.bsc_name,b.ci,b.pn,b.btsid,<include refid="SCENERY_Column_List"/>
+        FROM(SELECT w.cell_int_id,w.lib_id,q.* FROM wy_cell_lib w,wy_lib_scene q WHERE w.lib_type=7 and q.id=w.lib_id)a
         LEFT JOIN wy_cell b
         ON b.int_id=a.cell_int_id
         LEFT JOIN wy_city c

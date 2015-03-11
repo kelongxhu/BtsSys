@@ -58,8 +58,8 @@ $(function(){
 			pageSizeOptions:[50,100],
 			url:'${ctx}/schooljson/airLibData.action',
 			checkbox : true,
-			width: '100%',
-			height:'100%',
+			width: '99%',
+			height:'99%',
             onDblClickRow :airInfo
 		}); 
  	$("#pageloading").hide();

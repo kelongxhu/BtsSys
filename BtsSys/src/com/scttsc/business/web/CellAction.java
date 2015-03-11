@@ -13,10 +13,7 @@ import com.scttsc.business.service.CellManualManager;
 import com.scttsc.business.util.Constants;
 import com.scttsc.business.util.ExcelHelper;
 import com.scttsc.business.util.Validity;
-import com.scttsc.common.util.Common;
-import com.scttsc.common.util.ExcelUtil;
-import com.scttsc.common.util.FileRealPath;
-import com.scttsc.common.util.StringUtil;
+import com.scttsc.common.util.*;
 import com.scttsc.common.web.BaseAction;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -51,6 +48,8 @@ public class CellAction extends BaseAction {
     private RoadLibManager roadLibManager;
     private TunnelLibManager tunnelLibManager;
     private SecneryLibManager secneryLibManager;
+    @Autowired
+    private SceneLibManager sceneLibManager;
     @Autowired
     private AirLibManager airLibManager;
 
@@ -174,19 +173,6 @@ public class CellAction extends BaseAction {
             if (cellManual == null) {
                 editFlag = 0;// 增加
             } else {
-                //农村乡镇库
-//                Map map = new HashMap();
-//                map.put("cellId", intId);
-//                map.put("libType", 2);
-//                List<CellLib> countryLibs = cellManualManager.selectCellLibByMap(map);
-//                String countryLib = "";
-//                for (CellLib coutry : countryLibs) {
-//                    countryLib += coutry.getLibId() + ";";
-//                }
-//                if (!Common.isEmpty(countryLib)) {
-//                    countryLib = countryLib.substring(0, countryLib.length() - 1);
-//                    cellManual.setCountryLib(countryLib);
-//                }
                 //覆盖道路库
                 String roadLib = "";
                 Map map2 = new HashMap();
@@ -208,24 +194,16 @@ public class CellAction extends BaseAction {
                     roadLib = roadLib.substring(0, roadLib.length() - 1);
                     cellManual.setRoadLib(roadLib);
                 }
-                //校园库
+                 //场景库
                 String hotLib = "";
                 Map map4 = new HashMap();
                 map4.put("cellId", intId);
-                map4.put("libType", 1);
-                List<CellLib> schoolLibs = cellManualManager.selectCellLibByMap(map4);
-                for (CellLib school : schoolLibs) {
-                    hotLib += "-2_" + school.getLibId() +  Constants.SPLIT_SYMBOL;
+                map4.put("libType", Constants.SceneLib);
+                List<CellLib> sceneLibs = cellManualManager.selectCellLibByMap(map4);
+                for (CellLib sceneLib : sceneLibs) {
+                    hotLib += sceneLib.getLibId() +  Constants.SPLIT_SYMBOL;
                 }
-                //风景库
-                Map map5 = new HashMap();
-                map5.put("cellId", intId);
-                map5.put("libType", 5);
-                List<CellLib> secneryLibs = cellManualManager.selectCellLibByMap(map5);
-                for (CellLib secnery : secneryLibs) {
-                    hotLib += "-3_" + secnery.getLibId() +  Constants.SPLIT_SYMBOL;
-                }
-                if (!Common.isEmpty(hotLib)) {
+                if(!Common.isEmpty(hotLib)){
                     hotLib = hotLib.substring(0, hotLib.length() - 1);
                     cellManual.setHotLib(hotLib);
                 }
@@ -268,9 +246,9 @@ public class CellAction extends BaseAction {
                 this.getRequest().setAttribute("bts", bts);
             }
             //c_cell的手工表
+            addCoverInfo(cellManual);//处理覆盖信息
             CparCell cparCell = cellManager.selectCparCellById(intId);
             this.getRequest().setAttribute("cparCell", cparCell);
-            addCoverInfo(cellManual);//处理覆盖信息
         } catch (Exception e) {
            LOG.error(e.getMessage(),e);
         }
@@ -285,6 +263,22 @@ public class CellAction extends BaseAction {
      */
     public void addCoverInfo(CellManual cellManual) {
         try {
+            //热点覆盖类型
+            String coverhot=cellManual.getCoverhot();
+            StringBuilder coverhotSb=new StringBuilder();
+            if(!Common.isEmpty(coverhot)){
+                String[] coverhotArr=coverhot.split( Constants.SPLIT_SYMBOL);
+                for(String ch:coverhotArr){
+                    Cons con= ConstantUtil.getInstance().getConsByCode("SCENE_TYPE",ch);
+                    if(con!=null){
+                        coverhotSb.append(con.getName()+",");
+                    }
+                }
+            }
+            if(coverhotSb.length()>0){
+                coverhotSb=coverhotSb.delete(coverhotSb.length()-1,coverhotSb.length());
+            }
+            cellManual.setCoverhotStr(coverhotSb.toString());
             //覆盖信息
             Map map1 = new HashMap();
             //农村乡镇库
@@ -295,7 +289,7 @@ public class CellAction extends BaseAction {
             List<VitoLib> vitoLibs = new ArrayList<VitoLib>();//农村库
             List<RoadLib> roadLibs = new ArrayList<RoadLib>();//道路库
             List<TunnelLib> tunnelLibs = new ArrayList<TunnelLib>();//隧道库
-            List<SecneryLib> secneryLibs = new ArrayList<SecneryLib>();//风景库
+            List<WyLibScene> wyLibScenes = new ArrayList<WyLibScene>();//場景庫
             for (CellLib cellLib : cellLibs) {
                 int libType = cellLib.getLibType();
                 switch (libType) {
@@ -316,22 +310,23 @@ public class CellAction extends BaseAction {
                         break;
                     case 5:
                         //风景库
-                        SecneryLib secneryLib = secneryLibManager.getById(cellLib.getLibId().longValue());
-                        secneryLibs.add(secneryLib);
+//                        SecneryLib secneryLib = secneryLibManager.getById(cellLib.getLibId().longValue());
+//                        secneryLibs.add(secneryLib);
                         break;
                     case 6:
                         //隧道库
-                        TunnelLib tunnelLib = tunnelLibManager.getById(cellLib.getLibId().longValue());
-                        tunnelLibs.add(tunnelLib);
+//                        TunnelLib tunnelLib = tunnelLibManager.getById(cellLib.getLibId().longValue());
+//                        tunnelLibs.add(tunnelLib);
                         break;
-
+                    case 7:
+                        WyLibScene wyLibScene=sceneLibManager.selectByPrimaryKey(cellLib.getLibId().longValue());
+                        wyLibScenes.add(wyLibScene);
+                        break;
                 }
             }
-            cellManual.setSchoolLibs(schoolLibs);
-            cellManual.setVitoLibs(vitoLibs);
             cellManual.setRoadLibs(roadLibs);
-            cellManual.setSecneryLibs(secneryLibs);
             cellManual.setTunnelLibs(tunnelLibs);
+            cellManual.setWyLibScenes(wyLibScenes);
         } catch (Exception e) {
             LOG.error(e.getMessage(),e);
         }
@@ -476,20 +471,13 @@ public class CellAction extends BaseAction {
                             }
                         }
                         cList.add(roadSb.length() > 0 ? roadSb.substring(0, roadSb.length() - 1).toString() : "");//道路名称
-                        cList.add(StringUtil.null2String(cellManual1.getCoverhot()));
+                        cList.add(StringUtil.null2String(cellManual1.getCoverhotStr()));
 
-                        List<SchoolLib> schoolLibs = cellManual1.getSchoolLibs();
-                        List<SecneryLib> secneryLibs = cellManual1.getSecneryLibs();
                         StringBuilder hotSb = new StringBuilder();
-                        if (schoolLibs != null) {
-                            for (SchoolLib schoolLib : schoolLibs) {
-                                hotSb.append(schoolLib.getName() + ";");
-                            }
-                        }
-                        if (secneryLibs != null) {
-                            for (SecneryLib secneryLib : secneryLibs) {
-                                hotSb.append(secneryLib.getSceName() + ";");
-                            }
+                        //场景库
+                        List<WyLibScene> sceneLibs=cellManual1.getWyLibScenes();
+                        for (WyLibScene sceneLib : sceneLibs) {
+                            hotSb.append(sceneLib.getName()+",");
                         }
                         cList.add(hotSb.length() > 0 ? hotSb.substring(0, hotSb.length() - 1).toString() : "");//热点名称
                         cList.add(StringUtil.null2String(cellManual1.getBoundarycellflag()));
@@ -537,12 +525,6 @@ public class CellAction extends BaseAction {
         Map<String, Map> libMap = new HashMap<String, Map>();
         try {
             //农村库统一查询放内存，加快导入速度
-//            List<VitoLib> vitoLibs = vitoLibManager.getByMap(null);
-//            Map<String, VitoLib> vitoLibMap = new HashMap<String, VitoLib>();
-//            for (VitoLib vitoLib : vitoLibs) {
-//                vitoLibMap.put(vitoLib.getName(), vitoLib);
-//            }
-//            libMap.put(Constants.VitoLib + "", vitoLibMap);
             List<RoadLib> roadLibs = roadLibManager.loadAll();
             Map<String, RoadLib> roadLibMap = new HashMap<String, RoadLib>();
             for (RoadLib road : roadLibs) {
@@ -555,18 +537,13 @@ public class CellAction extends BaseAction {
                 tunnelLibMap.put(tunnelLib.getName(), tunnelLib);
             }
             libMap.put(Constants.TunnelLib + "", tunnelLibMap);
-            List<SchoolLib> schoolLibs = schoolLibManager.loadAll();
-            Map<String, SchoolLib> schoolLibMap = new HashMap<String, SchoolLib>();
-            for (SchoolLib schoolLib : schoolLibs) {
-                schoolLibMap.put(schoolLib.getName(), schoolLib);
+            //场景库
+            List<WyLibScene> sceneLibs =sceneLibManager.selectByMap(null);
+            Map<String, WyLibScene> sceneLibMap = new HashMap<String, WyLibScene>();
+            for (WyLibScene sceneLib : sceneLibs) {
+                sceneLibMap.put(sceneLib.getName(), sceneLib);
             }
-            libMap.put(Constants.SchoolLib + "", schoolLibMap);
-            List<SecneryLib> secneryLibs = secneryLibManager.loadAll();
-            Map<String, SecneryLib> secneryLibMap = new HashMap<String, SecneryLib>();
-            for (SecneryLib secneryLib : secneryLibs) {
-                secneryLibMap.put(secneryLib.getSceName(), secneryLib);
-            }
-            libMap.put(Constants.SecneryLib + "", secneryLibMap);
+            libMap.put(Constants.SceneLib + "", sceneLibMap);
             List<AirLib> airLibs = airLibManager.selectAll(null);
             Map<String, AirLib> airLibMap = new HashMap<String, AirLib>();
             for (AirLib airLib : airLibs) {
@@ -618,6 +595,7 @@ public class CellAction extends BaseAction {
             jsonMap.put("result", 1);
             jsonMap.put("sucess", sucess);
             jsonMap.put("errorList", errorList);
+            LOG.info("导入完毕。。");
         } catch (Exception e) {
             LOG.error(e.getMessage(),e);
             jsonMap.put("result", 0);
@@ -650,7 +628,27 @@ public class CellAction extends BaseAction {
                     errorList.add("第" + rowNum + "行:" + "校验失败," + validity.getMsg());
                     return null;
                 }
-                map.put(dataKey, cellValue);
+
+                if("coverhot".equals(dataKey)){
+                    StringBuilder coverHotSb=new StringBuilder();
+                    if(!Common.isEmpty(cellValue)){
+                        String[] coverHotArr=cellValue.split(";");
+                        if(coverHotArr!=null){
+                            for(String hot:coverHotArr){
+                                Cons sceneType=ConstantUtil.getInstance().getCons("SCENE_TYPE",hot);
+                                if(sceneType!=null){
+                                    coverHotSb.append(sceneType.getCode()+",");
+                                }
+                            }
+                        }
+                        if(coverHotSb.length()>0){
+                            coverHotSb=coverHotSb.delete(coverHotSb.length()-1,coverHotSb.length());
+                        }
+                    }
+                    map.put(dataKey, coverHotSb.toString());
+                }else{
+                    map.put(dataKey, cellValue);
+                }
                 j++;
             }
             map.put("updatetime", new Date());

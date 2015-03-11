@@ -12,6 +12,8 @@ public interface WyLibSceneDao {
 
     WyLibScene selectByPrimaryKey(Long id);
 
+    List<WyLibScene> selectByPrimaryKeys(Map<String,Object> param);
+
     int updateByPrimaryKeySelective(WyLibScene record);
 
     int deleteByPrimaryKeys(Map<String,Object> param);

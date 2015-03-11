@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.scttsc.baselibs.model.RoadLib;
-import com.scttsc.baselibs.model.SchoolLib;
-import com.scttsc.baselibs.model.SecneryLib;
-import com.scttsc.baselibs.model.TunnelLib;
+import com.scttsc.baselibs.model.*;
 import com.scttsc.common.model.TreeNode;
 import com.scttsc.common.model.TreeNodeHelper;
 
@@ -63,28 +60,17 @@ public class BuildTree {
 	}
 	
 	/**
-	 * 组装校园库和风景库的树
+	 * 组装場景庫
 	 * @param schoolLibs
 	 * @param secneryLibs
 	 * @return
 	 */
-	public static TreeNode buildTreeNodeBySchool(List<SchoolLib> schoolLibs,List<SecneryLib> secneryLibs){
+	public static TreeNode buildTreeNodeBySceneLib(List<WyLibScene> wyLibSceneList){
 		TreeNode root = new TreeNode("请选择", "0", "-1");
-		TreeNode node1=new TreeNode("校园库","-2","0");
-		TreeNode node2=new TreeNode("风景库","-3","0");
-		for(SchoolLib schoolLib:schoolLibs){
-			TreeNode node=new TreeNode(schoolLib.getName(),"-2_"+schoolLib.getId(),"-2");
-			node1.addChild(node);
+		for(WyLibScene wyLibScene:wyLibSceneList){
+			TreeNode node=new TreeNode(wyLibScene.getName(),wyLibScene.getId()+"","-1");
+            root.addChild(node);
 		}
-		for(SecneryLib secneryLib:secneryLibs){
-			TreeNode node=new TreeNode(secneryLib.getSceName(), "-3_"+secneryLib.getId()+"", "-3");
-			node2.addChild(node);
-		}
-		root.addChild(node1);
-		root.addChild(node2);
-		
 		return root;
 	}
-	
-
 }

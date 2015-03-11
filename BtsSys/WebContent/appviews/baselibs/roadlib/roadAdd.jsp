@@ -7,6 +7,7 @@
 <%@ include file="/appviews/common/tag.jsp"%>
 
 <script type="text/javascript">
+    var treeCombox=null;
 $(function(){
 	
 	//选择地市
@@ -28,38 +29,39 @@ $(function(){
 				checkbox:false
 			}
 		});
+        if('${roadLib.cityId}'!=""){
+            treeCombox.selectValue('${roadLib.cityId}');
+        }
      });
-	
+
+    //开通状态
+
+    var comBox1 = $("#openStatusVal").ligerComboBox({
+        data: [
+            { text: '已开通', id: '1' },
+            { text: '部分开通', id: '2' }
+        ],
+        width : 200,
+        selectBoxWidth: 200,
+        valueFieldID: 'openStatus'
+    });
+
+    if('${roadLib.openStatus}'!=""){
+        comBox1.selectValue('${roadLib.openStatus}');
+    }
+
 	//初始化控件
 	$("#name").ligerTextBox({width : 200 });
-	$("#speed").ligerTextBox({width : 200 });
-	$("#lineMile").ligerTextBox({width : 200 });
-	$("#tunnelMile").ligerTextBox({width : 200 });
-	$("#plainMile").ligerTextBox({width : 200 });
-	$("#mountainMile").ligerTextBox({width : 200 });
-	$("#stationNum").ligerTextBox({width : 200 });
-	$("#coverMile1x").ligerTextBox({width : 200 });
-	$("#coverRate1x").ligerTextBox({width : 200 });
-	$("#dropcallMile").ligerTextBox({width : 200 });
-	$("#coverMileDo").ligerTextBox({width : 200 });
-	$("#coverRateDo").ligerTextBox({width : 200 });
-	$("#downTpRate").ligerTextBox({width : 200 });
-	$("#downTpgoodRate").ligerTextBox({width : 200 });
-	$("#coverStationNum").ligerTextBox({width : 200 });
-	$("#coverStationRate").ligerTextBox({width : 200 });
-	
-	
-	
-	
-	$("#testuser").ligerTextBox({width : 200 });
+	$("#roadNo").ligerTextBox({width : 200 });
+	$("#domesiicStart").ligerTextBox({width : 200 });
+	$("#domesiicEnd").ligerTextBox({width : 200 });
+	$("#mileage").ligerTextBox({width : 200 });
 	$("#remark").ligerTextBox({width : 600 ,height:50 });
-	
-	 $("#testtime").ligerDateEditor({ label: '', format: "yyyy-MM-dd", labelAlign: 'right',width : 200});
 });
 
 
    //道路属性
-	var typeURL1="${ctx}/schooljson/cons.action?groupCode=ROADPROP";
+	var typeURL1="${ctx}/schooljson/cons.action?groupCode=ROAD_TYPE";
 	var sl1;
 	$.getJSON(typeURL1, 
 		function(data){
@@ -71,25 +73,11 @@ $(function(){
 				valueField : 'code',
 				valueFieldID:'roadProp'
 			});
+            if('${roadLib.roadProp}'!=''){
+                sl1.selectValue('${roadLib.roadProp}');
+            }
 		}
 	);
-	
-	//沿线CDMA网络覆盖方式
-	var typeURL2="${ctx}/schooljson/cons.action?groupCode=COVERTYPE";
-	var sl2;
-	$.getJSON(typeURL2, 
-		function(data){
-			sl2 = $("#covertypeVal").ligerComboBox({
-				data : data.Rows,
-				width : 200,
-				selectBoxWidth: 200,
-				textField : 'name',
-				valueField : 'code',
-				valueFieldID:'covertype'
-			});
-		}
-	);
-	
 	
 	function add(){
 		$("#form1").submit();
@@ -104,9 +92,9 @@ $(function(){
 								//form.submit();
 								 jQuery(form).ajaxSubmit(function(json){
 									 if (json.result == 1) {
-										 alert('增加成功!');
+										 alert('操作成功!');
 									}else{
-										 alert('增加失败!');
+										 alert('操作失败!');
 									} 
 									 //跳转
 									 window.location.href="${ctx}/school/roadLib.action";
@@ -135,7 +123,14 @@ $(function(){
 	<div id="main_2">
 	<!-- 标题 end-->
 	<div class="main_title_2">
-              <p class="main_title_p"><img src="${ctx}/layouts/image/ico_arrow.gif"></img>增加道路库信息</p>
+              <p class="main_title_p"><img src="${ctx}/layouts/image/ico_arrow.gif"></img>
+                  <c:if test="${empty roadLib.id}">
+                      增加道路库信息
+                  </c:if>
+                  <c:if test="${!empty roadLib.id}">
+                      编辑道路库信息
+                  </c:if>
+              </p>
 	</div>
 	<div class="content">
 	<form method="post" name="form1" id="form1" action="${ctx}/schooljson/addRoadLib.action">
@@ -143,129 +138,52 @@ $(function(){
             <tr>
                 <th width="170px"><span style="color: red;">*</span>本地网:</th>
                 <td width="300px">
+                    <input name="roadLib.id"  type="hidden" value="${roadLib.id}"/>
 					<input name="cityIdVal" id="cityIdVal" type="text" class="required"/>
 					<input name="roadLib.cityId" id="cityId" type="hidden"/>
 				</td>
-				<th width="170px"><span style="color: red;">*</span>线路属性:</th>
+				<th width="170px"><span style="color: red;">*</span>道路类型:</th>
                 <td width="300px">
 					<input name="roadPropVal" type="text" id="roadPropVal" class="{required:true}"/> 
 					<input name="roadLib.roadProp" type="hidden" id="roadProp" />
 				</td>
             </tr>
             <tr>
-           		<th><span style="color: red;">*</span>线路名称：</th>
+                <th><span style="color: red;">*</span>道路编号：</th>
+                <td>
+                    <input name="roadLib.roadNo" type="text" id="roadNo" class="{required:true}" value="${roadLib.roadNo}"/>
+                </td>
+           		<th><span style="color: red;">*</span>道路名称：</th>
 				<td>
-					<input name="roadLib.name" type="text" id="name" class="{required:true}"/> 
+					<input name="roadLib.name" type="text" id="name" class="{required:true}" value="${roadLib.name}"/>
 				</td>
-				<th><span style="color: red;">*</span>设计时速：</th>
-				<td>
-					<input name="roadLib.speed" type="text" id="speed" class="{required:true}"/> 
-				</td>
+
             </tr>
              <tr>
-                <th><span style="color: red;">*</span>辖区内线路里程(km)：</th>
+                <th><span style="color: red;">*</span>境内起点：</th>
 				<td>
-					<input name="roadLib.lineMile" id="lineMile" type="text" class="{required:true,number:true}"/>
+					<input name="roadLib.domesiicStart" id="domesiicStart" type="text" class="{required:true}" value="${roadLib.domesiicStart}"/>
 				</td>
-				<th><span style="color: red;">*</span>辖区内隧道里程(km):</th>
+				<th><span style="color: red;">*</span>境内终点:</th>
                 <td>
-					<input name="roadLib.tunnelMile" type="text" id="tunnelMile" class="{required:true,number:true}"/> 
+					<input name="roadLib.domesiicEnd" type="text" id="domesiicEnd" class="{required:true}" value="${roadLib.domesiicEnd}"/>
 				</td>           
 			</tr>
 			<tr>
-				<th><span style="color: red;">*</span>辖区内平原段里程(km):</th>
+				<th><span style="color: red;">*</span>里程(km):</th>
                 <td>
-					<input name="roadLib.plainMile" type="text" id="plainMile" class="{required:true,number:true}" /> 
+					<input name="roadLib.mileage" type="text" id="mileage" class="{required:true,number:true}" value="${roadLib.mileage}" />
 				</td>
-				<th><span style="color: red;">*</span>辖区内山区段里程(km)：</th>
+				<th><span style="color: red;">*</span>开通状态：</th>
 				<td>
-					<input name="roadLib.mountainMile" type="text" id="mountainMile" class="{required:true,number:true}"/> 
+					<input type="text" id="openStatusVal" class="{required:true}"/>
+                    <input name="roadLib.openStatus" type="hidden" id="openStatus"/>
 				</td>
 			</tr>
-			<tr>
-				<th><span style="color: red;">*</span>辖区内车站（收费站或服务区）数量：</th>
-				<td>
-			        <input name="roadLib.stationNum" type="text" id="stationNum" class="{required:true,number:true}"/> 
-				</td>
-				 <th><span style="color: red;">*</span>沿线CDMA网络覆盖方式:</th>
-                <td>
-					<input name="covertypeVal" type="text" id="covertypeVal" class="{required:true}"/> 
-					<input name="roadLib.covertype" type="hidden" id="covertype" />
-				</td>
-            </tr>
-   
-            <tr>
-				<th>辖区内1X覆盖里程（km）：</th>
-				<td>
-					<input name="roadLib.coverMile1x" type="text" id="coverMile1x" class="{number:true)"/>
-				</td>
-				<th> 辖区内1X里程覆盖率（%）：</th>
-				<td>
-					<input name="roadLib.coverRate1x" type="text" id="coverRate1x" class="{number:true}"/>
-				</td>
-			</tr>
-				<tr>
-				
-				<th>里程掉话比（km）：</th>
-				<td>
-					<input name="roadLib.dropcallMile" type="text" id="dropcallMile" class="{number:true}"/>
-				</td>
-				<th>辖区内DO覆盖里程（km）：</th>
-				<td>
-					<input name="roadLib.coverMileDo" type="text" id="coverMileDo" class="{number:true}"/>
-				</td>
-            </tr>
-            <tr>		
-				<th>辖区内DO里程覆盖率（%）：</th>
-				<td>
-					<input name="roadLib.coverRateDo" type="text" id="coverRateDo" class="{number:true}"/>
-				</td>
-				<th>覆盖区域的下行吞吐率（%）：</th>
-				<td>
-					<input name="roadLib.downTpRate" type="text" id="downTpRate" class="{number:true}"/>
-				</td>
-            </tr>
-             <tr>
-				
-				<th>覆盖区域下行吞吐率优良比（>=300kbps）：</th>
-				<td>
-					<input name="roadLib.downTpgoodRate" type="text" id="downTpgoodRate" class="{number:true}"/>
-				</td>
-				<th>辖区内已覆盖车站（收费站或服务区）数量：</th>
-				<td>
-					<input name="roadLib.coverStationNum" type="text" id="coverStationNum" class="{number:true}"/>
-				</td>
-				
-				
-			
-            </tr>
-            <tr>
-				
-				<th> 辖区内已覆盖车站(收费站或服务区)覆盖比例：</th>
-				<td>
-					<input name="roadLib.coverStationRate" type="text" id="coverStationRate" class="{number:true}"/>
-				</td>
-				<th>路测时间：</th>
-				<td>
-					<input name="roadLib.testtime" type="text" id="testtime"/>
-				</td>
-				
-					
-            </tr>
-            
-            <tr>
-            	<th> 路测人员：</th>
-				<td colspan="3">
-					<input name="roadLib.testuser" type="text" id="testuser"/>
-				</td>
-            
-            </tr>
-            
-           
             <tr>
 				<th>备注：</th>
 				<td colspan="3">
-					<textarea name="roadLib.remark"  id="remark"></textarea>
+					<textarea name="roadLib.remark"  id="remark">${roadLib.remark}</textarea>
 				</td>
             </tr>
          </table>

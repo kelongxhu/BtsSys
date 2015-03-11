@@ -6,7 +6,29 @@
 <%@ include file="/appviews/common/tag.jsp"%>
 <script type="text/javascript">
 var gridObj = null;
+var treeCombox=null;
 $(function(){
+
+    //选择地市
+    $.post("${ctx}/schooljson/initCityTree.action", function(
+            ajaxData, status) {
+        var treeData=ajaxData.cityJson;
+        treeData = treeData.replace(/"children":\[\],/g, '');
+        treeData=eval('('+treeData+')');
+        treeCombox=$("#cityIdVal").ligerComboBox( {
+            width : 150,
+            selectBoxWidth : 200,
+            selectBoxHeight : 200,
+            textField : 'text',
+            valueField : 'id',
+            valueFieldID : 'cityId',
+            treeLeafOnly : false,
+            tree : {
+                data : treeData,
+                checkbox:false
+            }
+        });
+    });
 
     //toptoolbar
     $("#toptoolbar").ligerToolBar({ 
@@ -19,15 +41,13 @@ $(function(){
 	
     gridObj=$("#maingrid").ligerGrid({
 			columns: [{display:'本地网',name:'cityName',width : 100,align:'center'},
-			          {display:'线路属性',name:'roadPropName',width : 100,align:'center',frozen: true },
-			          {display:'线路名称',name:'name',width : 200,align:'center'},
-			          {display:'设计时速',name:'speed',width : 100,align:'center'},
-			          {display:'辖区内线路里程(km)',name:'lineMile',width : 120,align:'center'},
-			          {display:'辖区内隧道里程(km)',name:'tunnelMile',width : 120,align:'center'},              		          
-			          {display:'辖区内平原段里程(km)',name:'plainMile',width :140,align:'center'} ,         		          
-			          {display:'辖区内山区段里程(km)',name:'mountainMile',width : 140,align:'center'},
-			          {display:'辖区内车站数量',name:'stationNum',width : 140,align:'center'},              		          
-			          {display:'沿线CDMA网络覆盖方式',name:'coverTypeName',width : 140,align:'center'}
+			          {display:'道路编号',name:'roadNo',width : 100,align:'center'},
+                      {display:'道路类别',name:'roadPropName',width : 100,align:'center'},
+			          {display:'道路名称',name:'name',width : 200,align:'center'},
+			          {display:'境内起点',name:'domesiicStart',width : 100,align:'center'},
+			          {display:'境内终点',name:'domesiicEnd',width : 120,align:'center'},
+			          {display:'里程',name:'mileage',width : 120,align:'center'},
+			          {display:'开通状态',name:'openStatusStr',width :140,align:'center'}
 			],
 			rownumbers:true,
 			showTitle : false,
@@ -35,8 +55,8 @@ $(function(){
 			pageSizeOptions:[50,100],
 			url:'${ctx}/schooljson/roadLibData.action',
 			checkbox : true,
-			width: '100%',
-			height:'100%',
+			width: '99.9%',
+			height:'99.9%',
             onDblClickRow :roadInfo
 		}); 
  	$("#pageloading").hide();
@@ -49,7 +69,7 @@ function roadInfo(data){
  
  
 //初始化天线厂家
-var typeURL1="${ctx}/schooljson/cons.action?groupCode=ROADPROP";
+var typeURL1="${ctx}/schooljson/cons.action?groupCode=ROAD_TYPE";
 var sl1;
 $.getJSON(typeURL1, 
 	function(data){
@@ -57,7 +77,7 @@ $.getJSON(typeURL1,
 			isShowCheckBox: true, 
 			isMultiSelect: true,
 			data : data.Rows,
-			width : 200,
+			width : 150,
 			selectBoxWidth: 200,
 			textField : 'name',
 			valueField : 'code',
@@ -88,7 +108,7 @@ $.getJSON(typeURL1,
 			id=this.id;
 		});
 		
-		window.location.href="${ctx}/school/editRoadLibPage.action?id="+id;
+		window.location.href="${ctx}/school/addRoadLibPage.action?id="+id;
 	}
  	//删除操作
  	function del(){
@@ -124,6 +144,7 @@ $.getJSON(typeURL1,
 	//查询
 	function toSearch() {
 		//处理地区
+        var cityId=$("#cityId").val();
 		var roadProps = $("#roadPropVal").val().replace(/;/g, ',');
 		
 		gridObj.setOptions({
@@ -131,7 +152,7 @@ $.getJSON(typeURL1,
 		});
 		gridObj.setOptions({
 			url : encodeURI("${ctx}/schooljson/roadLibData.action?roadProps="
-					+ roadProps)
+					+ roadProps+"&cityId="+cityId)
 		});
 		gridObj.loadData(); //加载数据
 	}
@@ -145,10 +166,17 @@ $.getJSON(typeURL1,
 	  </div>   -->
 	<!-- 标题 end-->
 	<div class="content"> 
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr class="tr_inquires">
+        <td width="60px">
+            地区：
+        </td>
+        <td width="150px">
+            <input type="text" id="cityIdVal" />
+            <input type="hidden" id="cityId" />
+        </td>
 		<td width="60px">
-				线路属性：
+				道路类别：
 		</td>
 		<td width="150px">
 		<input type="text" id="roadProp" /> 

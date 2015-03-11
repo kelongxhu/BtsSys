@@ -22,6 +22,7 @@ $(function() {
         }
     });
 
+
     $("#toptoolbar").ligerToolBar({
         items: [
             { text: '导出', click: exportLib , icon:'add'}
@@ -31,27 +32,26 @@ $(function() {
 //数据类型
     var comBox1 = $("#typeIdVal").ligerComboBox({
         data: [
-            { text: '校园库', id: '1' },
-            { text: '风景库', id: '5' },
-            { text: '农村库', id: '2' },
             { text: '道路库', id: '3' },
-            { text: '隧道库', id: '6' }
+            { text: '隧道库', id: '6' },
+            { text: '场景库', id: '7' }
         ],
         width : 200,
         selectBoxWidth: 200,
         valueFieldID: 'typeId',
         onSelected:function(value, text) {
-            if (value == 1 || value == 3) {
+            if (value == 7 || value == 3) {
                 initCity();
             } else {
                 initCountry();
             }
         }
     });
-    comBox1.selectValue('1');
+    comBox1.selectValue('7');
 
 
 //控件
+//    $("#libName").ligerTextBox({width : 150 });
     $("#name").ligerTextBox({width : 150 });
     $("#bscName").ligerTextBox({width : 150 });
     $("#btsId").ligerTextBox({width : 150 });
@@ -109,19 +109,19 @@ function schoolGrid(url) {
         pageSizeOptions:[50,100],
         url:url,
         checkbox : true,
-        width: '100%',
-        height:'100%'
+        width: '99.9%',
+        height:'99.9%'
     });
     $("#pageloading").hide();
 }
 
-function secneryGrid(url) {
+function sceneGrid(url) {
     gridObj = null;
     gridObj = $("#maingrid").ligerGrid({
         columns: [
             {display:'本地网',name:'CITYNAME',width : 80,align:'center'},
             {display:'区县',name:'COUNTRYNAME',width : 80,align:'center'},
-            {display:'风景名称',name:'LIBNAME',width :200,align:'center',
+            {display:'场景名称',name:'LIBNAME',width :200,align:'center',
                 render:function(row) {
                     if (null != row.LIBNAME) {
                         return "<a style='color: blue;' href='#' onclick=\"secneryInfo('" + row.ID + "')\">" + row.LIBNAME + "</a>";
@@ -139,8 +139,8 @@ function secneryGrid(url) {
         pageSizeOptions:[50,100],
         url:url,
         checkbox : true,
-        width: '100%',
-        height:'100%'
+        width: '99.9%',
+        height:'99.9%'
     });
     $("#pageloading").hide();
 }
@@ -170,8 +170,8 @@ function vitoGrid(url) {
         pageSizeOptions:[50,100],
         url:url,
         checkbox : true,
-        width: '100%',
-        height:'100%'
+        width: '99.9%',
+        height:'99.9%'
     });
     $("#pageloading").hide();
 }
@@ -202,8 +202,8 @@ function roadGrid(url) {
         pageSizeOptions:[50,100],
         url:url,
         checkbox : true,
-        width: '100%',
-        height:'100%'
+        width: '99.9%',
+        height:'99.9%'
     });
     $("#pageloading").hide();
 }
@@ -233,8 +233,8 @@ function tunnelGrid(url) {
         pageSizeOptions:[50,100],
         url:url,
         checkbox : true,
-        width: '100%',
-        height:'100%'
+        width: '99.9%',
+        height:'99.9%'
     });
     $("#pageloading").hide();
 }
@@ -248,6 +248,7 @@ function toSearch() {
 
     var typeId = $("#typeId").val();
     var cityIds = $("#cityIdVal").val().replace(/;/g, ',');
+//    var libName=$("#libName").val();
     var name = $("#name").val();
     var bscName = $("#bscName").val();
     var btsId = $("#btsId").val();
@@ -256,25 +257,21 @@ function toSearch() {
 
     var url;
 
-    if (typeId == 1) {
-        url = encodeURI("${ctx}/businessjson/schoolQuery.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn);
-        schoolGrid(url);
-    } else if (typeId == 2) {
+    if(typeId == 2) {
         url = encodeURI("${ctx}/businessjson/vitoQuery.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn);
         vitoGrid(url);
     } else if (typeId == 3) {
         url = encodeURI("${ctx}/businessjson/roadQuery.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&ci=" + ci + "&pn=" + pn);
         roadGrid(url);
-    } else if (typeId == 5) {
-        url = encodeURI("${ctx}/businessjson/secneryQuery.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn);
-        secneryGrid(url);
     } else if(typeId==6){
          url = encodeURI("${ctx}/businessjson/tunnelQuery.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn);
         tunnelGrid(url);
-    } else{
-        //默认查询校园库
-       url = encodeURI("${ctx}/businessjson/schoolQuery.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn);
-       schoolGrid(url);
+    } else if (typeId == 7) {
+        url = encodeURI("${ctx}/businessjson/secneryQuery.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn);
+        sceneGrid(url);
+    }else{
+        url = encodeURI("${ctx}/businessjson/secneryQuery.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn);
+        sceneGrid(url);
     }
 }
 
@@ -317,7 +314,7 @@ function exportLib() {
     var btsId = $("#btsId").val();
     var ci = $("#ci").val();
     var pn = $("#pn").val();
-    var url = "${ctx}/business/libExport.action?type=" + typeId + "&countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn;
+    var url = "${ctx}/business/libExport.action?typeId=" + typeId + "&countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn;
     window.location.href = url;
 }
   function schoolInfo(id){
@@ -329,7 +326,7 @@ function exportLib() {
   function vitoInfo(id){
         window.location.href="${ctx}/school/vitoInfo.action?id="+id;
     }
-function roadInfo(id) {
+  function roadInfo(id) {
     window.location.href = "${ctx}/school/roadInfo.action?id=" +id;
 }
  function tunnelInfo(id){
@@ -361,6 +358,12 @@ function roadInfo(id) {
                     <input type="text" id="cityId"/>
                     <input type="hidden" id="cityIdVal"/>
                 </td>
+                <%--<td width="60px">--%>
+                    <%--库名称：--%>
+                <%--</td>--%>
+                <%--<td width="150px">--%>
+                    <%--<input type="text" id="libName"/>--%>
+                <%--</td>--%>
                 <td align="left">
                     <input class="btn btn-info btn-small" type="button" onclick="toSearch()" value="查询"/>
                     <a onclick="toggle('ydzdgcs')"><img id="arrow_icon_ydzdgcs"
@@ -374,7 +377,7 @@ function roadInfo(id) {
         </table>
         <table id="ydzdgcs" class="tab_send" cellpadding="0" cellspacing="0" style="display:none;" border="0">
             <tr>
-                <td width="50px" align="left">名称:</td>
+                <td width="50px" align="left">库名称:</td>
                 <td>
                     <input type="text" id="name"/>
                 </td>

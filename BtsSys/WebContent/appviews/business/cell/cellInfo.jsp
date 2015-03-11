@@ -221,16 +221,11 @@
 
                         <tr>
                             <th>扇区覆盖热点类型：</th>
-                            <td align="left">${cellManual.coverhot}</td>
+                            <td align="left">${cellManual.coverhotStr}</td>
                             <th>热点名称：</th>
                             <td align="left">
-                                <span class="label label-info">校园:</span>
-                                 <c:forEach items="${cellManual.schoolLibs}" var="schoolLib">
-                                     <a href="${ctx}/school/schoolInfo.action?id=${schoolLib.id}">${schoolLib.name}</a>||
-                                </c:forEach>
-                                <span class="label label-info">风景：</span>
-                                  <c:forEach items="${cellManual.secneryLibs}" var="secneryLib">
-                                     <a href="${ctx}/school/secneryInfo.action?id=${secneryLib.id}">${secneryLib.sceName}</a>||
+                                 <c:forEach items="${cellManual.wyLibScenes}" var="wyLibScene">
+                                     <a href="${ctx}/school/secneryInfo.action?id=${wyLibScene.id}">${wyLibScene.name}</a>||
                                 </c:forEach>
                             </td>
                         </tr>

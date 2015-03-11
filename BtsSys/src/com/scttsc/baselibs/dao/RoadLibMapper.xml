@@ -1,173 +1,166 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.scttsc.baselibs.dao.RoadLibDao" >
-  <resultMap id="BaseResultMap" type="com.scttsc.baselibs.model.RoadLib" >
-    <id column="ID" property="id" jdbcType="DECIMAL" />
-    <result column="CITY_ID" property="cityId" jdbcType="DECIMAL" />
-    <result column="ROAD_PROP" property="roadProp" jdbcType="DECIMAL" />
-    <result column="NAME" property="name" jdbcType="VARCHAR" />
-    <result column="SPEED" property="speed" jdbcType="DECIMAL" />
-    <result column="LINE_MILE" property="lineMile" jdbcType="DECIMAL" />
-    <result column="TUNNEL_MILE" property="tunnelMile" jdbcType="DECIMAL" />
-    <result column="PLAIN_MILE" property="plainMile" jdbcType="DECIMAL" />
-    <result column="MOUNTAIN_MILE" property="mountainMile" jdbcType="DECIMAL" />
-    <result column="STATION_NUM" property="stationNum" jdbcType="DECIMAL" />
-    <result column="COVERTYPE" property="covertype" jdbcType="DECIMAL" />
-    <result column="COVER_MILE_1X" property="coverMile1x" jdbcType="DECIMAL" />
-    <result column="COVER_RATE_1X" property="coverRate1x" jdbcType="DECIMAL" />
-    <result column="DROPCALL_MILE" property="dropcallMile" jdbcType="DECIMAL" />
-    <result column="COVER_MILE_DO" property="coverMileDo" jdbcType="DECIMAL" />
-    <result column="COVER_RATE_DO" property="coverRateDo" jdbcType="DECIMAL" />
-    <result column="DOWN_TP_RATE" property="downTpRate" jdbcType="DECIMAL" />
-    <result column="DOWN_TPGOOD_RATE" property="downTpgoodRate" jdbcType="DECIMAL" />
-    <result column="COVER_STATION_NUM" property="coverStationNum" jdbcType="DECIMAL" />
-    <result column="COVER_STATION_RATE" property="coverStationRate" jdbcType="DECIMAL" />
-    <result column="TESTTIME" property="testtime" jdbcType="DATE" />
-    <result column="TESTUSER" property="testuser" jdbcType="VARCHAR" />
-    <result column="INTIME" property="intime" jdbcType="DATE" />
-    <result column="UPDATETIME" property="updatetime" jdbcType="DATE" />
-    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
-    <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL" />
-    
-    
-    <result column="cityname" property="cityName" jdbcType="VARCHAR" />
-    <result column="roadpropname" property="roadPropName" jdbcType="VARCHAR" />
-    <result column="covertypename" property="coverTypeName" jdbcType="VARCHAR" />
-    
-    
-    
-    
-  </resultMap>
-  
-  <sql id="Base_Column_List" >
-    u.ID,u.CITY_ID, ROAD_PROP, u.NAME, SPEED, LINE_MILE, TUNNEL_MILE, PLAIN_MILE,
-    MOUNTAIN_MILE, STATION_NUM, COVERTYPE, COVER_MILE_1X, COVER_RATE_1X, DROPCALL_MILE, 
-    COVER_MILE_DO, COVER_RATE_DO, DOWN_TP_RATE, DOWN_TPGOOD_RATE, COVER_STATION_NUM, 
-    COVER_STATION_RATE, TESTTIME, TESTUSER, INTIME, UPDATETIME, REMARK,DELETE_FLAG
-  </sql>
-  
- <select id="loadAll" resultMap="BaseResultMap">
- 	select <include refid="Base_Column_List" />,a.name cityname from WY_LIB_ROAD u
- 	left join wy_city a on a.id=u.CITY_ID
- 	<where>
- 		1=1 and u.DELETE_FLAG=0
- 	</where>
- </select>
- 
- <select id="getByConds" resultMap="BaseResultMap">
-		select* from (select m.*,ROWNUM RN from
-		(select
-		<include refid="Base_Column_List" />,a.name roadpropname,b.name covertypename,c.name cityname
-		from WY_LIB_ROAD u
-		LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='ROADPROP')a
-    	ON a.code=u.ROAD_PROP
-    	LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='COVERTYPE')b
-    	ON b.code=u.COVERTYPE
-    	LEFT JOIN wy_city c
-		ON c.id=u.CITY_ID
-		)m
-		<where>
+<mapper namespace="com.scttsc.baselibs.dao.RoadLibDao">
+    <resultMap id="BaseResultMap" type="com.scttsc.baselibs.model.RoadLib">
+        <id column="ID" property="id" jdbcType="DECIMAL"/>
+        <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
+        <result column="ROAD_PROP" property="roadProp" jdbcType="DECIMAL"/>
+        <result column="ROAD_NO" property="roadNo" jdbcType="DECIMAL"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="DOMESTIC_START" property="domesiicStart" jdbcType="VARCHAR"/>
+        <result column="DOMESTIC_END" property="domesiicEnd" jdbcType="VARCHAR"/>
+        <result column="MILEAGE" property="mileage" jdbcType="DECIMAL"/>
+        <result column="OPEN_STATUS" property="openStatus" jdbcType="DECIMAL"/>
+        <result column="IN_TIME" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="IN_USER" property="inUser" jdbcType="DECIMAL"/>
+        <result column="UPDATE_TIME" property="updatetime" jdbcType="TIMESTAMP"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL"/>
+        <result column="cityname" property="cityName" jdbcType="VARCHAR"/>
+        <result column="roadpropname" property="roadPropName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    u.ID,u.CITY_ID, u.ROAD_PROP,u.ROAD_NO, u.NAME, u.DOMESTIC_START, u.DOMESTIC_END, u.MILEAGE,u.OPEN_STATUS,u.IN_TIME,u.IN_USER,u.UPDATE_TIME,
+     u.REMARK,u.DELETE_FLAG
+    </sql>
+
+    <select id="loadAll" resultMap="BaseResultMap">
+        select<include refid="Base_Column_List"/>,a.name cityname from WY_LIB_ROAD u
+        left join wy_city a on a.id=u.CITY_ID
+        <where>
+            1=1 and u.DELETE_FLAG=0
+        </where>
+    </select>
+
+    <select id="getByConds" resultMap="BaseResultMap">
+        select* from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List"/>,a.name roadpropname,c.name cityname
+        from WY_LIB_ROAD u
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='ROAD_TYPE')a
+        ON a.code=u.ROAD_PROP
+        LEFT JOIN wy_city c
+        ON c.id=u.CITY_ID
+        )m
+        <where>
             and DELETE_FLAG=0
-			<if test="roadProps!=null">
-				and ROAD_PROP in(${roadProps})
-			</if>
-			<if test="start!=null">
-				and RowNum &lt; (#{start} + #{pagesize})
-			</if>
-		</where>
-		)
-		<where>
-			<if test="start!=null">
-				RN >= #{start}
-			</if>
-		</where>
-	</select>
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId}
+            </if>
+            <if test="roadProps!=null">
+                and ROAD_PROP in(${roadProps})
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        )
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
 
-	<select id="countByConds" resultType="int">
-		select count(1) from
-		(select
-		<include refid="Base_Column_List" />
-		from WY_LIB_ROAD u)
-		<where>
-			1=1 and DELETE_FLAG=0
-			<if test="roadProps!=null">
-				and ROAD_PROP in(${roadProps})
-			</if>
-		</where>
-	</select>
-	
-	
-  <select id="getById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
-    select 
-    <include refid="Base_Column_List" />
-    from WY_LIB_ROAD u
-    where u.ID = #{id,jdbcType=DECIMAL} and u.DELETE_FLAG=0
-  </select>
+    <select id="countByConds" resultType="int">
+        select count(1) from
+        (select
+        <include refid="Base_Column_List"/>
+        from WY_LIB_ROAD u)
+        <where>
+            1=1 and DELETE_FLAG=0
+            <if test="cityId!=null">
+                and CITY_ID=#{cityId}
+            </if>
+            <if test="roadProps!=null">
+                and ROAD_PROP in(${roadProps})
+            </if>
+        </where>
+    </select>
 
-   <select id="getByName" resultMap="BaseResultMap">
-       select
-       <include refid="Base_Column_List" />
-       from WY_LIB_ROAD u
-       where u.NAME = #{name,jdbcType=VARCHAR} and u.DELETE_FLAG=0
-   </select>
-	
-   <update id="deleteByDeleteFlag">
-         update WY_LIB_ROAD set delete_flag=1,UPDATETIME=sysdate where id in(${ids})
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.math.BigDecimal">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_LIB_ROAD u
+        where u.ID = #{id,jdbcType=DECIMAL} and u.DELETE_FLAG=0
+    </select>
+
+    <select id="getByName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from WY_LIB_ROAD u
+        where u.NAME = #{name,jdbcType=VARCHAR} and u.DELETE_FLAG=0
+    </select>
+
+    <update id="deleteByDeleteFlag">
+         update WY_LIB_ROAD set delete_flag=1,UPDATE_TIME=sysdate where id in(${ids})
    </update>
 
-  <delete id="delete" parameterType="java.math.BigDecimal" >
+    <delete id="delete" parameterType="java.math.BigDecimal">
     delete from WY_LIB_ROAD
     where ID in(${ids})
   </delete>
-  
-  
-  <insert id="insert" parameterType="com.scttsc.baselibs.model.RoadLib" >
+
+
+    <insert id="insert" parameterType="com.scttsc.baselibs.model.RoadLib">
     insert into WY_LIB_ROAD (ID, CITY_ID,
-      ROAD_PROP, NAME, SPEED, 
-      LINE_MILE, TUNNEL_MILE, PLAIN_MILE, 
-      MOUNTAIN_MILE, STATION_NUM, COVERTYPE, 
-      COVER_MILE_1X, COVER_RATE_1X, DROPCALL_MILE, 
-      COVER_MILE_DO, COVER_RATE_DO, DOWN_TP_RATE, 
-      DOWN_TPGOOD_RATE, COVER_STATION_NUM, COVER_STATION_RATE, 
-      TESTTIME, TESTUSER, REMARK)
+      ROAD_PROP,ROAD_NO, NAME, DOMESTIC_START,
+      DOMESTIC_END, MILEAGE, OPEN_STATUS,
+      IN_TIME, IN_USER, UPDATE_TIME,
+      REMARK, DELETE_FLAG)
     values (WY_LIB_ROAD_SEQ.nextval, #{cityId,jdbcType=DECIMAL},
-      #{roadProp,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{speed,jdbcType=DECIMAL}, 
-      #{lineMile,jdbcType=DECIMAL}, #{tunnelMile,jdbcType=DECIMAL}, #{plainMile,jdbcType=DECIMAL}, 
-      #{mountainMile,jdbcType=DECIMAL}, #{stationNum,jdbcType=DECIMAL}, #{covertype,jdbcType=DECIMAL}, 
-      #{coverMile1x,jdbcType=DECIMAL}, #{coverRate1x,jdbcType=DECIMAL}, #{dropcallMile,jdbcType=DECIMAL}, 
-      #{coverMileDo,jdbcType=DECIMAL}, #{coverRateDo,jdbcType=DECIMAL}, #{downTpRate,jdbcType=DECIMAL}, 
-      #{downTpgoodRate,jdbcType=DECIMAL}, #{coverStationNum,jdbcType=DECIMAL}, #{coverStationRate,jdbcType=DECIMAL}, 
-      #{testtime,jdbcType=DATE}, #{testuser,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+      #{roadProp,jdbcType=DECIMAL}, #{roadNo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{domesiicStart,jdbcType=VARCHAR},
+      #{domesiicEnd,jdbcType=VARCHAR}, #{mileage,jdbcType=DECIMAL}, #{openStatus,jdbcType=DECIMAL},
+      #{intime,jdbcType=TIMESTAMP}, #{inUser,jdbcType=DECIMAL}, #{updatetime,jdbcType=TIMESTAMP},
+      #{remark,jdbcType=VARCHAR}, #{deleteFlag,jdbcType=DECIMAL})
   </insert>
-  
-  
- 
-  <update id="update" parameterType="com.scttsc.baselibs.model.RoadLib" >
-    update WY_LIB_ROAD
-    set
-      CITY_ID = #{cityId,jdbcType=DECIMAL},
-      ROAD_PROP = #{roadProp,jdbcType=DECIMAL},
-      NAME = #{name,jdbcType=VARCHAR},
-      SPEED = #{speed,jdbcType=DECIMAL},
-      LINE_MILE = #{lineMile,jdbcType=DECIMAL},
-      TUNNEL_MILE = #{tunnelMile,jdbcType=DECIMAL},
-      PLAIN_MILE = #{plainMile,jdbcType=DECIMAL},
-      MOUNTAIN_MILE = #{mountainMile,jdbcType=DECIMAL},
-      STATION_NUM = #{stationNum,jdbcType=DECIMAL},
-      COVERTYPE = #{covertype,jdbcType=DECIMAL},
-      COVER_MILE_1X = #{coverMile1x,jdbcType=DECIMAL},
-      COVER_RATE_1X = #{coverRate1x,jdbcType=DECIMAL},
-      DROPCALL_MILE = #{dropcallMile,jdbcType=DECIMAL},
-      COVER_MILE_DO = #{coverMileDo,jdbcType=DECIMAL},
-      COVER_RATE_DO = #{coverRateDo,jdbcType=DECIMAL},
-      DOWN_TP_RATE = #{downTpRate,jdbcType=DECIMAL},
-      DOWN_TPGOOD_RATE = #{downTpgoodRate,jdbcType=DECIMAL},
-      COVER_STATION_NUM = #{coverStationNum,jdbcType=DECIMAL},
-      COVER_STATION_RATE = #{coverStationRate,jdbcType=DECIMAL},
-      TESTTIME = #{testtime,jdbcType=DATE},
-      TESTUSER = #{testuser,jdbcType=VARCHAR},
-      UPDATETIME = sysdate,
-      REMARK = #{remark,jdbcType=VARCHAR}
-    where ID = #{id,jdbcType=DECIMAL}
-  </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.baselibs.model.RoadLib" >
+        update WY_LIB_ROAD
+        <set >
+            <if test="cityId != null" >
+                CITY_ID = #{cityId,jdbcType=DECIMAL},
+            </if>
+            <if test="roadProp != null" >
+                ROAD_PROP = #{roadProp,jdbcType=DECIMAL},
+            </if>
+            <if test="roadNo != null" >
+                ROAD_NO = #{roadNo,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="domesiicStart != null" >
+                DOMESTIC_START = #{domesiicStart,jdbcType=VARCHAR},
+            </if>
+            <if test="domesiicEnd != null" >
+                DOMESTIC_END = #{domesiicEnd,jdbcType=VARCHAR},
+            </if>
+            <if test="mileage != null" >
+                MILEAGE = #{mileage,jdbcType=DECIMAL},
+            </if>
+            <if test="openStatus != null" >
+                OPEN_STATUS = #{openStatus,jdbcType=DECIMAL},
+            </if>
+            <if test="intime != null" >
+                IN_TIME = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="inUser != null" >
+                IN_USER = #{inUser,jdbcType=DECIMAL},
+            </if>
+            <if test="updatetime != null" >
+                UPDATE_TIME = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null" >
+                REMARK = #{remark,jdbcType=DECIMAL},
+            </if>
+            <if test="deleteFlag != null" >
+                DELETE_FLAG = #{deleteFlag,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+
 </mapper>

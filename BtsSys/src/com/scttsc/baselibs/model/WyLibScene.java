@@ -33,7 +33,6 @@ public class WyLibScene {
     private Integer deleteFlag;
 
     private String sceneTypeName;
-
     private String sceneLevelName;
 
     private City city;

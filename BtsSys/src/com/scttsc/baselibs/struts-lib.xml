@@ -13,16 +13,24 @@
 			</result>
 		</action>
 		<action name="initCityTree" class="com.scttsc.baselibs.web.SchoolLibAction" method="initCityTree">
-			<result type="json" name="success"/>
+			<result type="json" name="success">
+                <param name="includeProperties">cityJson</param>
+            </result>
 		</action>
 		<action name="initCountryTree" class="com.scttsc.baselibs.web.SchoolLibAction" method="initCountryTree">
-			<result type="json" name="success"/>
+            <result type="json" name="success">
+                <param name="includeProperties">cityJson</param>
+            </result>
 		</action>
         <action name="initAllCountryTree" class="com.scttsc.baselibs.web.SchoolLibAction" method="initAllCountryTree">
-			<result type="json" name="success"/>
+            <result type="json" name="success">
+                <param name="includeProperties">cityJson</param>
+            </result>
 		</action>
         <action name="initAllCityTree" class="com.scttsc.baselibs.web.SchoolLibAction" method="initAllCityTree">
-			<result type="json" name="success"/>
+            <result type="json" name="success">
+                <param name="includeProperties">cityJson</param>
+            </result>
 		</action>
 		<action name="cons" class="com.scttsc.baselibs.web.SchoolLibAction"
 			method="cons">
@@ -50,7 +58,7 @@
 			</result>
 		</action>
 		
-		<action name="hotTree" class="com.scttsc.baselibs.web.SchoolLibAction"
+		<action name="hotTree" class="com.scttsc.baselibs.web.SceneLibAction"
 			method="hotTree">
 			<result name="success" type="json" />
 		</action>
@@ -109,14 +117,7 @@
 				 <param name="root">jsonMap</param>   
 			</result>
 		</action>
-		
-		<action name="editRoadLib" class="com.scttsc.baselibs.web.RoadLibAction"
-			method="editRoadLib">
-			<result name="success" type="json">
-				 <param name="root">jsonMap</param>   
-			</result>
-		</action>
-		
+
 		<action name="delRoadLib" class="com.scttsc.baselibs.web.RoadLibAction"
 			method="delRoadLib">
 			<result name="success" type="json">
@@ -316,6 +317,26 @@
             </result>
         </action>
 
+        <action name="delSceneLibs" class="com.scttsc.baselibs.web.SceneLibAction" method="delSceneLibs">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="sceneLibs" class="com.scttsc.baselibs.web.SceneLibAction" method="sceneLibs">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="importSceneInputData" class="com.scttsc.baselibs.web.SceneLibAction" method="importSceneInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+
+
 
 
     </package>
@@ -375,10 +396,10 @@
 			</result>
 		</action>
 		
-		<action name="editRoadLibPage" class="com.scttsc.baselibs.web.RoadLibAction"
-			method="editRoadLibPage">
+		<action name="addRoadLibPage" class="com.scttsc.baselibs.web.RoadLibAction"
+			method="addRoadLibPage">
 			<result name="success" type="dispatcher">
-				/appviews/baselibs/roadlib/roadEdit.jsp
+				/appviews/baselibs/roadlib/roadAdd.jsp
 			</result>
 		</action>
 
@@ -527,6 +548,30 @@
                 /appviews/baselibs/scenelib/sceneLibAdd.jsp
             </result>
         </action>
+        <action name="secneryInfo" class="com.scttsc.baselibs.web.SceneLibAction"
+                method="secneryInfo">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/scenelib/sceneInfo.jsp
+            </result>
+        </action>
+
+        <action name="seeneDialog" class="com.scttsc.baselibs.web.SceneLibAction"
+                method="seeneDialog">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/scenelib/sceneDialog.jsp
+            </result>
+        </action>
+
+        <action name="importScenePage" class="com.scttsc.baselibs.web.SceneLibAction"
+                method="importScenePage">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/scenelib/sceneImport.jsp
+            </result>
+        </action>
+
+
+        <action name="exportSceneLibTemplate" class="com.scttsc.baselibs.web.SceneLibAction" method="exportSceneLibTemplate"/>
+
 
     </package>
 

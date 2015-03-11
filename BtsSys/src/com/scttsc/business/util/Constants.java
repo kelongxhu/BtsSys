@@ -9,6 +9,7 @@ public class Constants {
     public static Integer AirLib = 4;
     public static Integer SecneryLib = 5;
     public static Integer TunnelLib = 6;
+    public static int SceneLib = 7;//场景库
 
 
     //记录日志

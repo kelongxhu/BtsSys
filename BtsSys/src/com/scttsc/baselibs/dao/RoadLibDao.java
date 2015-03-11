@@ -8,7 +8,7 @@ import com.scttsc.baselibs.model.RoadLib;
 public interface RoadLibDao {
 	int insert(RoadLib roadLib) throws Exception;
 
-	int update(RoadLib roadLib) throws Exception;
+	int updateByPrimaryKeySelective(RoadLib roadLib) throws Exception;
 	
 	int delete(Object map)throws Exception;
 	

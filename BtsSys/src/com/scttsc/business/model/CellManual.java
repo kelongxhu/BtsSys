@@ -21,7 +21,7 @@ public class CellManual extends Entity {
     private Integer feederlength;  //馈线长度
     private String coverarea;
     private String coverroad;
-    private String coverhot;
+    private String coverhot;//场景库类型
     private Double radii;//小区半径
     private String boundarycellflag;
     private String borderprovince;
@@ -31,6 +31,8 @@ public class CellManual extends Entity {
     private String remark;
     private Date updatetime;
     private Long updateuser;
+
+    private String coverhotStr;//解析场景库类型
 
 
     List<CellAirLib> airLibs;//小区天线列表
@@ -44,6 +46,7 @@ public class CellManual extends Entity {
     List<TunnelLib> tunnelLibs;//覆盖隧道库
     List<SchoolLib> schoolLibs;//覆盖校园库
     List<SecneryLib> secneryLibs;//覆盖风景库
+    List<WyLibScene> wyLibScenes;//覆盖场景库
 
 
     @Override
@@ -69,6 +72,7 @@ public class CellManual extends Entity {
         this.igFields.add("tunnelLibs");
         this.igFields.add("schoolLibs");
         this.igFields.add("secneryLibs");
+        this.igFields.add("wyLibScenes");
     }
 
     public String compareEntity(Object object) {
@@ -620,5 +624,21 @@ public class CellManual extends Entity {
 
     public void setSecneryLibs(List<SecneryLib> secneryLibs) {
         this.secneryLibs = secneryLibs;
+    }
+
+    public List<WyLibScene> getWyLibScenes() {
+        return wyLibScenes;
+    }
+
+    public void setWyLibScenes(List<WyLibScene> wyLibScenes) {
+        this.wyLibScenes = wyLibScenes;
+    }
+
+    public String getCoverhotStr() {
+        return coverhotStr;
+    }
+
+    public void setCoverhotStr(String coverhotStr) {
+        this.coverhotStr = coverhotStr;
     }
 }

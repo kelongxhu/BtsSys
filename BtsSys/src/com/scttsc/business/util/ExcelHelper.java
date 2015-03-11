@@ -51,7 +51,7 @@ public class ExcelHelper {
         return ret;
 
     }
-    
+
     public static String getValue(HSSFCell cell, String formatePattern) {
         String ret = "";
         switch (cell.getCellType()) {
@@ -152,8 +152,8 @@ public class ExcelHelper {
     }
 
     public static Map<String, Validity> getBtsChargeCoulmnMap() {
-    	Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
-    	cols.put("contractStarttime", new Validity("合同开始日期", true, Validity.D3, null));//不能为空
+        Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
+        cols.put("contractStarttime", new Validity("合同开始日期", true, Validity.D3, null));//不能为空
         cols.put("contractEndtime", new Validity("合同结束日期", true, Validity.D3, null));//不能为空
         cols.put("payCycle", new Validity("缴费周期", true, Validity.NUM, null));//不能为空
         cols.put("payDay", new Validity("缴费日期", true, Validity.NUM, null));//不能为空
@@ -165,23 +165,23 @@ public class ExcelHelper {
         cols.put("eachAccountname", new Validity("对方账号名称", false, Validity.STR, null));//不能为空
         cols.put("eachBanknum", new Validity("对方银行账号", false, Validity.STR, null));//不能为空
         cols.put("remark", new Validity("备注", false, Validity.STR, null));//不能为空
-    	return cols;
+        return cols;
     }
-        
-    public static Map<String , Validity> getBtsPowerChargeCoulmnMap() {
-    	Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
-    	cols.put("payType", new Validity("缴费方式", true, Validity.STR, new String[]{"人工缴费","自动代扣"}));//不能为空
-    	cols.put("payCycle", new Validity("缴费周期", true, Validity.STR, null));//不能为空
-    	cols.put("payDay", new Validity("缴费日期", true, Validity.STR, null));//不能为空
-    	cols.put("lastPayTime", new Validity("上次缴费时间", true, Validity.STR, null));//不能为空
-    	cols.put("remindUser", new Validity("提醒人员", true, Validity.STR, null));//不能为空
-    	cols.put("remindTel", new Validity("提醒号码", true, Validity.STR, null));//不能为空
-    	cols.put("money", new Validity("单价", true, Validity.STR, null));//不能为空
-    	cols.put("bankAccount", new Validity("代扣银行账号", false, Validity.STR, null));//不能为空
-    	cols.put("balance", new Validity("当前账户余额", false, Validity.NUM, null));//不能为空
-    	return cols;
+
+    public static Map<String, Validity> getBtsPowerChargeCoulmnMap() {
+        Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
+        cols.put("payType", new Validity("缴费方式", true, Validity.STR, new String[]{"人工缴费", "自动代扣"}));//不能为空
+        cols.put("payCycle", new Validity("缴费周期", true, Validity.STR, null));//不能为空
+        cols.put("payDay", new Validity("缴费日期", true, Validity.STR, null));//不能为空
+        cols.put("lastPayTime", new Validity("上次缴费时间", true, Validity.STR, null));//不能为空
+        cols.put("remindUser", new Validity("提醒人员", true, Validity.STR, null));//不能为空
+        cols.put("remindTel", new Validity("提醒号码", true, Validity.STR, null));//不能为空
+        cols.put("money", new Validity("单价", true, Validity.STR, null));//不能为空
+        cols.put("bankAccount", new Validity("代扣银行账号", false, Validity.STR, null));//不能为空
+        cols.put("balance", new Validity("当前账户余额", false, Validity.NUM, null));//不能为空
+        return cols;
     }
-    
+
     /**
      * 字段和常量groupCode关系
      *
@@ -536,13 +536,13 @@ public class ExcelHelper {
     public static Map<String, Validity> getRoomChargeCoulmnMap() {
         Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
         cols.put("btsName", new Validity("站点名称", true, 1, null));//不能为空
-        cols.put("intId",new Validity("INT_ID", true, 1, null));
-        cols.put("btsType",new Validity("BTS_TYPE", true, 1, null));
+        cols.put("intId", new Validity("INT_ID", true, 1, null));
+        cols.put("btsType", new Validity("BTS_TYPE", true, 1, null));
         cols.put("cityId", new Validity("本地网", true, 1, null));//忽略
-        cols.put("countryId",  new Validity("区县", true, 1, null));//忽略
-        cols.put("bscName",  new Validity("bscName", true, 1, null));//忽略
+        cols.put("countryId", new Validity("区县", true, 1, null));//忽略
+        cols.put("bscName", new Validity("bscName", true, 1, null));//忽略
         cols.put("btsId", new Validity("btsId", true, 1, null));//忽略
-        cols.put("costType", new Validity("费用类型", true, 1, new String[]{"房租","物业","电费"}));//忽略
+        cols.put("costType", new Validity("费用类型", true, 1, new String[]{"房租", "物业", "电费"}));//忽略
         cols.put("money", new Validity("金额", true, 2, null)); // 不能为空
         cols.put("payTime", new Validity("缴费时间", true, 5, null));
         cols.put("payUser", new Validity("缴费人员", true, 1, null));
@@ -559,13 +559,13 @@ public class ExcelHelper {
     public static Map<String, Validity> getPowerChargeCoulmnMap() {
         Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
         cols.put("btsName", new Validity("站点名称", true, 1, null));//不能为空
-        cols.put("intId",new Validity("INT_ID", true, 1, null));
-        cols.put("btsType",new Validity("BTS_TYPE", true, 1, null));
+        cols.put("intId", new Validity("INT_ID", true, 1, null));
+        cols.put("btsType", new Validity("BTS_TYPE", true, 1, null));
         cols.put("cityId", new Validity("本地网", true, 1, null));//忽略
-        cols.put("countryId",  new Validity("区县", true, 1, null));//忽略
-        cols.put("bscName",  new Validity("bscName", true, 1, null));//忽略
+        cols.put("countryId", new Validity("区县", true, 1, null));//忽略
+        cols.put("bscName", new Validity("bscName", true, 1, null));//忽略
         cols.put("btsId", new Validity("btsId", true, 1, null));//忽略
-        cols.put("costType", new Validity("费用类型", true, 1, new String[]{"房租","物业","电费"}));//忽略
+        cols.put("costType", new Validity("费用类型", true, 1, new String[]{"房租", "物业", "电费"}));//忽略
         cols.put("money", new Validity("金额", true, 2, null)); // 不能为空
         cols.put("baseDegree", new Validity("底度", true, 2, null)); // 不能为空
         cols.put("monthDegree", new Validity("当月度数", true, 2, null)); // 不能为空
@@ -574,6 +574,24 @@ public class ExcelHelper {
         cols.put("payTime", new Validity("缴费时间", true, 5, null));
         cols.put("payUser", new Validity("缴费人员", true, 1, null));
         cols.put("remark", new Validity("备注", false, 1, null));
+        return cols;
+    }
+
+    /**
+     * 场景库导入字段
+     *
+     * @return
+     */
+    public static Map<String, Validity> getSceneCoulmnMap() {
+        Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
+        cols.put("cityId", new Validity("本地网", true, 1, null));//不能为空
+        cols.put("countryId", new Validity("区县", false, 1, null));
+        cols.put("sceneType", new Validity("场景类型", true, 1, null));
+        cols.put("sceneLevel", new Validity("场景级别", true, 1, null));//忽略
+        cols.put("name", new Validity("场景名称", true, 1, null));//忽略
+        cols.put("longitude", new Validity("经度", false, 1, null));//忽略
+        cols.put("latitude", new Validity("纬度", false, 1, null));//忽略
+        cols.put("remark", new Validity("备注", false, 1, null));//忽略
         return cols;
     }
 

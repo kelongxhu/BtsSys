@@ -18,11 +18,12 @@
 	</style>
 
 <script type="text/javascript">
-
+var treeCombox4;
 //注册表单验证
 $(function(){
 
 	 var treeCombox;
+
 		//初始化地市
 	 	//初始化树控件
     $.post("${ctx}/schooljson/airTree.action", function(ajaxData, status) {
@@ -99,11 +100,8 @@ $(function(){
 
 	comBox2.selectValue('${cellManual.coverroad}');
 
-
-
-	
 	//初始化扇区热点覆盖类型
-	var typeURL1="${ctx}/schooljson/cons.action?groupCode=COVERHOTTYPE";
+	var typeURL1="${ctx}/schooljson/cons.action?groupCode=SCENE_TYPE";
 	var comBox3;
 	$.getJSON(typeURL1, 
 		function(data){
@@ -114,10 +112,15 @@ $(function(){
 				width : 200,
 				selectBoxWidth: 200,
 				textField : 'name',
-				valueField : 'name',
-				valueFieldID:'coverhot' 
+				valueField : 'code',
+				valueFieldID:'coverhot' ,
+                onSelected:function(data){
+                    initHotTreeCombox(data);
+                }
 			});
-		comBox3.selectValue('${cellManual.coverhot}');
+            if('${cellManual.coverhot}'!=''){
+                comBox3.selectValue('${cellManual.coverhot}');
+            }
 		}
 	);
 	//是否属于边界扇区
@@ -221,41 +224,52 @@ $(function(){
 		   	    		treeCombox3.selectValue('${cellManual.roadLib}');
 		   	    	}
 				});
-			 	
-			 	
-					//初始校园库、风景库树结构
-					var treeCombox4;
-					
-					 var url="${ctx}/schooljson/hotTree.action";
-					 	//初始化树控件
-							$.post(url, function(
-								ajaxData, status) {
-							var treeData=ajaxData.cityJson;
-							treeData = treeData.replace(/"children":\[\],/g, '');
-				   	    	treeData=eval('('+treeData+')'); 
-				   	    	
-				   	    	treeCombox4=$("#hotLibVal").ligerComboBox( {
-								width : 200,
-								selectBoxWidth : 220,
-								selectBoxHeight : 200,
-								textField : 'text',
-								valueField : 'id',
-								valueFieldID : 'hotLib',
-								treeLeafOnly : true,
-								tree : {
-									data : treeData,
-									checkbox:true,
-									nodeWidth:200
-								}
-							});
-							var hotLib='${cellManual.hotLib}';
-							if(hotLib!=''){								
-				   	    		treeCombox4.selectValue('${cellManual.hotLib}');
-							}
-						});
-				
-				
+
+			//初始校园库、风景库树结构
+            treeCombox4 = $("#hotLibVal").ligerComboBox({
+                width: 200,
+                selectBoxWidth: 220,
+                selectBoxHeight: 200,
+                textField: 'text',
+                valueField: 'id',
+                valueFieldID: 'hotLib',
+                treeLeafOnly: true,
+                tree: {
+                    data: null,
+                    checkbox: true,
+                    nodeWidth: 200
+                }
+            });
 });
+
+
+//默认没数据
+function initHotTreeCombox(sceneType){
+    if(sceneType==''){
+        var treeManager=treeCombox4.tree.ligerGetTreeManager();
+        treeManager.clear();
+        return;
+    }
+    var url="${ctx}/schooljson/hotTree.action";
+    var parm={
+        cityIds:'${cell.cityId}',
+        sceneTypes:sceneType
+    }
+    //初始化树控件
+    $.post(url,parm, function(
+            ajaxData, status) {
+        var treeData=ajaxData.jsonData;
+        treeData = treeData.replace(/"children":\[\],/g, '');
+        treeData=eval('('+treeData+')');
+        var treeManager=treeCombox4.tree.ligerGetTreeManager();
+        treeManager.clear();
+        treeManager.setData(treeData);
+        var hotLib='${cellManual.hotLib}';
+        if(hotLib!=''){
+            treeCombox4.selectValue('${cellManual.hotLib}');
+        }
+    });
+}
 
 
 $(function() {
@@ -305,10 +319,10 @@ function back(){
 	<div class="main_title_2">
               <p class="main_title_p"><img src="${ctx}/layouts/image/ico_arrow.gif"></img>
                 <c:if test="${editFlag==1}">
-                	编辑小区手工信息
+                	室外覆盖小区手工信息编辑
                 </c:if>         
                 <c:if test="${editFlag==0}">
-             	    录入小区手工信息
+             	    室外覆盖小区手工信息录入
                 </c:if>
              </p>
 	</div>
@@ -384,12 +398,12 @@ function back(){
 	     	</tr>
 	     	
 	     	<tr>
-	     		<th><span style="color: red;">*</span>扇区覆盖热点类型</th>
+	     		<th>扇区覆盖场景类型</th>
 	     		<td>
-	     			<input name="coverhotVal" id="coverhotVal" type="text" class="required">
+	     			<input name="coverhotVal" id="coverhotVal" type="text">
 	     			<input name="cellManual.coverhot" id="coverhot" type="hidden"/>
 	     		</td>
-	     		<td>热点名称</td>
+	     		<td>场景名称</td>
 	     		<td>
 	     			<input name="hotLibVal" id="hotLibVal" type="text">
 	     			<input name="cellManual.hotLib" id="hotLib" type="hidden"/>

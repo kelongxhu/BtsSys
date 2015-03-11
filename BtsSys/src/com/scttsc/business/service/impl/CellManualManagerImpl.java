@@ -139,30 +139,11 @@ public class CellManualManagerImpl implements CellManualManager {
         }
 
         //获取各个库Map
-//        Map<String, VitoLib> vitoLibMap = libMap.get(Constants.VitoLib + "");
         Map<String, RoadLib> roadLibMap = libMap.get(Constants.RoadLib + "");
         Map<String, TunnelLib> tunnelLibMap = libMap.get(Constants.TunnelLib + "");
-        Map<String, SchoolLib> schoolLibMap = libMap.get(Constants.SchoolLib + "");
-        Map<String, SecneryLib> secneryLibMap = libMap.get(Constants.SecneryLib + "");
+        Map<String,WyLibScene> sceneLibMap=libMap.get(Constants.SceneLib+"");
 
 
-        //农村库
-//        String countryLibs = cellManual.getCountryLib();
-//        if (!Common.isEmpty(countryLibs)) {
-//            String[] countryLibArray = countryLibs.split(";");
-//            for (String countryLib : countryLibArray) {
-//                VitoLib lib = vitoLibMap.get(countryLib);
-//                if (lib != null) {
-//                    CellLib cellLib = new CellLib();
-//                    cellLib.setCellIntId(cellManual.getIntId());
-//                    cellLib.setLibId(lib.getId().intValue());
-//                    cellLib.setLibType(Constants.VitoLib);
-//                    cellLibDao.insert(cellLib);
-//                } else {
-//                    throw new CustomizeException("填写的农村库未找到," + countryLib);
-//                }
-//            }
-//        }
         //道路、隧道库
         String roadLib = cellManual.getRoadLib();
         if (!Common.isEmpty(roadLib)) {
@@ -201,28 +182,15 @@ public class CellManualManagerImpl implements CellManualManager {
         if (!Common.isEmpty(hotLib)) {
             String[] hotLibArray = hotLib.split(";");
             for (String hot : hotLibArray) {
-                SchoolLib schoolLib = schoolLibMap.get(hot);
-                boolean hotLibFlag = false;
-                if (schoolLib != null) {
-                    CellLib cellLib = new CellLib();
-                    cellLib.setCellIntId(cellManual.getIntId());
-                    cellLib.setLibId(schoolLib.getId().intValue());
-                    cellLib.setLibType(Constants.SchoolLib);
-                    cellLibDao.insert(cellLib);
-                    continue;
+                WyLibScene sceneLib = sceneLibMap.get(hot);
+                if (sceneLib==null) {
+                    throw new CustomizeException("场景库中未找到该信息," + hot);
                 }
-                SecneryLib secneryLib = secneryLibMap.get(hot);
-                if (secneryLib != null) {
-                    CellLib cellLib = new CellLib();
-                    cellLib.setCellIntId(cellManual.getIntId());
-                    cellLib.setLibId(secneryLib.getId().intValue());
-                    cellLib.setLibType(Constants.SecneryLib);
-                    cellLibDao.insert(cellLib);
-                    hotLibFlag = true;
-                }
-                if (!hotLibFlag) {
-                    throw new CustomizeException("校园和风景库中未找到该信息," + hot);
-                }
+                CellLib cellLib = new CellLib();
+                cellLib.setCellIntId(cellManual.getIntId());
+                cellLib.setLibId(sceneLib.getId().intValue());
+                cellLib.setLibType(Constants.SceneLib);
+                cellLibDao.insert(cellLib);
             }
         }
 
@@ -258,6 +226,7 @@ public class CellManualManagerImpl implements CellManualManager {
         } else {
             record.setCelltype("标准小区");
         }
+        /*
         // DO载频数量
         Map<String, Object> seachdoMap = new HashMap<String, Object>();
         seachdoMap.put("carType", "DO");
@@ -272,7 +241,7 @@ public class CellManualManagerImpl implements CellManualManager {
             if (pilotpn != null) {
                 record.setDopn(cparCell.getPilotpn().intValue());
             }
-        }
+        }*/
         // 小区半径，室分小区为0.1，此外，城区0.2；县城、城郊0.3；农村乡镇0.5
 
         String coverArea = record.getCoverarea();
@@ -426,19 +395,6 @@ public class CellManualManagerImpl implements CellManualManager {
      * @param record
      */
     void insertCellLib(CellManual record) {
-        // 插入小区覆盖农村、乡镇库
-        /*
-        String countryLib = record.getCountryLib();
-        if (!Common.isEmpty(countryLib)) {
-            String[] strs = countryLib.split(";");
-            for (String str : strs) {
-                CellLib cellLib = new CellLib();
-                cellLib.setCellIntId(record.getIntId());
-                cellLib.setLibId(StringUtil.null2Integer0(str));
-                cellLib.setLibType(Constants.VitoLib);
-                cellLibDao.insert(cellLib);
-            }
-        }*/
         // 插入道路、隧道(道路：0_道路ID;道路ID_隧道ID)
         String roadLib = record.getRoadLib();
         if (!Common.isEmpty(roadLib)) {
@@ -468,20 +424,11 @@ public class CellManualManagerImpl implements CellManualManager {
             String[] strs = hotLib.split(Constants.SPLIT_SYMBOL);
             for (String str : strs) {
                 if (!Common.isEmpty(str)) {
-                    String s[] = str.split("_");
                     CellLib cellLib = new CellLib();
                     cellLib.setCellIntId(record.getIntId());
-                    if ("-2".equals(s[0])) {
-                        // 校园
-                        cellLib.setLibId(StringUtil.null2Integer0(s[1]));
-                        cellLib.setLibType(Constants.SchoolLib);
-                        cellLibDao.insert(cellLib);
-                    } else if ("-3".equals(s[0])) {
-                        // 风景
-                        cellLib.setLibId(StringUtil.null2Integer0(s[1]));
-                        cellLib.setLibType(Constants.SecneryLib);
-                        cellLibDao.insert(cellLib);
-                    }
+                    cellLib.setLibId(StringUtil.null2Integer0(str));
+                    cellLib.setLibType(Constants.SceneLib);
+                    cellLibDao.insert(cellLib);
                 }
             }
         }

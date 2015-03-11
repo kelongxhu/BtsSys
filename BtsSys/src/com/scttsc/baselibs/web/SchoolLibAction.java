@@ -7,6 +7,7 @@ import com.scttsc.admin.service.CityManager;
 import com.scttsc.baselibs.model.Cons;
 import com.scttsc.baselibs.model.SchoolLib;
 import com.scttsc.baselibs.model.SecneryLib;
+import com.scttsc.baselibs.model.WyLibScene;
 import com.scttsc.baselibs.service.ConsManager;
 import com.scttsc.baselibs.service.SchoolLibManager;
 import com.scttsc.baselibs.service.SecneryLibManager;
@@ -296,26 +297,6 @@ public class SchoolLibAction extends BaseAction {
         } catch (Exception e) {
             e.printStackTrace();
             jsonMap.put("result", 0);
-        }
-        return SUCCESS;
-    }
-
-    /**
-     * 热点类型
-     *
-     * @return
-     */
-    public String hotTree() {
-        List<SchoolLib> schoolLibs;
-        List<SecneryLib> secneryLibs;
-        try {
-            secneryLibs = secneryLibManager.loadAll();
-            schoolLibs = schoolLibManager.loadAll();
-            TreeNode root = BuildTree.buildTreeNodeBySchool(schoolLibs, secneryLibs);
-            JSONArray jsonObject = JSONArray.fromObject(root);
-            cityJson = jsonObject.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return SUCCESS;
     }

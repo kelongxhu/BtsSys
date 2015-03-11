@@ -182,6 +182,14 @@
                 valueField : 'village',
                 valueFieldID : 'indoorManual.village'
             });
+
+            //场景库选择弹出框
+            //传输上游节点，弹出选择框
+            $("#sceneVal").ligerComboBox({
+                onBeforeOpen: showDilog,
+                valueFieldID: 'scene',
+                width: 200
+            });
         })
 
 
@@ -204,6 +212,21 @@
             $.post(url, function(
                     data, status) {
                 liger.get("village").setData(data.Rows);
+            });
+        }
+
+        function showDilog(){
+            $.ligerDialog.open({
+                height: 512,
+                url: '${ctx}/school/seeneDialog.action?cityIds=${indoorManual.cityId}',
+                width: 1075,
+                name: 'columns',
+                title: "选择场景库",
+                showMax: true,
+                showToggle: true,
+                showMin: true,
+                isResize: true,
+                isHidden: false
             });
         }
     </script>
@@ -252,6 +275,13 @@
     </td>
     <td>
         <input type="text" id="village" class="required">
+    </td>
+</tr>
+<tr>
+    <td>场景名称：</td>
+    <td colspan="3">
+        <input type="text" id="sceneVal" value="${indoorManual.sceneLibNames}">
+        <input type="hidden" id="scene" name="indoorManual.sceneLibs" value="${indoorManual.sceneLibs}">
     </td>
 </tr>
 <tr>

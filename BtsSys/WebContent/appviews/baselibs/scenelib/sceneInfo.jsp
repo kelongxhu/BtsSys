@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>道路库信息</title>
+    <title>场景库信息</title>
     <%@ include file="/appviews/common/tag.jsp" %>
     <link href="${ctx}/resources/bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript">
@@ -15,38 +15,45 @@
 </head>
 <body>
 <!-- 标题 -->
-<div id="main_2">
+<div id="main">
     <!-- 标题 end-->
     <div class="main_title_2">
-        <p class="main_title_p"><img src="${ctx}/layouts/image/ico_arrow.gif"></img>道路库信息</p>
+        <p class="main_title_p"><img src="${ctx}/layouts/image/ico_arrow.gif"></img>场景库信息</p>
     </div>
     <div class="content">
         <table class="table table-condensed">
             <tr>
-                <th width="15%">地市:</th>
-                <td width="35%" align="left">${city.cityName}</td>
-                <th width="15%">道路列表:</th>
-                <td width="35%" align="left">${roadPropCons.name}</td>
+                <th width="15%">本地网:</th>
+                <td align="left">${wyLibScene.city.cityName}</td>
             </tr>
             <tr>
-                <th>道路名称:</th>
-                <td>${roadLib.name}</td>
-                <th>道路编号:</th>
-                <td>${roadLib.roadNo}</td>
+                <th>区县:</th>
+                <td>${wyLibScene.country.cityName}</td>
             </tr>
             <tr>
-                <th>境内起点:</th>
-                <td>${roadLib.domesiicStart}</td>
-                <th>境内终点:</th>
-                <td>${roadLib.domesiicEnd}</td>
+                <th>场景类型:</th>
+                <td>${wyLibScene.sceneTypeName}</td>
             </tr>
             <tr>
-                <th>里程:</th>
-                <td>${roadLib.mileage}</td>
-                <th>开通状态:</th>
-                <td>${roadLib.openStatusStr}</td>
+                <th>场景级别:</th>
+                <td>${wyLibScene.sceneLevelName}</td>
             </tr>
-
+            <tr>
+                <th>场景名称:</th>
+                <td>${wyLibScene.name}</td>
+            </tr>
+            <tr>
+                <th>经度:</th>
+                <td>${wyLibScene.longitude}</td>
+            </tr>
+            <tr>
+                <th>纬度:</th>
+                <td>${wyLibScene.latitude}</td>
+            </tr>
+            <tr>
+                <th>备注:</th>
+                <td colspan="3">${wyLibScene.remark}</td>
+            </tr>
         </table>
         <div class="form-actions_2">
             <button class="btn" type="reset" onclick="back();">
