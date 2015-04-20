@@ -44,7 +44,7 @@
                 <th>里程:</th>
                 <td>${roadLib.mileage}</td>
                 <th>开通状态:</th>
-                <td>${roadLib.openStatusStr}</td>
+                <td>${roadLib.openStatus}</td>
             </tr>
 
         </table>

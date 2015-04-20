@@ -38,8 +38,8 @@ $(function(){
 
     var comBox1 = $("#openStatusVal").ligerComboBox({
         data: [
-            { text: '已开通', id: '1' },
-            { text: '部分开通', id: '2' }
+            { text: '已开通', id: '已开通' },
+            { text: '部分开通', id: '部分开通' }
         ],
         width : 200,
         selectBoxWidth: 200,
