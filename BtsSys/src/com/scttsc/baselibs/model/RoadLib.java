@@ -16,7 +16,7 @@ public class RoadLib {
     private String domesiicStart;
     private String domesiicEnd;
     private BigDecimal mileage;
-    private Integer openStatus;
+    private String openStatus;
     private Date intime;
     private Long inUser;
     private Date updatetime;
@@ -25,7 +25,6 @@ public class RoadLib {
     //冗余字段
     private String cityName;//本地网名称
     private String roadPropName;//属性名称
-    private String openStatusStr;//开通状态
 
     public BigDecimal getId() {
         return id;
@@ -83,11 +82,11 @@ public class RoadLib {
         this.mileage = mileage;
     }
 
-    public Integer getOpenStatus() {
+    public String getOpenStatus() {
         return openStatus;
     }
 
-    public void setOpenStatus(Integer openStatus) {
+    public void setOpenStatus(String openStatus) {
         this.openStatus = openStatus;
     }
 
@@ -153,26 +152,5 @@ public class RoadLib {
 
     public void setRoadProp(Integer roadProp) {
         this.roadProp = roadProp;
-    }
-
-    public String getOpenStatusStr() {
-        if (openStatus == null) {
-            return "";
-        }
-        switch (openStatus) {
-            case 1:
-                openStatusStr = "已经开通";
-                break;
-            case 2:
-                openStatusStr = "部分开通";
-                break;
-            default:
-                break;
-        }
-        return openStatusStr;
-    }
-
-    public void setOpenStatusStr(String openStatusStr) {
-        this.openStatusStr = openStatusStr;
     }
 }

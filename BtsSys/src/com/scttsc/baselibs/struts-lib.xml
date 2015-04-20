@@ -134,6 +134,14 @@
 			method="roadTunnelTree">
 			<result name="success" type="json" />
 		</action>
+
+        <action name="importRoadInputData" class="com.scttsc.baselibs.web.RoadLibAction"
+                method="importRoadInputData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
 		
 		
 		
@@ -409,6 +417,13 @@
 				/appviews/baselibs/roadlib/roadInfo.jsp
 			</result>
 		</action>
+
+        <action name="importRoadPage" class="com.scttsc.baselibs.web.RoadLibAction"
+                method="importRoadPage">
+            <result name="success" type="dispatcher">
+                /appviews/baselibs/roadlib/roadImport.jsp
+            </result>
+        </action>
 		
 		
 		<!-- 景区库 -->
@@ -571,6 +586,7 @@
 
 
         <action name="exportSceneLibTemplate" class="com.scttsc.baselibs.web.SceneLibAction" method="exportSceneLibTemplate"/>
+        <action name="exportRoadLibTemplate" class="com.scttsc.baselibs.web.RoadLibAction" method="exportRoadLibTemplate"/>
 
 
     </package>

@@ -595,4 +595,26 @@ public class ExcelHelper {
         return cols;
     }
 
+
+    /**
+     * 导入道路库字段
+     * @return
+     */
+    public static Map<String, Validity> geRoadCoulmnMap() {
+        Map<String, Validity> cols = new LinkedHashMap<String, Validity>();
+        cols.put("cityId", new Validity("本地网", true, 1, null));//不能为空
+        cols.put("roadProp", new Validity("道路类型", false, 1, null));
+        cols.put("roadNo", new Validity("道路编号", true, 1, null));
+        cols.put("name", new Validity("道路名称", true, 1, null));//
+        cols.put("domesiicStart", new Validity("境内起点", false, 1, null));//
+        cols.put("domesiicEnd", new Validity("境内终点", false, 1, null));//
+        cols.put("mileage", new Validity("里程(km)", false, 1, null));//
+        cols.put("openStatus", new Validity("开通状态", false, 1,  new String[]{"已开通", "部分开通"}));//
+        cols.put("remark", new Validity("备注", false, 1, null));//
+        return cols;
+    }
+
+
+
+
 }

@@ -1,7 +1,14 @@
 package com.scttsc.baselibs.service.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import com.scttsc.baselibs.model.WyLibScene;
+import com.scttsc.business.util.DateConverter;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +19,8 @@ import com.scttsc.baselibs.service.RoadLibManager;
 @Service("roadLibManager")
 @Transactional(readOnly = true)
 public class RoadLibManagerImpl implements RoadLibManager {
+
+    Logger LOG=Logger.getLogger(RoadLibManagerImpl.class);
 	@Autowired
 	private RoadLibDao roadLibDao;
 
@@ -54,5 +63,25 @@ public class RoadLibManagerImpl implements RoadLibManager {
             roadLib=roadLibs.get(0);
         }
         return roadLib;
+    }
+
+    public int importInsert(List<Map<String, Object>> data) {
+        int result = 0;
+        try {
+            DateConverter d = new DateConverter();
+            String[] datePattern = {"yyyy-MM-dd", "yyyy-MM"};
+            d.setPatterns(datePattern);
+            ConvertUtils.register(d, Date.class);
+            for (Map<String, Object> roadMap : data) {
+                RoadLib roadLib = new RoadLib();
+                BeanUtils.populate(roadLib, roadMap);
+                roadLib.setIntime(new Date());
+                roadLib.setDeleteFlag(0);
+                result +=  roadLibDao.insert(roadLib);
+            }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return result;
     }
 }
