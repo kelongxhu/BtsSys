@@ -37,6 +37,7 @@
 
 <script type="text/javascript">
     var countryCombox;
+    var townCombox;
 //注册表单验证
 $(function() {
     //有无机房
@@ -88,6 +89,57 @@ $(function() {
     });
 
 
+    //乡镇行政区域
+    var treeCombox;
+    //初始化树控件
+    $.post("${ctx}/schooljson/initCountryTree.action", function(
+            ajaxData, status) {
+        var treeData=ajaxData.cityJson;
+        treeData = treeData.replace(/"children":\[\],/g, '');
+        treeData=eval('('+treeData+')');
+        treeCombox=$("#townCountryIdVal").ligerComboBox( {
+            width : 200,
+            selectBoxWidth : 200,
+            selectBoxHeight : 200,
+            textField : 'text',
+            valueField : 'id',
+            valueFieldID : 'townCountryId',
+            treeLeafOnly : true,
+            tree : {
+                data : treeData,
+                checkbox:false
+            },
+            onSelected:function(data){
+                if(data!=''){
+                    initTownCombox(data);
+                }
+            }
+        });
+        var townCountryId='${tunelManual.wyLibVillage.countryId}';
+        if(townCountryId!=''){
+            treeCombox.selectValue(townCountryId);
+        }
+    });
+
+
+
+    townCombox=$("#townVal").ligerComboBox( {
+        data : null,
+        width : 200,
+        selectBoxWidth : 200,
+        selectBoxHeight : 200,
+        textField : 'TOWN',
+        valueField : 'TOWN',
+        valueFieldID : 'town',
+        onSelected:function(data){
+            if(data!=''){
+                var countryId=$("#townCountryId").val();
+                initCombox(countryId,data);
+            }
+        }
+    });
+
+
     countryCombox=$("#villageVal").ligerComboBox( {
         data : null,
         width : 200,
@@ -97,6 +149,15 @@ $(function() {
         valueField : 'village',
         valueFieldID : 'village'
     });
+
+    //初始化
+    if('${tunelManual.town}'!=''){
+        townCombox.selectValue('${tunelManual.town}');
+    }
+    var village='${tunelManual.village}';
+    if(village!=''){
+        countryCombox.selectValue(village);
+    }
 
 
 
@@ -126,42 +187,23 @@ $(function() {
 });
 
 
-
-    //初始化乡镇下拉框
-
-    var townURL = "${ctx}/schooljson/getTownList.action?countryId=${wyTunel.countryId}";
-    var townCombox;
-    $.getJSON(townURL,
-            function(data) {
-                townCombox = $("#townVal").ligerComboBox({
-                    data : data.Rows,
-                    width : 200,
-                    selectBoxWidth: 200,
-                    textField : 'TOWN',
-                    valueField : 'TOWN',
-                    valueFieldID:'town',
-                    onSelected:function(data){
-                        initCombox(data);
-                    }
-                });
-                if('${tunelManual.town}'!=''){
-                    townCombox.selectValue('${tunelManual.town}');
-                }
-                var village='${tunelManual.village}';
-                if(village!=''){
-                    countryCombox.selectValue(village);
-                }
-            }
-    );
-
-
     //初始化乡镇库
+    function initTownCombox(data){
+        //初始化乡镇下拉框
+        var townURL = "${ctx}/schooljson/getTownList.action?countryId="+data;
+        townURL=encodeURI(townURL);
+        //初始化树控件
+        $.post(townURL, function(
+                data, status) {
+            liger.get("townVal").setData(data.Rows);
+        });
+    }
 
 
 
     //初始化乡镇库
-    function initCombox(town){
-        var url="${ctx}/schooljson/getVillageLib.action?countryId=${wyTunel.countryId}&town="+town;
+    function initCombox(countryId,town){
+        var url="${ctx}/schooljson/getVillageLib.action?countryId="+countryId+"&town="+town;
         url=encodeURI(url);
         //初始化树控件
         $.post(url, function(
@@ -294,6 +336,15 @@ $(function() {
             <td width="300px">${wyTunel.city.cityName}</td>
             <td width="150px">区县:</td>
             <td width="300px">${wyTunel.country.cityName}</td>
+        </tr>
+        <tr>
+            <td><span style="color: red;">*</span>乡镇行政区域:</td>
+            <td colspan="3">
+                <div style="float: left">
+                    <input id="townCountryIdVal" type="text" class="required"/>
+                    <input id="townCountryId" type="hidden"/>
+                </div>
+            </td>
         </tr>
         <tr>
             <td><span style="color: red;">*</span>所属乡镇:</td>

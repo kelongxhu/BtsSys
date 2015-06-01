@@ -49,6 +49,33 @@
                 </div>
             </div>
 
+            <div id="109" class="box well" style="position: relative; left: 0px; top: 0px;">
+                <h4 class="box-title">
+                    <i class="icon chevron icon-chevron-up"></i>
+                    <i class="icon-star" style=" margin-right: 7px;"></i>
+                    本地网各类型特殊站点统计
+                </h4>
+
+                <div class="box-content " style="display: block;">
+                    <table id="sortTableExample3" class="table table-striped table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>本地网</th>
+                            <th>新建未验收站</th>
+                            <th>调测站</th>
+                            <th>升级站</th>
+                            <th>新建未验收小区</th>
+                            <th>调测小区</th>
+                            <th>升级小区</th>
+                        </tr>
+                        </thead>
+                        <tbody id="specalCitysBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
             <div id="99" class="box well" style="position: relative; left: 0px; top: 0px;">
                 <h4 class="box-title">
                     <i class="icon chevron icon-chevron-up"></i>
@@ -106,7 +133,6 @@
         }
     });
 
-
     $.post("${ctx}/businessjson/statNoManualByCity", {}, function (data) {
         var result = data['noManualCitys'];
         if (result && result.length > 0) {
@@ -122,6 +148,26 @@
                 trObj.append('<td>' + data['indoorCellCount'] + '</td>');
                 trObj.append('<td>' + data['tunelCellCount'] + '</td>');
                 trObj.append('<td>' + data['wrongNameCount'] + '</td>');
+                body.append(trObj);
+            }
+        }
+    });
+
+    $.post("${ctx}/businessjson/statSpecialByCity", {}, function (data) {
+        var result = data['spcialCitys'];
+        if (result && result.length > 0) {
+            var body = $("#specalCitysBody");
+            for (var i in result) {
+                var data = result[i];
+                var trObj = $("<tr></tr>");
+                var tdObj = $("<td></td>");
+                trObj.append('<td>' + data['cityName'] + '</td>');
+                trObj.append('<td>' + data['noAcceptBtsCount'] + '</td>');
+                trObj.append('<td>' + data['testBtsCount'] + '</td>');
+                trObj.append('<td>' + data['upgradeBtsCount'] + '</td>');
+                trObj.append('<td>' + data['noAcceptCellCount'] + '</td>');
+                trObj.append('<td>' + data['testCellCount'] + '</td>');
+                trObj.append('<td>' + data['upgradeCellCount'] + '</td>');
                 body.append(trObj);
             }
         }

@@ -39,6 +39,7 @@
 
 <script type="text/javascript">
 var countryCombox=null;
+var townCombox=null;
 //注册表单验证
 $(function(){
 	var comBox1=$("#sharFlagVal").ligerComboBox({  
@@ -122,6 +123,23 @@ $(function(){
 	 
 	comBox4.selectValue('${bbuManual.tranIsnode}');
 
+
+
+    townCombox=$("#townVal").ligerComboBox( {
+        data : null,
+        width : 200,
+        selectBoxWidth : 200,
+        selectBoxHeight : 200,
+        textField : 'TOWN',
+        valueField : 'TOWN',
+        valueFieldID : 'town',
+        onSelected:function(data){
+            if(data!=''){
+                initCombox(data);
+            }
+        }
+    });
+
     countryCombox=$("#villageVal").ligerComboBox( {
         data : null,
         width : 200,
@@ -131,6 +149,49 @@ $(function(){
         valueField : 'village',
         valueFieldID : 'village'
     });
+
+
+    //初始化级联乡镇库区县下拉框
+
+    var treeCombox;
+    //初始化地市
+    //初始化树控件
+    $.post("${ctx}/schooljson/initCountryTree.action", function(
+            ajaxData, status) {
+        var treeData=ajaxData.cityJson;
+        treeData = treeData.replace(/"children":\[\],/g, '');
+        treeData=eval('('+treeData+')');
+        treeCombox=$("#townCountryIdVal").ligerComboBox( {
+            width : 200,
+            selectBoxWidth : 200,
+            selectBoxHeight : 200,
+            textField : 'text',
+            valueField : 'id',
+            valueFieldID : 'townCountryId',
+            treeLeafOnly : true,
+            tree : {
+                data : treeData,
+                checkbox:false
+            },
+            onSelected:function(data){
+                if(data!=''){
+                    initTownCombox(data);
+                }
+            }
+        });
+        var townCountryId='${bbuManual.wyLibVillage.countryId}';
+        if(townCountryId!=''){
+            treeCombox.selectValue(townCountryId);
+        }
+    });
+
+    if('${bbuManual.town}'!=''){
+        townCombox.selectValue('${bbuManual.town}');
+    }
+    var village='${bbuManual.village}';
+    if(village!=''){
+        countryCombox.selectValue(village);
+    }
 
 
         if (!Array.prototype.indexOf)
@@ -156,39 +217,23 @@ $(function(){
 });
 
 
-
+function initTownCombox(data) {
 //初始化乡镇下拉框
-
-var townURL = "${ctx}/schooljson/getTownList.action?countryId=${bbu.countyId}";
-var townCombox;
-$.getJSON(townURL,
-        function(data) {
-            townCombox = $("#townVal").ligerComboBox({
-                data : data.Rows,
-                width : 200,
-                selectBoxWidth: 200,
-                textField : 'TOWN',
-                valueField : 'TOWN',
-                valueFieldID:'town',
-                onSelected:function(data){
-                    initCombox(data);
-                }
-            });
-            if('${bbuManual.town}'!=''){
-                townCombox.selectValue('${bbuManual.town}');
-            }
-            var village='${bbuManual.village}';
-            if(village!=''){
-                countryCombox.selectValue(village);
-            }
-        }
-);
+    var townURL = "${ctx}/schooljson/getTownList.action?countryId=" + data;
+    townURL = encodeURI(townURL);
+    //初始化树控件
+    $.post(townURL, function (data, status) {
+        liger.get("townVal").setData(data.Rows);
+    });
+}
 
 
-//初始化乡镇库
+
+//初始化农村库
 
 function initCombox(town){
-    var url="${ctx}/schooljson/getVillageLib.action?countryId=${bbu.countyId}&town="+town;
+    var countryId=$("#townCountryId").val();
+    var url="${ctx}/schooljson/getVillageLib.action?countryId="+countryId+"&town="+town;
     url=encodeURI(url);
     //初始化树控件
     $.post(url, function(
@@ -377,6 +422,15 @@ function back(){
             <tr>
                 <td>区县:</td>
                 <td>${bbu.country.cityName}</td>
+                <td><span style="color: red;">*</span>乡镇行政区域:</td>
+                <td>
+                    <div style="float: left">
+                        <input id="townCountryIdVal" type="text" class="required"/>
+                        <input id="townCountryId" type="hidden"/>
+                    </div>
+                </td>
+            </tr>
+            <tr>
                 <td><span style="color: red;">*</span>乡镇:</td>
                 <td>
                     <div style="float: left">
@@ -384,19 +438,23 @@ function back(){
                         <input name="bbuManual.town" id="town" type="hidden"/>
                     </div>
                 </td>
-            </tr>
-            <tr>
                 <td>农村:</td>
                 <td>
                     <input id="villageVal" type="text"/>
                     <input name="bbuManual.village" id="village" type="hidden"/>
                 </td>
+            </tr>
+            <tr>
                 <td>主设备安装位置:</td>
                 <td>
                     <div style="float: left">
                     <input name="installPosVal" id="installPosVal" type="text"/>
                     <input name="bbuManual.installPosCode" id="installPos" type="hidden"/>
                    </div>
+                </td>
+                <td><span style="color: red;">*</span>基站开通年月:</td>
+                <td>
+                    <input type="text" name="bbuManual.openTime" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy.MM'})" value="${bbuManual.openTime}"/>
                 </td>
             </tr>
             <tr>
@@ -428,10 +486,6 @@ function back(){
 				<tr>
 					<td><span style="color: red;">*</span>详细地址:</td>
 					<td><input name="bbuManual.address"  type="text" class="input150 required" value="${bbuManual.address}"/></td>
-					<td><span style="color: red;">*</span>基站开通年月:</td>
-					<td>
-                        <input type="text" name="bbuManual.openTime" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy.MM'})" value="${bbuManual.openTime}"/>
-					</td>
 				</tr>
 				<tr>
 				<th colspan="4"><span class="label label-success">传输配套信息</span></th>

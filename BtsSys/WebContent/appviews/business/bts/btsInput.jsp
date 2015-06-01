@@ -40,6 +40,7 @@
 
 <script type="text/javascript">
 var countryCombox=null;
+var townCombox=null;
 //注册表单验证
 $(function() {
     var comBox1 = $("#sharFlagVal").ligerComboBox({
@@ -139,6 +140,20 @@ $(function() {
         width: 200
     });
 
+        townCombox=$("#townVal").ligerComboBox( {
+            data : null,
+            width : 200,
+            selectBoxWidth : 200,
+            selectBoxHeight : 200,
+            textField : 'TOWN',
+            valueField : 'TOWN',
+            valueFieldID : 'town',
+            onSelected:function(data){
+                if(data!=''){
+                    initCombox(data);
+                }
+            }
+        });
 
       countryCombox=$("#villageVal").ligerComboBox( {
         data : null,
@@ -175,43 +190,93 @@ $(function() {
 
 
 
+    //初始化级联乡镇库区县下拉框
+
+    var treeCombox;
+    //初始化地市
+    //初始化树控件
+    $.post("${ctx}/schooljson/initCountryTree.action", function(
+            ajaxData, status) {
+        var treeData=ajaxData.cityJson;
+        treeData = treeData.replace(/"children":\[\],/g, '');
+        treeData=eval('('+treeData+')');
+        treeCombox=$("#townCountryIdVal").ligerComboBox( {
+            width : 200,
+            selectBoxWidth : 200,
+            selectBoxHeight : 200,
+            textField : 'text',
+            valueField : 'id',
+            valueFieldID : 'townCountryId',
+            treeLeafOnly : true,
+            tree : {
+                data : treeData,
+                checkbox:false
+            },
+            onSelected:function(data){
+                if(data!=''){
+                    initTownCombox(data);
+                }
+            }
+        });
+        var townCountryId='${btsManual.wyLibVillage.countryId}';
+        if(townCountryId!=''){
+            treeCombox.selectValue(townCountryId);
+        }
+    });
+
+
+    //初始化
+    if('${btsManual.town}'!=''){
+        townCombox.selectValue('${btsManual.town}');
+    }
+    var village='${btsManual.village}';
+    if(village!=''){
+    countryCombox.selectValue(village);
+    }
+
+
+
 });
 
+
+function initTownCombox(data){
 //初始化乡镇下拉框
+    var townURL = "${ctx}/schooljson/getTownList.action?countryId="+data;
+    townURL=encodeURI(townURL);
+    //初始化树控件
+    $.post(townURL, function(
+            data, status) {
+        liger.get("townVal").setData(data.Rows);
+    });
 
-var townURL = "${ctx}/schooljson/getTownList.action?countryId=${bts.countyId}";
-var townCombox;
-$.getJSON(townURL,
-        function(data) {
-            townCombox = $("#townVal").ligerComboBox({
-                data : data.Rows,
-                width : 200,
-                selectBoxWidth: 200,
-                textField : 'TOWN',
-                valueField : 'TOWN',
-                valueFieldID:'town',
-                onSelected:function(data){
-                    initCombox(data);
-                }
-            });
-            if('${btsManual.town}'!=''){
-                townCombox.selectValue('${btsManual.town}');
-            }
-            var village='${btsManual.village}';
-            if(village!=''){
-                countryCombox.selectValue(village);
-            }
-        }
-);
-
-
-//初始化乡镇库
-
-
-
+    <%--var townCombox;--%>
+    <%--$.getJSON(townURL,--%>
+            <%--function(data) {--%>
+                <%--townCombox = $("#townVal").ligerComboBox({--%>
+                    <%--data : data.Rows,--%>
+                    <%--width : 200,--%>
+                    <%--selectBoxWidth: 200,--%>
+                    <%--textField : 'TOWN',--%>
+                    <%--valueField : 'TOWN',--%>
+                    <%--valueFieldID:'town',--%>
+                    <%--onSelected:function(data){--%>
+                        <%--initCombox(data);--%>
+                    <%--}--%>
+                <%--});--%>
+                <%--if('${btsManual.town}'!=''){--%>
+                    <%--townCombox.selectValue('${btsManual.town}');--%>
+                <%--}--%>
+                <%--var village='${btsManual.village}';--%>
+                <%--if(village!=''){--%>
+                    <%--countryCombox.selectValue(village);--%>
+                <%--}--%>
+            <%--}--%>
+    <%--);--%>
+}
 //初始化乡镇库
 function initCombox(town){
-    var url="${ctx}/schooljson/getVillageLib.action?countryId=${bts.countyId}&town="+town;
+    var countryId=$("#townCountryId").val();
+    var url="${ctx}/schooljson/getVillageLib.action?countryId="+countryId+"&town="+town;
     url=encodeURI(url);
     //初始化树控件
     $.post(url, function(
@@ -479,20 +544,29 @@ function showDownDilog(){
         <tr>
             <td>区县:</td>
             <td>${bts.country.cityName}</td>
-            <td><span style="color: red;">*</span>所属乡镇:</td>
+            <td><span style="color: red;">*</span>乡镇行政区域:</td>
             <td>
                 <div style="float: left">
-                <input id="townVal" type="text" class="required"/>
-                <input name="btsManual.town" id="town" type="hidden"/>
+                <input id="townCountryIdVal" type="text" class="required"/>
+                <input id="townCountryId" type="hidden"/>
                 </div>
             </td>
         </tr>
         <tr>
+            <td><span style="color: red;">*</span>所属乡镇:</td>
+            <td>
+                <div style="float: left">
+                    <input id="townVal" type="text" class="required"/>
+                    <input name="btsManual.town" id="town" type="hidden"/>
+                </div>
+            </td>
             <td>覆盖农村:</td>
             <td>
                 <input id="villageVal" type="text"/>
                 <input name="btsManual.village" id="village" type="hidden"/>
             </td>
+        </tr>
+        <tr>
             <td><span style="color: red;">*</span>主设备安装位置:</td>
             <td>
                 <div style="float: left">
@@ -500,15 +574,15 @@ function showDownDilog(){
                 <input name="btsManual.installPos" id="installPos" type="hidden"/>
                 </div>
             </td>
-        </tr>
-        <tr>
             <td><span style="color: red;">*</span>是否共建共享:</td>
             <td>
                 <div style="float: left">
-                <input name="sharFlagVal" id="sharFlagVal" type="text" class="required"/>
-                <input name="btsManual.sharFlag" id="sharFlag" type="hidden"/>
+                    <input name="sharFlagVal" id="sharFlagVal" type="text" class="required"/>
+                    <input name="btsManual.sharFlag" id="sharFlag" type="hidden"/>
                 </div>
             </td>
+        </tr>
+        <tr>
             <td><span style="color: red;">*</span>共享方名称:</td>
             <td>
                 <div style="float: left">
@@ -516,15 +590,16 @@ function showDownDilog(){
                 <input name="btsManual.sharName" id="sharName" type="hidden"/>
                 </div>
             </td>
+            <td><span style="color: red;">*</span>基站开通年月:</td>
+            <td>
+                <input type="text" name="btsManual.openTime" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy.MM'})" value="${btsManual.openTime}"/>
+            </td>
         </tr>
         <tr>
             <td><span style="color: red;">*</span>详细地址:</td>
             <td><input name="btsManual.address" type="text" class="input200 required" value="${btsManual.address}"/>
             </td>
-            <td><span style="color: red;">*</span>基站开通年月:</td>
-            <td>
-                <input type="text" name="btsManual.openTime" class="Wdate input150 required" onFocus="WdatePicker({dateFmt: 'yyyy.MM'})" value="${btsManual.openTime}"/>
-            </td>
+
         </tr>
         <tr>
             <th colspan="4"><span class="label label-success">传输配套信息</span></th>

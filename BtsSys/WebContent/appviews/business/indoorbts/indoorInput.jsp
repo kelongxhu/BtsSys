@@ -56,16 +56,50 @@
                     tree:{
                         data:treeData,
                         checkbox:false
-                    },
-                    onSelected:function(data){
-                        if(data!='')initTownCombox(data);
                     }
+//                    onSelected:function(data){
+//                        if(data!='')initTownCombox(data);
+//                    }
                 });
                 if ('${indoorManual.countryId}' != "") {
                     treeCombox.setValue('${indoorManual.countryId}');
                     if('${addFlag==0}'){
                         treeCombox.setDisabled(true);
                     }
+                }
+            });
+
+
+            ///乡镇行政区域
+            var treeCombox;
+            //初始化地市
+            //初始化树控件
+            $.post("${ctx}/schooljson/initCountryTree.action", function(
+                    ajaxData, status) {
+                var treeData=ajaxData.cityJson;
+                treeData = treeData.replace(/"children":\[\],/g, '');
+                treeData=eval('('+treeData+')');
+                treeCombox=$("#townCountryIdVal").ligerComboBox( {
+                    width : 200,
+                    selectBoxWidth : 200,
+                    selectBoxHeight : 200,
+                    textField : 'text',
+                    valueField : 'id',
+                    valueFieldID : 'townCountryId',
+                    treeLeafOnly : true,
+                    tree : {
+                        data : treeData,
+                        checkbox:false
+                    },
+                    onSelected:function(data){
+                        if(data!=''){
+                            initTownCombox(data);
+                        }
+                    }
+                });
+                var townCountryId='${indoorManual.wyLibVillage.countryId}';
+                if(townCountryId!=''){
+                    treeCombox.selectValue(townCountryId);
                 }
                 if('${indoorManual.town}'!=''){
                     townCombox.selectValue('${indoorManual.town}');
@@ -164,12 +198,10 @@
                 valueField : 'TOWN',
                 valueFieldID : 'indoorManual.town',
                 onSelected:function(data){
-                    var countryId=$("#countryId").val();
-                    if(countryId==''){
-                        $.ligerDialog.alert('请选择区县！');
-                        return;
+                    var countryId=$("#townCountryId").val();
+                    if(countryId!=''){
+                        initVillageCombox(countryId,data);
                     }
-                    initVillageCombox(countryId,data);
                 }
             });
             //农村
@@ -191,7 +223,6 @@
                 width: 200
             });
         })
-
 
 
         function initTownCombox(countryId){
@@ -249,7 +280,7 @@
 <div class="tab-content">
 <div class="tab-pane active" id="tab1">
 <form id="addIndoorManual" style="padding-bottom: 15px;padding-top: 20px;"
-      action="${ctx}/businessjson/businessjson/addIndoorManual.action"
+      action="${ctx}/businessjson/addIndoorManual.action"
       method="post">
 <input type="hidden" id="intId" name="indoorManual.intId" value="${indoorManual.intId}">
 <input type="hidden" name="indoorManual.addFlag" value="${addFlag}">
@@ -266,20 +297,27 @@
     </td>
 </tr>
 <tr>
+    <td><span style="color: red;">*</span>乡镇行政区域:</td>
+    <td>
+        <div style="float: left">
+            <input id="townCountryIdVal" type="text" class="required"/>
+            <input id="townCountryId" type="hidden"/>
+        </div>
+    </td>
     <td><span style="color: red;">*</span>所属乡镇：</td>
     <td>
         <input type="text" id="town" class="required">
     </td>
+</tr>
+<tr>
     <td>
         覆盖农村
     </td>
     <td>
         <input type="text" id="village" class="required">
     </td>
-</tr>
-<tr>
     <td>场景名称：</td>
-    <td colspan="3">
+    <td>
         <input type="text" id="sceneVal" value="${indoorManual.sceneLibNames}">
         <input type="hidden" id="scene" name="indoorManual.sceneLibs" value="${indoorManual.sceneLibs}">
     </td>
