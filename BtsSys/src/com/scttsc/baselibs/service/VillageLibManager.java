@@ -21,4 +21,6 @@ public interface VillageLibManager {
 
     int updateByPrimaryKeySelective(WyLibVillage record);
 
+    WyLibVillage selectByVillage(Map<String, Object> param) throws Exception;
+
 }

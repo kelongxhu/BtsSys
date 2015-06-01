@@ -2,6 +2,7 @@ package com.scttsc.business.model;
 
 import com.scttsc.baselibs.model.Cons;
 import com.scttsc.baselibs.model.RoadLib;
+import com.scttsc.baselibs.model.WyLibVillage;
 import com.scttsc.common.util.DateUtils;
 
 import java.util.Date;
@@ -64,6 +65,7 @@ public class WyTunelManual {
     //增加
     private String town;
     private String village;
+    private WyLibVillage wyLibVillage;
 
 
     //冗余
@@ -325,5 +327,13 @@ public class WyTunelManual {
 
     public void setVillage(String village) {
         this.village = village;
+    }
+
+    public WyLibVillage getWyLibVillage() {
+        return wyLibVillage;
+    }
+
+    public void setWyLibVillage(WyLibVillage wyLibVillage) {
+        this.wyLibVillage = wyLibVillage;
     }
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.scttsc.baselibs.model.Cons;
+import com.scttsc.baselibs.model.WyLibVillage;
 
 public class BbuManual extends Entity{
 
@@ -68,6 +69,7 @@ public class BbuManual extends Entity{
 
     private String town;//乡镇
     private String village;//农村
+    private WyLibVillage wyLibVillage;//乡镇库
 
 
     private Cons mrStrutCons;//机房机构
@@ -1331,5 +1333,13 @@ public class BbuManual extends Entity{
     }
     public void setVillage(String village) {
         this.village = village;
+    }
+
+    public WyLibVillage getWyLibVillage() {
+        return wyLibVillage;
+    }
+
+    public void setWyLibVillage(WyLibVillage wyLibVillage) {
+        this.wyLibVillage = wyLibVillage;
     }
 }

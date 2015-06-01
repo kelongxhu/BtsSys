@@ -67,10 +67,10 @@ public class IndoorManualManagerImpl implements IndoorManualManager {
     public void insert(IndoorManual record) throws Exception {
         if (0 == record.getAddFlag()) {
             //关联增加，将手工标识更新为1
-            Map map = new HashMap();
+            Map<String, Object> map = new HashMap<String, Object>();
             map.put("intId", record.getIntId());
             map.put("manualFlag", 1);
-            btsDao.updateByMap(map);
+            cellDao.updateByMap(map);
         }
         indoorManualDao.insert(record);
         //插入关联场景库

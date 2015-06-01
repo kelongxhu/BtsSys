@@ -3,9 +3,11 @@ package com.scttsc.business.service.impl;
 import com.scttsc.admin.dao.CityDao;
 import com.scttsc.admin.model.City;
 import com.scttsc.business.dao.*;
+import com.scttsc.business.model.WyBtsSpecial;
 import com.scttsc.business.service.DashBordManager;
 import com.scttsc.business.vo.DataCityItem;
 import com.scttsc.business.vo.DataCityItemNoManual;
+import com.scttsc.business.vo.DataCitySpecial;
 import com.scttsc.common.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,8 @@ public class DashBordManagerImpl implements DashBordManager {
     private CityDao cityDao;
     @Autowired
     private WrongNameDao wrongNameDao;
+    @Autowired
+    private WyBtsSpecialDao wyBtsSpecialDao;
 
     public List<DataCityItem> selectGroupbyCity() {
         List<DataCityItem> cityItemList = new ArrayList<DataCityItem>();
@@ -255,6 +259,78 @@ public class DashBordManagerImpl implements DashBordManager {
             cityItemList.add(allCity);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+        }
+        return cityItemList;
+    }
+
+    public List<DataCitySpecial> statSpecialGroupByCity() {
+        List<DataCitySpecial> cityItemList = new ArrayList<DataCitySpecial>();
+        try {
+            List<Map> btsSpecials=wyBtsSpecialDao.selectSpcialGroupByState(1);//基站
+            List<Map> cellSpecials=wyBtsSpecialDao.selectSpcialGroupByState(2);//小区
+            Map param = new HashMap();
+            param.put("pid", "10001");
+            List<City> citys = cityDao.getByMap(param);
+            Map<String, DataCitySpecial> dataCityItemMap = new LinkedHashMap<String, DataCitySpecial>();
+            for (City city : citys) {
+                DataCitySpecial cityItem = new DataCitySpecial();
+                cityItem.setCityId(city.getId());
+                cityItem.setCityName(city.getCityName());
+                dataCityItemMap.put(city.getId() + "", cityItem);
+            }
+            int noAcceptBtsTotal=0;
+            int testBtsTotal=0;
+            int upgradeBtsTotal=0;
+            //組裝室外覆蓋站點
+            for (Map btsCity : btsSpecials) {
+                String cityId = StringUtil.null2String(btsCity.get("CITY_ID"));
+                int noAcceptBtsCount = StringUtil.null2Integer0(btsCity.get("A_NUM"));
+                int testBtsCount = StringUtil.null2Integer0(btsCity.get("T_NUM"));
+                int upgradeCount = StringUtil.null2Integer0(btsCity.get("U_NUM"));
+                DataCitySpecial cityItem = dataCityItemMap.get(cityId);
+                if (cityItem != null) {
+                    cityItem.setNoAcceptBtsCount(noAcceptBtsCount);
+                    cityItem.setTestBtsCount(testBtsCount);
+                    cityItem.setUpgradeBtsCount(upgradeCount);
+                }
+                noAcceptBtsTotal+=noAcceptBtsCount;
+                testBtsTotal+=testBtsCount;
+                upgradeBtsTotal+=upgradeCount;
+            }
+            //組裝室外覆蓋站點
+            int noAcceptCellTotal=0;
+            int testCellTotal=0;
+            int upgradeCellTotal=0;
+            for (Map cellCity : cellSpecials) {
+                String cityId = StringUtil.null2String(cellCity.get("CITY_ID"));
+                int noAcceptCellCount = StringUtil.null2Integer0(cellCity.get("A_NUM"));
+                int testCellCount = StringUtil.null2Integer0(cellCity.get("T_NUM"));
+                int upgradeCellCount = StringUtil.null2Integer0(cellCity.get("U_NUM"));
+                DataCitySpecial cityItem = dataCityItemMap.get(cityId);
+                if (cityItem != null) {
+                    cityItem.setNoAcceptCellCount(noAcceptCellCount);
+                    cityItem.setTestCellCount(testCellCount);
+                    cityItem.setUpgradeBtsCount(upgradeCellCount);
+                }
+                noAcceptCellTotal+=noAcceptCellCount;
+                testCellTotal+=testCellCount;
+                upgradeCellTotal+=upgradeCellCount;
+            }
+            //
+            for (Map.Entry<String, DataCitySpecial> dataCityItemEntry : dataCityItemMap.entrySet()) {
+                cityItemList.add(dataCityItemEntry.getValue());
+            }
+            DataCitySpecial allCity=new DataCitySpecial();
+            allCity.setCityName("全省");
+            allCity.setNoAcceptBtsCount(noAcceptBtsTotal);
+            allCity.setTestBtsCount(testBtsTotal);
+            allCity.setUpgradeBtsCount(upgradeBtsTotal);
+            allCity.setNoAcceptCellCount(noAcceptCellTotal);
+            allCity.setTestCellCount(testCellTotal);
+            allCity.setUpgradeBtsCount(upgradeCellTotal);
+            cityItemList.add(allCity);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(),e);
         }
         return cityItemList;
     }

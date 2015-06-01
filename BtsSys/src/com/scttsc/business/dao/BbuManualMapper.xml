@@ -116,9 +116,9 @@
       #{mrWidth,jdbcType=DECIMAL}, #{mrHigh,jdbcType=DECIMAL}, #{mrOwner,jdbcType=VARCHAR}, 
       #{mrPic,jdbcType=VARCHAR}, #{wdType,jdbcType=VARCHAR}, #{wdModel,jdbcType=VARCHAR}, 
       #{wdFac,jdbcType=VARCHAR}, #{wdGds,jdbcType=VARCHAR}, #{oeType,jdbcType=VARCHAR}, 
-      #{oeModel,jdbcType=VARCHAR}, #{oePower,jdbcType=VARCHAR}, #{oeFac,jdbcType=VARCHAR}, 
+      #{oeModel,jdbcType=VARCHAR}, #{oePower,jdbcType=VARCHAR}, #{oeFac,jdbcType=VARCHAR},
       #{remark,jdbcType=VARCHAR}, #{updatetime,jdbcType=DATE}, #{updateuser,jdbcType=DECIMAL}, #{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL},
-      #{town},#{village}
+      #{town,jdbcType=VARCHAR},#{village,jdbcType=VARCHAR}
       )
   </insert>
 
@@ -291,10 +291,10 @@
             LATITUDE = #{latitude,jdbcType=DECIMAL},
       </if>
      <if test="town!=null">
-         TOWN=#{town},
+         TOWN=#{town,jdbcType=VARCHAR},
      </if>
      <if test="village!=null">
-         VILLAGE=#{village}
+         VILLAGE=#{village,jdbcType=VARCHAR}
      </if>
     </set>
      <where>

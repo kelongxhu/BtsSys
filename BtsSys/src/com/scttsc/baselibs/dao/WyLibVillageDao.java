@@ -23,4 +23,6 @@ public interface WyLibVillageDao {
 
     List<WyLibVillage> selectByConds(Map<String, Object> param) throws Exception;
 
+    List<WyLibVillage> selectByVillage(Map<String, Object> param) throws Exception;
+
 }

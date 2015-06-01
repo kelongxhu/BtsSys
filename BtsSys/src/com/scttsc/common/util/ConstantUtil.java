@@ -251,8 +251,10 @@ public class ConstantUtil {
     public void putVillageLib(List<WyLibVillage> wyLibVillages) {
         if (wyLibVillages == null) return;
         for (WyLibVillage wyLibVillage : wyLibVillages) {
-            String townKey = wyLibVillage.getCountryId() + "_" + wyLibVillage.getTown();
-            String villiageKey = wyLibVillage.getCountryId() + "_" + wyLibVillage.getTown() + "_" + wyLibVillage.getVillage();
+//            String townKey = wyLibVillage.getCountryId() + "_" + wyLibVillage.getTown();
+//            String villiageKey = wyLibVillage.getCountryId() + "_" + wyLibVillage.getTown() + "_" + wyLibVillage.getVillage();
+            String townKey= wyLibVillage.getTown();
+            String villiageKey= wyLibVillage.getVillage();
             townMap.put(townKey, wyLibVillage.getTown());
             viliageMap.put(villiageKey, wyLibVillage.getVillage());
         }

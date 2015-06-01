@@ -2,6 +2,7 @@ package com.scttsc.business.service;
 
 import com.scttsc.business.vo.DataCityItem;
 import com.scttsc.business.vo.DataCityItemNoManual;
+import com.scttsc.business.vo.DataCitySpecial;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface DashBordManager {
     List<DataCityItem> selectGroupbyCity();
 
     List<DataCityItemNoManual> statNoManualGroupByCity();
+
+    List<DataCitySpecial> statSpecialGroupByCity();
 }

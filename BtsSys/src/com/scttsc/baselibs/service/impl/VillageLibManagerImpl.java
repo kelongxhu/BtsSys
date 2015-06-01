@@ -40,4 +40,13 @@ public class VillageLibManagerImpl implements VillageLibManager {
     public int updateByPrimaryKeySelective(WyLibVillage record) {
         return wyLibVillageDao.updateByPrimaryKeySelective(record);
     }
+
+    public WyLibVillage selectByVillage(Map<String, Object> param) throws Exception {
+        List<WyLibVillage> villageList = wyLibVillageDao.selectByVillage(param);
+        WyLibVillage village = null;
+        if (villageList != null && villageList.size() > 0) {
+            village = villageList.get(0);
+        }
+        return village;
+    }
 }

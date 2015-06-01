@@ -1,6 +1,7 @@
 package com.scttsc.business.model;
 
 import com.scttsc.baselibs.model.Cons;
+import com.scttsc.baselibs.model.WyLibVillage;
 import com.scttsc.common.util.Common;
 
 import java.math.BigDecimal;
@@ -85,10 +86,13 @@ public class BtsManual extends Entity {
     private String town;//乡镇
     private String village;//农村
 
+    //冗余
+    private WyLibVillage wyLibVillage;
 
     Cons installPosCons;  //主设备安装位置
     Cons towerTypeCons;//塔跪类型
     Cons mrStrutCons;//机房结构
+
 
 
     //冗余一个传输上游节点名称
@@ -662,5 +666,14 @@ public class BtsManual extends Entity {
 
     public void setVillage(String village) {
         this.village = village;
+    }
+
+
+    public WyLibVillage getWyLibVillage() {
+        return wyLibVillage;
+    }
+
+    public void setWyLibVillage(WyLibVillage wyLibVillage) {
+        this.wyLibVillage = wyLibVillage;
     }
 }

@@ -12,6 +12,7 @@ import com.scttsc.business.util.Validity;
 import com.scttsc.common.util.*;
 import com.scttsc.common.web.BaseAction;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -40,6 +41,8 @@ public class BtsAction extends BaseAction {
     private ConsManager consManager;
     @Autowired
     private TransferManager transferManager;
+    @Autowired
+    private VillageLibManager villageLibManager;
 
     String countryIds;// 本地网集合
 
@@ -204,6 +207,21 @@ public class BtsAction extends BaseAction {
             String tranUpsitename;
             String tranDownsitename;
             if (btsManual != null) {
+                Map<String,Object> param=new HashMap<String, Object>();
+                String town=btsManual.getTown();
+                String viliage=btsManual.getVillage();
+                if(!StringUtils.isEmpty(town)&&!StringUtils.isEmpty(viliage)){
+                    String[] v=viliage.split(",");
+                    if(v!=null&&v.length>0){
+                        viliage=v[0];
+                    }
+                    param.put("town",town);
+                    param.put("village",viliage);
+                    WyLibVillage wyLibVillage=villageLibManager.selectByVillage(param);
+                    if(wyLibVillage!=null){
+                        btsManual.setWyLibVillage(wyLibVillage);
+                    }
+                }
                 editFlag = 1;// 编辑页面
             } else {
                 editFlag = 0;// 增加页面
@@ -649,7 +667,7 @@ public class BtsAction extends BaseAction {
                         map.put(dataKey, "3_" + bbu.getName());
                     }
                 } else if ("town".equals(dataKey)) {
-                    String townKey = wyBts.getCountyId() + "_" + cellValue;
+                    String townKey = cellValue;
                     townDb = ConstantUtil.getInstance().getTown(townKey);
                     if (townDb == null) {
                         errorList.add("第" + rowNum + "行乡镇列校验失败。" + cellValue + "未在乡镇库中，请核查。");
@@ -662,7 +680,7 @@ public class BtsAction extends BaseAction {
                         String[] villageArr = cellValue.split(";");
                         if (villageArr != null && villageArr.length > 0) {
                             for (String village : villageArr) {
-                                String villageKey=wyBts.getCountyId()+"_"+townDb+"_"+village;
+                                String villageKey=village;
                                 String villageDb = ConstantUtil.getInstance().getVillage(villageKey);
                                 if (villageDb == null) {
                                     errorList.add("第" + rowNum + "行农村列校验失败，" + cellValue + "中，" + village + "未在乡镇库中，请核查。");

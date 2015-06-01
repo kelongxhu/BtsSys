@@ -5,7 +5,9 @@ import com.scttsc.admin.model.User;
 import com.scttsc.admin.service.CityManager;
 import com.scttsc.baselibs.model.Cons;
 import com.scttsc.baselibs.model.WyLibScene;
+import com.scttsc.baselibs.model.WyLibVillage;
 import com.scttsc.baselibs.service.SceneLibManager;
+import com.scttsc.baselibs.service.VillageLibManager;
 import com.scttsc.baselibs.service.impl.ConsManagerImpl;
 import com.scttsc.business.model.*;
 import com.scttsc.business.service.*;
@@ -15,6 +17,7 @@ import com.scttsc.business.util.Validity;
 import com.scttsc.common.util.*;
 import com.scttsc.common.web.BaseAction;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,8 @@ public class IndoorAction extends BaseAction {
     private CellManualManager cellManualManager;
     @Autowired
     private SceneLibManager sceneLibManager;
+    @Autowired
+    private VillageLibManager villageLibManager;
 
     IndoorManual indoorManual;
     private Cell cell;//室内分布小区
@@ -263,6 +268,23 @@ public class IndoorAction extends BaseAction {
                         libNames=libNames.delete(libNames.length()-1,libNames.length());
                     }
                     indoorManual.setSceneLibNames(libNames.toString());
+
+                    //设置农村库
+                    Map<String,Object> param=new HashMap<String, Object>();
+                    String town=indoorManual.getTown();
+                    String viliage=indoorManual.getVillage();
+                    if(!StringUtils.isEmpty(town)&&!StringUtils.isEmpty(viliage)){
+                        String[] v=viliage.split(",");
+                        if(v!=null&&v.length>0){
+                            viliage=v[0];
+                        }
+                        param.put("town",town);
+                        param.put("village",viliage);
+                        WyLibVillage wyLibVillage=villageLibManager.selectByVillage(param);
+                        if(wyLibVillage!=null){
+                            indoorManual.setWyLibVillage(wyLibVillage);
+                        }
+                    }
                 }
                 addFlag = 0;//关联增加
             } else {
@@ -748,7 +770,7 @@ public class IndoorAction extends BaseAction {
                     }
                 } else if ("town".equals(dataKey)) {
                     //校验乡镇
-                    String townKey =countryId + "_" + cellValue;
+                    String townKey =cellValue;
                     townDb = ConstantUtil.getInstance().getTown(townKey);
                     if (townDb == null) {
                         errorList.add("第" + rowNum + "行乡镇列校验失败。" + cellValue + "未在乡镇库中，请核查。");
@@ -761,7 +783,7 @@ public class IndoorAction extends BaseAction {
                         String[] villageArr = cellValue.split(";");
                         if (villageArr != null && villageArr.length > 0) {
                             for (String village : villageArr) {
-                                String villageKey= countryId+"_"+townDb+"_"+village;
+                                String villageKey= village;
                                 String villageDb = ConstantUtil.getInstance().getVillage(villageKey);
                                 if (villageDb == null) {
                                     errorList.add("第" + rowNum + "行农村列校验失败，" + cellValue + "中，" + village + "未在乡镇库中，请核查。");

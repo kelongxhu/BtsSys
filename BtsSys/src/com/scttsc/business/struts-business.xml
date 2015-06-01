@@ -429,6 +429,13 @@
             </result>
         </action>
 
+        <action name="statSpecialByCity" class="com.scttsc.business.web.DashBordAction"
+                method="statSpecialByCity">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
         <!--小区查询-->
         <action name="cellQueryData" class="com.scttsc.business.web.CellQueryAction"
                 method="cellQueryData">
@@ -436,6 +443,15 @@
                 <param name="root">jsonMap</param>
             </result>
         </action>
+
+        <!--特殊站点查询-->
+        <action name="specialeData" class="com.scttsc.business.web.SpecialBtsAction"
+                method="specialeData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
 
     </package>
 
@@ -698,6 +714,10 @@
          <action name="exportDeleteData" class="com.scttsc.business.web.AbandonAction"
                 method="exportDeleteData"></action>
 
+        <action name="specialBtsExport" class="com.scttsc.business.web.SpecialBtsAction"
+                method="specialBtsExport"></action>
+
+
 
          <!--数据统计页面-->
           <action name="count" class="com.scttsc.business.web.DataCountAction"
@@ -785,6 +805,13 @@
             </result>
         </action>
 
+        <!--特殊状态站点查询-->
+        <action name="special" class="com.scttsc.business.web.SpecialBtsAction"
+                method="special">
+            <result name="success" type="dispatcher">
+                /appviews/business/specialbts/specialBtsList.jsp
+            </result>
+        </action>
     </package>
 
 

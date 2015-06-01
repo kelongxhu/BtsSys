@@ -82,7 +82,23 @@
         </where>
     </select>
 
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Long" >
+    <select id="selectByVillage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from WY_LIB_VILLAGE u
+        <where>
+            1=1
+            <if test="town!=null">
+                and u.TOWN=#{town}
+            </if>
+            <if test="village!=null">
+                and VILLAGE =#{village}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Long" >
     select 
     <include refid="Base_Column_List" />
     from WY_LIB_VILLAGE u

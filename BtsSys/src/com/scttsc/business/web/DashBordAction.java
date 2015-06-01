@@ -30,4 +30,13 @@ public class DashBordAction extends BaseAction {
         jsonMap.put("noManualCitys", dashBordManager.statNoManualGroupByCity());
         return SUCCESS;
     }
+
+    /**
+     * 特殊站点统计
+     * @return
+     */
+    public String statSpecialByCity(){
+        jsonMap.put("spcialCitys", dashBordManager.statSpecialGroupByCity());
+        return SUCCESS;
+    }
 }

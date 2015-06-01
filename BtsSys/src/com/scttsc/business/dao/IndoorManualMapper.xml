@@ -513,7 +513,7 @@
       #{wlanflag,jdbcType=VARCHAR}, #{wlanshare,jdbcType=VARCHAR}, #{wlancoverage,jdbcType=VARCHAR}, 
       #{ownername,jdbcType=VARCHAR}, #{ownerphone,jdbcType=VARCHAR}, #{monitordevicenum,jdbcType=DECIMAL}, 
       #{monitordeviceids,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{updatetime,jdbcType=DATE}, 
-      #{updateuser,jdbcType=DECIMAL},#{addFlag},#{town},#{village})
+      #{updateuser,jdbcType=DECIMAL},#{addFlag,jdbcType=DECIMAL},#{town,jdbcType=VARCHAR},#{village,jdbcType=VARCHAR})
   </insert>
 
     <select id="countByExample" parameterType="com.scttsc.business.model.IndoorManual" resultType="java.lang.Integer">

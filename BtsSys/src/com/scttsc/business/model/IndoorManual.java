@@ -1,6 +1,7 @@
 package com.scttsc.business.model;
 
 import com.scttsc.admin.model.City;
+import com.scttsc.baselibs.model.WyLibVillage;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -98,6 +99,7 @@ public class IndoorManual extends Entity {
     //增加字段
     private String town;
     private String village;
+    private WyLibVillage wyLibVillage;
 
 
     City city;
@@ -1064,5 +1066,12 @@ public class IndoorManual extends Entity {
 
     public void setSceneLibNames(String sceneLibNames) {
         this.sceneLibNames = sceneLibNames;
+    }
+
+    public WyLibVillage getWyLibVillage() {
+        return wyLibVillage;
+    }
+    public void setWyLibVillage(WyLibVillage wyLibVillage) {
+        this.wyLibVillage = wyLibVillage;
     }
 }
