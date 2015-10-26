@@ -107,7 +107,7 @@
       #{shareflag,jdbcType=DECIMAL}, #{mchroomflag,jdbcType=VARCHAR}, #{mchroonarea,jdbcType=DECIMAL}, 
       #{meteradress,jdbcType=VARCHAR}, #{builddate,jdbcType=DATE}, #{owner,jdbcType=VARCHAR}, 
       #{ownertel,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{intime,jdbcType=DATE}, 
-      #{inuser,jdbcType=DECIMAL},#{town},#{village})
+      #{inuser,jdbcType=DECIMAL},#{town,jdbcType=VARCHAR},#{village,jdbcType=VARCHAR})
   </insert>
 
   <update id="updateByPrimaryKeySelective" parameterType="com.scttsc.business.model.WyTunelManual" >

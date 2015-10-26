@@ -377,6 +377,7 @@ public class CellAction extends BaseAction {
                 map.put("countryIds", user.getCountryIds());
             }
             map.put("deleteFlag", 0);// 再用
+            map.put("isIndoor","否");
             if (checkAllFlag == null || checkAllFlag == 0) {
                 if (!Common.isEmpty(ids)) {
                     map.put("ids", ids); //
@@ -442,7 +443,7 @@ public class CellAction extends BaseAction {
                         cList.add(electrondipSb.length() > 0 ? electrondipSb.substring(0, electrondipSb.length() - 1).toString() : "");
                         cList.add(enginedipSb.length() > 0 ? enginedipSb.substring(0, enginedipSb.length() - 1).toString() : "");
                         cList.add(StringUtil.null2String(cellManual1.getBorderflag()));
-                        cList.add(StringUtil.null2String(cellManual1.getDofrqnum()));
+                        cList.add(StringUtil.null2String(cellManual1.getFeederlength()));
                         cList.add(StringUtil.null2String(cellManual1.getCoverarea())); //扇区覆盖区域类型
 
                         //农村乡镇名称
@@ -462,12 +463,16 @@ public class CellAction extends BaseAction {
                         StringBuilder roadSb = new StringBuilder();
                         if (roadLibs != null) {
                             for (RoadLib roadLib : roadLibs) {
-                                roadSb.append(roadLib.getName() + ";");
+                                if (roadLib!=null){
+                                    roadSb.append(roadLib.getName() + ";");
+                                }
                             }
                         }
-                        if (tunnelLibs != null) {
+                        if (tunnelLibs != null&&tunnelLibs.size()>0) {
                             for (TunnelLib tunnelLib : tunnelLibs) {
-                                roadSb.append(tunnelLib.getName() + ";");
+                                if (tunnelLib!=null){
+                                    roadSb.append(tunnelLib.getName() + ";");
+                                }
                             }
                         }
                         cList.add(roadSb.length() > 0 ? roadSb.substring(0, roadSb.length() - 1).toString() : "");//道路名称
@@ -476,8 +481,12 @@ public class CellAction extends BaseAction {
                         StringBuilder hotSb = new StringBuilder();
                         //场景库
                         List<WyLibScene> sceneLibs=cellManual1.getWyLibScenes();
-                        for (WyLibScene sceneLib : sceneLibs) {
-                            hotSb.append(sceneLib.getName()+",");
+                        if (sceneLibs!=null){
+                            for (WyLibScene sceneLib : sceneLibs) {
+                                if (sceneLib!=null){
+                                    hotSb.append(sceneLib.getName()+",");
+                                }
+                            }
                         }
                         cList.add(hotSb.length() > 0 ? hotSb.substring(0, hotSb.length() - 1).toString() : "");//热点名称
                         cList.add(StringUtil.null2String(cellManual1.getBoundarycellflag()));

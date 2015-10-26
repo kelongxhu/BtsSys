@@ -228,7 +228,7 @@
       #{cityId,jdbcType=DECIMAL}, #{countyId,jdbcType=DECIMAL}, #{relatedBts,jdbcType=DECIMAL}, 
       #{manualFlag,jdbcType=DECIMAL}, #{deleteFlag,jdbcType=DECIMAL}, #{deletetime,jdbcType=DATE}, 
       #{updatetime,jdbcType=DATE}, #{serviceLevel,jdbcType=VARCHAR}, #{deleteResoncode,jdbcType=DECIMAL}, 
-      #{deleteText,jdbcType=VARCHAR}, #{hightrainFlag,jdbcType=VARCHAR}, #{redlineFlag,jdbcType=DECIMAL}
+      #{deleteText,jdbcType=VARCHAR}, #{highTrainFlag,jdbcType=VARCHAR}, #{redlineFlag,jdbcType=DECIMAL}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.scttsc.business.model.WyTunel" >
