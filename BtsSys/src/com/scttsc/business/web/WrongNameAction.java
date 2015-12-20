@@ -9,6 +9,8 @@ import com.scttsc.common.util.ExcelUtil;
 import com.scttsc.common.util.FileRealPath;
 import com.scttsc.common.util.StringUtil;
 import com.scttsc.common.web.BaseAction;
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
@@ -26,6 +28,7 @@ import java.util.Map;
  * Time: 下午4:52
  */
 public class WrongNameAction extends BaseAction {
+    private Logger logger = Logger.getLogger(WrongNameAction.class);
     private WrongNameManager wrongNameManager;
 
     private Integer type;
@@ -33,6 +36,8 @@ public class WrongNameAction extends BaseAction {
     private String cityIds;//本地网
 
     private String countryIds;//本地网
+
+    private Integer netId;//网络类型
 
     public String wrongName() {
         return SUCCESS;
@@ -52,6 +57,9 @@ public class WrongNameAction extends BaseAction {
             if (!Common.isEmpty(type)) {
                 map.put("type", type);
             }
+            if(!Common.isEmpty(netId)){
+                map.put("netType",netId);
+            }
             total = wrongNameManager.countByMap(map);
             if (total < pagesize) {
                 page = 1;
@@ -62,7 +70,7 @@ public class WrongNameAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = wrongNameManager.selectByMap(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -72,7 +80,6 @@ public class WrongNameAction extends BaseAction {
     public String wrongNameExport() {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = (User) this.getSession().getAttribute("user");
-        int total = 0;
         List<WrongName> list = null;
         String path = FileRealPath.getPath();
         String templatePath = path + "template" + "/wrongNameTemplate.xls";
@@ -87,10 +94,9 @@ public class WrongNameAction extends BaseAction {
             if (!Common.isEmpty(type)) {
                 map.put("type", type);
             }
-
-            total = wrongNameManager.countByMap(map);
-            map.put("start", 0);
-            map.put("pagesize", (total + 1));
+            if(!Common.isEmpty(netId)){
+                map.put("netType",netId);
+            }
             list = wrongNameManager.selectByMap(map);
             POIFSFileSystem fis = new POIFSFileSystem(new FileInputStream(
                     templatePath));
@@ -109,7 +115,15 @@ public class WrongNameAction extends BaseAction {
                 }
                 cList.add(StringUtil.null2String(cityName));
                 cList.add(StringUtil.null2String(wrongName.getCellName()));
-                cList.add(StringUtil.null2String(wrongName.getBscName()));
+                cList.add(StringUtil.null2String(wrongName.getWrongMsg()));
+                int netType=wrongName.getNetType();
+                String netTypeName="";
+                if(netType==1){
+                    netTypeName="CDMA";
+                }else{
+                    netTypeName="LTE";
+                }
+                cList.add(netTypeName);
                 BigDecimal type = wrongName.getType();
                 String typeName = "";
                 if (type != null) {
@@ -131,7 +145,6 @@ public class WrongNameAction extends BaseAction {
                         default:
                             cell.setCellValue(cList.get(j));
                             break;
-
                     }
                 }
                 rowIndex++;
@@ -148,7 +161,6 @@ public class WrongNameAction extends BaseAction {
                     + new String(fileName.getBytes("GBK"), "iso-8859-1"));
             demoSheet.setGridsPrinted(true);
             demoWorkBook.write(resp.getOutputStream());
-
             // 清空流
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
@@ -185,5 +197,12 @@ public class WrongNameAction extends BaseAction {
 
     public void setCityIds(String cityIds) {
         this.cityIds = cityIds;
+    }
+
+    public Integer getNetId() {
+        return netId;
+    }
+    public void setNetId(Integer netId) {
+        this.netId = netId;
     }
 }

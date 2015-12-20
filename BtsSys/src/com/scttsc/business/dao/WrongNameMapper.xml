@@ -11,14 +11,15 @@
         <result column="UPDATETIME" property="updatetime" jdbcType="DATE"/>
         <result column="DELETE_FLAG" property="deleteFlag" jdbcType="DECIMAL"/>
         <result column="TYPE" property="type" jdbcType="DECIMAL"/>
+        <result column="NET_TYPE" property="netType" jdbcType="DECIMAL"/>
+        <result column="WRONG_MSG" property="wrongMsg" jdbcType="VARCHAR"/>
         <result column="CITY_ID" property="cityId" jdbcType="DECIMAL"/>
-
         <result column="city_name" property="city.cityName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
     u.INT_ID, u.CELL_NAME, u.BSC_NAME, u.BTS_ID, u.BTSNAME, u.INTIME, u.UPDATETIME, u.DELETE_FLAG, u.TYPE,
-    u.CITY_ID
+    u.CITY_ID,u.NET_TYPE,u.WRONG_MSG
     </sql>
 
     <select id="selectByMap" resultMap="BaseResultMap">
@@ -35,12 +36,16 @@
                 and CITY_ID in(${cityIds})
             </if>
             <if test="type!=null">
-                and u.TYPE=#{type,jdbcType=DECIMAL}
+                and TYPE=#{type,jdbcType=DECIMAL}
+            </if>
+            <if test="netType!=null">
+                and NET_TYPE=#{netType,jdbcType=DECIMAL}
             </if>
             <if test="start!=null">
                 and RowNum &lt; (#{start} + #{pagesize})
             </if>
         </where>
+        order by CITY_ID
         )
         <where>
             <if test="start!=null">
@@ -59,6 +64,9 @@
             </if>
             <if test="type!=null">
                 and TYPE=#{type,jdbcType=DECIMAL}
+            </if>
+            <if test="netType!=null">
+                and NET_TYPE=#{netType,jdbcType=DECIMAL}
             </if>
         </where>
     </select>

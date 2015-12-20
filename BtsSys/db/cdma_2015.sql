@@ -14,4 +14,7 @@ create table WY_BTS_SPECIAL(
     constraint PK_WY_BTS_SPECIAL primary key (INT_ID)
 )
 
-insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(57,15,'ÌØÊâ×´Ì¬Õ¾µã²éÑ¯','menu','business/special.action',28,0);
+alter table wy_wrongname add NET_TYPE NUMBER(1);
+alter table wy_wrongname add WRONG_MSG VARCHAR(512);
+
+insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(57,15,'ï¿½ï¿½ï¿½ï¿½×´Ì¬Õ¾ï¿½ï¿½ï¿½Ñ¯','menu','business/special.action',28,0);

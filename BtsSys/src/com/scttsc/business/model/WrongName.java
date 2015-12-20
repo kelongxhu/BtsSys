@@ -17,7 +17,8 @@ public class WrongName {
     private BigDecimal deleteFlag;
     private BigDecimal type;
     private BigDecimal cityId;
-
+    private Integer netType;//网络类型
+    private String wrongMsg;//错误原因
     private City city;
 
     /**
@@ -247,5 +248,21 @@ public class WrongName {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public Integer getNetType() {
+        return netType;
+    }
+
+    public void setNetType(Integer netType) {
+        this.netType = netType;
+    }
+
+    public String getWrongMsg() {
+        return wrongMsg;
+    }
+
+    public void setWrongMsg(String wrongMsg) {
+        this.wrongMsg = wrongMsg;
     }
 }
