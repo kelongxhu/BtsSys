@@ -1,10 +1,8 @@
 package com.scttsc.business.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.scttsc.business.model.BtsManual;
-import com.scttsc.business.model.CellLib;
+
+import java.util.Map;
 
 public interface BtsManualManager {
 	BtsManual getById(Long intId)throws Exception;

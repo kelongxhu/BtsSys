@@ -26,23 +26,23 @@
     </javaTypeResolver>
     
     <!-- 数据表对应的model 层  -->
-    <javaModelGenerator targetPackage="com.scttsc.business.model" targetProject="E:\Workspaces_2014\bbbb\BtsSys\trunk\BtsSys\src">
+    <javaModelGenerator targetPackage="com.scttsc.lte.model" targetProject="E:\Workspaces_2014\bbbb\BtsSys\trunk\BtsSys\src">
       <property name="enableSubPackages" value="true" />
       <property name="trimStrings" value="true" />
     </javaModelGenerator>
     
     <!-- sql mapper 隐射配置文件 -->
-    <sqlMapGenerator targetPackage="com.scttsc.business.dao"  targetProject="E:\Workspaces_2014\bbbb\BtsSys\trunk\BtsSys\src">
+    <sqlMapGenerator targetPackage="com.scttsc.lte.dao"  targetProject="E:\Workspaces_2014\bbbb\BtsSys\trunk\BtsSys\src">
       <property name="enableSubPackages" value="true" />
     </sqlMapGenerator>
     
     <!-- 在ibatis2 中是dao层，但在mybatis3中，其实就是mapper接口 -->
-    <javaClientGenerator type="XMLMAPPER" targetPackage="com.scttsc.business.dao"  targetProject="E:\Workspaces_2014\bbbb\BtsSys\trunk\BtsSys\src">
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.scttsc.lte.dao"  targetProject="E:\Workspaces_2014\bbbb\BtsSys\trunk\BtsSys\src">
       <property name="enableSubPackages" value="true" />
     </javaClientGenerator>
     
     <!-- 要对那些数据表进行生成操作，必须要有一个.  domainObjectName="Menu"-->
-    <table tableName="WY_BTS_SPECIAL" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="true"
+    <table tableName="WY_LTE_BBU" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="true"
                enableInsert="true" enableSelectByPrimaryKey="true" enableCountByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false">

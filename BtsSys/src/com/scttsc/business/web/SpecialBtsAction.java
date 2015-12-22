@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +34,8 @@ public class SpecialBtsAction extends BaseAction {
     private WyBtsSpecialManager wyBtsSpecialManager;
 
     private Integer type;
+
+    private Integer netType;//网络类型
 
     private String cityIds;//本地网
 
@@ -59,6 +60,9 @@ public class SpecialBtsAction extends BaseAction {
             }
             if (!Common.isEmpty(type)) {
                 map.put("type", type);
+            }
+            if(!Common.isEmpty(netType)){
+                map.put("netType",netType);
             }
             if (!Common.isEmpty(state)) {
                 map.put("state", state);
@@ -98,12 +102,12 @@ public class SpecialBtsAction extends BaseAction {
             if (!Common.isEmpty(type)) {
                 map.put("type", type);
             }
+            if(!Common.isEmpty(netType)){
+                map.put("netType",netType);
+            }
             if(!Common.isEmpty(state)){
                 map.put("state",state);
             }
-            total = wyBtsSpecialManager.countByMap(map);
-            map.put("start", 0);
-            map.put("pagesize", (total + 1));
             list = wyBtsSpecialManager.selectByMap(map);
             POIFSFileSystem fis = new POIFSFileSystem(new FileInputStream(
                     templatePath));
@@ -193,5 +197,13 @@ public class SpecialBtsAction extends BaseAction {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public Integer getNetType() {
+        return netType;
+    }
+
+    public void setNetType(Integer netType) {
+        this.netType = netType;
     }
 }

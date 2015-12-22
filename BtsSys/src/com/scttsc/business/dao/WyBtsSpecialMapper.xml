@@ -38,6 +38,9 @@
             <if test="type!=null">
                 and m.TYPE=#{type,jdbcType=DECIMAL}
             </if>
+            <if test="netType!=null">
+                and m.NET_TYPE=#{netType,jdbcType=DECIMAL}
+            </if>
             <if test="state!=null">
                 and m.STATE=#{state,jdbcType=DECIMAL}
             </if>
@@ -65,6 +68,9 @@
             </if>
             <if test="state!=null">
                 and STATE=#{state,jdbcType=DECIMAL}
+            </if>
+            <if test="netType!=null">
+                and NET_TYPE=#{netType,jdbcType=DECIMAL}
             </if>
         </where>
     </select>
