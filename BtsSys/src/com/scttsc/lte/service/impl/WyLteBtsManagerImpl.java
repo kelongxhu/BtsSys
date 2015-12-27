@@ -24,4 +24,9 @@ public class WyLteBtsManagerImpl implements WyLteBtsManager {
     public int countWyLteBts(Map<String, Object> param) {
         return wyLteBtsDao.countWyLteBts(param);
     }
+
+
+    public int updateByPrimaryKeySelective(WyLteBts wyLteBts) {
+        return wyLteBtsDao.updateByPrimaryKeySelective(wyLteBts);
+    }
 }

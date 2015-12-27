@@ -17,6 +17,7 @@ create table WY_BTS_SPECIAL(
 alter table wy_wrongname add NET_TYPE NUMBER(1);
 alter table wy_wrongname add WRONG_MSG VARCHAR(512);
 
-insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(57,15,'����״̬վ���ѯ','menu','business/special.action',28,0);
+insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(57,15,'特殊站点查询','menu','business/special.action',28,0);
 insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(58,15,'LTE基站查询','menu','lte/lteData.action',23,0);
 insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(59,15,'LTE小区查询','menu','lte/cellData.action',24,0);
+insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(60,15,'LTE废弃查询','menu','lte/lteAbandon.action',29,0);

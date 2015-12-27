@@ -31,23 +31,19 @@ $(function() {
     //数据类型
     var comBox1 = $("#typeIdVal").ligerComboBox({
         data: [
-            { text: '室外覆盖小区', id: '否' },
-            { text: '室内分布小区', id: '是' },
-            { text: '隧道覆盖小区', id: '隧' }
+            { text: '室外覆盖小区', id: '1' },
+            { text: '室内分布小区', id: '2' },
+            { text: '隧道覆盖小区', id: '3' }
         ],
         width : 200,
         selectBoxWidth: 200,
         valueFieldID: 'typeId'
     });
-    comBox1.selectValue('否');
+    comBox1.selectValue('1');
 
 
     //控件
     $("#name").ligerTextBox({width : 150 });
-    $("#bscName").ligerTextBox({width : 150 });
-    $("#btsId").ligerTextBox({width : 150 });
-    $("#ci").ligerTextBox({width : 150 });
-    $("#pn").ligerTextBox({width : 150 });
 
     toSearch();
 
@@ -76,38 +72,14 @@ function toolBar2(){
 }
 
 function cellGrid(url) {
-    if(gridObj!=null){
-        toolBar1();
-    }
+//    if(gridObj!=null){
+//        toolBar1();
+//    }
     gridObj = $("#maingrid").ligerGrid({
         columns: [
-            {display:'小区名称',name:'name',width : 200,align:'center'},
-            {display:'本地网',name:'cityName',width : 55,align:'center',
-                render: function (row) {
-                    if (row.city != null) {
-                        return row.city.cityName;
-                        }
-                }
-            },
-            {display:'区县',name:'country.cityName',width : 55,align:'center',
-                render: function (row) {
-                    return row.country.cityName;
-                }},
-            {display:'扇区号',name:'cellId',width : 55,align:'center'},
-            {display:'所属BSC名称',name:'bscName',width : 120,align:'center'},
-            {display:'网管编号',name:'btsId',width : 55,align:'center'},
-            {display:'CI',name:'ci',width : 60,align:'center'},
-            {display:'PN',name:'pn',width : 40,align:'center'},
-            {display:'DO小区',name:'doCell',width : 55,align:'center',
-                render: function (row) {
-                    if (row.doCell == 0) {
-                        return "1X";
-                    } else if (row.doCell == 2) {
-                        return "DO";
-                    } else if (row.doCell == 3) {
-                        return "1X+DO"
-                    }
-                }},
+            {display:'小区名称',name:'name',width : 250,align:'center'},
+            {display:'本地网',name:'cityName',width : 55,align:'center'},
+            {display:'区县',name:'countryName',width : 55,align:'center'},
             {display:'是否室分',name:'isIndoor',width : 55,align:'center'},
             {display:'是否拉远',name:'isRru',width : 55,align:'center'},
             {display:'是否功分',name:'isGf',width : 55,align:'center',
@@ -119,64 +91,7 @@ function cellGrid(url) {
                     }
                 }},
             {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
-            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'},
-            {display:'手工标识',name:'manualFlag',width : 55,align:'center',
-                render: function (row) {
-                    if (row.manualFlag == 0) {
-                        return "<span>未录入</span>";
-                    } else {
-                        return "<span>已录入</span>";
-                    }
-                }}
-        ],
-        toolbar: {
-            items: [
-                {text: '导出', click: columnConfigExport, icon: 'add', type: 1}
-            ]
-        },
-        rownumbers:true,
-        showTitle : false,
-        pageSize : 50,
-        pageSizeOptions:[50,100],
-        url:url,
-        checkbox : true,
-        width: '100%',
-        height:'99%',
-        onDblClickRow :cellInfo
-    });
-    $("#pageloading").hide();
-}
-
-function indoorGrid(url) {
-    toolBar2();
-    gridObj = $("#maingrid").ligerGrid({
-        columns: [
-            {display:'室内分布名称',name:'name',width : 200,align:'center'},
-            {display:'本地网',name:'city.cityName',width : 80,align:'center',
-                render: function (row) {
-                    if (row.city != null) {
-                        return row.city.cityName;
-                    }
-                }
-            },
-            {display:'区县',name:'country.cityName',width : 80,align:'center',
-                render: function (row) {
-                    if (row.country != null) {
-                        return row.country.cityName;
-                    }
-                }},
-            {display:'设备类型',name:'vendorBtstype',width : 80,align:'center'},
-            {display:'所属BSC名称',name:'bscName',width : 120,align:'center'},
-            {display:'施主基站名称',name:'btsName',width : 80,align:'center'},
-            {display:'小区序号',name:'cellSeq',width : 80,align:'center'},
-            {display:'PN',name:'pn',width : 80,align:'center'},
-            {display:'CI',name:'ci',width : 80,align:'center'},
-            {display:'站点性质一',name:'prop1',width : 80,align:'center'},
-            {display:'站点性质二',name:'prop2',width : 80,align:'center'},
-            {display:'站点分级',name:'grade',width : 80,align:'center'},
-            {display:'直放设备数量',name:'repeaternum',width : 80,align:'center'},
-            {display:'干放设备数量',name:'drynum',width : 80,align:'center'}
-
+            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'}
         ],
         rownumbers:true,
         showTitle : false,
@@ -184,9 +99,8 @@ function indoorGrid(url) {
         pageSizeOptions:[50,100],
         url:url,
         checkbox : true,
-        width: '100%',
-        height:'98%',
-        onDblClickRow :indoorInfo
+        width: '99.9%',
+        height:'99%'
     });
     $("#pageloading").hide();
 }
@@ -195,39 +109,8 @@ function toSearch() {
     var typeId = $("#typeId").val();
     var cityIds = $("#cityIdVal").val().replace(/;/g, ',');
     var name = $("#name").val();
-    var bscName = $("#bscName").val();
-    var btsId = $("#btsId").val();
-    var ci = $("#ci").val();
-    var pn = $("#pn").val();
-    var url;
-
-    if (typeId == '否') {
-        url = encodeURI("${ctx}/businessjson/cellQueryData.action?isIndoor=否&countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn);
-        cellGrid(url);
-    } else if (typeId == '是') {
-        url = encodeURI("${ctx}/businessjson/indoorQueryData.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&ci=" + ci + "&pn=" + pn);
-        indoorGrid(url);
-    } else if (typeId == '隧') {
-        url = encodeURI("${ctx}/businessjson/cellQueryData.action?isIndoor=隧&countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&ci=" + ci + "&pn=" + pn);
-        cellGrid(url);
-    }else{
-        //默认查询室外覆盖小区
-        url = encodeURI("${ctx}/businessjson/cellQueryData.action?isIndoor=否&countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId + "&ci=" + ci + "&pn=" + pn);
-        cellGrid(url);
-    }
-}
-
-
-//小区信息显示界面
-function cellInfo(data) {
-    var indoor=data.isIndoor;
-    if(indoor=='否'){
-        var url = "business/cellInfo.action?intId=" + data.intId;
-        parent.f_addTab('室外覆盖小区详情','室外覆盖小区详情',url);
-    }else if(indoor=='隧'){
-        var url =  "business/tunelInfo.action?intId=" + data.intId;
-        parent.f_addTab('隧道覆盖小区详情','室外覆盖小区详情',url);
-    }
+    var url= encodeURI("${ctx}/ltejson/cellData.action?countryIds=" + cityIds + "&name=" + name + "&type=" + typeId);
+    cellGrid(url);
 }
 
 //高级检索
@@ -245,75 +128,7 @@ function toggle(targetid) {
         }
     }
 }
-//基站显示信息
-function btsInfo(data) {
-    window.location.href = "${ctx}/business/btsInfo.action?intId=" + data.intId;
-}
-//BBU信息显示界面
-function bbuInfo(data) {
-    window.location.href = "${ctx}/business/bbuInfo.action?intId=" + data.intId;
-}
 
-//indoorinfo显示界面
-function indoorInfo(data) {
-    var url = "business/indoorDetail.action?intId=" + data.intId;
-    parent.f_addTab('室内分布小区详情','室内分布小区详情',url);
-}
-
-//transferinfo显示页面
-function transferInfo(data){
-    window.location.href="${ctx}/business/showTransferDetail.action?transferId="+data.id;
-}
-
-function columnConfig() {
-    var typeId = $("#typeId").val();
-    var cityIds = $("#cityIdVal").val().replace(/;/g, ',');
-    var name = $("#name").val();
-    var bscName = $("#bscName").val();
-    var btsId = $("#btsId").val();
-    var ci = $("#ci").val();
-    var pn = $("#pn").val();
-   var url = "${ctx}/business/columnConfig.action?typeId=" + typeId+"&countryIds="+cityIds+"&name="+name+"&bscName="+bscName+"&btsId="+btsId+"&ci="+ci+"&pn="+pn;
-    $.ligerDialog.open({
-        url : url,
-        height : 450,
-        width : 1000,
-        showMax:true,
-        showToggle: true,
-        showMin: true,
-        isResize : true,
-        isDrag:true,
-        name : 'columnConfig',
-        title : '选择导出模板'
-
-    });
-}
-
-function columnConfigExport() {
-    var type = $("#typeId").val();
-    var cityIds = $("#cityIdVal").val().replace(/;/g, ',');
-    var name = $("#name").val();
-    var bscName = $("#bscName").val();
-    var btsId = $("#btsId").val();
-    var ci = $("#ci").val();
-    var pn = $("#pn").val();
-    var url;
-    if(type=='否')
-        url=encodeURI("${ctx}/business/columnConfig.action?typeId=4&countryIds="+cityIds+"&name="+name+"&bscName="+bscName+"&btsId="+btsId+"&ci="+ci+"&pn="+pn);
-    else if(type=='是')
-        url=encodeURI("${ctx}/business/columnConfig.action?typeId=3&countryIds="+cityIds+"&name="+name+"&bscName="+bscName+"&btsId="+btsId+"&ci="+ci+"&pn="+pn);
-    else if(type=='隧')
-        url=encodeURI('${ctx}/business/tunelExport?countryIds='+cityIds+'&name='+name+"&bscName="+bscName+"&btsId="+btsId+"&ci="+ci+"&pn="+pn);
-    window.location.href = url;
-}
-//直放站导出
-function ErectExport() {
-    window.location.href ="${ctx}/business/exportErect.action";
-}
-//干放站导出
-function DryExport() {
-    window.location.href ="${ctx}/business/exportDry.action";
-}
 </script>
 </head>
 <body>
@@ -352,24 +167,6 @@ function DryExport() {
                 <td width="50px" align="left">名称:</td>
                 <td>
                     <input type="text" id="name"/>
-                </td>
-                <td width="50px" align="left">BSC名称:</td>
-                <td>
-                    <input type="text" id="bscName"/>
-                </td>
-                <td width="50px" align="left">btsid:</td>
-                <td>
-                    <input type="text" id="btsId"/>
-                </td>
-            </tr>
-            <tr>
-                <td>CI:</td>
-                <td>
-                    <input type="text" id="ci"/>
-                </td>
-                <td>PN:</td>
-                <td>
-                    <input type="text" id="pn"/>
                 </td>
             </tr>
         </table>

@@ -23,11 +23,16 @@
     <result column="DELETETIME" property="deletetime" jdbcType="DATE" />
     <result column="INTIME" property="intime" jdbcType="DATE" />
     <result column="UPDATETIME" property="updatetime" jdbcType="DATE" />
+    <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL" />
+    <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR" />
+    <result column="CITY_NAME" property="cityName" jdbcType="VARCHAR" />
+    <result column="COUNTRY_NAME" property="countryName" jdbcType="VARCHAR" />
+    <result column="DELETERESON_TEXT" property="deleteResonText" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    INT_ID, NAME, CITY_ID, COUNTRY_ID, VENDOR_NAME, IS_INDOOR, IS_RRU, IS_GF, IS_OR, 
-    IS_RR, IS_SR, SITE_TOGETHER, LET_INT_ID, ENB_INT_ID, HIGHTRAIN_FLAG, REDLINE_FLAG, 
-    MANUAL_FLAG, DELETE_FLAG, DELETETIME, INTIME, UPDATETIME
+    u.INT_ID, u.NAME, u.CITY_ID, u.COUNTRY_ID, u.VENDOR_NAME, u.IS_INDOOR, u.IS_RRU, u.IS_GF, u.IS_OR,
+    u.IS_RR, u.IS_SR, u.SITE_TOGETHER, u.LET_INT_ID, u.ENB_INT_ID, u.HIGHTRAIN_FLAG, u.REDLINE_FLAG,
+    u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, u.INTIME, u.UPDATETIME, u.DELETE_RESONCODE, u.DELETE_TEXT
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
     select 
@@ -39,6 +44,73 @@
     delete from WY_LTE_CELL
     where INT_ID = #{intId,jdbcType=DECIMAL}
   </delete>
+
+  <select id="selectWyLteCell" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List"/>,a.NAME CITY_NAME,b.NAME COUNTRY_NAME,c.name DELETERESON_TEXT
+        from WY_LTE_CELL u
+        left join wy_city a on a.id=u.CITY_ID
+        left join wy_city b on b.id=u.COUNTRY_ID
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='ABANDONEDTYPE')c
+        ON c.code=u.DELETE_RESONCODE
+        )m
+        <where>
+            1=1
+            <if test="deleteFlag!=null">
+                and delete_flag=#{deleteFlag,jdbcType=DECIMAL}
+            </if>
+            <if test="countryIds!=null">
+                and COUNTRY_ID in(${countryIds})
+            </if>
+            <if test="isIndoor!=null">
+                and IS_INDOOR=#{isIndoor,jdbcType=VARCHAR}
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="ntxFlag!=null">
+                and DELETE_RESONCODE=0
+            </if>
+            <if test="ytxFlag!=null">
+                and DELETE_RESONCODE!=0
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        order by CITY_ID)
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="countWyLteCell" resultType="int">
+        select count(1)
+        from WY_LTE_CELL
+        where 1=1
+        <if test="deleteFlag!=null">
+        and delete_flag=#{deleteFlag,jdbcType=DECIMAL}
+        </if>
+        <if test="countryIds!=null">
+            and COUNTRY_ID in(${countryIds})
+        </if>
+        <if test="isIndoor!=null">
+            and IS_INDOOR=#{isIndoor,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null">
+            and name like #{name}
+        </if>
+        <if test="ntxFlag!=null">
+            and DELETE_RESONCODE=0
+        </if>
+        <if test="ytxFlag!=null">
+            and DELETE_RESONCODE!=0
+        </if>
+    </select>
+
   <insert id="insert" parameterType="com.scttsc.lte.model.WyLteCell" >
     insert into WY_LTE_CELL (INT_ID, NAME, CITY_ID, 
       COUNTRY_ID, VENDOR_NAME, IS_INDOOR, 
@@ -253,6 +325,12 @@
       <if test="updatetime != null" >
         UPDATETIME = #{updatetime,jdbcType=DATE},
       </if>
+     <if test="deleteResoncode != null" >
+            DELETE_RESONCODE = #{deleteResoncode,jdbcType=DECIMAL},
+     </if>
+     <if test="deleteText != null" >
+            DELETE_TEXT = #{deleteText,jdbcType=VARCHAR},
+     </if>
     </set>
     where INT_ID = #{intId,jdbcType=DECIMAL}
   </update>

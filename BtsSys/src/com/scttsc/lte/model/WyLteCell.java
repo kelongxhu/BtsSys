@@ -1,10 +1,12 @@
 package com.scttsc.lte.model;
 
+import com.scttsc.common.util.DateUtils;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class WyLteCell {
-    private BigDecimal intId;
+    private String intId;
 
     private String name;
 
@@ -46,11 +48,24 @@ public class WyLteCell {
 
     private Date updatetime;
 
-    public BigDecimal getIntId() {
+    private Short deleteResoncode;  //废弃原因代码
+
+    private String deleteText;
+
+    //冗余字段
+    private String cityName;
+
+    private String countryName;
+
+    private String deleteResonText; //废弃原因文本
+
+    private String deleteTimeStr;//废弃时间
+
+    public String getIntId() {
         return intId;
     }
 
-    public void setIntId(BigDecimal intId) {
+    public void setIntId(String intId) {
         this.intId = intId;
     }
 
@@ -213,4 +228,53 @@ public class WyLteCell {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public Short getDeleteResoncode() {
+        return deleteResoncode;
+    }
+
+    public void setDeleteResoncode(Short deleteResoncode) {
+        this.deleteResoncode = deleteResoncode;
+    }
+
+    public String getDeleteResonText() {
+        return deleteResonText;
+    }
+
+    public void setDeleteResonText(String deleteResonText) {
+        this.deleteResonText = deleteResonText;
+    }
+
+    public String getDeleteText() {
+        return deleteText;
+    }
+
+    public void setDeleteText(String deleteText) {
+        this.deleteText = deleteText;
+    }
+
+    public String getDeleteTimeStr() {
+        return deletetime == null ? "" : DateUtils.DateToStr(deletetime, "yyyy-MM-dd");
+    }
+
+    public void setDeleteTimeStr(String deleteTimeStr) {
+        this.deleteTimeStr = deleteTimeStr;
+    }
 }
+

@@ -11,6 +11,32 @@
                 <param name="root">jsonMap</param>
             </result>
         </action>
+
+        <action name="bbuData" class="com.scttsc.lte.web.WyLteBbuAction"
+                method="bbuData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+
+        <action name="cellData" class="com.scttsc.lte.web.WyLteCellAction"
+                method="cellData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="abandonData" class="com.scttsc.lte.web.WyLteAbandonAction"
+                method="abandonData">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
+        <action name="lteAbandonEdit" class="com.scttsc.lte.web.WyLteAbandonAction"
+                method="lteAbandonEdit">
+            <result name="success" type="json">
+                <param name="root">jsonMap</param>
+            </result>
+        </action>
     </package>
 
     <package name="lte" namespace="/lte" extends="default">
@@ -20,10 +46,20 @@
                 /appviews/lte/query/btsQuery.jsp
             </result>
         </action>
-		<action name="lteCell" class="com.scttsc.charge.web.WyBtsChargeAction" method="lteCell">
+		<action name="lteCell" class="com.scttsc.lte.web.WyLteCellAction" method="lteCell">
     		<result name="success" type="dispatcher">
     			/appviews/lte/query/cellQuery.jsp
     		</result>
     	</action>
+        <action name="lteAbandon" class="com.scttsc.lte.web.WyLteAbandonAction" method="lteAbandon">
+            <result name="success" type="dispatcher">
+                /appviews/lte/query/lteAbandon.jsp
+            </result>
+        </action>
+        <action name="abandonEdit" class="com.scttsc.lte.web.WyLteAbandonAction" method="abandonEdit">
+            <result name="success" type="dispatcher">
+                /appviews/lte/query/editAbandon.jsp
+            </result>
+        </action>
     </package>
 </struts>

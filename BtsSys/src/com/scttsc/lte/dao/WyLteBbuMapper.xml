@@ -26,19 +26,84 @@
     <result column="UPDATETIME" property="updatetime" jdbcType="DATE" />
     <result column="ENB_ID" property="enbId" jdbcType="DECIMAL" />
     <result column="SITE_TOGETHER" property="siteTogether" jdbcType="VARCHAR" />
+    <result column="CITY_NAME" property="cityName" jdbcType="VARCHAR" />
+    <result column="COUNTRY_NAME" property="countryName" jdbcType="VARCHAR" />
+    <result column="DELETE_RESONCODE" property="deleteResoncode" jdbcType="DECIMAL" />
+    <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR" />
+    <result column="DELETERESON_TEXT" property="deleteResonText" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    INT_ID, NAME, LONGITUDE, LATITUDE, BBU_NO, ENB_BTS_NAME, ENB_BTS_ID, CIRCUITROOM_OWNERSHIP, 
-    TRANS_OWNERSHIP, VENDOR_NAME, CITY_ID, COUNTY_ID, IS_SHARE, BBU_TYPE, WY_LTE_BTSID, 
-    HIGHTRAIN_FLAG, REDLINE_FLAG, MANUAL_FLAG, DELETE_FLAG, DELETETIME, INTIME, UPDATETIME, 
-    ENB_ID, SITE_TOGETHER
+    u.INT_ID, u.NAME, u.LONGITUDE, u.LATITUDE, u.BBU_NO, u.ENB_BTS_NAME, u.ENB_BTS_ID,u.CIRCUITROOM_OWNERSHIP,
+    u.TRANS_OWNERSHIP, u.VENDOR_NAME, u.CITY_ID, u.COUNTY_ID, u.IS_SHARE, u.BBU_TYPE, u.WY_LTE_BTSID,
+    u.HIGHTRAIN_FLAG, u.REDLINE_FLAG, u.MANUAL_FLAG, u.DELETE_FLAG, u.DELETETIME, INTIME, u.UPDATETIME,
+    u.ENB_ID, u.SITE_TOGETHER, u.DELETE_RESONCODE, u.DELETE_TEXT
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
     select 
     <include refid="Base_Column_List" />
-    from WY_LTE_BBU
-    where INT_ID = #{intId,jdbcType=DECIMAL}
+    from WY_LTE_BBU u
+    where u.INT_ID = #{intId,jdbcType=DECIMAL}
   </select>
+
+    <select id="selectWyLteBbu" resultMap="BaseResultMap">
+        select * from (select m.*,ROWNUM RN from
+        (select
+        <include refid="Base_Column_List"/>,a.NAME CITY_NAME,b.NAME COUNTRY_NAME,c.name DELETERESON_TEXT
+        from WY_LTE_BBU u
+        left join wy_city a on a.id=u.CITY_ID
+        left join wy_city b on b.id=u.COUNTY_ID
+        LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='ABANDONEDTYPE')c
+        ON c.code=u.DELETE_RESONCODE
+        )m
+        <where>
+            1=1 and is_share=0 and bbu_type=2
+            <if test="deleteFlag!=null">
+                and delete_flag=#{deleteFlag}
+            </if>
+            <if test="countryIds!=null">
+                and COUNTY_ID in(${countryIds})
+            </if>
+            <if test="name!=null">
+                and name like #{name}
+            </if>
+            <if test="ntxFlag!=null">
+                and DELETE_RESONCODE=0
+            </if>
+            <if test="ytxFlag!=null">
+                and DELETE_RESONCODE!=0
+            </if>
+            <if test="start!=null">
+                and RowNum &lt; (#{start} + #{pagesize})
+            </if>
+        </where>
+        order by CITY_ID)
+        <where>
+            <if test="start!=null">
+                RN >= #{start}
+            </if>
+        </where>
+    </select>
+
+    <select id="countWyLteBbu" resultType="int">
+        select count(1)
+        from WY_LTE_BBU
+        where 1=1 and is_share=0 and bbu_type=2
+        <if test="deleteFlag!=null">
+            and delete_flag=#{deleteFlag}
+        </if>
+        <if test="countryIds!=null">
+            and COUNTY_ID in(${countryIds})
+        </if>
+        <if test="name!=null">
+            and name like #{name}
+        </if>
+        <if test="ntxFlag!=null">
+            and DELETE_RESONCODE=0
+        </if>
+        <if test="ytxFlag!=null">
+            and DELETE_RESONCODE!=0
+        </if>
+    </select>
   <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
     delete from WY_LTE_BBU
     where INT_ID = #{intId,jdbcType=DECIMAL}
@@ -286,6 +351,12 @@
       <if test="siteTogether != null" >
         SITE_TOGETHER = #{siteTogether,jdbcType=VARCHAR},
       </if>
+        <if test="deleteResoncode != null" >
+            DELETE_RESONCODE = #{deleteResoncode,jdbcType=DECIMAL},
+        </if>
+        <if test="deleteText != null" >
+            DELETE_TEXT = #{deleteText,jdbcType=VARCHAR},
+        </if>
     </set>
     where INT_ID = #{intId,jdbcType=DECIMAL}
   </update>

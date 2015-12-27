@@ -108,7 +108,7 @@ public class AbandonAction extends BaseAction {
     }
 
 
-    public String data() {
+    public String abandonData() {
         String result = null;
         try {
             if (!Common.isEmpty(typeId)) {

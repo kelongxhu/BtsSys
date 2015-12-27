@@ -63,7 +63,7 @@ function toolBar1(){
 function btsGrid(url) {
     gridObj = $("#maingrid").ligerGrid({
         columns: [
-            {display:'室外覆盖站点名称',name:'name',width : 150,align:'center'},
+            {display:'室外覆盖站点名称',name:'name',width : 180,align:'center'},
             {display:'本地网',name:'cityName',width : 60,align:'center'},
             {display:'区县',name:'countryName',width : 60,align:'center'},
             {display:'维护等级',name:'serviceLevel',width : 60,align:'center'},
@@ -87,30 +87,16 @@ function btsGrid(url) {
 }
 
 function bbuGrid(url) {
-    toolBar1();
+//    toolBar1();
     gridObj = $("#maingrid").ligerGrid({
         columns: [
             {display:'纯BBU站点名称',name:'name',width : 150,align:'center'},
             {display:'本地网',name:'cityName',width : 60,align:'center'},
-            {display:'区县',name:'country.cityName',width : 60,align:'center',
-                render: function (row) {
-                    return row.country.cityName;
-                }},
-            {display:'所属BSC',name:'bscName',width :100,align:'center'} ,
-            {display:'网管编号',name:'btsId',width :60,align:'center'} ,
-            {display:'共站BBU数量',name:'shareBbuCount',width : 80,align:'center'},
+            {display:'区县',name:'countryName',width : 60,align:'center'},
             {display:'机房产权',name:'circuitroomOwnership',width : 60,align:'center'},
             {display:'传输产权',name:'transOwnership',width : 60,align:'center'},
-            {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
-            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'},
-            {display:'手工标识',name:'manualFlag',width : 60,align:'center',
-                render: function (row) {
-                    if (row.manualFlag == 0) {
-                        return "<span>未录入</span>";
-                    } else {
-                        return "<span>已录入</span>";
-                    }
-                }}
+            {display:'高铁覆盖',name:'hightrainFlag',width : 55,align:'center'},
+            {display:'红线内外',name:'redlieFlagStr',width : 55,align:'center'}
         ],
         rownumbers:true,
         showTitle : false,
@@ -118,129 +104,11 @@ function bbuGrid(url) {
         pageSizeOptions:[50,100],
         url:url,
         checkbox : true,
-        width: '99.9%',
-        height:'99%',
-        onDblClickRow :bbuInfo
-    });
-    $("#pageloading").hide();
-}
-
-function indoorGrid(url) {
-    toolBar1();
-    gridObj = $("#maingrid").ligerGrid({
-        columns: [
-            {display:'室内分布站点名称',name:'name',width : 100,align:'center'},
-            {display:'本地网',name:'cityName',width : 60,align:'center'},
-            {display:'区县',name:'country.cityName',width : 60,align:'center',
-                render: function (row) {
-                    return row.country.cityName;
-                }},
-            {display:'所属BSC',name:'bscName',width :120,align:'center'} ,
-            {display:'网管编号',name:'btsId',width :60,align:'center',isSort:true} ,
-            {display:'维护等级',name:'serviceLevel',width : 60,align:'center'},
-            {display:'机房产权',name:'circuitroomOwnership',width : 60,align:'center'},
-            {display:'传输产权',name:'transOwnership',width : 60,align:'center'},
-            {display:'是否拉远',name:'isRru',width : 60,align:'center'},
-            {display:'施主基站名称',name:'btsName',width : 100,align:'center'},
-            {display:'设备类型',name:'vendorBtstype',width : 60,align:'center'}
-        ],
-        rownumbers:true,
-        showTitle : false,
-        pageSize : 50,
-        pageSizeOptions:[50,100],
-        url:url,
-        checkbox : true,
-        onDblClickRow : function (data, rowindex, rowobj)
-        {
-            window.location.href ="";
-        },
         width: '99.9%',
         height:'99%'
     });
     $("#pageloading").hide();
 }
-
-function transferGrid(url){
-    toolBar1();
-    gridObj = $("#maingrid").ligerGrid({
-        rownumbers: true,
-        url: url,
-        showTitle : false,
-        checkbox: true,
-        width: '99.9%',
-        height: '99%',
-        pageSize: 50,
-        pageSizeOptions: [50,100],
-        onDblClickRow: transferInfo,
-        columns: [
-                    {display: '本地网', name: 'cityName', minWidth: 60, align: 'center'},
-                    {display: '区县', name: 'countryName', minWidth: 60, align: 'center'},
-                    {display: '站名', name: 'name', minWidth: 120, align: 'center'},
-                    {display: '所属类型', name: 'typeName', minWidth: 50, align: 'center'},
-                    {display: '经度', name: 'longitude', minWidth: 50, align: 'center'},
-                    {display: '纬度', name: 'latitude', minWidth: 50, align: 'center'},
-                    {display: '备注', name: 'remark', minWidth: 120, align: 'center'},
-                    {display: '下挂基站', name: 'btsList', minWidth: 180, align: 'center', render: function(data, index, value){
-                        var result = '';
-                        for(var i in value){
-                            var bts = value[i];
-                            var name = bts['name'];
-                            result += name + ',';
-                        }
-                        if(result) result = result.substring(0, result.length - 1);
-                        return result;
-                    }}
-        ]
-    });
-    $("#pageloading").hide();
-}
-
-
-function tunelGrid(url){
-    toolBar1();
-    gridObj = $("#maingrid").ligerGrid({
-        rownumbers: true,
-        url:url,
-        onDblClickRow : function (data, rowindex, rowobj)
-         {
-             return;
-//         window.location.href ="";
-         },
-        showTitle : false,
-        checkbox: true,
-        width: '99.9%',
-        height: '99%',
-        pageSize: 50,
-        pageSizeOptions: [50,100],
-        columns: [
-            {display:'隧道覆蓋站点名称',name:'name',width : 140,align:'center'},
-            {display:'本地网',name:'cityName',width : 80,align:'center',
-                render:function(row){
-                    if(row.city){
-                        return row.city.cityName;
-                    }
-                }},
-            {display:'区县',name:'countryName',width : 80,align:'center',
-                render:function(row){
-                    if(row.country){
-                        return row.country.cityName;
-                    }
-                }},
-            {display:'是否拉远',name:'isRru',width : 60,align:'center'},
-            {display:'施主基站名称',name:'btsName',width : 120,align:'center'},
-            {display:'所属BSC名称',name:'bscName',width : 120,align:'center'},
-            {display:'网管编号',name:'btsId',width : 80,align:'center'},
-            {display:'机房产权',name:'circuitroomOwnership',width : 60,align:'center'},
-            {display:'传输产权',name:'transOwnership',width : 60,align:'center'},
-            {display:'维护等级',name:'serviceLevel',width : 60,align:'center'},
-            {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
-            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'}
-        ]
-    });
-    $("#pageloading").hide();
-}
-
-
 //查询
 function toSearch() {
 
@@ -253,7 +121,7 @@ function toSearch() {
         url = encodeURI("${ctx}/ltejson/btsData.action?countryIds=" + cityIds + "&name=" + name + "&type="+typeId);
         btsGrid(url);
     } else if (typeId ==4) {
-        url = encodeURI("${ctx}/businessjson/bbuData.action?countryIds=" + cityIds + "&name=" + name + "&bscName=" + bscName + "&btsId=" + btsId);
+        url = encodeURI("${ctx}/ltejson/bbuData.action?countryIds=" + cityIds + "&name=" + name);
         bbuGrid(url);
     } else{
         //默认查询物理站点

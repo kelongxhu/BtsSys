@@ -28,6 +28,7 @@
     <result column="DELETE_TEXT" property="deleteText" jdbcType="VARCHAR" />
     <result column="CITY_NAME" property="cityName" jdbcType="VARCHAR" />
     <result column="COUNTRY_NAME" property="countryName" jdbcType="VARCHAR" />
+    <result column="DELETERESON_TEXT" property="deleteResonText" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     u.INT_ID, u.NAME, u.LONGITUDE, u.LATITUDE, u.IS_INDOOR, u.IS_RRU, u.RELATE_ENB_INTID, u.ENB_NAME,
@@ -47,13 +48,18 @@
   <select id="findWyLteBts" resultMap="BaseResultMap">
       select * from (select m.*,ROWNUM RN from
       (select
-      <include refid="Base_Column_List"/>,a.NAME CITY_NAME,b.NAME COUNTRY_NAME
+      <include refid="Base_Column_List"/>,a.NAME CITY_NAME,b.NAME COUNTRY_NAME,c.name DELETERESON_TEXT
       from WY_LTE_BTS u
       left join wy_city a on a.id=u.CITY_ID
       left join wy_city b on b.id=u.COUNTRY_ID
+      LEFT JOIN (SELECT CODE,NAME FROM wy_cons WHERE groupcode='ABANDONEDTYPE')c
+      ON c.code=u.DELETE_RESONCODE
       )m
       <where>
-          1=1 and delete_flag=0
+          1=1
+          <if test="deleteFlag!=null">
+              and delete_flag=#{deleteFlag,jdbcType=DECIMAL}
+          </if>
           <if test="countryIds!=null">
               and COUNTRY_ID in(${countryIds})
           </if>
@@ -62,6 +68,12 @@
           </if>
           <if test="name!=null">
               and name like #{name}
+          </if>
+          <if test="ntxFlag!=null">
+              and DELETE_RESONCODE=0
+          </if>
+          <if test="ytxFlag!=null">
+              and DELETE_RESONCODE!=0
           </if>
           <if test="start!=null">
               and RowNum &lt; (#{start} + #{pagesize})
@@ -78,7 +90,10 @@
   <select id="countWyLteBts" resultType="int">
      select count(1)
       from WY_LTE_BTS
-          where delete_flag=0
+          where 1=1
+          <if test="deleteFlag!=null">
+              and delete_flag=#{deleteFlag,jdbcType=DECIMAL}
+          </if>
           <if test="countryIds!=null">
               and COUNTRY_ID in(${countryIds})
           </if>
@@ -88,6 +103,12 @@
           <if test="name!=null">
               and name like #{name}
           </if>
+         <if test="ntxFlag!=null">
+             and DELETE_RESONCODE=0
+          </if>
+         <if test="ytxFlag!=null">
+             and DELETE_RESONCODE!=0
+         </if>
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >

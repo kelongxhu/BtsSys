@@ -1,5 +1,7 @@
 package com.scttsc.lte.model;
 
+import com.scttsc.common.util.DateUtils;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -51,6 +53,21 @@ public class WyLteBbu {
     private Long enbId;
 
     private String siteTogether;
+
+    private Short deleteResoncode;  //废弃原因代码
+
+    private String deleteText;
+
+    //冗余
+    private String cityName;
+
+    private String countryName;
+
+    private String redlieFlagStr;
+
+    private String deleteResonText; //废弃原因文本
+
+    private String deleteTimeStr;//废弃时间
 
     public BigDecimal getIntId() {
         return intId;
@@ -242,5 +259,75 @@ public class WyLteBbu {
 
     public void setSiteTogether(String siteTogether) {
         this.siteTogether = siteTogether == null ? null : siteTogether.trim();
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getRedlieFlagStr() {
+        if (redlineFlag == null) {
+            return "";
+        }
+        switch (redlineFlag) {
+            case 1:
+                redlieFlagStr = "红线内";
+                break;
+            case 2:
+                redlieFlagStr = "红线外";
+                break;
+            default:
+                break;
+        }
+        return redlieFlagStr;
+    }
+
+    public void setRedlieFlagStr(String redlieFlagStr) {
+        this.redlieFlagStr = redlieFlagStr;
+    }
+
+
+    public Short getDeleteResoncode() {
+        return deleteResoncode;
+    }
+
+    public void setDeleteResoncode(Short deleteResoncode) {
+        this.deleteResoncode = deleteResoncode;
+    }
+
+    public String getDeleteResonText() {
+        return deleteResonText;
+    }
+
+    public void setDeleteResonText(String deleteResonText) {
+        this.deleteResonText = deleteResonText;
+    }
+
+    public String getDeleteText() {
+        return deleteText;
+    }
+
+    public void setDeleteText(String deleteText) {
+        this.deleteText = deleteText;
+    }
+
+    public String getDeleteTimeStr() {
+        return deletetime == null ? "" : DateUtils.DateToStr(deletetime, "yyyy-MM-dd");
+    }
+
+    public void setDeleteTimeStr(String deleteTimeStr) {
+        this.deleteTimeStr = deleteTimeStr;
     }
 }

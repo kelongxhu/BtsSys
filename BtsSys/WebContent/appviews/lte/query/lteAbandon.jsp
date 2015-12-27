@@ -9,9 +9,7 @@
 var gridObj = null;
 var typeId;
 
-
 $(function() {
-
     var treeCombox;
     $.post("${ctx}/schooljson/initAllCountryTree.action", function (ajaxData, status) {
         var treeData = ajaxData.cityJson;
@@ -43,24 +41,14 @@ $(function() {
         data: [
             { text: '物理站点', id: '1' },
             { text: '纯BBU', id: '2' },
-            { text: '室分', id: '3' },
-            { text: '小区', id: '4' },
-            { text: '隧道', id: '6' }
+            { text: '小区', id: '3' }
         ],
         width : 200,
         selectBoxWidth: 200,
         valueFieldID: 'typeId'
     });
+    comBox1.selectValue('1');
 
-    var typeID='${typeId}';
-     if(typeID!=''){
-         comBox1.selectValue(typeID);
-     }else{
-         comBox1.selectValue('1');
-     }
-
-
-    //控件
     var comBox2 = $("#txFlagVal").ligerComboBox({
         data: [
             { text: '未填写', id: '0' },
@@ -71,10 +59,7 @@ $(function() {
         valueFieldID: 'txFlag'
     });
 
-
-
     toSearch();
-
 });
 
 
@@ -82,42 +67,17 @@ function btsGrid(url) {
     gridObj = null;
     gridObj = $("#maingrid").ligerGrid({
         columns:[
-            {display:'物理站点名称', name:'name', width:80, align:'center'},
+            {display:'物理站点名称', name:'name', width:150, align:'center'},
             {display:'本地网', name:'cityName', width:40, align:'center'},
-            {display:'区县', name:'country', width:40, align:'center',
-                render:function (row) {
-                    if (row.country != null) {
-                        return row.country.cityName;
-                    }
-                }
-            },
+            {display:'区县', name:'countryName', width:40, align:'center'},
             {display:'是否室内', name:'isIndoor', width:50, align:'center'} ,
             {display:'是否拉远', name:'isRru', width:50, align:'center'},
-            {display:'基站名称', name:'btsName', width:100, align:'center'},
-            {display:'BSC名称', name:'bscName', width:100, align:'center'},
-            {display:'BTSID', name:'btsId', width:60, align:'center'},
+            {display:'基站名称', name:'enbName', width:100, align:'center'},
             {display:'机房产权', name:'circuitroomOwnership', width:60, align:'center'},
             {display:'传输产权', name:'transOwnership', width:60, align:'center'},
             {display:'维护等级', name:'serviceLevel', width:60, align:'center'},
-            {display:'设备类型', name:'vendorBtstype', width:60, align:'center'},
             {display:'废弃时间', name:'deleteTimeStr', width:80, align:'center'},
-            {display:'填写标识', name:'deleteText', width:60, align:'center',
-                render:function (row) {
-                    if (row.deleteResoncode == 0 || row.deleteResoncode == '') {
-                        return "<span class='label label-important'>未填写</span>";
-                    } else {
-                        return "<span class='label'>已填写</span>";
-                    }
-                }} ,
-            {display:'废弃原因', name:'deleteResoncode', width:120, align:'center',
-                render:function (row) {
-                    if (row.cons) {
-                        return row.cons.name;
-                    } else {
-                        return "";
-                    }
-                }
-            },
+            {display:'废弃原因', name:'deleteResonText', width:120, align:'center'},
             {display:'废弃文本解释', name:'deleteText', width:120, align:'center'}
         ],
         rownumbers:true,
@@ -139,13 +99,7 @@ function bbuGrid(url) {
         columns:[
             {display:'物理站点名称', name:'name', width:100, align:'center'},
             {display:'本地网', name:'cityName', width:60, align:'center'},
-            {display:'区县', name:'country', width:60, align:'center',
-                render:function (row) {
-                    if (row.country != null) {
-                        return row.country.cityName;
-                    }
-                }
-            },
+            {display:'区县', name:'countryName', width:60, align:'center'},
             {display:'BBU类型', name:'bbuType', width:80, align:'center',
                 render:function (row) {
                     if (row.bbuType == 0) {
@@ -159,12 +113,9 @@ function bbuGrid(url) {
                     }
                 }
             },
-            {display:'基站名称', name:'btsName', width:120, align:'center'},
-            {display:'BSC名称', name:'bscName', width:100, align:'center'},
-            {display:'BTSID', name:'btsId', width:60, align:'center'},
+            {display:'基站名称', name:'enbBtsName', width:120, align:'center'},
             {display:'机房产权', name:'circuitroomOwnership', width:60, align:'center'},
             {display:'传输产权', name:'transOwnership', width:60, align:'center'},
-            {display:'设备类型', name:'vendorBtstype', width:60, align:'center'},
             {display:'废弃时间', name:'deleteTimeStr', width:80, align:'center'},
             {display:'填写标识', name:'deleteResoncode', width:60, align:'center',
                 render:function (row) {
@@ -175,15 +126,7 @@ function bbuGrid(url) {
                     }
                 }
             },
-            {display:'废弃原因', name:'cons', width:120, align:'center',
-                render:function (row) {
-                    if (row.cons) {
-                        return row.cons.name;
-                    } else {
-                        return "";
-                    }
-                }
-            },
+            {display:'废弃原因', name:'deleteResonText', width:120, align:'center'},
             {display:'废弃文本解释', name:'deleteText', width:120, align:'center'}
         ],
         rownumbers:true,
@@ -206,13 +149,7 @@ function cellGrid(url) {
         columns:[
             {display:'小区名称', name:'name', width:250, align:'center'},
             {display:'本地网', name:'cityName', width:100, align:'center'},
-            {display:'区县', name:'country', width:80, align:'center',
-                render:function (row) {
-                    if (row.country != null) {
-                        return row.country.cityName;
-                    }
-                }
-            },
+            {display:'区县', name:'countryName', width:80, align:'center'},
             {display:'是否室内', name:'isIndoor', width:80, align:'center'} ,
             {display:'是否拉远', name:'isRru', width:80, align:'center'},
             {display:'废弃时间', name:'deleteTimeStr', width:80, align:'center'},
@@ -224,15 +161,7 @@ function cellGrid(url) {
                         return "<span class='label'>已填写</span>";
                     }
                 }},
-            {display:'废弃原因', name:'cons', width:200, align:'center',
-                render:function (row) {
-                    if (row.cons) {
-                        return row.cons.name;
-                    } else {
-                        return "";
-                    }
-                }
-            },
+            {display:'废弃原因', name:'deleteResonText', width:200, align:'center'},
             {display:'废弃文本解释', name:'deleteText', width:200, align:'center'}
         ],
         rownumbers:true,
@@ -247,125 +176,6 @@ function cellGrid(url) {
     });
     $("#pageloading").hide();
 }
-
-function indoorGrid(url) {
-    gridObj = null;
-    gridObj = $("#maingrid").ligerGrid({
-        columns:[
-            {display:'室内站点名称', name:'name', width:80, align:'center'},
-            {display:'本地网', name:'cityName', width:40, align:'center'},
-            {display:'区县', name:'country', width:40, align:'center',
-                render:function (row) {
-                    if (row.country != null) {
-                        return row.country.cityName;
-                    }
-                }
-            },
-            {display:'是否室内', name:'isIndoor', width:50, align:'center'} ,
-            {display:'是否拉远', name:'isRru', width:50, align:'center'},
-            {display:'基站名称', name:'btsName', width:100, align:'center'},
-            {display:'BSC名称', name:'bscName', width:100, align:'center'},
-            {display:'BTSID', name:'btsId', width:60, align:'center'},
-            {display:'机房产权', name:'circuitroomOwnership', width:60, align:'center'},
-            {display:'传输产权', name:'transOwnership', width:60, align:'center'},
-            {display:'维护等级', name:'serviceLevel', width:60, align:'center'},
-            {display:'设备类型', name:'vendorBtstype', width:60, align:'center'},
-            {display:'废弃时间', name:'deleteTimeStr', width:80, align:'center'},
-            {display:'填写标识', name:'deleteText', width:60, align:'center',
-                render:function (row) {
-                    if (row.deleteResoncode == 0 || row.deleteResoncode == '') {
-                        return "<span class='label label-important'>未填写</span>";
-                    } else {
-                        return "<span class='label'>已填写</span>";
-                    }
-                }} ,
-            {display:'废弃原因', name:'deleteResoncode', width:120, align:'center',
-                render:function (row) {
-                    if (row.cons) {
-                        return row.cons.name;
-                    } else {
-                        return "";
-                    }
-                }
-            },
-            {display:'废弃文本解释', name:'deleteText', width:120, align:'center'}
-        ],
-        rownumbers:true,
-        showTitle:false,
-        pageSize:50,
-        pageSizeOptions:[50, 100],
-        url:url,
-        checkbox:true,
-        width:'99.8%',
-        height:'100%'
-    });
-    $("#pageloading").hide();
-}
-
-
-  function tunelGrid(url){
-      gridObj = $("#maingrid").ligerGrid({
-          columns: [
-              {display:'隧道覆盖站点名称',name:'name',width : 140,align:'center'},
-              {display:'本地网',name:'cityName',width : 80,align:'center',
-                  render:function(row){
-                      if(row.city){
-                          return row.city.cityName;
-                      }
-                  }},
-              {display:'区县',name:'countryName',width : 80,align:'center',
-                  render:function(row){
-                      if(row.country){
-                          return row.country.cityName;
-                      }
-                  }},
-              {display:'是否拉远',name:'isRru',width : 60,align:'center'},
-              {display:'施主基站名称',name:'btsName',width : 120,align:'center'},
-              {display:'所属BSC名称',name:'bscName',width : 120,align:'center'},
-              {display:'网管编号',name:'btsId',width : 80,align:'center'},
-              {display:'机房产权',name:'circuitroomOwnership',width : 60,align:'center'},
-              {display:'传输产权',name:'transOwnership',width : 60,align:'center'},
-              {display:'维护等级',name:'serviceLevel',width : 60,align:'center'},
-              {display:'废弃时间',name:'deleteTimeStr',width : 60,align:'center'},
-              // {display:'设备类型',name:'vendorBtstype',width : 60,align:'center'},
-              {display:'填写标识', name:'deleteText', width:60, align:'center',
-                  render:function (row) {
-                      if (row.deleteResoncode == 0 || row.deleteResoncode == '') {
-                          return "<span class='label label-important'>未填写</span>";
-                      } else {
-                          return "<span class='label'>已填写</span>";
-                      }
-                  }} ,
-              {display:'废弃原因', name:'deleteResoncode', width:120, align:'center',
-                  render:function (row) {
-                      if (row.reasonCons) {
-                          return row.reasonCons.name;
-                      } else {
-                          return "";
-                      }
-                  }
-              },
-              {display:'废弃文本解释', name:'deleteText', width:120, align:'center'}
-          ],
-          rownumbers:true,
-          showTitle : false,
-          pageSize : 50,
-          pageSizeOptions:[50,100],
-          url:url,
-          checkbox : true,
-          width: '100%',
-          height:'100%'
-//          onDblClickRow :tunelInfo
-//          onCheckAllRow: f_onCheckAllRow
-      });
-      $("#pageloading").hide();
-  }
-
-
-function tunnelInfo(data){
-    window.location.href="${ctx}/school/tunnelInfo.action?id="+data.id;
-}
-
 
 //编辑页面
 function edit() {
@@ -387,11 +197,12 @@ function edit() {
         deleteText = this.deleteText;
         deleteResoncode = this.deleteResoncode;
     });
-    var url = "${ctx}/business/business/editPage.action?id=" + id + "&typeId=" + typeId;
+    var url = "${ctx}/lte/abandonEdit.action?id=" + id + "&typeId=" + typeId;
     if (deleteText)
         url += "&deleteText=" + deleteText;
     if (deleteResoncode)
         url += "&deleteResoncode=" + deleteResoncode;
+    alert(url);
     window.location.href = url;
 }
 //查询
@@ -402,17 +213,13 @@ function toSearch() {
     var txFlag = $("#txFlag").val();
     var name = $("#name").val();
 
-    var url = encodeURI("${ctx}/businessjson/abandonBtsData.action?typeId=" + typeId + "&countryIds=" + cityIds + "&txFlag=" + txFlag + "&name=" + name);
+    var url = encodeURI("${ctx}/ltejson/abandonData.action?typeId=" + typeId + "&countryIds=" + cityIds + "&txFlag=" + txFlag + "&name=" + name);
     if (typeId == 1) {
         btsGrid(url);
     } else if (typeId == 2) {
         bbuGrid(url);
     } else if (typeId == 3) {
-        indoorGrid(url);
-    } else if (typeId == 4) {
         cellGrid(url);
-    }else if(typeId==6){
-        tunelGrid(url);
     } else {
         btsGrid(url);
     }

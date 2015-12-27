@@ -1,5 +1,7 @@
 package com.scttsc.lte.model;
 
+import com.scttsc.common.util.DateUtils;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -48,7 +50,7 @@ public class WyLteBts {
 
     private Date updatetime;
 
-    private Short deleteResoncode;
+    private Short deleteResoncode;  //废弃原因代码
 
     private String deleteText;
 
@@ -56,6 +58,10 @@ public class WyLteBts {
     private String cityName;//地市
 
     private String countryName;//区县
+
+    private String deleteResonText; //废弃原因文本
+
+    private String deleteTimeStr;   //删除时间
 
     public BigDecimal getIntId() {
         return intId;
@@ -263,5 +269,21 @@ public class WyLteBts {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public String getDeleteResonText() {
+        return deleteResonText;
+    }
+
+    public void setDeleteResonText(String deleteResonText) {
+        this.deleteResonText = deleteResonText;
+    }
+
+    public String getDeleteTimeStr() {
+        return deletetime == null ? "" : DateUtils.DateToStr(deletetime, "yyyy-MM-dd");
+    }
+
+    public void setDeleteTimeStr(String deleteTimeStr) {
+        this.deleteTimeStr = deleteTimeStr;
     }
 }

@@ -22,4 +22,13 @@ public interface WyLteBtsManager {
      * @return
      */
     int countWyLteBts(Map<String,Object> param);
+
+    /**
+     * 编辑Lte bts
+     * @param wyLteBts
+     * @return
+     */
+    int updateByPrimaryKeySelective(WyLteBts wyLteBts);
+
+
 }
