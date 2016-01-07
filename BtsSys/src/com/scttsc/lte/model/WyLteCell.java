@@ -61,6 +61,8 @@ public class WyLteCell {
 
     private String deleteTimeStr;//废弃时间
 
+    private String updateTimeStr;//更新时间
+
     public String getIntId() {
         return intId;
     }
@@ -275,6 +277,14 @@ public class WyLteCell {
 
     public void setDeleteTimeStr(String deleteTimeStr) {
         this.deleteTimeStr = deleteTimeStr;
+    }
+
+    public String getUpdateTimeStr() {
+            return updatetime == null ? "" : DateUtils.DateToStr(updatetime, "yyyy-MM-dd");
+    }
+
+    public void setUpdateTimeStr(String updateTimeStr) {
+        this.updateTimeStr = updateTimeStr;
     }
 }
 

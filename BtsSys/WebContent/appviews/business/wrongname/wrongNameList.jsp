@@ -42,9 +42,10 @@
                             return row.city.cityName;
                         }
                     }},
-                    {display:'错误名称',name:'cellName',width : 400,align:'center'},
+                    {display:'错误名称',name:'cellName',width : 330,align:'center'},
+                    {display:'BTSID/CI/ENB_ID/ECI',name:'bscName',width : 200,align:'center'},
                     {display:'错误原因',name:'wrongMsg',width : 200,align:'center'},
-                    {display:'网络类型',name:'netType',width : 100,align:'center',
+                    {display:'网络类型',name:'netType',width : 80,align:'center',
                         render: function (row) {
                             if (row.netType == 1) {
                                 return "CDMA";
@@ -53,7 +54,7 @@
                             }
                         }
                     },
-                    {display:'类型',name:'type',width : 100,align:'center',
+                    {display:'类型',name:'type',width : 80,align:'center',
                         render: function (row) {
                             if (row.type == 1) {
                                 return "错误小区";
@@ -70,7 +71,7 @@
                 url:'${ctx}/businessjson/wrongNameData.action',
                 checkbox :true,
                 width:'99.8%',
-                height :  '99.8%'
+                height:'99%'
             });
             $("#pageloading").hide();
 

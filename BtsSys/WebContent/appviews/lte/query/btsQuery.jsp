@@ -72,7 +72,8 @@ function btsGrid(url) {
             {display:'是否拉远',name:'isRru',width : 60,align:'center'},
             {display:'施主基站名称',name:'enbName',width : 150,align:'center'},
             {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
-            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'}
+            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'},
+            {display:'更新时间',name:'updateTimeStr',width : 80,align:'center'}
         ],
         rownumbers:true,
         showTitle : false,
@@ -96,7 +97,8 @@ function bbuGrid(url) {
             {display:'机房产权',name:'circuitroomOwnership',width : 60,align:'center'},
             {display:'传输产权',name:'transOwnership',width : 60,align:'center'},
             {display:'高铁覆盖',name:'hightrainFlag',width : 55,align:'center'},
-            {display:'红线内外',name:'redlieFlagStr',width : 55,align:'center'}
+            {display:'红线内外',name:'redlieFlagStr',width : 55,align:'center'},
+            {display:'更新时间',name:'updateTimeStr',width : 80,align:'center'}
         ],
         rownumbers:true,
         showTitle : false,

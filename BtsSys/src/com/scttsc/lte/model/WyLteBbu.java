@@ -69,6 +69,8 @@ public class WyLteBbu {
 
     private String deleteTimeStr;//废弃时间
 
+    private String updateTimeStr;//更新时间
+
     public BigDecimal getIntId() {
         return intId;
     }
@@ -329,5 +331,13 @@ public class WyLteBbu {
 
     public void setDeleteTimeStr(String deleteTimeStr) {
         this.deleteTimeStr = deleteTimeStr;
+    }
+
+    public String getUpdateTimeStr() {
+        return updatetime == null ? "" : DateUtils.DateToStr(updatetime, "yyyy-MM-dd");
+    }
+
+    public void setUpdateTimeStr(String updateTimeStr) {
+        this.updateTimeStr = updateTimeStr;
     }
 }

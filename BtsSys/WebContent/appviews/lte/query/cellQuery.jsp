@@ -91,7 +91,8 @@ function cellGrid(url) {
                     }
                 }},
             {display:'高铁覆盖',name:'highTrainFlag',width : 55,align:'center'},
-            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'}
+            {display:'红线内外',name:'redLineFlagStr',width : 55,align:'center'},
+            {display:'更新时间',name:'updateTimeStr',width : 80,align:'center'}
         ],
         rownumbers:true,
         showTitle : false,
