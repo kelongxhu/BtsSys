@@ -1,25 +1,5 @@
 package com.scttsc.baselibs.web;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
-import com.scttsc.baselibs.model.Cons;
-import com.scttsc.business.model.Bts;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.ibm.icu.text.SimpleDateFormat;
 import com.scttsc.admin.model.City;
 import com.scttsc.admin.model.User;
@@ -30,12 +10,20 @@ import com.scttsc.baselibs.service.BlindManager;
 import com.scttsc.baselibs.service.VitoLibManager;
 import com.scttsc.business.util.ExcelHelper;
 import com.scttsc.business.util.Validity;
-import com.scttsc.common.util.Common;
-import com.scttsc.common.util.ConstantUtil;
-import com.scttsc.common.util.ExcelUtil;
-import com.scttsc.common.util.FileRealPath;
-import com.scttsc.common.util.StringUtil;
+import com.scttsc.common.util.*;
 import com.scttsc.common.web.BaseAction;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class BlindAction extends BaseAction{
 
@@ -72,7 +60,11 @@ public class BlindAction extends BaseAction{
 	public String blindImport()throws Exception {
 		return SUCCESS;
 	}
-	
+
+    /**
+     * 盲点数据查询
+     * @return
+     */
     public String blindData() {
         User user = (User) this.getSession().getAttribute("user");
         Map<String, Object> map = new HashMap<String, Object>();
@@ -94,14 +86,18 @@ public class BlindAction extends BaseAction{
             map.put("sortorder", sortorder);
             list = blindManager.getByConds(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
         jsonMap.put("page", page);
         return SUCCESS;
     }
-    
+
+    /**
+     * 添加盲点数据
+     * @return
+     */
     public String addBlind(){
     	try {
     		BigDecimal countryId = null;// 区县ID
@@ -121,10 +117,13 @@ public class BlindAction extends BaseAction{
 			 e.printStackTrace();
 	         jsonMap.put("result", 0);
 		}
-    	
     	return SUCCESS;
     }
-    
+
+    /**
+     * 添加盲点数据
+     * @return
+     */
     public String deleteBlind() {
     	Map<String, Object> map = new HashMap<String, Object>();
     	try {
@@ -139,7 +138,11 @@ public class BlindAction extends BaseAction{
         }
     	return SUCCESS;
     }
-    
+
+    /**
+     * 盲点信息
+     * @return
+     */
     public String blindInfo() {
     	try {
     		wyBlind = blindManager.getById(id);
@@ -154,7 +157,11 @@ public class BlindAction extends BaseAction{
         }
     	return SUCCESS;
     }
-    
+
+    /**
+     * 盲点编辑页面
+     * @return
+     */
     public String blindEdit() {
     	try {
     		wyBlind = blindManager.getById(id);
@@ -165,7 +172,11 @@ public class BlindAction extends BaseAction{
         }
     	return SUCCESS;
     }
-    
+
+    /**
+     * 编辑盲点数据
+     * @return
+     */
     public String editBlind() {
     	try {
     		BigDecimal countryId = null;// 区县ID
@@ -185,7 +196,11 @@ public class BlindAction extends BaseAction{
     	
     	return SUCCESS;
     }
-    
+
+    /**
+     * 导出盲点模板
+     * @return
+     */
     public String exportBlindTemplate() {
         String path = FileRealPath.getPath();
         String templatePath = path + "template" + "/blindTemplate.xls";
@@ -215,7 +230,11 @@ public class BlindAction extends BaseAction{
         }
         return null;
     }
-    
+
+    /**
+     * 导入盲点数据
+     * @return
+     */
     public String importBlindInputData() {
         int sucess = 0;
         List<String> errorList = new ArrayList<String>();
@@ -250,7 +269,14 @@ public class BlindAction extends BaseAction{
         }
         return SUCCESS;
     }
-    
+
+    /**
+     * 解析一行盲点数据
+     * @param rowNum
+     * @param row
+     * @param errorList
+     * @return
+     */
     public Map<String, Object> parseBlindObj(int rowNum, HSSFRow row, List<String> errorList) {
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Validity> coulmnMap = ExcelHelper.getBlindCoulmnMap();

@@ -16,7 +16,6 @@ import java.util.Map;
 
 public class HxMenuAction extends BaseAction {
 
-    Logger LOG = Logger.getLogger(HxMenuAction.class);
     private HxMenuManager hxMenuManager;
 
     List<HxMenu> authorityList;
@@ -37,21 +36,29 @@ public class HxMenuAction extends BaseAction {
         try {
             authorityList = hxMenuManager.getByPid(pid);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }
 
+    /**
+     * 获取子菜单
+     * @return
+     */
     @JSON(serialize = false)
     public String subMenu() {
         try {
             authorityList = hxMenuManager.getByPid(pid);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }
 
+    /**
+     * 获取子菜单树数据
+     * @return
+     */
     public String index() {
         try {
             User user = (User) this.getSession().getAttribute("user");
@@ -64,11 +71,15 @@ public class HxMenuAction extends BaseAction {
                 menu.setChildren(children);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return SUCCESS;
     }
 
+    /**
+     * 获取用户菜单数据
+     * @return
+     */
     public String loadMenuTree() {
         try {
             User user = (User) this.getSession().getAttribute("user");
@@ -91,7 +102,11 @@ public class HxMenuAction extends BaseAction {
         return SUCCESS;
     }
 
-
+    /**
+     * 构建菜单树
+     * @param menuTreeNode
+     * @param userId
+     */
     private void buildMenuTree(HxMenu menuTreeNode, Long userId) {
         List<HxMenu> menuList = null;
         try {

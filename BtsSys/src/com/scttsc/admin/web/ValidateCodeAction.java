@@ -27,6 +27,11 @@ public class ValidateCodeAction extends BaseAction
 	
 	private ByteArrayInputStream inputStream;
 
+    /**
+     * 校驗
+     * @return
+     * @throws Exception
+     */
 	public String execute() throws Exception
 	{
 		ValidateCodeCreator rdnu = ValidateCodeCreator.Instance();

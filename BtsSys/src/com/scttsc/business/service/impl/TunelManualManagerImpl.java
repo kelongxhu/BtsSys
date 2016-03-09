@@ -42,10 +42,11 @@ public class TunelManualManagerImpl implements TunelManualManager {
     public int insert(WyTunelManual record) throws Exception {
         //插入手工数据，更新wy_tunel为手工录入状态
         wyTunelManualDao.insert(record);
-        WyTunel wyTunel=new WyTunel();
-        wyTunel.setIntId(record.getIntId());
-        wyTunel.setManualFlag(1);
-        wyTunelDao.updateByPrimaryKeySelective(wyTunel);
+        // 将手工标识置为1，表示手工录入成功
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("intId", record.getIntId());
+        map.put("manualFlag", 1);
+        cellDao.updateByMap(map);
         return Constants.SUCECSS;
     }
 

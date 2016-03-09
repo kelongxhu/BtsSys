@@ -69,7 +69,10 @@ public class DrystationAction extends BaseAction {
         return SUCCESS;
     }
 
-
+    /**
+     * 增加干放数据
+     * @return
+     */
     public String dryAddDate() {
         User user = (User) this.getSession().getAttribute("user");
         Bts bts = (Bts) this.getSession().getAttribute("bts");
@@ -89,6 +92,10 @@ public class DrystationAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 删除干放数据
+     * @return
+     */
     public String delete() {
         try {
             String idString = this.getRequest().getParameter("ids");

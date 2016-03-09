@@ -127,6 +127,10 @@ public class RoadLibAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 道路信息
+     * @return
+     */
     public String roadInfo() {
         try {
             roadLib = roadLibManager.getById(id);

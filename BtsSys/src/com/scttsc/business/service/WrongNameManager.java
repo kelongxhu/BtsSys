@@ -10,7 +10,19 @@ import java.util.List;
  * Time: 下午4:40
  */
 public interface WrongNameManager {
+    /**
+     * 錯誤命名列表查詢
+     * @param map
+     * @return
+     * @throws Exception
+     */
      List<WrongName> selectByMap(Object map) throws Exception;
 
+    /**
+     * 錯誤命名總數
+     * @param map
+     * @return
+     * @throws Exception
+     */
     int countByMap(Object map) throws Exception;
 }

@@ -47,6 +47,10 @@ public class SpecialBtsAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 特殊站点数据
+     * @return
+     */
     public String specialeData() {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = (User) this.getSession().getAttribute("user");
@@ -84,6 +88,10 @@ public class SpecialBtsAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 导出特殊站点数据
+     * @return
+     */
     public String specialBtsExport() {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = (User) this.getSession().getAttribute("user");

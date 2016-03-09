@@ -128,7 +128,12 @@ public class WyBtsChargeAction extends BaseAction {
 		}
     	return SUCCESS;
     }
-    
+
+    /**
+     * 费用设置操作
+     * @return
+     * @throws Exception
+     */
     public String doChargeSetting() throws Exception{
     	try {
     		copyAttachment(wyBtsCharge.getCostType(), wyBtsCharge.getIntId());
@@ -158,7 +163,12 @@ public class WyBtsChargeAction extends BaseAction {
 			charge.setBankAccount("");
 		}
 	}
-    
+
+    /**
+     * 删除费用设置
+     * @return
+     * @throws Exception
+     */
     public String deleteChargeSetting() throws Exception{
     	try {
     		if(!StringUtil.isEmpty(ids)){
@@ -175,7 +185,12 @@ public class WyBtsChargeAction extends BaseAction {
 		}
     	return SUCCESS;
     }
-    
+
+    /**
+     * 费用信息
+     * @return
+     * @throws Exception
+     */
     public String btsChargeInfo() throws Exception {
     	try {
     		Map<String, Object> paramMap = buildParamMap();
@@ -309,14 +324,19 @@ public class WyBtsChargeAction extends BaseAction {
     	return null;
     }
     
-    /**
+    /**导入费用页面
      * @return
      * @throws Exception
      */
     public String importCharges() throws Exception {
     	return SUCCESS;
     }
-    
+
+    /**
+     * 导入费用设置数据
+     * @return
+     * @throws Exception
+     */
     public String importChargeData() throws Exception {
         try {
             User user = (User) this.getSession().getAttribute("user");
@@ -362,7 +382,16 @@ public class WyBtsChargeAction extends BaseAction {
         }
     	return SUCCESS;
     }
-    
+
+    /**
+     * 解析一行数据
+     * @param rowNum
+     * @param cloumnStart
+     * @param row
+     * @param errorList
+     * @return
+     * @throws Exception
+     */
 	private Map<String, String> parseChargeMap(int rowNum, int cloumnStart, HSSFRow row, List<String> errorList) throws Exception {
     	Map<String, String> map = parseBaseMap(row);
         Map<String, Validity> coulmnMap = "3".equals(map.get("costType"))?ExcelHelper.getBtsPowerChargeCoulmnMap():ExcelHelper.getBtsChargeCoulmnMap();
@@ -430,7 +459,7 @@ public class WyBtsChargeAction extends BaseAction {
     }
     
     /**
-     * 
+     * 删除附件
      * @param fileName
      * @throws Exception
      */

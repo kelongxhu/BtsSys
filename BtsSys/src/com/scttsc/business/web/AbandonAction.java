@@ -70,7 +70,6 @@ public class AbandonAction extends BaseAction {
      *
      * @return
      */
-
     public String editAbandoned() {
         if (!Common.isEmpty(typeId)) {
             Map map = new HashMap();
@@ -96,10 +95,9 @@ public class AbandonAction extends BaseAction {
                 jsonMap.put("result", 1);
             } catch (Exception e) {
                 jsonMap.put("result", 0);
-                e.printStackTrace();
+                LOG.error(e.getMessage(),e);
             }
         }
-
         return SUCCESS;
     }
 
@@ -107,7 +105,10 @@ public class AbandonAction extends BaseAction {
         return SUCCESS;
     }
 
-
+    /**
+     * 获取废弃数据
+     * @return
+     */
     public String abandonData() {
         String result = null;
         try {
@@ -133,11 +134,15 @@ public class AbandonAction extends BaseAction {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return result;
     }
 
+    /**
+     * 废弃基站
+     * @return
+     */
     public String btsData() {
         User user = (User) this.getSession().getAttribute("user");
         Map<String, Object> map = new HashMap<String, Object>();
@@ -174,7 +179,7 @@ public class AbandonAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = btsManager.getByConds(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -182,6 +187,10 @@ public class AbandonAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 废弃小区
+     * @return
+     */
     public String cellData() {
         User user = (User) this.getSession().getAttribute("user");
         Map<String, Object> map = new HashMap<String, Object>();
@@ -218,7 +227,7 @@ public class AbandonAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = cellManager.selectByMap(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -226,6 +235,10 @@ public class AbandonAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 废弃BBU
+     * @return
+     */
     public String bbuData() {
         User user = (User) this.getSession().getAttribute("user");
         Map<String, Object> map = new HashMap<String, Object>();
@@ -262,7 +275,7 @@ public class AbandonAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = bbuManager.selectByExample(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -311,7 +324,7 @@ public class AbandonAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = btsManager.getByConds(map);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -398,7 +411,10 @@ public class AbandonAction extends BaseAction {
         return null;
     }
 
-
+    /**
+     * 导出废弃物理站点
+     * @return
+     */
     public String exportDeleteBtsData() {
         Map<String, Object> map = new HashMap<String, Object>();
         int total = 0;
@@ -510,12 +526,15 @@ public class AbandonAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return null;
     }
 
-
+    /**
+     * 导出废弃BBU
+     * @return
+     */
     public String exportDeleteBbuData() {
         Map<String, Object> map = new HashMap<String, Object>();
         int total = 0;
@@ -634,12 +653,15 @@ public class AbandonAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return null;
     }
 
-
+    /**
+     * 导出废弃室分基站
+     * @return
+     */
     public String exportDeleteIndoorData() {
         Map<String, Object> map = new HashMap<String, Object>();
         int total = 0;
@@ -751,11 +773,15 @@ public class AbandonAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return null;
     }
 
+    /**
+     * 导出废弃小区
+     * @return
+     */
     public String exportDeleteCellData() {
         Map<String, Object> map = new HashMap<String, Object>();
         int total = 0;
@@ -859,7 +885,7 @@ public class AbandonAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return null;
     }
@@ -978,7 +1004,7 @@ public class AbandonAction extends BaseAction {
             resp.getOutputStream().flush();
             resp.getOutputStream().close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
         }
         return null;
     }

@@ -64,7 +64,7 @@ public class RoleAction extends BaseAction {
             map.put("sortorder", sortorder);
             list = roleManager.selectByMap(map);
         } catch (Exception e) {
-            e.printStackTrace();
+           LOG.error(e.getMessage(),e);
         }
         setJsonMapRows(list);
         setJsonMapTotal(total);
@@ -72,6 +72,10 @@ public class RoleAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 角色菜單
+     * @return
+     */
     public String roleMenu() {
         User user = (User) this.getSession().getAttribute("user");
         List<RoleMenu> roleMenus = null;

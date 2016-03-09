@@ -7,15 +7,47 @@ import com.scttsc.business.vo.FindBackReponse;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * bbu手工数据业务类
+ */
 public interface BbuManualManager {
+    /**
+     * 根据intid查询bbu手工数据
+     * @param intId
+     * @return
+     * @throws Exception
+     */
 	BbuManual getById(Long intId)throws Exception;
-	   
+
+    /**
+     * 插入bbu手工数据
+     * @param record
+     * @return
+     * @throws Exception
+     */
     int insert(BbuManual record)throws Exception;
-   
+
+    /**
+     * 更新bbu手工数据
+     * @param record
+     * @return
+     * @throws Exception
+     */
     int update(BbuManual record)throws Exception;
-    
+
+    /**
+     * 导入Bbu手工数据
+     * @param record
+     * @throws Exception
+     */
     void importInsert(Map record)throws Exception;//导入手工数据
 
+    /**
+     * 接口更新bbu手工字段
+     * @param record
+     * @return
+     * @throws Exception
+     */
     int updateByInterface(Map record)throws Exception;
 
 

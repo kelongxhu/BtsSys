@@ -91,6 +91,10 @@ public class IndoorAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 室分详情
+     * @return
+     */
     public String indoorDetail() {
         Map<String, Object> map = new HashMap<String, Object>();
         if (intId != null) {

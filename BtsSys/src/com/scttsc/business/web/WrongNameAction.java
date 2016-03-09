@@ -43,6 +43,10 @@ public class WrongNameAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 错误数据
+     * @return
+     */
     public String wrongNameData() {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = (User) this.getSession().getAttribute("user");
@@ -77,6 +81,10 @@ public class WrongNameAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 错误命名数据导出
+     * @return
+     */
     public String wrongNameExport() {
         Map<String, Object> map = new HashMap<String, Object>();
         User user = (User) this.getSession().getAttribute("user");

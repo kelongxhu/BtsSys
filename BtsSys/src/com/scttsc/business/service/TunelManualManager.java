@@ -4,7 +4,6 @@ import com.scttsc.business.model.MateEntry;
 import com.scttsc.business.model.WyTunelManual;
 import com.scttsc.business.vo.FindBackReponse;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,11 @@ import java.util.Map;
  * Created by _think on 2014/9/27.
  */
 public interface TunelManualManager {
+    /**
+     * 获取隧道手工数据
+     * @param intId
+     * @return
+     */
     WyTunelManual selectByPrimaryKey(Long intId);
 
     /**
@@ -22,6 +26,12 @@ public interface TunelManualManager {
      */
     int insert(WyTunelManual record)throws Exception;
 
+    /**
+     * 更新隧道庫
+     * @param record
+     * @return
+     * @throws Exception
+     */
     int updateByPrimaryKeySelective(WyTunelManual record)throws Exception;
 
     /**
@@ -41,6 +51,10 @@ public interface TunelManualManager {
      */
     List<MateEntry> findDelTunelData(List<Long> ids) throws Exception;
 
-
+    /**
+     * 找回隧道数据
+     * @param ids
+     * @return
+     */
     FindBackReponse findManualData(List<String> ids);
 }

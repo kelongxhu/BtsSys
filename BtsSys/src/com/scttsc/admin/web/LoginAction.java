@@ -37,6 +37,10 @@ public class LoginAction extends BaseAction {
 
     private String intId;// 传过来的用户ID
 
+    /**
+     *校驗密碼
+     * @return
+     */
     public String checkPassword() {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
@@ -56,7 +60,7 @@ public class LoginAction extends BaseAction {
                 isCheckPwd = 5;// 用户不存在
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             isCheckPwd = 0;
         }
         map.put("isCheckPwd", isCheckPwd);
@@ -65,6 +69,11 @@ public class LoginAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 登陸操作
+     * @return
+     * @throws Exception
+     */
     @SuppressWarnings("unchecked")
     public String execute() throws Exception {
         try {
@@ -97,13 +106,16 @@ public class LoginAction extends BaseAction {
                 return ERROR;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             errMsg = "登陆异常!";
             return ERROR;
         }
     }
 
-
+    /**
+     * 登陸
+     * @return
+     */
     public String login2() {
         try {
             Map<String, Object> map = new HashMap<String, Object>();
@@ -135,7 +147,7 @@ public class LoginAction extends BaseAction {
                 return ERROR;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             errMsg = "登陆异常!";
             return ERROR;
         }

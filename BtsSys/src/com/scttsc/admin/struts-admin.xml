@@ -149,7 +149,7 @@
             </result>
         </action>
 		
-		
+		<!--登出-->
 		<action name="loginOut" class="com.scttsc.admin.web.LoginAction" method="loginOut">
 			<result name="success" type="dispatcher" >
 				/appviews/sys/login2.jsp

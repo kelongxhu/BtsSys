@@ -209,7 +209,7 @@ public class SceneLibAction extends BaseAction {
     }
 
 
-    /**
+    /**风景库
      * @return
      */
     public String sceneLibs() {

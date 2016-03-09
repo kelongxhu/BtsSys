@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
+/**Excel校验类
  * User: Administrator
  * Date: 13-7-10
  * Time: 下午1:39
@@ -56,7 +56,6 @@ public class Validity {
         }else if(isEmput(str)){
             return true;
         }
-
 
         switch (dataType) {
             case 2:

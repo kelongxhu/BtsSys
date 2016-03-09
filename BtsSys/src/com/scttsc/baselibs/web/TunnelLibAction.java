@@ -36,6 +36,10 @@ public class TunnelLibAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 查询隧道列表
+     * @return
+     */
     public String tunnelLibData() {
         User user = (User) this.getSession().getAttribute("user");
         Map<String, Object> map = new HashMap<String, Object>();

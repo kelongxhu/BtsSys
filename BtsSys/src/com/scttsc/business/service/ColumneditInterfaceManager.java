@@ -11,14 +11,44 @@ import java.util.Map;
  * Time: 下午3:35
  */
 public interface ColumneditInterfaceManager {
+    /**
+     * 根据ID查询字段
+     * @param id
+     * @return
+     * @throws Exception
+     */
     WyColumneditInterface selectByPrimaryKey(Long id)throws Exception;
 
+    /**
+     * 插入更新字段记录
+     * @param record
+     * @return
+     * @throws Exception
+     */
     int insert(WyColumneditInterface record)throws Exception;
 
+    /**
+     * 更新记录
+     * @param record
+     * @return
+     * @throws Exception
+     */
     int updateByPrimaryKeySelective(WyColumneditInterface record)throws Exception;
 
+    /**
+     * 查询修改记录
+     * @param record
+     * @return
+     * @throws Exception
+     */
     List<WyColumneditInterface> selectByMap(Map record) throws Exception;
 
+    /**
+     * 修改记录总数
+     * @param record
+     * @return
+     * @throws Exception
+     */
     int countByMap(Map record) throws Exception;
 
     /**

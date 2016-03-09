@@ -91,9 +91,16 @@ public class CellManagerImpl implements CellManager {
         return ccellDao.selectByBtsId(btsId);
     }
 
+    /**
+     * excel导出小区
+     * @param map
+     * @return
+     * @throws Exception
+     */
     public List<Map> selectExportCellDataByMap(Map map) throws Exception {
         return cellDao.selectExportCellDataByMap(map);
     }
+
 
     public List<Map> selectSchoolLibCells(Object map) throws Exception {
         return cellLibDao.selectSchoolLibCells(map);

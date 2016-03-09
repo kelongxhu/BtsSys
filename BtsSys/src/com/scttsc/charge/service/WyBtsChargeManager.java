@@ -18,12 +18,41 @@ public interface WyBtsChargeManager {
      */
     List<WyBtsCharge> selectWyBtsChargeListByMap(Map<String, Object> param, int btsType) throws Exception;
 
+    /**
+     * 总数
+     * @param param
+     * @param btsType
+     * @return
+     * @throws Exception
+     */
     int selectWyBtsChargeCountByMap(Map<String, Object> param, int btsType) throws Exception;
 
+    /**
+     * 查询费用设置
+     * @param intId
+     * @param costType
+     * @param btsType
+     * @return
+     * @throws Exception
+     */
     WyBtsCharge selectByPrimaryKey(BigDecimal intId, int costType, int btsType) throws Exception;
 
+    /**
+     * 查询某类型费用设置
+     * @param param
+     * @param btsType
+     * @return
+     * @throws Exception
+     */
     List<WyBtsCharge> selectWyBtsChargeSettingByMap(final Map<String, Object> param, int btsType) throws Exception;
 
+    /**
+     * 总数
+     * @param param
+     * @param btsType
+     * @return
+     * @throws Exception
+     */
     int selectWyBtsChargeSettingCountByMap(final Map<String, Object> param, int btsType) throws Exception;
 
     /**

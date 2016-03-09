@@ -77,6 +77,10 @@ public class VillageLibAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 获取城镇列表
+     * @return
+     */
     public String getTownList() {
         try {
             List<Map> townList = villageLibManager.selectTownByCountryId(countryId);
@@ -110,6 +114,10 @@ public class VillageLibAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 构建查询条件
+     * @return
+     */
     public Map<String, Object> buildMap() {
         User user = (User) this.getSession().getAttribute("user");
         Map<String, Object> param = new HashMap<String, Object>();

@@ -12,17 +12,49 @@ import java.util.Map;
  * Email: wokzhen@vip.qq.com
  */
 public interface TransferManager {
-
+    /**
+     * 查询传输节点
+     * @param cond
+     * @return
+     * @throws Exception
+     */
     public List<WyTransfernode> selectTransferList(Map cond) throws Exception;
 
+    /**
+     * 计数传输节点
+     * @param cond
+     * @return
+     * @throws Exception
+     */
     public int selectTransferCount(Map cond) throws Exception;
 
+    /**
+     * 根据主键获取传输节点
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public WyTransfernode selectByPrimaryKey(Long id) throws Exception;
 
+    /**
+     * 更新传输节点
+     * @param wyTransfernode
+     * @throws Exception
+     */
     public void updateByPrimaryKeySelective(WyTransfernode wyTransfernode) throws Exception;
 
+    /**
+     * 插入传输节点
+     * @param wyTransfernode
+     * @throws Exception
+     */
     public void insertSelective(WyTransfernode wyTransfernode) throws Exception;
 
+    /**
+     * 根据主键删除传输节点
+     * @param ids
+     * @throws Exception
+     */
     public void deleteByPks(String ids) throws Exception;
 
 }

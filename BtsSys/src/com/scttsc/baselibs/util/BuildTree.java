@@ -10,6 +10,11 @@ import com.scttsc.common.model.TreeNode;
 import com.scttsc.common.model.TreeNodeHelper;
 
 public class BuildTree {
+    /**
+     * 组建道路库树
+     * @param list
+     * @return
+     */
 	public static TreeNode buildTreeNode(List<RoadLib> list) {
 		TreeNode root = new TreeNode("本地网", "10001", "-1");
 		Map<String, TreeNode> nodeMap = new HashMap<String, TreeNode>();

@@ -70,7 +70,10 @@ public class ErectstationAction extends BaseAction {
         return SUCCESS;
     }
 
-
+    /**
+     * 添加直放数据
+     * @return
+     */
     public String ereAddDate() {
         User user = (User) this.getSession().getAttribute("user");
         erectStation.setUpdateuser(user.getIntId());
@@ -89,6 +92,10 @@ public class ErectstationAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 删除直放数据
+     * @return
+     */
     public String delete() {
         try {
             String idString = this.getRequest().getParameter("ids");
@@ -106,7 +113,7 @@ public class ErectstationAction extends BaseAction {
     }
 
     /**
-     * 导入干放数据
+     * 导入直放数据
      *
      * @return
      */

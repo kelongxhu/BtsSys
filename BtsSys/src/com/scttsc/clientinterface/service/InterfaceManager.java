@@ -12,5 +12,11 @@ import java.util.Map;
  * Time: 下午5:08
  */
 public interface InterfaceManager {
+    /**
+     * 查询地市告警
+     * @param cityName
+     * @return
+     * @throws Exception
+     */
     public List<Alarm> getAlarms(String cityName)throws Exception;
 }

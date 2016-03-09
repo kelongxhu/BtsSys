@@ -275,12 +275,16 @@ public class VitoLibAction extends BaseAction {
             vitoLibManager.deleteByDeleteFlag(map);
             jsonMap.put("result", 1);// 删除成功
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             jsonMap.put("result", 0);// 删除失败
         }
         return SUCCESS;
     }
 
+    /**
+     * 导入乡镇库数据
+     * @return
+     */
     public String importTownInputData() {
         try {
             File desFile = new File(getRequest().getSession()
@@ -311,7 +315,7 @@ public class VitoLibAction extends BaseAction {
             jsonMap.put("sucess", sucess);
             jsonMap.put("errorList", errorList);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             jsonMap.put("result", 0);
         }
         return SUCCESS;
@@ -369,14 +373,17 @@ public class VitoLibAction extends BaseAction {
             map.put("updateuser", user.getIntId());
             map.put("parentId", 0);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(),e);
             errorList.add("第" + rowNum + "行:" + "程序解析异常...");
             return null;
         }
         return map;
     }
 
-
+    /**
+     * Excel导入乡村数据
+     * @return
+     */
     public String importCountryInputData() {
         try {
             File desFile = new File(getRequest().getSession()

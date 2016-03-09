@@ -10,7 +10,9 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import com.scttsc.admin.model.User;
 
-
+/**
+ * 会话拦截器
+ */
 @SuppressWarnings("serial")
 public class AuthInterceptor extends AbstractInterceptor {
 

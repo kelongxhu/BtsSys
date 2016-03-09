@@ -250,6 +250,10 @@ public class SchoolLibAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 校园库信息
+     * @return
+     */
     public String schoolInfo() {
         try {
             schoolLib = schoolLibManager.getById(id);
