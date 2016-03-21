@@ -51,11 +51,22 @@ public class TunelManualManagerImpl implements TunelManualManager {
     }
 
     public int updateByPrimaryKeySelective(WyTunelManual record) throws Exception {
-        return wyTunelManualDao.updateByPrimaryKeySelective(record);
+        int result = wyTunelManualDao.updateByPrimaryKeySelective(record);
+        Cell cell = cellDao.selectById(record.getIntId());
+        if (cell != null) {
+            int manualFlag = cell.getManualFlag().intValue();
+            if (manualFlag == 0) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("intId", record.getIntId());
+                map.put("manualFlag", 1);
+                cellDao.updateByMap(map);
+            }
+        }
+        return result;
     }
 
     public int importInsert(Map record) throws Exception {
-        int status=Constants.FAIL;
+        int status = Constants.FAIL;
         try {
             WyTunelManual wyTunelManual = new WyTunelManual();
             DateConverter d = new DateConverter();
@@ -72,9 +83,9 @@ public class TunelManualManagerImpl implements TunelManualManager {
                 //覆盖更新
                 updateByPrimaryKeySelective(wyTunelManual);
             }
-            status=Constants.SUCECSS;
+            status = Constants.SUCECSS;
         } catch (Exception e) {
-            LOG.error(e.getMessage()+"-"+"导入隧道库手工数据失败!",e);
+            LOG.error(e.getMessage() + "-" + "导入隧道库手工数据失败!", e);
         }
         return status;
     }
@@ -96,7 +107,7 @@ public class TunelManualManagerImpl implements TunelManualManager {
                 wyTunel = tunelList.get(0);
             }
             //再用的未录入
-            if (wyTunel != null&&wyTunel.getManualFlag()==0) {
+            if (wyTunel != null && wyTunel.getManualFlag() == 0) {
                 MateEntry mateEntry = new MateEntry();
                 mateEntry.setDel_IntId(tunelDel.getIntId().toString());
                 mateEntry.setDel_BscName(tunelDel.getBscName());
@@ -122,9 +133,9 @@ public class TunelManualManagerImpl implements TunelManualManager {
                 WyTunelManual wyTunelManual = wyTunelManualDao.selectByPrimaryKey(new Long(pair[0]));//废弃数据的手工数据
                 //找回原则：废弃存在手工数据，当前再用不存在手工数据
                 if (wyTunelManual != null) {
-                    Long intId= new Long(pair[1]);//再用intId
-                    WyTunelManual wyTunelManual1=wyTunelManualDao.selectByPrimaryKey(intId);
-                    if(wyTunelManual1!=null){
+                    Long intId = new Long(pair[1]);//再用intId
+                    WyTunelManual wyTunelManual1 = wyTunelManualDao.selectByPrimaryKey(intId);
+                    if (wyTunelManual1 != null) {
                         wyTunelManualDao.deleteByPrimaryKey(intId);
                     }
                     //将废弃数据手工数据关联到现在的数据INT_ID

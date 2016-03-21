@@ -21,3 +21,7 @@ insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(57,15,'特殊站
 insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(58,15,'LTE基站查询','menu','lte/lteData.action',23,0);
 insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(59,15,'LTE小区查询','menu','lte/cellData.action',24,0);
 insert into wy_menu(ID,PID, name,type,url, orderby, flag)values(60,15,'LTE废弃查询','menu','lte/lteAbandon.action',29,0);
+
+
+ Insert into WY_COLUMNS_CONFIG (ID,CN_NAME,EN_NAME,TYPE,ORDERNO,
+ REMARK,ENABLE,ENEDIT,COMBOBOX) values (304,'名称','NAME',8,2,'wy_tunel',0,0,0);
